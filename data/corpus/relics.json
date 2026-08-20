@@ -1,0 +1,3917 @@
+[
+ {
+  "id": "AKABEKO",
+  "name": "Akabeko",
+  "gameId": "Akabeko",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "combat",
+  "values": [
+   8
+  ],
+  "text": "Your first {{QueryLink|Cards|type:Attack|Attack}} each combat deals 8 additional damage",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "AKABEKO",
+   "spire": "AKABEKO",
+   "wiki": "Akabeko"
+  }
+ },
+ {
+  "id": "ART_OF_WAR",
+  "name": "Art of War",
+  "gameId": "Art of War",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "If you do not play any {{QueryLink|Cards|type:Attack|Attacks}} during your turn, gain an additional $Energy next turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ART_OF_WAR",
+   "spire": "ART_OF_WAR",
+   "wiki": "Art of War"
+  }
+ },
+ {
+  "id": "BIRD_FACED_URN",
+  "name": "Bird-Faced Urn",
+  "gameId": "Bird Faced Urn",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "Whenever you play a {{QueryLink|Cards|type:Power|Power}} card, heal 2 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BIRD_FACED_URN",
+   "spire": "BIRD_FACED_URN",
+   "wiki": "Bird-Faced Urn"
+  }
+ },
+ {
+  "id": "BLOODY_IDOL",
+  "name": "Bloody Idol",
+  "gameId": "Bloody Idol",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": [
+   5
+  ],
+  "text": "Whenever you gain [[Gold]], heal 5 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BLOODY_IDOL",
+   "spire": "BLOODY_IDOL",
+   "wiki": "Bloody Idol"
+  }
+ },
+ {
+  "id": "BLUE_CANDLE",
+  "name": "Blue Candle",
+  "gameId": "Blue Candle",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "$Unplayable {{QueryLink|Cards|type:Curse|Curse}} cards can now be played. <br>Whenever you play a {{QueryLink|Cards|type:Curse|Curse}}, lose 1 HP and $Exhaust it.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BLUE_CANDLE",
+   "spire": "BLUE_CANDLE",
+   "wiki": "Blue Candle"
+  }
+ },
+ {
+  "id": "BRIMSTONE",
+  "name": "Brimstone",
+  "gameId": "Brimstone",
+  "tier": "shop",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.shop"
+  ],
+  "counter": "none",
+  "values": [
+   null,
+   1
+  ],
+  "text": "At the start of your turn, gain 2 $Strength and ALL enemies gain 1 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BRIMSTONE",
+   "spire": "BRIMSTONE",
+   "wiki": "Brimstone"
+  }
+ },
+ {
+  "id": "CALIPERS",
+  "name": "Calipers",
+  "gameId": "Calipers",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   15
+  ],
+  "text": "At the start of your turn, lose 15 $Block rather than all of your $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CALIPERS",
+   "spire": "CALIPERS",
+   "wiki": "Calipers"
+  }
+ },
+ {
+  "id": "CAPTAINS_WHEEL",
+  "name": "Captain's Wheel",
+  "gameId": "CaptainsWheel",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "combat",
+  "values": [
+   18
+  ],
+  "text": "At the start of your 3rd turn, gain 18 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CAPTAINS_WHEEL",
+   "spire": "CAPTAINSWHEEL",
+   "wiki": "Captain's Wheel"
+  }
+ },
+ {
+  "id": "CENTENNIAL_PUZZLE",
+  "name": "Centennial Puzzle",
+  "gameId": "Centennial Puzzle",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "combat",
+  "values": [
+   3
+  ],
+  "text": "The first time you lose HP each combat, draw 3 cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CENTENNIAL_PUZZLE",
+   "spire": "CENTENNIAL_PUZZLE",
+   "wiki": "Centennial Puzzle"
+  }
+ },
+ {
+  "id": "CERAMIC_FISH",
+  "name": "Ceramic Fish",
+  "gameId": "CeramicFish",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   9
+  ],
+  "text": "Whenever you add a card to your deck, gain 9 [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CERAMIC_FISH",
+   "spire": "CERAMICFISH",
+   "wiki": "Ceramic Fish"
+  }
+ },
+ {
+  "id": "CHAMPION_BELT",
+  "name": "Champion Belt",
+  "gameId": "Champion Belt",
+  "tier": "rare",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.rare"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Whenever you apply $Vulnerable, also apply 1 $Weak.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CHAMPION_BELT",
+   "spire": "CHAMPION_BELT",
+   "wiki": "Champion Belt"
+  }
+ },
+ {
+  "id": "CHARONS_ASHES",
+  "name": "Charon's Ashes",
+  "gameId": "Charon's Ashes",
+  "tier": "rare",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.rare"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Whenever you $Exhaust a card, deal 3 damage to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CHARONS_ASHES",
+   "spire": "CHARON_S_ASHES",
+   "wiki": "Charon's Ashes"
+  }
+ },
+ {
+  "id": "CHEMICAL_X",
+  "name": "Chemical X",
+  "gameId": "Chemical X",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "The effects of your cost X cards are increased by 2.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CHEMICAL_X",
+   "spire": "CHEMICAL_X",
+   "wiki": "Chemical X"
+  }
+ },
+ {
+  "id": "CLOAK_CLASP",
+  "name": "Cloak Clasp",
+  "gameId": "CloakClasp",
+  "tier": "rare",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the end of your turn, gain 1 $Block for each card in your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CLOAK_CLASP",
+   "spire": "CLOAKCLASP",
+   "wiki": "Cloak Clasp"
+  }
+ },
+ {
+  "id": "DARKSTONE_PERIAPT",
+  "name": "Darkstone Periapt",
+  "gameId": "Darkstone Periapt",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   null
+  ],
+  "text": "Whenever you obtain a {{QueryLink|Cards|type:Curse|Curse}}, increase your Max HP by 6",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DARKSTONE_PERIAPT",
+   "spire": "DARKSTONE_PERIAPT",
+   "wiki": "Darkstone Periapt"
+  }
+ },
+ {
+  "id": "DEAD_BRANCH",
+  "name": "Dead Branch",
+  "gameId": "Dead Branch",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you $Exhaust a card, add a random card to your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DEAD_BRANCH",
+   "spire": "DEAD_BRANCH",
+   "wiki": "Dead Branch"
+  }
+ },
+ {
+  "id": "DUALITY",
+  "name": "Duality",
+  "gameId": "Yang",
+  "tier": "uncommon",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you play an {{QueryLink|Cards|type:Attack|Attack}}, gain 1 temporary $Dexterity.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DUALITY",
+   "spire": "YANG",
+   "wiki": "Duality"
+  }
+ },
+ {
+  "id": "ECTOPLASM",
+  "name": "Ectoplasm",
+  "gameId": "Ectoplasm",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You can no longer gain [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ECTOPLASM",
+   "spire": "ECTOPLASM",
+   "wiki": "Ectoplasm"
+  }
+ },
+ {
+  "id": "EMOTION_CHIP",
+  "name": "Emotion Chip",
+  "gameId": "Emotion Chip",
+  "tier": "rare",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.rare"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "If you lost HP during the previous turn, trigger the passive ability of all $Orbs at the start of your turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "EMOTION_CHIP",
+   "spire": "EMOTION_CHIP",
+   "wiki": "Emotion Chip"
+  }
+ },
+ {
+  "id": "FROZEN_CORE",
+  "name": "Frozen Core",
+  "gameId": "FrozenCore",
+  "tier": "boss",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Replaces {{R|Cracked Core}}. If you end your turn with any empty $Orb slots, $Channel 1 $Frost.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FROZEN_CORE",
+   "spire": "FROZENCORE",
+   "wiki": "Frozen Core"
+  }
+ },
+ {
+  "id": "FROZEN_EYE",
+  "name": "Frozen Eye",
+  "gameId": "Frozen Eye",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "When viewing your Draw Pile, the cards are now shown in order.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FROZEN_EYE",
+   "spire": "FROZEN_EYE",
+   "wiki": "Frozen Eye"
+  }
+ },
+ {
+  "id": "GAMBLING_CHIP",
+  "name": "Gambling Chip",
+  "gameId": "Gambling Chip",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "combat",
+  "values": null,
+  "text": "At the start of each combat, discard any number of cards, then draw that many cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GAMBLING_CHIP",
+   "spire": "GAMBLING_CHIP",
+   "wiki": "Gambling Chip"
+  }
+ },
+ {
+  "id": "GINGER",
+  "name": "Ginger",
+  "gameId": "Ginger",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "You can no longer become $Weakened.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GINGER",
+   "spire": "GINGER",
+   "wiki": "Ginger"
+  }
+ },
+ {
+  "id": "GOLDEN_EYE",
+  "name": "Golden Eye",
+  "gameId": "GoldenEye",
+  "tier": "rare",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "Whenever you $Scry, $Scry 2 additional cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GOLDEN_EYE",
+   "spire": "GOLDENEYE",
+   "wiki": "Golden Eye"
+  }
+ },
+ {
+  "id": "GREMLIN_HORN",
+  "name": "Gremlin Horn",
+  "gameId": "Gremlin Horn",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever an enemy dies, gain 1 $Energy and draw 1 card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GREMLIN_HORN",
+   "spire": "GREMLIN_HORN",
+   "wiki": "Gremlin Horn"
+  }
+ },
+ {
+  "id": "HAND_DRILL",
+  "name": "Hand Drill",
+  "gameId": "HandDrill",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you break an enemy's $Block, apply 2 $Vulnerable.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "HAND_DRILL",
+   "spire": "HANDDRILL",
+   "wiki": "Hand Drill"
+  }
+ },
+ {
+  "id": "HAPPY_FLOWER",
+  "name": "Happy Flower",
+  "gameId": "Happy Flower",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every 3 turns, gain 1 $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "HAPPY_FLOWER",
+   "spire": "HAPPY_FLOWER",
+   "wiki": "Happy Flower"
+  }
+ },
+ {
+  "id": "HORN_CLEAT",
+  "name": "Horn Cleat",
+  "gameId": "HornCleat",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "combat",
+  "values": [
+   14
+  ],
+  "text": "At the start of your 2nd turn, gain 14 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "HORN_CLEAT",
+   "spire": "HORNCLEAT",
+   "wiki": "Horn Cleat"
+  }
+ },
+ {
+  "id": "HOVERING_KITE",
+  "name": "Hovering Kite",
+  "gameId": "HoveringKite",
+  "tier": "boss",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.boss"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "The first time you discard a card each turn, gain 1 $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "HOVERING_KITE",
+   "spire": "HOVERINGKITE",
+   "wiki": "Hovering Kite"
+  }
+ },
+ {
+  "id": "ICE_CREAM",
+  "name": "Ice Cream",
+  "gameId": "Ice Cream",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "$Energy is now conserved between turns.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ICE_CREAM",
+   "spire": "ICE_CREAM",
+   "wiki": "Ice Cream"
+  }
+ },
+ {
+  "id": "INCENSE_BURNER",
+  "name": "Incense Burner",
+  "gameId": "Incense Burner",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every 6 turns, gain 1 $Intangible.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "INCENSE_BURNER",
+   "spire": "INCENSE_BURNER",
+   "wiki": "Incense Burner"
+  }
+ },
+ {
+  "id": "INK_BOTTLE",
+  "name": "Ink Bottle",
+  "gameId": "InkBottle",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Whenever you play 10 cards, draw 1 card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "INK_BOTTLE",
+   "spire": "INKBOTTLE",
+   "wiki": "Ink Bottle"
+  }
+ },
+ {
+  "id": "INSERTER",
+  "name": "Inserter",
+  "gameId": "Inserter",
+  "tier": "boss",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.boss"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every 2 turns, gain 1 $Orb slot.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "INSERTER",
+   "spire": "INSERTER",
+   "wiki": "Inserter"
+  }
+ },
+ {
+  "id": "KUNAI",
+  "name": "Kunai",
+  "gameId": "Kunai",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "turn",
+  "values": [
+   null,
+   1
+  ],
+  "text": "Every time you play 3 {{QueryLink|Cards|type:Attack|Attacks}} in a single turn, gain 1 $Dexterity",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "KUNAI",
+   "spire": "KUNAI",
+   "wiki": "Kunai"
+  }
+ },
+ {
+  "id": "LETTER_OPENER",
+  "name": "Letter Opener",
+  "gameId": "Letter Opener",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "turn",
+  "values": [
+   5
+  ],
+  "text": "Every time you play 3 {{QueryLink|Cards|type:Skill|Skills}} in a single turn, deal 5 damage to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "LETTER_OPENER",
+   "spire": "LETTER_OPENER",
+   "wiki": "Letter Opener"
+  }
+ },
+ {
+  "id": "LIZARD_TAIL",
+  "name": "Lizard Tail",
+  "gameId": "Lizard Tail",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "When you would die, heal to 50% of your Max HP instead (works once).",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "LIZARD_TAIL",
+   "spire": "LIZARD_TAIL",
+   "wiki": "Lizard Tail"
+  }
+ },
+ {
+  "id": "MAGIC_FLOWER",
+  "name": "Magic Flower",
+  "gameId": "Magic Flower",
+  "tier": "rare",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Healing is 50% more effective during combat.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MAGIC_FLOWER",
+   "spire": "MAGIC_FLOWER",
+   "wiki": "Magic Flower"
+  }
+ },
+ {
+  "id": "MARK_OF_THE_BLOOM",
+  "name": "Mark of the Bloom",
+  "gameId": "Mark of the Bloom",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "You can no longer heal.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MARK_OF_THE_BLOOM",
+   "spire": "MARK_OF_THE_BLOOM",
+   "wiki": "Mark of the Bloom"
+  }
+ },
+ {
+  "id": "MEDICAL_KIT",
+  "name": "Medical Kit",
+  "gameId": "Medical Kit",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "$Unplayable {{QueryLink|Cards|type:Status|Status}} cards can now be played. Whenever you play a {{QueryLink|Cards|type:Status|Status}} card, $Exhaust it.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MEDICAL_KIT",
+   "spire": "MEDICAL_KIT",
+   "wiki": "Medical Kit"
+  }
+ },
+ {
+  "id": "MELANGE",
+  "name": "Melange",
+  "gameId": "Melange",
+  "tier": "shop",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Whenever you shuffle your draw pile, $Scry 3.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MELANGE",
+   "spire": "MELANGE",
+   "wiki": "Melange"
+  }
+ },
+ {
+  "id": "MERCURY_HOURGLASS",
+  "name": "Mercury Hourglass",
+  "gameId": "Mercury Hourglass",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "At the start of your turn, deal 3 damage to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MERCURY_HOURGLASS",
+   "spire": "MERCURY_HOURGLASS",
+   "wiki": "Mercury Hourglass"
+  }
+ },
+ {
+  "id": "MUMMIFIED_HAND",
+  "name": "Mummified Hand",
+  "gameId": "Mummified Hand",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you play a {{QueryLink|Cards|type:Power|Power}} card, a random card in your hand costs 0 that turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MUMMIFIED_HAND",
+   "spire": "MUMMIFIED_HAND",
+   "wiki": "Mummified Hand"
+  }
+ },
+ {
+  "id": "NECRONOMICON",
+  "name": "Necronomicon",
+  "gameId": "Necronomicon",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "turn",
+  "values": [
+   2
+  ],
+  "text": "The first {{QueryLink|Cards|type:Attack|Attack}} played each turn that costs 2 or more is played twice. Upon pickup, obtain a special {{QueryLink|Cards|type:Curse|Curse}}.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NECRONOMICON",
+   "spire": "NECRONOMICON",
+   "wiki": "Necronomicon"
+  }
+ },
+ {
+  "id": "NILRYS_CODEX",
+  "name": "Nilry's Codex",
+  "gameId": "Nilry's Codex",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "At the end of each turn, you may shuffle 1 of 3 random cards to shuffle into your draw pile.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NILRYS_CODEX",
+   "spire": "NILRY_S_CODEX",
+   "wiki": "Nilry's Codex"
+  }
+ },
+ {
+  "id": "NUNCHAKU",
+  "name": "Nunchaku",
+  "gameId": "Nunchaku",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every time you play 10 {{QueryLink|Cards|type:Attack|Attacks}}, gain 1 $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NUNCHAKU",
+   "spire": "NUNCHAKU",
+   "wiki": "Nunchaku"
+  }
+ },
+ {
+  "id": "ODD_MUSHROOM",
+  "name": "Odd Mushroom",
+  "gameId": "Odd Mushroom",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "When $Vulnerable, take 25% more attack damage rather than 50%.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ODD_MUSHROOM",
+   "spire": "ODD_MUSHROOM",
+   "wiki": "Odd Mushroom"
+  }
+ },
+ {
+  "id": "OMAMORI",
+  "name": "Omamori",
+  "gameId": "Omamori",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Negate the next 2 {{QueryLink|Cards|type:Curse|Curses}} you obtain.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "OMAMORI",
+   "spire": "OMAMORI",
+   "wiki": "Omamori"
+  }
+ },
+ {
+  "id": "ORANGE_PELLETS",
+  "name": "Orange Pellets",
+  "gameId": "OrangePellets",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "Whenever you play a {{QueryLink|Cards|type:Power|Power}}, {{QueryLink|Cards|type:Attack|Attack}}, and {{QueryLink|Cards|type:Skill|Skill}} in the same turn, remove all of your [[Debuffs|debuffs]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ORANGE_PELLETS",
+   "spire": "ORANGEPELLETS",
+   "wiki": "Orange Pellets"
+  }
+ },
+ {
+  "id": "ORICHALCUM",
+  "name": "Orichalcum",
+  "gameId": "Orichalcum",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   6
+  ],
+  "text": "If you end your turn without $Block, gain 6 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ORICHALCUM",
+   "spire": "ORICHALCUM",
+   "wiki": "Orichalcum"
+  }
+ },
+ {
+  "id": "ORNAMENTAL_FAN",
+  "name": "Ornamental Fan",
+  "gameId": "Ornamental Fan",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "turn",
+  "values": [
+   4
+  ],
+  "text": "Every time you play 3 {{QueryLink|Cards|type:Attack|Attacks}} in a single turn, gain 4 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ORNAMENTAL_FAN",
+   "spire": "ORNAMENTAL_FAN",
+   "wiki": "Ornamental Fan"
+  }
+ },
+ {
+  "id": "PAPER_KRANE",
+  "name": "Paper Krane",
+  "gameId": "Paper Crane",
+  "tier": "uncommon",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Enemies with $Weak deal 40% less damage rather than 25%.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PAPER_KRANE",
+   "spire": "PAPER_CRANE",
+   "wiki": "Paper Krane"
+  }
+ },
+ {
+  "id": "PAPER_PHROG",
+  "name": "Paper Phrog",
+  "gameId": "Paper Frog",
+  "tier": "uncommon",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Enemies with $Vulnerable take 75% more damage rather than 50%.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PAPER_PHROG",
+   "spire": "PAPER_FROG",
+   "wiki": "Paper Phrog"
+  }
+ },
+ {
+  "id": "PEN_NIB",
+  "name": "Pen Nib",
+  "gameId": "Pen Nib",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every 10th {{QueryLink|Cards|type:Attack|Attack}} you play deals double damage.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PEN_NIB",
+   "spire": "PEN_NIB",
+   "wiki": "Pen Nib"
+  }
+ },
+ {
+  "id": "PHILOSOPHERS_STONE",
+  "name": "Philosopher's Stone",
+  "gameId": "Philosopher's Stone",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Gain 1 $Energy at the start of your turn. ALL enemies start combat with 1 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PHILOSOPHERS_STONE",
+   "spire": "PHILOSOPHER_S_STONE",
+   "wiki": "Philosopher's Stone"
+  }
+ },
+ {
+  "id": "POCKETWATCH",
+  "name": "Pocketwatch",
+  "gameId": "Pocketwatch",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "Whenever you play 3 or less cards during your turn, draw 3 additional cards at the start of your next turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "POCKETWATCH",
+   "spire": "POCKETWATCH",
+   "wiki": "Pocketwatch"
+  }
+ },
+ {
+  "id": "RED_SKULL",
+  "name": "Red Skull",
+  "gameId": "Red Skull",
+  "tier": "common",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.common"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "While your HP is at or below 50%, you have 3 additional $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RED_SKULL",
+   "spire": "RED_SKULL",
+   "wiki": "Red Skull"
+  }
+ },
+ {
+  "id": "RUNIC_CUBE",
+  "name": "Runic Cube",
+  "gameId": "Runic Cube",
+  "tier": "boss",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.boss"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Whenever you lose HP, draw 1 card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RUNIC_CUBE",
+   "spire": "RUNIC_CUBE",
+   "wiki": "Runic Cube"
+  }
+ },
+ {
+  "id": "RUNIC_DOME",
+  "name": "Runic Dome",
+  "gameId": "Runic Dome",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You can no longer see enemy intents.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RUNIC_DOME",
+   "spire": "RUNIC_DOME",
+   "wiki": "Runic Dome"
+  }
+ },
+ {
+  "id": "RUNIC_PYRAMID",
+  "name": "Runic Pyramid",
+  "gameId": "Runic Pyramid",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the end of your turn, you no longer discard your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RUNIC_PYRAMID",
+   "spire": "RUNIC_PYRAMID",
+   "wiki": "Runic Pyramid"
+  }
+ },
+ {
+  "id": "SACRED_BARK",
+  "name": "Sacred Bark",
+  "gameId": "SacredBark",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Double the effectiveness of [[Potions|potions]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SACRED_BARK",
+   "spire": "SACREDBARK",
+   "wiki": "Sacred Bark"
+  }
+ },
+ {
+  "id": "SELF_FORMING_CLAY",
+  "name": "Self-Forming Clay",
+  "gameId": "Self Forming Clay",
+  "tier": "uncommon",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Whenever you lose HP, gain 3 $Block next turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SELF_FORMING_CLAY",
+   "spire": "SELF_FORMING_CLAY",
+   "wiki": "Self-Forming Clay"
+  }
+ },
+ {
+  "id": "SHURIKEN",
+  "name": "Shuriken",
+  "gameId": "Shuriken",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "turn",
+  "values": [
+   null,
+   1
+  ],
+  "text": "Every time you play 3 {{QueryLink|Cards|type:Attack|Attacks}} in a single turn, gain 1 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SHURIKEN",
+   "spire": "SHURIKEN",
+   "wiki": "Shuriken"
+  }
+ },
+ {
+  "id": "SNECKO_EYE",
+  "name": "Snecko Eye",
+  "gameId": "Snecko Eye",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of your turn, draw 2 additional cards. Start each combat $Confused.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SNECKO_EYE",
+   "spire": "SNECKO_EYE",
+   "wiki": "Snecko Eye"
+  }
+ },
+ {
+  "id": "SNECKO_SKULL",
+  "name": "Snecko Skull",
+  "gameId": "Snake Skull",
+  "tier": "common",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Whenever you apply $Poison, apply an additional 1 $Poison.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SNECKO_SKULL",
+   "spire": "SNAKE_SKULL",
+   "wiki": "Snecko Skull"
+  }
+ },
+ {
+  "id": "SOZU",
+  "name": "Sozu",
+  "gameId": "Sozu",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You can no longer obtain [[Potions|potions]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SOZU",
+   "spire": "SOZU",
+   "wiki": "Sozu"
+  }
+ },
+ {
+  "id": "STONE_CALENDAR",
+  "name": "Stone Calendar",
+  "gameId": "StoneCalendar",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "combat",
+  "values": [
+   null,
+   52
+  ],
+  "text": "At the end of turn 7, deal 52 damage to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "STONE_CALENDAR",
+   "spire": "STONECALENDAR",
+   "wiki": "Stone Calendar"
+  }
+ },
+ {
+  "id": "STRANGE_SPOON",
+  "name": "Strange Spoon",
+  "gameId": "Strange Spoon",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Cards which $Exhaust when played will instead discard 50% of the time.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "STRANGE_SPOON",
+   "spire": "STRANGE_SPOON",
+   "wiki": "Strange Spoon"
+  }
+ },
+ {
+  "id": "STRIKE_DUMMY",
+  "name": "Strike Dummy",
+  "gameId": "StrikeDummy",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Cards containing \"Strike\" deal 3 additional damage.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "STRIKE_DUMMY",
+   "spire": "STRIKEDUMMY",
+   "wiki": "Strike Dummy"
+  }
+ },
+ {
+  "id": "SUNDIAL",
+  "name": "Sundial",
+  "gameId": "Sundial",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Every 3 times you shuffle your draw pile, gain 2 $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SUNDIAL",
+   "spire": "SUNDIAL",
+   "wiki": "Sundial"
+  }
+ },
+ {
+  "id": "THE_ABACUS",
+  "name": "The Abacus",
+  "gameId": "TheAbacus",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": [
+   6
+  ],
+  "text": "Whenever you shuffle your draw pile, gain 6 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "THE_ABACUS",
+   "spire": "THEABACUS",
+   "wiki": "The Abacus"
+  }
+ },
+ {
+  "id": "THE_BOOT",
+  "name": "The Boot",
+  "gameId": "Boot",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   4
+  ],
+  "text": "Whenever you would deal 4 or less unblocked {{QueryLink|Cards|type:Attack|Attack}} damage, increase it to 5.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "THE_BOOT",
+   "spire": "BOOT",
+   "wiki": "The Boot"
+  }
+ },
+ {
+  "id": "THE_SPECIMEN",
+  "name": "The Specimen",
+  "gameId": "The Specimen",
+  "tier": "rare",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever an enemy dies, transfer any $Poison it has to a random enemy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "THE_SPECIMEN",
+   "spire": "THE_SPECIMEN",
+   "wiki": "The Specimen"
+  }
+ },
+ {
+  "id": "TINGSHA",
+  "name": "Tingsha",
+  "gameId": "Tingsha",
+  "tier": "rare",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.rare"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Whenever you discard a card during your turn, deal 3 damage to a random enemy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TINGSHA",
+   "spire": "TINGSHA",
+   "wiki": "Tingsha"
+  }
+ },
+ {
+  "id": "TOOLBOX",
+  "name": "Toolbox",
+  "gameId": "Toolbox",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, choose 1 of 3 random {{QueryLink|Cards|color:Colorless|Colorless}} cards and add the chosen card into your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TOOLBOX",
+   "spire": "TOOLBOX",
+   "wiki": "Toolbox"
+  }
+ },
+ {
+  "id": "TORII",
+  "name": "Torii",
+  "gameId": "Torii",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   5
+  ],
+  "text": "Whenever you would receive 5 or less unblocked {{QueryLink|Cards|type:Attack|Attack}} damage, reduce it to 1.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TORII",
+   "spire": "TORII",
+   "wiki": "Torii"
+  }
+ },
+ {
+  "id": "TOUGH_BANDAGES",
+  "name": "Tough Bandages",
+  "gameId": "Tough Bandages",
+  "tier": "rare",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.rare"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Whenever you discard a card during your turn, gain 3 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TOUGH_BANDAGES",
+   "spire": "TOUGH_BANDAGES",
+   "wiki": "Tough Bandages"
+  }
+ },
+ {
+  "id": "TOY_ORNITHOPTER",
+  "name": "Toy Ornithopter",
+  "gameId": "Toy Ornithopter",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   5
+  ],
+  "text": "Whenever you use a [[Potions|potion]], heal 5 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TOY_ORNITHOPTER",
+   "spire": "TOY_ORNITHOPTER",
+   "wiki": "Toy Ornithopter"
+  }
+ },
+ {
+  "id": "TUNGSTEN_ROD",
+  "name": "Tungsten Rod",
+  "gameId": "TungstenRod",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Whenever you would lose HP, lose 1 less.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TUNGSTEN_ROD",
+   "spire": "TUNGSTENROD",
+   "wiki": "Tungsten Rod"
+  }
+ },
+ {
+  "id": "TURNIP",
+  "name": "Turnip",
+  "gameId": "Turnip",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "You can no longer become $Frail.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TURNIP",
+   "spire": "TURNIP",
+   "wiki": "Turnip"
+  }
+ },
+ {
+  "id": "TWISTED_FUNNEL",
+  "name": "Twisted Funnel",
+  "gameId": "TwistedFunnel",
+  "tier": "shop",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, apply 4 $Poison to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TWISTED_FUNNEL",
+   "spire": "TWISTEDFUNNEL",
+   "wiki": "Twisted Funnel"
+  }
+ },
+ {
+  "id": "UNCEASING_TOP",
+  "name": "Unceasing Top",
+  "gameId": "Unceasing Top",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you have no cards in hand during your turn, draw a card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "UNCEASING_TOP",
+   "spire": "UNCEASING_TOP",
+   "wiki": "Unceasing Top"
+  }
+ },
+ {
+  "id": "VELVET_CHOKER",
+  "name": "Velvet Choker",
+  "gameId": "Velvet Choker",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "turn",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You cannot play more than 6 cards per turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "VELVET_CHOKER",
+   "spire": "VELVET_CHOKER",
+   "wiki": "Velvet Choker"
+  }
+ },
+ {
+  "id": "VIOLET_LOTUS",
+  "name": "Violet Lotus",
+  "gameId": "VioletLotus",
+  "tier": "boss",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you exit $Calm, gain an additional $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "VIOLET_LOTUS",
+   "spire": "VIOLETLOTUS",
+   "wiki": "Violet Lotus"
+  }
+ },
+ {
+  "id": "WARPED_TONGS",
+  "name": "Warped Tongs",
+  "gameId": "WarpedTongs",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of your turn, $Upgrade a random card in your hand for the rest of combat.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WARPED_TONGS",
+   "spire": "WARPEDTONGS",
+   "wiki": "Warped Tongs"
+  }
+ },
+ {
+  "id": "WRIST_BLADE",
+  "name": "Wrist Blade",
+  "gameId": "WristBlade",
+  "tier": "boss",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "{{QueryLink|Cards|type:Attack|Attacks}} that cost 0 deal 4 additional damage.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WRIST_BLADE",
+   "spire": "WRISTBLADE",
+   "wiki": "Wrist Blade"
+  }
+ },
+ {
+  "id": "BLACK_BLOOD",
+  "name": "Black Blood",
+  "gameId": "Black Blood",
+  "tier": "boss",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.boss"
+  ],
+  "counter": "none",
+  "values": [
+   12
+  ],
+  "text": "Replaces {{R|Burning Blood}}. At the end of combat, heal 12 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BLACK_BLOOD",
+   "spire": "BLACK_BLOOD",
+   "wiki": "Black Blood"
+  }
+ },
+ {
+  "id": "BURNING_BLOOD",
+  "name": "Burning Blood",
+  "gameId": "Burning Blood",
+  "tier": "starter",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.starter"
+  ],
+  "counter": "none",
+  "values": [
+   6
+  ],
+  "text": "At the end of combat, heal 6 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BURNING_BLOOD",
+   "spire": "BURNING_BLOOD",
+   "wiki": "Burning Blood"
+  }
+ },
+ {
+  "id": "MEAT_ON_THE_BONE",
+  "name": "Meat on the Bone",
+  "gameId": "Meat on the Bone",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   12
+  ],
+  "text": "If your HP is at or below 50% at the end of combat, heal 12 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MEAT_ON_THE_BONE",
+   "spire": "MEAT_ON_THE_BONE",
+   "wiki": "Meat on the Bone"
+  }
+ },
+ {
+  "id": "FACE_OF_CLERIC",
+  "name": "Face of Cleric",
+  "gameId": "FaceOfCleric",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "At the end of combat, raise your Max HP by 1.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FACE_OF_CLERIC",
+   "spire": "FACEOFCLERIC",
+   "wiki": "Face of Cleric"
+  }
+ },
+ {
+  "id": "ANCHOR",
+  "name": "Anchor",
+  "gameId": "Anchor",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   10
+  ],
+  "text": "Start each combat with 10 $Block.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ANCHOR",
+   "spire": "ANCHOR",
+   "wiki": "Anchor"
+  }
+ },
+ {
+  "id": "ANCIENT_TEA_SET",
+  "name": "Ancient Tea Set",
+  "gameId": "Ancient Tea Set",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Whenever you enter a Rest Site, start the next combat with 2 extra $Energy.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ANCIENT_TEA_SET",
+   "spire": "ANCIENT_TEA_SET",
+   "wiki": "Ancient Tea Set"
+  }
+ },
+ {
+  "id": "BAG_OF_MARBLES",
+  "name": "Bag of Marbles",
+  "gameId": "Bag of Marbles",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the start of each combat, apply 1 $Vulnerable to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BAG_OF_MARBLES",
+   "spire": "BAG_OF_MARBLES",
+   "wiki": "Bag of Marbles"
+  }
+ },
+ {
+  "id": "BAG_OF_PREPARATION",
+  "name": "Bag of Preparation",
+  "gameId": "Bag of Preparation",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "At the start of each combat, draw 2 additional cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BAG_OF_PREPARATION",
+   "spire": "BAG_OF_PREPARATION",
+   "wiki": "Bag of Preparation"
+  }
+ },
+ {
+  "id": "BLOOD_VIAL",
+  "name": "Blood Vial",
+  "gameId": "Blood Vial",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "At the start of each combat, heal 2 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BLOOD_VIAL",
+   "spire": "BLOOD_VIAL",
+   "wiki": "Blood Vial"
+  }
+ },
+ {
+  "id": "BOTTLED_FLAME",
+  "name": "Bottled Flame",
+  "gameId": "Bottled Flame",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Upon pickup, choose an {{QueryLink|Cards|type:Attack|Attack}} card. <br>At the start of each combat, this card will be in your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BOTTLED_FLAME",
+   "spire": "BOTTLED_FLAME",
+   "wiki": "Bottled Flame"
+  }
+ },
+ {
+  "id": "BOTTLED_LIGHTNING",
+  "name": "Bottled Lightning",
+  "gameId": "Bottled Lightning",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Upon pickup, choose a {{QueryLink|Cards|type:Skill|Skill}} card. <br>At the start of each combat, this card will be in your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BOTTLED_LIGHTNING",
+   "spire": "BOTTLED_LIGHTNING",
+   "wiki": "Bottled Lightning"
+  }
+ },
+ {
+  "id": "BOTTLED_TORNADO",
+  "name": "Bottled Tornado",
+  "gameId": "Bottled Tornado",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "Upon pickup, choose a {{QueryLink|Cards|type:Power|Power}} card. <br>At the start of each combat, this card will be in your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BOTTLED_TORNADO",
+   "spire": "BOTTLED_TORNADO",
+   "wiki": "Bottled Tornado"
+  }
+ },
+ {
+  "id": "BRONZE_SCALES",
+  "name": "Bronze Scales",
+  "gameId": "Bronze Scales",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "Start each combat with 3 $Thorns.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BRONZE_SCALES",
+   "spire": "BRONZE_SCALES",
+   "wiki": "Bronze Scales"
+  }
+ },
+ {
+  "id": "BUSTED_CROWN",
+  "name": "Busted Crown",
+  "gameId": "Busted Crown",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. Future card rewards have 2 less cards to choose from.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BUSTED_CROWN",
+   "spire": "BUSTED_CROWN",
+   "wiki": "Busted Crown"
+  }
+ },
+ {
+  "id": "CLOCKWORK_SOUVENIR",
+  "name": "Clockwork Souvenir",
+  "gameId": "ClockworkSouvenir",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Start each combat with 1 $Artifact.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CLOCKWORK_SOUVENIR",
+   "spire": "CLOCKWORKSOUVENIR",
+   "wiki": "Clockwork Souvenir"
+  }
+ },
+ {
+  "id": "COFFEE_DRIPPER",
+  "name": "Coffee Dripper",
+  "gameId": "Coffee Dripper",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You can no longer Rest at Rest Sites.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "COFFEE_DRIPPER",
+   "spire": "COFFEE_DRIPPER",
+   "wiki": "Coffee Dripper"
+  }
+ },
+ {
+  "id": "CRACKED_CORE",
+  "name": "Cracked Core",
+  "gameId": "Cracked Core",
+  "tier": "starter",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.starter"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, $Channel 1 $Lightning.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CRACKED_CORE",
+   "spire": "CRACKED_CORE",
+   "wiki": "Cracked Core"
+  }
+ },
+ {
+  "id": "CURSED_KEY",
+  "name": "Cursed Key",
+  "gameId": "Cursed Key",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. Whenever you open a non-Boss chest, obtain a {{QueryLink|Cards|type:Curse|Curse}}.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CURSED_KEY",
+   "spire": "CURSED_KEY",
+   "wiki": "Cursed Key"
+  }
+ },
+ {
+  "id": "DAMARU",
+  "name": "Damaru",
+  "gameId": "Damaru",
+  "tier": "common",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the start of your turn, gain 1 $Mantra.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DAMARU",
+   "spire": "DAMARU",
+   "wiki": "Damaru"
+  }
+ },
+ {
+  "id": "DATA_DISK",
+  "name": "Data Disk",
+  "gameId": "DataDisk",
+  "tier": "common",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "Start each combat with 1 $Focus.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DATA_DISK",
+   "spire": "DATADISK",
+   "wiki": "Data Disk"
+  }
+ },
+ {
+  "id": "DU_VU_DOLL",
+  "name": "Du-Vu Doll",
+  "gameId": "Du-Vu Doll",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "For each {{QueryLink|Cards|type:Curse|Curse}} in your deck, start each combat with 1 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DU_VU_DOLL",
+   "spire": "DU_VU_DOLL",
+   "wiki": "Du-Vu Doll"
+  }
+ },
+ {
+  "id": "ENCHIRIDION",
+  "name": "Enchiridion",
+  "gameId": "Enchiridion",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, add a random {{QueryLink|Cards|type:Power|Power}} card into your hand. It costs 0 for that turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ENCHIRIDION",
+   "spire": "ENCHIRIDION",
+   "wiki": "Enchiridion"
+  }
+ },
+ {
+  "id": "FOSSILIZED_HELIX",
+  "name": "Fossilized Helix",
+  "gameId": "FossilizedHelix",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Prevent the first time you would lose HP in combat.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FOSSILIZED_HELIX",
+   "spire": "FOSSILIZEDHELIX",
+   "wiki": "Fossilized Helix"
+  }
+ },
+ {
+  "id": "FUSION_HAMMER",
+  "name": "Fusion Hammer",
+  "gameId": "Fusion Hammer",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. You can no longer Smith at Rest Sites.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FUSION_HAMMER",
+   "spire": "FUSION_HAMMER",
+   "wiki": "Fusion Hammer"
+  }
+ },
+ {
+  "id": "GIRYA",
+  "name": "Girya",
+  "gameId": "Girya",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "You can now gain $Strength at Rest Sites (up to 3 times).",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GIRYA",
+   "spire": "GIRYA",
+   "wiki": "Girya"
+  }
+ },
+ {
+  "id": "GOLD_PLATED_CABLES",
+  "name": "Gold-Plated Cables",
+  "gameId": "Cables",
+  "tier": "uncommon",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Your rightmost $Orb triggers its passive an additional time.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GOLD_PLATED_CABLES",
+   "spire": "CABLES",
+   "wiki": "Gold-Plated Cables"
+  }
+ },
+ {
+  "id": "GREMLIN_VISAGE",
+  "name": "Gremlin Visage",
+  "gameId": "GremlinMask",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "Start each combat with 1 $Weak.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GREMLIN_VISAGE",
+   "spire": "GREMLINMASK",
+   "wiki": "Gremlin Visage"
+  }
+ },
+ {
+  "id": "HOLY_WATER",
+  "name": "Holy Water",
+  "gameId": "HolyWater",
+  "tier": "boss",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Replaces {{R|Pure Water}}. At the start of each combat, add 3 {{C|Miracle|Miracles}} into your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "HOLY_WATER",
+   "spire": "HOLYWATER",
+   "wiki": "Holy Water"
+  }
+ },
+ {
+  "id": "LANTERN",
+  "name": "Lantern",
+  "gameId": "Lantern",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy on the first turn of each combat.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "LANTERN",
+   "spire": "LANTERN",
+   "wiki": "Lantern"
+  }
+ },
+ {
+  "id": "MARK_OF_PAIN",
+  "name": "Mark of Pain",
+  "gameId": "Mark of Pain",
+  "tier": "boss",
+  "pool": "red",
+  "inCharacterPools": [
+   "ironclad.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Gain 1 $Energy at the start of your turn. At the start of combat, shuffle 2 {{C|Wound|Wounds}} into your draw pile.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MARK_OF_PAIN",
+   "spire": "MARK_OF_PAIN",
+   "wiki": "Mark of Pain"
+  }
+ },
+ {
+  "id": "MUTAGENIC_STRENGTH",
+  "name": "Mutagenic Strength",
+  "gameId": "MutagenicStrength",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": [
+   null,
+   3
+  ],
+  "text": "Start each combat with 3 $Strength. At the end of your first turn, lose 3 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MUTAGENIC_STRENGTH",
+   "spire": "MUTAGENICSTRENGTH",
+   "wiki": "Mutagenic Strength"
+  }
+ },
+ {
+  "id": "NEOWS_LAMENT",
+  "name": "Neow's Lament",
+  "gameId": "NeowsBlessing",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "persistent",
+  "values": null,
+  "text": "Enemies in your first 3 combats will have 1 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NEOWS_LAMENT",
+   "spire": "NEOWSBLESSING",
+   "wiki": "Neow's Lament"
+  }
+ },
+ {
+  "id": "NINJA_SCROLL",
+  "name": "Ninja Scroll",
+  "gameId": "Ninja Scroll",
+  "tier": "uncommon",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   3
+  ],
+  "text": "At the start each combat, add 3 {{C|Shiv|Shivs}} into your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NINJA_SCROLL",
+   "spire": "NINJA_SCROLL",
+   "wiki": "Ninja Scroll"
+  }
+ },
+ {
+  "id": "NUCLEAR_BATTERY",
+  "name": "Nuclear Battery",
+  "gameId": "Nuclear Battery",
+  "tier": "boss",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, $Channel 1 $Plasma.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NUCLEAR_BATTERY",
+   "spire": "NUCLEAR_BATTERY",
+   "wiki": "Nuclear Battery"
+  }
+ },
+ {
+  "id": "ODDLY_SMOOTH_STONE",
+  "name": "Oddly Smooth Stone",
+  "gameId": "Oddly Smooth Stone",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the start of each combat, gain 1 $Dexterity.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ODDLY_SMOOTH_STONE",
+   "spire": "ODDLY_SMOOTH_STONE",
+   "wiki": "Oddly Smooth Stone"
+  }
+ },
+ {
+  "id": "PANTOGRAPH",
+  "name": "Pantograph",
+  "gameId": "Pantograph",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   25
+  ],
+  "text": "At the start of Boss combats, heal 25 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PANTOGRAPH",
+   "spire": "PANTOGRAPH",
+   "wiki": "Pantograph"
+  }
+ },
+ {
+  "id": "PRESERVED_INSECT",
+  "name": "Preserved Insect",
+  "gameId": "PreservedInsect",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   25
+  ],
+  "text": "Enemies in Elite combats have 25% less HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PRESERVED_INSECT",
+   "spire": "PRESERVEDINSECT",
+   "wiki": "Preserved Insect"
+  }
+ },
+ {
+  "id": "PURE_WATER",
+  "name": "Pure Water",
+  "gameId": "PureWater",
+  "tier": "starter",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.starter"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, add 1 {{C|Miracle}} into your hand.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PURE_WATER",
+   "spire": "PUREWATER",
+   "wiki": "Pure Water"
+  }
+ },
+ {
+  "id": "RED_MASK",
+  "name": "Red Mask",
+  "gameId": "Red Mask",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the start of each combat, apply 1 $Weak to ALL enemies.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RED_MASK",
+   "spire": "RED_MASK",
+   "wiki": "Red Mask"
+  }
+ },
+ {
+  "id": "RING_OF_THE_SERPENT",
+  "name": "Ring of the Serpent",
+  "gameId": "Ring of the Serpent",
+  "tier": "boss",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.boss"
+  ],
+  "counter": "none",
+  "values": [
+   null
+  ],
+  "text": "Replaces {{R|Ring of the Snake}}. At the start of your turn, draw 1 additional card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RING_OF_THE_SERPENT",
+   "spire": "RING_OF_THE_SERPENT",
+   "wiki": "Ring of the Serpent"
+  }
+ },
+ {
+  "id": "RING_OF_THE_SNAKE",
+  "name": "Ring of the Snake",
+  "gameId": "Ring of the Snake",
+  "tier": "starter",
+  "pool": "green",
+  "inCharacterPools": [
+   "silent.starter"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "At the start of each combat, draw 2 additional cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RING_OF_THE_SNAKE",
+   "spire": "RING_OF_THE_SNAKE",
+   "wiki": "Ring of the Snake"
+  }
+ },
+ {
+  "id": "RUNIC_CAPACITOR",
+  "name": "Runic Capacitor",
+  "gameId": "Runic Capacitor",
+  "tier": "shop",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Start each combat with 3 additional $Orb slots.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RUNIC_CAPACITOR",
+   "spire": "RUNIC_CAPACITOR",
+   "wiki": "Runic Capacitor"
+  }
+ },
+ {
+  "id": "SLAVERS_COLLAR",
+  "name": "Slaver's Collar",
+  "gameId": "SlaversCollar",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "During Boss and Elite combats, gain 1 $Energy at the start of your turn.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SLAVERS_COLLAR",
+   "spire": "SLAVERSCOLLAR",
+   "wiki": "Slaver's Collar"
+  }
+ },
+ {
+  "id": "SLING_OF_COURAGE",
+  "name": "Sling of Courage",
+  "gameId": "Sling",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "Start each Elite combat with 2 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SLING_OF_COURAGE",
+   "spire": "SLING",
+   "wiki": "Sling of Courage"
+  }
+ },
+ {
+  "id": "SYMBIOTIC_VIRUS",
+  "name": "Symbiotic Virus",
+  "gameId": "Symbiotic Virus",
+  "tier": "uncommon",
+  "pool": "blue",
+  "inCharacterPools": [
+   "defect.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "At the start of each combat, $Channel 1 $Dark.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SYMBIOTIC_VIRUS",
+   "spire": "SYMBIOTIC_VIRUS",
+   "wiki": "Symbiotic Virus"
+  }
+ },
+ {
+  "id": "TEARDROP_LOCKET",
+  "name": "Teardrop Locket",
+  "gameId": "TeardropLocket",
+  "tier": "uncommon",
+  "pool": "purple",
+  "inCharacterPools": [
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Start each combat in $Calm.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TEARDROP_LOCKET",
+   "spire": "TEARDROPLOCKET",
+   "wiki": "Teardrop Locket"
+  }
+ },
+ {
+  "id": "THREAD_AND_NEEDLE",
+  "name": "Thread and Needle",
+  "gameId": "Thread and Needle",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   4
+  ],
+  "text": "At the start of each combat, gain 4 $Plated Armor.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "THREAD_AND_NEEDLE",
+   "spire": "THREAD_AND_NEEDLE",
+   "wiki": "Thread and Needle"
+  }
+ },
+ {
+  "id": "VAJRA",
+  "name": "Vajra",
+  "gameId": "Vajra",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   1
+  ],
+  "text": "At the start of each combat, gain 1 $Strength.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "VAJRA",
+   "spire": "VAJRA",
+   "wiki": "Vajra"
+  }
+ },
+ {
+  "id": "ASTROLABE",
+  "name": "Astrolabe",
+  "gameId": "Astrolabe",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, $Transform 3 cards, then $Upgrade them.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ASTROLABE",
+   "spire": "ASTROLABE",
+   "wiki": "Astrolabe"
+  }
+ },
+ {
+  "id": "BLACK_STAR",
+  "name": "Black Star",
+  "gameId": "Black Star",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Elites now drop an additional relic when defeated.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "BLACK_STAR",
+   "spire": "BLACK_STAR",
+   "wiki": "Black Star"
+  }
+ },
+ {
+  "id": "CALLING_BELL",
+  "name": "Calling Bell",
+  "gameId": "Calling Bell",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, obtain a unique {{QueryLink|Cards|type:Curse|Curse}} and 3 relics.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CALLING_BELL",
+   "spire": "CALLING_BELL",
+   "wiki": "Calling Bell"
+  }
+ },
+ {
+  "id": "CAULDRON",
+  "name": "Cauldron",
+  "gameId": "Cauldron",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "When obtained, brews 5 random [[Potions|potions]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CAULDRON",
+   "spire": "CAULDRON",
+   "wiki": "Cauldron"
+  }
+ },
+ {
+  "id": "CULTIST_HEADPIECE",
+  "name": "Cultist Headpiece",
+  "gameId": "CultistMask",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "You feel more talkative.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CULTIST_HEADPIECE",
+   "spire": "CULTISTMASK",
+   "wiki": "Cultist Headpiece"
+  }
+ },
+ {
+  "id": "DOLLYS_MIRROR",
+  "name": "Dolly's Mirror",
+  "gameId": "DollysMirror",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, obtain an additional copy of a card in your deck.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DOLLYS_MIRROR",
+   "spire": "DOLLYSMIRROR",
+   "wiki": "Dolly's Mirror"
+  }
+ },
+ {
+  "id": "DREAM_CATCHER",
+  "name": "Dream Catcher",
+  "gameId": "Dream Catcher",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you Rest, you may add a card to your deck.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "DREAM_CATCHER",
+   "spire": "DREAM_CATCHER",
+   "wiki": "Dream Catcher"
+  }
+ },
+ {
+  "id": "EMPTY_CAGE",
+  "name": "Empty Cage",
+  "gameId": "Empty Cage",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, remove 2 cards from your deck.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "EMPTY_CAGE",
+   "spire": "EMPTY_CAGE",
+   "wiki": "Empty Cage"
+  }
+ },
+ {
+  "id": "ETERNAL_FEATHER",
+  "name": "Eternal Feather",
+  "gameId": "Eternal Feather",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   null,
+   3
+  ],
+  "text": "For every 5 cards in your deck, heal 3 HP whenever you enter a Rest Site.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ETERNAL_FEATHER",
+   "spire": "ETERNAL_FEATHER",
+   "wiki": "Eternal Feather"
+  }
+ },
+ {
+  "id": "FROZEN_EGG",
+  "name": "Frozen Egg",
+  "gameId": "Frozen Egg 2",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you add a {{QueryLink|Cards|type:Power|Power}} card to your deck, $Upgrade it.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "FROZEN_EGG",
+   "spire": "FROZEN_EGG_2",
+   "wiki": "Frozen Egg"
+  }
+ },
+ {
+  "id": "GOLDEN_IDOL",
+  "name": "Golden Idol",
+  "gameId": "Golden Idol",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "Enemies drop 25% more [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "GOLDEN_IDOL",
+   "spire": "GOLDEN_IDOL",
+   "wiki": "Golden Idol"
+  }
+ },
+ {
+  "id": "JUZU_BRACELET",
+  "name": "Juzu Bracelet",
+  "gameId": "Juzu Bracelet",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Regular enemy combats are no longer encountered in ? rooms.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "JUZU_BRACELET",
+   "spire": "JUZU_BRACELET",
+   "wiki": "Juzu Bracelet"
+  }
+ },
+ {
+  "id": "LEES_WAFFLE",
+  "name": "Lee's Waffle",
+  "gameId": "Lee's Waffle",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": [
+   7
+  ],
+  "text": "Upon pickup, raise your Max HP by 7 and heal all of your HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "LEES_WAFFLE",
+   "spire": "LEE_S_WAFFLE",
+   "wiki": "Lee's Waffle"
+  }
+ },
+ {
+  "id": "MANGO",
+  "name": "Mango",
+  "gameId": "Mango",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": [
+   null
+  ],
+  "text": "Upon pickup, raise your Max HP by 14.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MANGO",
+   "spire": "MANGO",
+   "wiki": "Mango"
+  }
+ },
+ {
+  "id": "MATRYOSHKA",
+  "name": "Matryoshka",
+  "gameId": "Matryoshka",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "The next 2 non-boss chests you open contain 2 Relics.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MATRYOSHKA",
+   "spire": "MATRYOSHKA",
+   "wiki": "Matryoshka"
+  }
+ },
+ {
+  "id": "MAW_BANK",
+  "name": "Maw Bank",
+  "gameId": "MawBank",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": [
+   12
+  ],
+  "text": "Whenever you climb a floor, gain 12 [[Gold]]. No longer works when you spend any [[Gold]] at a shop.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MAW_BANK",
+   "spire": "MAWBANK",
+   "wiki": "Maw Bank"
+  }
+ },
+ {
+  "id": "MEAL_TICKET",
+  "name": "Meal Ticket",
+  "gameId": "MealTicket",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   15
+  ],
+  "text": "Whenever you enter a shop, heal 15 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MEAL_TICKET",
+   "spire": "MEALTICKET",
+   "wiki": "Meal Ticket"
+  }
+ },
+ {
+  "id": "MEMBERSHIP_CARD",
+  "name": "Membership Card",
+  "gameId": "Membership Card",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "50% discount on all products!",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MEMBERSHIP_CARD",
+   "spire": "MEMBERSHIP_CARD",
+   "wiki": "Membership Card"
+  }
+ },
+ {
+  "id": "MOLTEN_EGG",
+  "name": "Molten Egg",
+  "gameId": "Molten Egg 2",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you add an {{QueryLink|Cards|type:Attack|Attack}} card to your deck, $Upgrade it.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "MOLTEN_EGG",
+   "spire": "MOLTEN_EGG_2",
+   "wiki": "Molten Egg"
+  }
+ },
+ {
+  "id": "NLOTHS_GIFT",
+  "name": "N'loth's Gift",
+  "gameId": "Nloth's Gift",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "Triples the chance of finding {{QueryLink|Cards|rarity:Rare|Rare}} cards from combat rewards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NLOTHS_GIFT",
+   "spire": "NLOTH_S_GIFT",
+   "wiki": "N'loth's Gift"
+  }
+ },
+ {
+  "id": "NLOTHS_HUNGRY_FACE",
+  "name": "N'loth's Hungry Face",
+  "gameId": "NlothsMask",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "persistent",
+  "values": null,
+  "text": "The next non-Boss chest you open is empty.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "NLOTHS_HUNGRY_FACE",
+   "spire": "NLOTHSMASK",
+   "wiki": "N'loth's Hungry Face"
+  }
+ },
+ {
+  "id": "OLD_COIN",
+  "name": "Old Coin",
+  "gameId": "Old Coin",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, gain 300 [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "OLD_COIN",
+   "spire": "OLD_COIN",
+   "wiki": "Old Coin"
+  }
+ },
+ {
+  "id": "ORRERY",
+  "name": "Orrery",
+  "gameId": "Orrery",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, choose and add 5 cards to your deck.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "ORRERY",
+   "spire": "ORRERY",
+   "wiki": "Orrery"
+  }
+ },
+ {
+  "id": "PANDORAS_BOX",
+  "name": "Pandora's Box",
+  "gameId": "Pandora's Box",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, $Transform all Strike and Defend cards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PANDORAS_BOX",
+   "spire": "PANDORA_S_BOX",
+   "wiki": "Pandora's Box"
+  }
+ },
+ {
+  "id": "PEACE_PIPE",
+  "name": "Peace Pipe",
+  "gameId": "Peace Pipe",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "You can now remove cards from your deck at Rest Sites.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PEACE_PIPE",
+   "spire": "PEACE_PIPE",
+   "wiki": "Peace Pipe"
+  }
+ },
+ {
+  "id": "PEAR",
+  "name": "Pear",
+  "gameId": "Pear",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": [
+   null
+  ],
+  "text": "Upon pickup, raise your Max HP by 10.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PEAR",
+   "spire": "PEAR",
+   "wiki": "Pear"
+  }
+ },
+ {
+  "id": "POTION_BELT",
+  "name": "Potion Belt",
+  "gameId": "Potion Belt",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Upon pickup, gain 2 [[Potions|Potion]] slots.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "POTION_BELT",
+   "spire": "POTION_BELT",
+   "wiki": "Potion Belt"
+  }
+ },
+ {
+  "id": "PRAYER_WHEEL",
+  "name": "Prayer Wheel",
+  "gameId": "Prayer Wheel",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Normal enemies drop an additional card reward.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PRAYER_WHEEL",
+   "spire": "PRAYER_WHEEL",
+   "wiki": "Prayer Wheel"
+  }
+ },
+ {
+  "id": "PRISMATIC_SHARD",
+  "name": "Prismatic Shard",
+  "gameId": "PrismaticShard",
+  "tier": "shop",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.shop",
+   "silent.shop",
+   "defect.shop",
+   "watcher.shop"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Combat reward screens now contain {{QueryLink|Cards|color:Colorless|Colorless}} cards and cards from other colors.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "PRISMATIC_SHARD",
+   "spire": "PRISMATICSHARD",
+   "wiki": "Prismatic Shard"
+  }
+ },
+ {
+  "id": "QUESTION_CARD",
+  "name": "Question Card",
+  "gameId": "Question Card",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Future card rewards have 1 additional card to choose from.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "QUESTION_CARD",
+   "spire": "QUESTION_CARD",
+   "wiki": "Question Card"
+  }
+ },
+ {
+  "id": "REGAL_PILLOW",
+  "name": "Regal Pillow",
+  "gameId": "Regal Pillow",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   15
+  ],
+  "text": "Whenever you Rest, heal an additional 15 HP.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "REGAL_PILLOW",
+   "spire": "REGAL_PILLOW",
+   "wiki": "Regal Pillow"
+  }
+ },
+ {
+  "id": "SSSERPENT_HEAD",
+  "name": "Ssserpent Head",
+  "gameId": "SsserpentHead",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": [
+   50
+  ],
+  "text": "Whenever you enter a ? room, gain 50 [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SSSERPENT_HEAD",
+   "spire": "SSSERPENTHEAD",
+   "wiki": "Ssserpent Head"
+  }
+ },
+ {
+  "id": "SHOVEL",
+  "name": "Shovel",
+  "gameId": "Shovel",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "You can now Dig for relics at Rest Sites.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SHOVEL",
+   "spire": "SHOVEL",
+   "wiki": "Shovel"
+  }
+ },
+ {
+  "id": "SINGING_BOWL",
+  "name": "Singing Bowl",
+  "gameId": "Singing Bowl",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "When adding cards to your deck, you may raise your Max HP by 2 instead.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SINGING_BOWL",
+   "spire": "SINGING_BOWL",
+   "wiki": "Singing Bowl"
+  }
+ },
+ {
+  "id": "SMILING_MASK",
+  "name": "Smiling Mask",
+  "gameId": "Smiling Mask",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   50
+  ],
+  "text": "The merchant's card removal service now always costs 50 [[Gold]].",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SMILING_MASK",
+   "spire": "SMILING_MASK",
+   "wiki": "Smiling Mask"
+  }
+ },
+ {
+  "id": "SPIRIT_POOP",
+  "name": "Spirit Poop",
+  "gameId": "Spirit Poop",
+  "tier": "event",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "It's unpleasant.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "SPIRIT_POOP",
+   "spire": "SPIRIT_POOP",
+   "wiki": "Spirit Poop"
+  }
+ },
+ {
+  "id": "STRAWBERRY",
+  "name": "Strawberry",
+  "gameId": "Strawberry",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   null
+  ],
+  "text": "Upon pickup, raise your Max HP by 7.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "STRAWBERRY",
+   "spire": "STRAWBERRY",
+   "wiki": "Strawberry"
+  }
+ },
+ {
+  "id": "THE_COURIER",
+  "name": "The Courier",
+  "gameId": "The Courier",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "The Merchant restocks [[Cards|cards]], [[Relics|relics]], and [[Potions|potions]]. All prices are reduced by 20%.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "THE_COURIER",
+   "spire": "THE_COURIER",
+   "wiki": "The Courier"
+  }
+ },
+ {
+  "id": "TINY_CHEST",
+  "name": "Tiny Chest",
+  "gameId": "Tiny Chest",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "persistent",
+  "values": [
+   4
+  ],
+  "text": "Every 4th ? room is a Treasure room.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TINY_CHEST",
+   "spire": "TINY_CHEST",
+   "wiki": "Tiny Chest"
+  }
+ },
+ {
+  "id": "TINY_HOUSE",
+  "name": "Tiny House",
+  "gameId": "Tiny House",
+  "tier": "boss",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.boss",
+   "silent.boss",
+   "defect.boss",
+   "watcher.boss"
+  ],
+  "counter": "none",
+  "values": [
+   null,
+   5
+  ],
+  "text": "Upon pickup, obtain 1 [[Potions|Potion]]. <br>Gain 50 [[Gold]]. <br>Raise your Max HP by 5. <br>Obtain 1 card. <br>$Upgrade 1 random card.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TINY_HOUSE",
+   "spire": "TINY_HOUSE",
+   "wiki": "Tiny House"
+  }
+ },
+ {
+  "id": "TOXIC_EGG",
+  "name": "Toxic Egg",
+  "gameId": "Toxic Egg 2",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "Whenever you add a {{QueryLink|Cards|type:Skill|Skill}} card to your deck, $Upgrade it.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "TOXIC_EGG",
+   "spire": "TOXIC_EGG_2",
+   "wiki": "Toxic Egg"
+  }
+ },
+ {
+  "id": "WAR_PAINT",
+  "name": "War Paint",
+  "gameId": "War Paint",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "Upon pick up, $Upgrade 2 random {{QueryLink|Cards|type:Skill|Skills}}.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WAR_PAINT",
+   "spire": "WAR_PAINT",
+   "wiki": "War Paint"
+  }
+ },
+ {
+  "id": "WHETSTONE",
+  "name": "Whetstone",
+  "gameId": "Whetstone",
+  "tier": "common",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.common",
+   "silent.common",
+   "defect.common",
+   "watcher.common"
+  ],
+  "counter": "none",
+  "values": [
+   2
+  ],
+  "text": "Upon pickup, $Upgrade 2 random {{QueryLink|Cards|type:Attack|Attacks}}.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WHETSTONE",
+   "spire": "WHETSTONE",
+   "wiki": "Whetstone"
+  }
+ },
+ {
+  "id": "WHITE_BEAST_STATUE",
+  "name": "White Beast Statue",
+  "gameId": "White Beast Statue",
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.uncommon",
+   "silent.uncommon",
+   "defect.uncommon",
+   "watcher.uncommon"
+  ],
+  "counter": "none",
+  "values": null,
+  "text": "[[Potions]] always appear in combat rewards.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WHITE_BEAST_STATUE",
+   "spire": "WHITE_BEAST_STATUE",
+   "wiki": "White Beast Statue"
+  }
+ },
+ {
+  "id": "WING_BOOTS",
+  "name": "Wing Boots",
+  "gameId": "WingedGreaves",
+  "tier": "rare",
+  "pool": "shared",
+  "inCharacterPools": [
+   "ironclad.rare",
+   "silent.rare",
+   "defect.rare",
+   "watcher.rare"
+  ],
+  "counter": "persistent",
+  "values": null,
+  "text": "You may ignore paths when choosing the next room to travel to 3 times.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "WING_BOOTS",
+   "spire": "WINGEDGREAVES",
+   "wiki": "Wing Boots"
+  }
+ },
+ {
+  "id": "CIRCLET",
+  "name": "Circlet",
+  "gameId": "Circlet",
+  "tier": "special",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "Collect as many as you can.",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "CIRCLET",
+   "spire": "CIRCLET",
+   "wiki": "Circlet"
+  },
+  "note": "fallback relic granted when the relevant relic pool is exhausted"
+ },
+ {
+  "id": "RED_CIRCLET",
+  "name": "Red Circlet",
+  "gameId": "Red Circlet",
+  "tier": "special",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "You ran out of relics. Impressive!",
+  "unobtainable": false,
+  "sources": {
+   "lightspeed": "RED_CIRCLET",
+   "spire": "RED_CIRCLET",
+   "wiki": "Red Circlet"
+  },
+  "note": "Endless mode only"
+ },
+ {
+  "id": "DISCERNING_MONOCLE",
+  "name": "Discerning Monocle",
+  "gameId": null,
+  "tier": "uncommon",
+  "pool": "shared",
+  "inCharacterPools": [],
+  "counter": "none",
+  "values": null,
+  "text": "Merchant prices are reduced by 20%",
+  "unobtainable": true,
+  "sources": {
+   "lightspeed": null,
+   "spire": "DISCERNING_MONOCLE",
+   "wiki": null
+  },
+  "lightspeedMissing": true
+ }
+]

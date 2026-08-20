@@ -1,0 +1,26 @@
+{{Enemy Infobox|The Guardian}} {{Power Infobox|Mode Shift}} {{Power Infobox|Sharp Hide}}
+'''The Guardian''' is a [[Boss]] that can appear at the end of [[Act 1]] or the [[Act 3]] event {{E|Mind Bloom}}.
+
+== Pattern ==
+{{Intents|The Guardian}}
+Repeats the following pattern:
+#{{Int|The Guardian|Charging Up}}
+#{{Int|The Guardian|Fierce Bash}}
+#{{Int|The Guardian|Vent Steam}}
+#{{Int|The Guardian|Whirlwind}}
+
+When Guardian triggers {{KW|Mode Shift}} the current [[Intent]] is replaced with {{Int|The Guardian|Defensive Mode}}.
+
+After {{Int|The Guardian|Defensive Mode}}, Guardian uses {{Int|The Guardian|Roll Attack}}, followed by {{Int|The Guardian|Twin Slam}} and {{Int|The Guardian|Whirlwind}}. Then the initial pattern restarts.
+
+<!-- == Hints == 
+* Interrupt Fierce Bash by triggering mode shift
+* Play block cards while in Defensive Mode
+* Permanently sources of minus strength good
+-->
+== Trivia ==
+
+* Guardian appears in the artwork of {{C|Spot Weakness}}.
+
+{{EnemyNav}}
+[[Category:Bosses]]

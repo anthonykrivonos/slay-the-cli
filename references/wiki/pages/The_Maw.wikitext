@@ -1,0 +1,23 @@
+{{Enemy Infobox|The Maw}}
+The Maw is a normal [[Monsters|Enemy]] found exclusively in [[Act 3]].
+
+== Pattern ==
+{{Intents|The Maw}}
+Always starts with {{Int|The Maw|Roar}}. Afterwards it has a 50/50 chance of using either {{Int|The Maw|Slam}} or {{Int|The Maw|Nom Nom}}.
+
+'''After using {{Int|The Maw|Drool}}:''' 50/50 split between {{Int|The Maw|Slam}} and {{Int|The Maw|Nom Nom}}.
+
+'''After using {{Int|The Maw|Slam}}:''' 50/50 split between {{Int|The Maw|Nom Nom}} and {{Int|The Maw|Drool}}.
+
+'''After using {{Int|The Maw|Nom Nom}}:''' Always uses {{Int|The Maw|Drool}}.
+
+== Found With ==
+=== Act 3 ===
+* Solo
+
+== Trivia ==
+* The Maw is the only enemy whose Max HP does not change based on [[Ascension]] level.
+* The Maw appears in the artwork of {{C|Weave}}.
+
+{{EnemyNav}}
+[[Category:Monsters]]

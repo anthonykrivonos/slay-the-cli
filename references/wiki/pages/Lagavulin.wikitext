@@ -1,0 +1,32 @@
+{{Enemy Infobox|Lagavulin}}
+{{Keyword Infobox|Metallicize}}
+Lagavulin is an [[Elite]] enemy found exclusively in [[Act 1]] or in the {{E|Dead Adventurer}} Event.
+== Pattern ==
+{{Intents|Lagavulin}}
+
+=== When found in an Elite encounter: ===
+[[File:Lagavulin.png|140px|left|thumb|Lagavulin asleep.]]
+Starts off {{Int|Lagavulin|Sleep|Sleeping}}. If it takes any damage, it will be stunned for one turn and then proceed to attack. If three turns pass without any damage taken, it will awake and immediately begin attacking. Once awoken, its {{KW|Metallicize}} will be removed.
+
+When attacking it will repeat this pattern:
+* {{Int|Lagavulin|Attack}}
+* {{Int|Lagavulin|Attack}}
+* {{Int|Lagavulin|Siphon Soul}}
+<br> <br> 
+
+=== When found in the {{E|Dead Adventurer}} fight: ===
+
+Spawns already awake and will repeat this pattern:
+
+* {{Int|Lagavulin|Siphon Soul}}
+* {{Int|Lagavulin|Attack}}
+* {{Int|Lagavulin|Attack}}
+
+== Found With ==
+
+=== Act 1 ===
+* Solo
+* Can be found in the {{E|Dead Adventurer}} when choosing {{Frame|Search}}.
+
+{{EnemyNav}}
+[[Category:Elites]]

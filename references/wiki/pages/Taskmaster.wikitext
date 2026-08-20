@@ -1,0 +1,20 @@
+{{Enemy Infobox|Taskmaster}}{{Small Card Infobox|Wound}}
+Taskmaster is an [[Elite]] enemy found exclusively in [[Act 2]].
+
+== Pattern ==
+{{Intents|Taskmaster}}
+
+== Found With ==
+
+=== Act 2 ===
+Found in the '''[[Slavers]]''' Elite encounter with:
+* {{M|Red Slaver}}
+* {{M|Blue Slaver}}
+
+Found in {{E|The Colosseum}} event alongside:
+
+* {{M|Enemy Name=|Gremlin Nob}}
+
+{{EnemyNav}}
+[[Category:ToUpdate]]
+[[Category:Elites]]

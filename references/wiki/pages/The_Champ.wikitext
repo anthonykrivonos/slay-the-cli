@@ -1,0 +1,35 @@
+{{Enemy Infobox|The Champ}}
+The Champ is a [[Boss]] found at the end of [[Act 2]].
+
+== Pattern ==
+{{Intents|The Champ}}
+
+=== Phase One ===
+Always uses {{Int|The Champ|Taunt}} every 4 turns.
+
+'''On all other turns:'''
+* {{Int|The Champ|Defensive Stance}} 15% chance
+* {{Int|The Champ|Gloat}} ({{Int|The Champ|Defensive Stance}} {{Asc|19}}) 15% chance
+* {{Int|The Champ|Face Slap}} 25% chance
+* {{Int|The Champ|Heavy Slash}} 45% chance
+
+No move can be used twice in a row.
+
+On {{Asc|19|Ascension}}, when {{Int|The Champ|Gloat}} is replaced with {{Int|The Champ|Defensive Stance}}, if the last move was also {{Int|The Champ|Defensive Stance}}, he will instead use {{Int|The Champ|Gloat}}.
+
+=== Phase Two ===
+When his HP drops below 50%, he will use {{Int|The Champ|Anger}} on the next turn and enter Phase Two.
+
+After using {{Int|The Champ|Anger}} he will use {{Int|The Champ|Execute}} the turn after.
+
+He will then repeat this pattern for the rest of combat:
+* Random Move (Same chances as Phase One)
+* Random Move (Same chances as Phase One)
+* {{Int|The Champ|Execute}}
+
+== Trivia ==
+* The Champ appears in the artwork of {{C|Pressure Points}} and {{C|Wheel Kick}}.
+* The {{R|Champion Belt}} Relic belongs to the Champ. If you fight him with it obtained, he will scream "{{TS||shake|THAT'S MY BELT!!}}" on his first turn.
+
+{{EnemyNav}}
+[[Category:Bosses]]

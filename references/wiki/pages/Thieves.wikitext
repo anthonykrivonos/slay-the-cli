@@ -1,0 +1,72 @@
+== Looter ==
+{{Enemy Infobox|Looter}}
+{{Keyword Infobox|Thievery}}
+'''Looter''' is a normal [[Monsters|Enemy]] that can show up in [[Act 1]] and [[Act 2]].
+
+=== Pattern ===
+{{Intents|Looter}}
+* Uses {{Int|Looter|Mug}} for the first 2 turns.
+* Has a 50% chance to use {{Int|Looter|Lunge}} or 50% chance to use {{Int|Looter|Smoke Bomb}}.
+** If {{Int|Looter|Lunge}} is used on its third turn, it will then use {{Int|Looter|Smoke Bomb}} next.
+* The turn after {{Int|Looter|Smoke Bomb}} has been used, it will {{Int|Looter|Escape}}.
+
+=== In Party With ===
+
+==== Act 1 ====
+As a hard pool encounter:
+
+* Solo
+
+As half of the '''Exodium Thugs''' encounter along with either:
+
+* 1 {{M|Red Louse}}
+* 1 {{M|Green Louse}}
+* 1 {{M|Spike Slime (M)}}
+* 1 {{M|Acid Slime (M)}}
+
+==== Act 2 ====
+As an easy pool encounter along with:
+
+* {{M|Mugger}}
+
+== Mugger ==
+{{Enemy Infobox|Mugger}}
+{{Keyword Infobox|Thievery}}
+'''Mugger''' is a normal [[Monsters|Enemy]] that can show up exclusively in [[Act 2]].
+
+=== Pattern ===
+{{Intents|Mugger}}
+'''Mugger''' has the same pattern as '''Looter'''.
+
+=== In Party With ===
+
+==== Act 2 ====
+As an easy pool encounter along with:
+
+* {{M|Looter}}
+
+{{Clear}}
+
+== Trivia ==
+* Looter appears in the Card art for {{C|Flurry of Blows}}.
+* Mugger appears in the Card art for {{C|Clothesline}}.
+
+== Update History ==
+* Weekly Patch 36: Power Through
+** Slaver/Looter and Slaver/Monster encounters in Act 1 swap positions to prevent Vulnerable + Attack turns.
+
+* Weekly Patch 6: We're Back!
+** Looter is moved from weak monster pool to regular monster pool (only appears after fighting 3 other 'weak' encounters on level 1)
+** Looter + Mugger fight no longer allows you to steal back extra gold if you ran out of gold.
+** Thievery Power now has correct name being applied to the Power.
+
+* Weekly Patch 3: Balance Balance Balance
+** Mugger doesn't give back gold it didn't steal
+
+* Day 1 Patch
+** Looter only refunds gold that was stolen now.
+** Thievery power now displays how much gold is stolen per attack.
+
+{{EnemyNav}}
+
+[[Category:Monsters]]

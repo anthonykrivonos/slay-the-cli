@@ -1,0 +1,56 @@
+{{Ambox
+| title = WARNING!
+| color = red
+| icon = GremlinNob.png
+| message = ''This page is under construction. Information may be wrong or incomplete.''
+}}
+__NOTOC__
+
+{{Enemy Infobox|Time Eater}}
+{{Keyword Infobox|Time Warp}}
+{{Keyword Infobox|Draw Reduction}}
+'''Time Eater''' is a [[Boss]] found at the end of [[Act 3]].
+
+== Pattern ==
+{{Intents|Time Eater}}
+'''Time Eater''' will always use {{Int|Time Eater|Haste}} when it is reduced to below half HP. {{Int|Time Eater|Haste}} can only be used once per combat. '''Time Eater''' will use one of the following three attacks each turn:
+* {{Int|Time Eater|Reverberate}} (45% chance)
+* {{Int|Time Eater|Head Slam}} (35% chance)
+* {{Int|Time Eater|Ripple}} (20% chance)
+'''Time Eater''' will not use {{Int|Time Eater|Reverberate}} three times in a row, or {{Int|Time Eater|Head Slam}}/{{Int|Time Eater|Ripple}} twice in a row.
+
+== Tips ==
+
+
+== Trivia ==
+* When playing as the [[Ironclad]], [[Silent]], or [[Defect]], Time Eater will say ''"Ah... company."'' on its first turn.
+** When playing as the [[Watcher]], Time Eater will instead say ''"Never... Liked... You..."''.
+
+== Update History ==
+* Weekly Patch 51: Recursion
+** Burn cards no longer trigger Time Eater's ability at end of turn.
+
+* Weekly Patch 42: Reboot
+** Adding a VFX for when your turn ends due to Time Warp power.
+** Updating SFX for Time Warp Power.
+
+* Weekly Patch 40: Forethought
+** Adding SFX for Time Warp, Flight, Constricted, and Entangle Powers.
+
+* Weekly Patch 18: Paranormal
+** Time Eater's Time Warp no longer increments when Curses play themselves.
+
+* Weekly Patch 11: A Library of Features
+** Curses/Statuses that play themselves no longer trigger Powers (Time Warp, After Image, etc)
+
+* Weekly Patch 10: Quality of Life
+** We updated the animations for several monsters! Affected monsters include: Time Eater
+
+* Weekly Patch 2: Slimes!
+** Time Eater now gains less Strength from Time Warp but base damage for attacks increased.
+
+* Weekly Patch 1: The First of Many!
+** Time Eater and Champ now show which Powers get removed when they remove them.
+
+{{EnemyNav}}
+[[Category:Bosses]] [[Category:ToUpdate]]

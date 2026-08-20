@@ -1,0 +1,67 @@
+{{Ambox
+| title = WARNING!
+| color = red
+| icon = GremlinNob.png
+| message = ''This page is under construction. Information may be wrong or incomplete.''
+}}
+
+
+{{Enemy Infobox|Gremlin Leader}}
+'''Gremlin Leader''' is an [[Elite]] Enemy encountered exclusively in [[Act 2]].
+
+== Pattern ==
+{{Intents|Gremlin Leader}}
+Depending on the amount of enemies in battle, '''Gremlin Leader''' will use one of the following actions each turn:
+==== With 0 Gremlins ====
+* {{Int|Gremlin Leader|Rally!}} (75% chance)
+* {{Int|Gremlin Leader|Stab}} (25% chance)
+
+==== With 1 Gremlin ====
+* {{Int|Gremlin Leader|Rally!}} (50% chance)*
+* {{Int|Gremlin Leader|Stab}} (50% chance)*
+:<nowiki>* </nowiki> ''If last used action was'' {{Int|Gremlin Leader|Encourage}}
+or
+* {{Int|Gremlin Leader|Rally!}} (62.5% chance)**
+* {{Int|Gremlin Leader|Encourage}} (37.5% chance)**
+:<nowiki>** </nowiki> ''If last used action was'' {{Int|Gremlin Leader|Stab}}
+
+==== With 2 or more Gremlins ====
+* {{Int|Gremlin Leader|Encourage}} (66% chance)
+* {{Int|Gremlin Leader|Stab}} (34% chance)
+'''Gremlin Leader''' cannot use any [[Intent|intent]] twice in a row. No more than 3 small [[Gremlins]] can be present at once.
+
+== In Party With ==
+=== Act 2 ===
+As an [[Elite]] encounter alongside:
+* 2 random [[Gremlins]]
+
+== Tips ==
+
+== Trivia ==
+* '''Gremlin Leader''' is female, as stated by a developer.<ref>[https://www.reddit.com/r/slaythespire/comments/duo993/comment/f77ja14/?utm_source=share&utm_medium=web2x Reddit]</ref>
+
+== References ==
+<references />
+
+== Update History ==
+* Patch V1.1: The Dealer
+** Fixed enemy order issues in Slime Boss, Gremlin Leader, and Reptomancer encounters.
+
+* Weekly Patch 37: Darkness
+** Gremlin Leader HP lowered. 155 - 164 -> 140 - 148. Asc: 162 - 172 -> 145 - 155.
+
+* Weekly Patch 33: Terror
+** Gremlin Leader summon used the incorrect RNG, resulting in different enemies for the same seed.
+
+* Weekly Patch 21: Channel Lightning
+** Gremlin Leader's minion summon is now seeded.
+
+* Weekly Patch 14: Bullet Time
+** New animations for the Gremlin Leader.
+** In Fast Mode, Gremlin Leader's minions spawn a lot faster.
+
+* Weekly Patch 6: We're Back!
+** Little gremlins no longer yell about escaping if they're dead. Corpses don't yell.
+
+{{EnemyNav}}
+[[Category:Elites]]

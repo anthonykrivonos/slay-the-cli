@@ -1,0 +1,29 @@
+Donu and Deca is a [[Bosses|Boss Encounter]] found at the end of [[Act 3]].
+
+= Donu =
+{{Enemy Infobox|Donu}}
+{{Keyword Infobox|Artifact}}
+== Pattern ==
+{{Intents|Donu}}
+Alternates between {{Int|Donu|Circle of Power}} and {{Int|Donu|Beam}}.
+
+{{Clear}}
+= Deca =
+{{Enemy Infobox|Deca}}
+{{Keyword Infobox|Artifact}}
+== Pattern ==
+{{Intents|Deca}}
+Alternates between {{Int|Deca|Beam}} and {{Int|Deca|Square of Protection}}.
+
+{{Clear}}
+
+== Achievements ==
+* '''The Shapes''': Defeat Donu and Deca.
+* '''Ooh Donut!''': Finish Donu with a {{C|Feed}}.
+
+== Trivia ==
+* Donu appears in the artwork of {{C|Bullseye}}.
+* Despite Deca's name being the Greek root for 10, Deca is an octahedron.
+
+{{EnemyNav}}
+[[Category:Bosses]]

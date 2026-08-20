@@ -1,0 +1,46 @@
+{{Enemy Infobox|Fungi Beast}}
+{{Keyword Infobox|Spore Cloud}}
+'''Fungi Beast''' is a normal [[Monsters|Enemy]] that appears in [[Act 1]] and [[Act 2]]. It also appears in the {{E|Hypnotizing Colored Mushrooms}} [[Event]] in groups of three.
+
+== Pattern ==
+{{Intents|Fungi Beast}}
+'''Fungi Beast''' will use one of the following attacks each turn:
+* {{Int|Fungi Beast|Bite}} (60% chance)
+* {{Int|Fungi Beast|Grow}} (40% chance)
+'''Fungi Beast''' will not use {{Int|Fungi Beast|Bite}} 3 times in a row or {{Int|Fungi Beast|Grow}} twice in a row.
+
+== In Party With ==
+=== Act 1 ===
+As a hard pool encounter alongside:
+* 1 other {{M|Fungi Beast}}
+
+As half of the Exordium Wildlife encounter along with either:
+* 1 {{M|Green Louse}} or {{M|Red Louse}}
+* 1 {{M|Acid Slime (M)}} or {{M|Spike Slime (M)}}
+
+In the {{E|Hypnotizing Colored Mushrooms}} [[Event]] alongside:
+* 2 other {{M|Fungi Beast|Fungi Beasts}}
+
+=== Act 2 ===
+As a hard pool encounter alongside:
+* 1 {{M|Shelled Parasite}}
+
+== Tips ==
+* {{KW|Spore Cloud}} will still activate even if a '''Fungi Beast''' is killed during the enemy's turn (ex. from {{KW|Thorns}} damage). Make sure to keep that in mind to avoid the extra damage other enemies may inflict while you have {{KW|Vulnerable}}.
+
+== Trivia ==
+* '''Fungi Beasts''' appear to be [[Slay the Spire 2:Two-Tailed Rat|Two-tailed Rats]] infested with a parasitic fungus.
+** {{M|Gremlin Nob}} wields a similar rodent-like skeleton as a weapon, presumably belonging to the same enemy.
+
+== Update History ==
+* Weekly Patch 38: Bane
+** Parasite + Fungi Beast combat can actually be encountered now.
+
+* Weekly Patch 37: Darkness
+** New City Encounter - Shelled Parasite and Fungi Beast.
+
+* Weekly Patch 10: Quality of Life
+** We updated the animations for several monsters! Affected monsters include: Fungi Beasts
+
+{{EnemyNav}}
+[[Category:Monsters]]

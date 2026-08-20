@@ -1,0 +1,811 @@
+{
+  "_meta": {
+    "description": "Run-structure meta constants for Slay the Spire V2.3.4, transcribed from the sts_lightspeed reference implementation (behavior spec) plus wiki text where noted.",
+    "referenceRoot": "references/sts_lightspeed",
+    "wikiRoot": "references/wiki",
+    "conventions": {
+      "citations": "file:line ranges refer to files under referenceRoot unless prefixed with wiki/",
+      "rolls": "rng.random(N) returns a uniform integer in [0, N]; rng.random(a, b) returns a uniform integer in [a, b]; rng.random() returns a float in [0, 1)",
+      "weights": "exact fractions are given as { \"n\": numerator, \"d\": denominator }"
+    }
+  },
+
+  "seedAlphabet": {
+    "base": 35,
+    "chars": "0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ",
+    "excludedLetter": "O",
+    "stringFromSeed": "repeated uint64 divmod by 35, remainder indexes chars, digits emitted least-significant first then string reversed",
+    "seedFromString": "ret = ret*35 + digitValue(toupper(c)) per char",
+    "digitValue": {
+      "digits0to9": "c - '0'",
+      "AtoN": "c - 'A' + 10",
+      "OtoZ": "c - 'A' + 9",
+      "note": "the letter O itself maps to 23, aliasing N ('N'-'A'+10 == 'O'-'A'+9 == 23); letters after O are shifted down by one so the alphabet skips O"
+    },
+    "sources": [
+      "src/game/Game.cpp:94-102 (getDigitValue)",
+      "src/game/Game.cpp:104-120 (getString, chars = \"0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ\")",
+      "src/game/Game.cpp:122-131 (getLong)",
+      "include/game/Game.h:25 (constexpr int SEED_BASE = 35)"
+    ]
+  },
+
+  "prng": {
+    "type": "xorshift128+ seeded via two murmurhash3 finalizer passes",
+    "murmurHash3": {
+      "algorithm": "x ^= x>>33; x *= 0xFF51AFD7ED558CCD; x ^= x>>33; x *= 0xC4CEB9FE1A85EC53; x ^= x>>33",
+      "constant1Signed": "-49064778989728563",
+      "constant1Hex": "0xFF51AFD7ED558CCD",
+      "constant2Signed": "-4265267296055464877",
+      "constant2Hex": "0xC4CEB9FE1A85EC53"
+    },
+    "seeding": {
+      "seed0": "murmurHash3(seed == 0 ? 1<<63 : seed)",
+      "seed1": "murmurHash3(seed0)",
+      "zeroSeedSubstitute": "0x8000000000000000 (ONE_IN_MOST_SIGNIFICANT = 1<<63)"
+    },
+    "nextLong": "s1 = seed0; s0 = seed1; seed0 = s0; s1 ^= s1 << 23; seed1 = s1 ^ s0 ^ (s1 >> 17) ^ (s0 >> 26); return seed1 + s0",
+    "nextDouble": {
+      "expr": "(nextLong() >> 11) * NORM_DOUBLE",
+      "NORM_DOUBLE": 1.1102230246251565e-16
+    },
+    "nextFloat": {
+      "expr": "float((nextLong() >> 40) * NORM_FLOAT)",
+      "NORM_FLOAT": 5.9604644775390625e-8
+    },
+    "nextBoolean": "nextLong() & 1",
+    "boundedNextLong": "rejection sampling: do { bits = nextLong() >>> 1; value = bits % n; } while (int64(bits - value + n - 1) < 0)",
+    "randomIntRange": "random(range) = nextInt(range + 1) and increments counter; random(start, end) = start + nextInt(end - start + 1)",
+    "counter": {
+      "increment": "every random* wrapper call increments counter by 1",
+      "restoreByTargetCounter": "Random(seed, targetCounter) replays targetCounter calls of random(999)",
+      "setCounter": "setCounter(target) advances using randomBoolean() until counter == target"
+    },
+    "javaRandom": {
+      "use": "java.util.Random LCG used only for Collections.shuffle of pools/lists, seeded from an sts Random's nextLong()/randomLong()",
+      "multiplier": "0x5DEECE66D",
+      "addend": "0xB",
+      "mask": "(1<<48) - 1",
+      "initialScramble": "(seed ^ 0x5DEECE66D) & mask",
+      "shuffle": "Fisher-Yates from the end: for i=size..2: swap(arr[i-1], arr[rnd.nextInt(i)])"
+    },
+    "sources": [
+      "include/game/Random.h:76-83 (murmurHash3, constants quoted as -49064778989728563 and -4265267296055464877)",
+      "include/game/Random.h:85-93 (nextLong xorshift128+)",
+      "include/game/Random.h:97-105 (bounded nextLong rejection sampling)",
+      "include/game/Random.h:111-120 (NORM_DOUBLE = 1.1102230246251565E-16, NORM_FLOAT = 5.9604644775390625E-8)",
+      "include/game/Random.h:68-70,136-140 (seeding, ONE_IN_MOST_SIGNIFICANT)",
+      "include/game/Random.h:142-152 (counter restore/setCounter)",
+      "include/game/Random.h:154-199 (random wrappers increment counter)",
+      "include/game/Random.h:13-15 (java Random multiplier 0x5DEECE66D, addend 0xB, 48-bit mask)",
+      "include/game/Random.h:49-59 (Collections.shuffle)"
+    ]
+  },
+
+  "rngStreams": {
+    "declared": ["aiRng", "cardRandomRng", "cardRng", "eventRng", "mathUtilRng", "merchantRng", "miscRng", "monsterHpRng", "monsterRng", "neowRng", "potionRng", "relicRng", "shuffleRng", "treasureRng"],
+    "seededFromRunSeedAtStart": ["neowRng", "treasureRng", "eventRng", "relicRng", "potionRng", "cardRng", "cardRandomRng", "merchantRng", "monsterRng", "shuffleRng", "miscRng"],
+    "mathUtilRng": {
+      "seed": "runSeed - 897897",
+      "note": "in the real game this stream is time-seeded; lightspeed pins it to seed-897897 (comment: 'uses a time based seed -_-'). initFromSave sets it to Random(seed, 0)"
+    },
+    "notSeededAtConstruction": {
+      "streams": ["aiRng", "monsterHpRng"],
+      "note": "assigned at battle init from Random(seed + floorNum)"
+    },
+    "perFloorReseedOnMapTransition": {
+      "streams": ["miscRng", "shuffleRng", "cardRandomRng"],
+      "seed": "runSeed + floorNum",
+      "where": "transitionToMapNode after ++floorNum; also enterBossTreasureRoom and the A20 act-3 second-boss transition"
+    },
+    "battleInitReseed": {
+      "streams": ["aiRng", "monsterHpRng", "shuffleRng", "cardRandomRng"],
+      "seed": "runSeed + floorNum",
+      "copiedFromGameContext": ["miscRng", "potionRng"]
+    },
+    "cardRngActTransitionCounterJump": "on transitionToAct: if cardRng.counter < 250 setCounter(250); else if < 500 setCounter(500); else if < 750 setCounter(750)",
+    "relicPoolShuffles": "at run start the 5 relic pools (common, uncommon, rare, shop, boss) are each shuffled with java.Collections.shuffle(java.Random(relicRng.nextLong())), consuming 5 relicRng longs in that order",
+    "mapRngOffsets": {
+      "expr": "offset = act == 1 ? 1 : act*(100*(act-1))",
+      "act1": "seed + 1",
+      "act2": "seed + 200",
+      "act3": "seed + 600"
+    },
+    "persistedCounters": {
+      "saveFields": ["potion_seed_count", "relic_seed_count", "event_seed_count", "monster_seed_count", "merchant_seed_count", "card_random_seed_count", "card_seed_count", "treasure_seed_count"],
+      "restoredAs": "streamRng = Random(seed, savedCount)",
+      "otherPersistedRandomState": ["card_random_seed_randomizer (cardRarityFactor)", "potion_chance", "monsterChance", "shopChance", "treasureChance"],
+      "miscRngOnLoad": "miscRng = Random(seed + floorNum)",
+      "note": "neowRng, shuffleRng, aiRng, monsterHpRng, mathUtilRng counters are not persisted"
+    },
+    "sources": [
+      "include/game/GameContext.h:160-173 (stream declarations)",
+      "src/game/GameContext.cpp:35-51 (constructor: 11 streams seeded from seed)",
+      "src/game/GameContext.cpp:48 (mathUtilRng(seed-897897), comment 'uses a time based seed -_-')",
+      "src/game/GameContext.cpp:756-762 (transitionToMapNode: ++floorNum then miscRng/shuffleRng/cardRandomRng = Random(seed + floorNum))",
+      "src/game/GameContext.cpp:1084-1088 (enterBossTreasureRoom reseed)",
+      "src/game/GameContext.cpp:1153-1159 (A20 second boss reseed)",
+      "src/combat/BattleContext.cpp:28-34 (battle init: aiRng/monsterHpRng/shuffleRng/cardRandomRng = Random(seed+floorNum); miscRng/potionRng copied)",
+      "src/game/GameContext.cpp:698-704 (cardRng counter jump to 250/500/750)",
+      "src/game/GameContext.cpp:468-472 (relic pool shuffles from relicRng.nextLong())",
+      "src/game/Map.cpp:58-59 (mapRng offset: act == 1 ? 1 : act*(100*(act-1)))",
+      "include/game/SaveFile.h:106-113 (persisted seed counts)",
+      "include/game/SaveFile.h:119-123 (card_random_seed_randomizer, potion_chance, monsterChance, shopChance, treasureChance)",
+      "src/game/GameContext.cpp:90-106 (initFromSave stream restoration)"
+    ]
+  },
+
+  "cardRewards": {
+    "baseCount": 3,
+    "questionCardModifier": 1,
+    "bustedCrownModifier": -2,
+    "rarityRoll": {
+      "roll": "cardRng.random(99) + cardRarityFactor",
+      "bossRoom": "always RARE (returned before threshold checks)",
+      "rareChance": { "elite": 10, "nonElite": 3 },
+      "uncommonChance": { "elite": 40, "nonElite": 37 },
+      "resolution": "roll < rareChance -> RARE; roll < rareChance + uncommonChance -> UNCOMMON; else COMMON",
+      "nlothsGift": "if room != REST and player has NLOTHS_GIFT: rareChance *= 3"
+    },
+    "rarePity": {
+      "fieldName": "cardRarityFactor (save: card_random_seed_randomizer)",
+      "initial": 5,
+      "onCommonRolled": "cardRarityFactor = max(cardRarityFactor - 1, -40)",
+      "onRareRolled": "cardRarityFactor = 5",
+      "onUncommonRolled": "unchanged",
+      "note": "factor is ADDED to the d100 roll, so lower factor means higher rare chance; floor -40"
+    },
+    "duplicates": "reroll card id (not rarity) until not a duplicate of earlier cards in this reward",
+    "prismaticShard": "if held, cards are drawn from the any-color pools via getAnyColorCard (which burns one extra cardRng.randomLong() per card)",
+    "upgradedCardChance": {
+      "act1": 0.0,
+      "act2": { "ascensionBelow12": 0.25, "ascension12Plus": 0.125 },
+      "act3Plus": { "ascensionBelow12": 0.5, "ascension12Plus": 0.25 },
+      "roll": "cardRng.randomBoolean(chance) per card; RARE cards are never auto-upgraded",
+      "eggRelics": "MOLTEN_EGG (attack) / TOXIC_EGG (skill) / FROZEN_EGG (power) upgrade via previewObtainCard when the upgrade roll fails"
+    },
+    "prayerWheel": "adds a second full card reward to normal-monster combat rewards",
+    "sources": [
+      "src/game/GameContext.cpp:1607-1630 (rollCardRarity: roll +factor, elite 10/40, other 3/37, boss always rare, NLOTHS_GIFT rareChance*3)",
+      "src/game/GameContext.cpp:1777-1838 (createCardReward: numCards 3, +1 QUESTION_CARD, -2 BUSTED_CROWN, pity update max(factor-1,-40)/reset 5, duplicate reroll, upgrade roll skips RARE)",
+      "include/game/GameContext.h:209 (int cardRarityFactor = 5)",
+      "include/game/SaveFile.h:119 (card_random_seed_randomizer)",
+      "src/game/Game.cpp:386-402 (getUpgradedCardChance)",
+      "src/game/GameContext.cpp:1558-1582 (previewObtainCard egg upgrades)",
+      "src/game/GameContext.cpp:1928-1930 (PRAYER_WHEEL second card reward)"
+    ]
+  },
+
+  "colorlessRewards": {
+    "count": "3, +1 QUESTION_CARD, -2 BUSTED_CROWN (same modifiers as class rewards)",
+    "rareChance": 0.3,
+    "roll": "cardRng.randomBoolean(0.30) -> RARE else UNCOMMON",
+    "pityInteraction": "a RARE result still resets cardRarityFactor to 5; COMMON branch is unreachable in this path",
+    "duplicates": "reroll until unique within the reward",
+    "sources": [
+      "include/game/Game.h:22 (COLORLESS_RARE_CHANCE = 0.30f)",
+      "src/game/GameContext.cpp:1840-1883 (createColorlessCardReward)"
+    ]
+  },
+
+  "potionDrop": {
+    "baseChance": 40,
+    "chanceExpr": "chance = 40 + potionChance (potionChance starts at 0)",
+    "pity": {
+      "onNoDrop": "potionChance += 10",
+      "onDrop": "potionChance -= 10"
+    },
+    "whiteBeastStatue": "chance = 100",
+    "maxRewardsRule": "if potionCount + relicCount + goldRewardCount + cardRewardCount >= 4 then chance = 0",
+    "roll": "potionRng.random(99) >= chance -> no potion",
+    "resetOnActTransition": "potionChance = 0",
+    "persistedInSave": "potion_chance",
+    "rarityRoll": {
+      "roll": "potionRng.random(0, 99)",
+      "commonBelow": 65,
+      "uncommonBelow": 90,
+      "rareOtherwise": true,
+      "selection": "returnRandomPotionOfRarity: draw uniform potions (potionRng.random(poolSize-1), pool size 33 per class) until rarity matches; 'limited' mode additionally rejects the first draw unless it is not FRUIT_JUICE"
+    },
+    "sources": [
+      "src/game/GameContext.cpp:1755-1775 (addPotionRewards: 40 + potionChance, White Beast Statue 100, rewardsSize >= 4 -> 0, +/-10 pity)",
+      "include/game/GameContext.h:208 (int potionChance = 0)",
+      "src/game/GameContext.cpp:737 (potionChance = 0 on transitionToAct)",
+      "src/game/Game.cpp:294-307 (returnRandomPotion: roll < 65 COMMON, < 90 UNCOMMON, else RARE)",
+      "src/game/Game.cpp:309-326 (returnRandomPotionOfRarity / getRandomPotion, pool size 33 per class)",
+      "include/game/SaveFile.h:120 (potion_chance persisted)"
+    ]
+  },
+
+  "goldRewards": {
+    "normalMonster": { "rng": "treasureRng", "min": 10, "max": 20 },
+    "elite": { "rng": "treasureRng", "min": 25, "max": 35 },
+    "boss": {
+      "expr": "100 + miscRng.random(-5, 5)",
+      "min": 95,
+      "max": 105,
+      "ascension13": "goldAmt = round(goldAmt * 0.75) BEFORE Golden Idol bonus",
+      "actRule": "boss reward includes potions and a (rare) card reward only when act < 3"
+    },
+    "goldenIdol": "goldAmt += round(goldAmt * 0.25) for all three reward types",
+    "sources": [
+      "src/game/GameContext.cpp:1919-1932 (createCombatReward: treasureRng.random(10, 20), Golden Idol +25%)",
+      "src/game/GameContext.cpp:1934-1951 (createEliteCombatReward: treasureRng.random(25, 35))",
+      "src/game/GameContext.cpp:1953-1969 (createBossCombatReward: 100 + miscRng.random(-5, 5), A13 *0.75 rounded, act < 3 potion/card)"
+    ]
+  },
+
+  "chests": {
+    "sizeOdds": { "small": 50, "medium": 33, "large": 17 },
+    "sizeRoll": "treasureRng.random(99): < 50 SMALL, < 83 MEDIUM, else LARGE",
+    "relicTierOdds": {
+      "small": { "common": 75, "uncommon": 25, "rare": 0 },
+      "medium": { "common": 35, "uncommon": 50, "rare": 15 },
+      "large": { "common": 0, "uncommon": 75, "rare": 25 }
+    },
+    "goldChancePercent": { "small": 50, "medium": 35, "large": 50 },
+    "goldBaseAmount": { "small": 25, "medium": 50, "large": 75 },
+    "goldAmountRoll": "round(treasureRng.random(base*0.9, base*1.1))",
+    "singleRollQuirk": "lightspeed uses ONE treasureRng.random(99) roll for BOTH the gold chance and the relic tier thresholds in setupTreasureRoom, so gold presence and relic tier are correlated",
+    "extras": {
+      "sapphireKey": "offered alongside chest relic if not yet owned",
+      "cursedKey": "opening a chest adds a random curse (getRandomCurse(cardRng))",
+      "matryoshka": "adds an extra relic while charges > 0; tier common with probability relicRng.randomBoolean(0.75) else uncommon",
+      "nlothsHungryFace": "consumes its charge to eat the chest relic (relic not awarded)"
+    },
+    "sources": [
+      "include/constants/Misc.h:32-34 (SMALL/MEDIUM/LARGE chest chance 50/33/17)",
+      "include/constants/Misc.h:36-40 (chestRelicTierChances {{75,25},{35,50},{0,75}})",
+      "include/constants/Misc.h:42-43 (chestGoldChances {50,35,50}, chestGoldAmounts {25,50,75})",
+      "src/game/Game.cpp:365-376 (getRandomChestSize)",
+      "src/game/GameContext.cpp:1063-1080 (setupTreasureRoom: single roll for gold + tier)",
+      "src/game/GameContext.cpp:1885-1917 (openTreasureRoomChest: gold roll 0.9x-1.1x rounded, cursed key, matryoshka, nloths hungry face, sapphire key)",
+      "src/game/Game.cpp:378-384 (getMatryoshkaRelicTier randomBoolean(0.75))"
+    ]
+  },
+
+  "relicTierRolls": {
+    "combatReward": {
+      "roll": "relicRng.random(0, 99)",
+      "commonBelow": 50,
+      "uncommonBelow": 83,
+      "rareOtherwise": true,
+      "act4Override": "commonChance = 0, uncommonChance = 100 (always UNCOMMON)"
+    },
+    "elite": {
+      "roll": "relicRng.random(99)",
+      "common": "roll < 50",
+      "rare": "roll > 82",
+      "uncommon": "otherwise (50-82 inclusive)"
+    },
+    "shop": {
+      "roll": "merchantRng.random(99)",
+      "commonBelow": 48,
+      "uncommonBelow": 82,
+      "rareOtherwise": true
+    },
+    "poolExhaustionFallbacks": "common -> uncommon -> rare -> CIRCLET; shop -> uncommon; boss -> RED_CIRCLET; relics failing relicCanSpawn are discarded and rerolled from the same tier",
+    "sources": [
+      "src/game/Game.cpp:268-281 (returnRandomRelicTier: act 4 -> 0/100, else 50/33 thresholds)",
+      "src/game/Game.cpp:283-292 (returnRandomRelicTierElite: <50 common, >82 rare, else uncommon)",
+      "src/game/Shop.cpp:256-265 (Shop::rollRelicTier: <48 common, <82 uncommon, else rare)",
+      "src/game/GameContext.cpp:1471-1535 (returnRandomRelic fallbacks, relicCanSpawn reroll)"
+    ]
+  },
+
+  "shop": {
+    "stock": {
+      "classCards": "5: index 0-1 ATTACK, 2-3 SKILL, 4 POWER; second attack/skill rerolled until id differs from the first",
+      "powerSlotPromotion": "if the power slot rarity roll is COMMON it is promoted to UNCOMMON",
+      "colorlessCards": "2: index 5 UNCOMMON, index 6 RARE",
+      "relics": "3: two tiers rolled with Shop::rollRelicTier(merchantRng), third is always SHOP tier",
+      "potions": "3: returnRandomPotion(potionRng, cc)"
+    },
+    "cardRarityRoll": {
+      "roll": "cardRng.random(99) + cardRarityFactor",
+      "rareBelow": 9,
+      "commonAtOrAbove": 46,
+      "uncommonOtherwise": true,
+      "constants": "BASE_RARE_CHANCE = 9, BASE_UNCOMMON_CHANCE = 37",
+      "pityNote": "Shop::rollCardRarityShop reads cardRarityFactor but does not update it"
+    },
+    "basePrices": {
+      "cardByRarity": { "common": 50, "uncommon": 75, "rare": 150 },
+      "relicByTier": { "common": 150, "uncommon": 250, "rare": 300, "boss": 999, "shop": 150, "starter": 300, "special": 400 },
+      "potionByRarity": { "common": 50, "uncommon": 75, "rare": 100 }
+    },
+    "priceFormulas": {
+      "classCard": "int(basePrice * merchantRng.random(0.9, 1.1))",
+      "colorlessCard": "int(basePrice * merchantRng.random(0.9, 1.1) * 1.2)",
+      "relic": "round(basePrice * merchantRng.random(0.95, 1.05))",
+      "potion": "round(basePrice * merchantRng.random(0.95, 1.05))"
+    },
+    "sale": {
+      "index": "merchantRng.random(4)",
+      "effect": "one of the 5 class cards gets price /= 2 (integer division)"
+    },
+    "cardRemoval": {
+      "basePrice": 75,
+      "increasePerPurchase": 25,
+      "expr": "75 + 25 * shopRemoveCount (shopRemoveCount is run-global and increments on purchase)",
+      "smilingMask": "fixed 50",
+      "courier": "cost * 0.80 rounded",
+      "membershipCard": "cost * 0.50 rounded",
+      "both": "cost * 0.80 * 0.50 rounded once"
+    },
+    "discounts": {
+      "courierFactor": 0.8,
+      "membershipCardFactor": 0.5,
+      "applicationOrder": "setup applies (disputed A16 factor), then Courier 0.80, then Membership 0.50, each rounding to int",
+      "membershipMidShop": "buying Membership Card immediately applies 0.50 to remaining prices and removal cost"
+    },
+    "courierRestock": "with The Courier, purchased slots restock: cards via gc.rollCardRarity(Room::SHOP) (class, drawn from mathUtilRng pool pick) or COLORLESS_RARE_CHANCE 0.30 roll (colorless); relics via Shop::rollRelicTier; potions via returnRandomPotion",
+    "disputed": {
+      "ascension16Prices": [
+        {
+          "claim": "prices multiplied by 0.80 at ascension >= 16 (a 20% DISCOUNT), applied via the same applyDiscount path as The Courier",
+          "source": "src/game/Shop.cpp:17-19: 'if (gc.ascension >= 16) { applyDiscount(0.80f); }'",
+          "provenance": "sts_lightspeed"
+        },
+        {
+          "claim": "A16 = 'Shops are more costly.' (commonly documented as +10%, i.e. prices multiplied by 1.1)",
+          "source": "wiki/Ascension.lua:17 ('[16] = \"Shops are more costly.\"')",
+          "provenance": "wiki"
+        }
+      ],
+      "note": "unresolved; a 0.80 multiplier makes shops CHEAPER, which contradicts the wiki text. Needs the game JAR (Merchant/ShopScreen price code) to settle the exact multiplier."
+    },
+    "knownLightspeedBugs": [
+      "src/game/Shop.cpp:193-205 (getNewCardPrice): checks THE_COURIER twice (second check with 0.5 factor should be MEMBERSHIP_CARD)",
+      "src/game/Shop.cpp:207-216 (getNewPrice): overwrites basePrice with round(merchantRng.random(0.95, 1.05)) and discards the std::round results, so Courier restock prices for relics/potions are wrong"
+    ],
+    "sources": [
+      "src/game/Shop.cpp:12-27 (setup order, A16/Courier/Membership discounts, removeCost)",
+      "src/game/Shop.cpp:29-58 (setupCards: 2A/2S/1P, power common->uncommon at line 41, colorless 1U/1R, price formulas, saleIdx = merchantRng.random(4), price /= 2)",
+      "src/game/Shop.cpp:60-69 (setupRelics: 2 rolled + 1 SHOP tier, x random(0.95,1.05) rounded)",
+      "src/game/Shop.cpp:71-78 (setupPotions)",
+      "src/game/Shop.cpp:218-236 (getRemoveCost: SMILING_MASK 50, 75 + 25*count, Courier/Membership factors)",
+      "src/game/Shop.cpp:238-254 (rollCardRarityShop: BASE_RARE_CHANCE 9, BASE_UNCOMMON_CHANCE 37)",
+      "src/game/Shop.cpp:256-265 (rollRelicTier: <48/<82)",
+      "src/game/Shop.cpp:86-106 (buyCard Courier restock, COLORLESS_RARE_CHANCE)",
+      "include/game/Shop.h:25-29 (REMOVE_PRICE_INCREASE 25, BASE_REMOVE_PRICE 75, SMILING_MASK_PRICE 50, COURIER_FACTOR 0.80, MEMBERSHIP_CARD_FACTOR 0.50)",
+      "include/constants/Cards.h:415 (cardRarityPrices {50,75,150})",
+      "include/constants/Relics.h:230-231 (relicTierPrices {150,250,300,999,150,300,400})",
+      "include/constants/Potions.h:231-232 (potionRarityPrices {50,75,100})",
+      "src/game/GameContext.cpp:831-833 (MEAL_TICKET heals 15 on entering shop)",
+      "include/game/GameContext.h:210 (shopRemoveCount = 0)"
+    ]
+  },
+
+  "unknownRoom": {
+    "baseChances": { "monster": 0.1, "shop": 0.03, "treasure": 0.02 },
+    "roll": "eventRng.random() float; idx = int(roll * 100)",
+    "thresholds": "monsterSize = int(monsterChance*100); shopSize = monsterSize + (lastRoomWasShop ? 0 : int(shopChance*100)); treasureSize = shopSize + int(treasureChance*100); idx < monsterSize -> MONSTER, < shopSize -> SHOP, < treasureSize -> TREASURE, else EVENT",
+    "lastRoomWasShopRule": "shop share is 0 if the previous room was a shop (but shopChance still escalates/resets normally)",
+    "escalation": {
+      "monster": "+0.10 when not chosen, reset to 0.10 when chosen",
+      "shop": "+0.03 when not chosen, reset to 0.03 when chosen",
+      "treasure": "+0.02 when not chosen, reset to 0.02 when chosen"
+    },
+    "resetOnActTransition": { "monster": 0.1, "shop": 0.03, "treasure": 0.02 },
+    "persistedInSave": ["monsterChance", "shopChance", "treasureChance"],
+    "tinyChest": "counter per relic: on the 4th ? room (value == 3) force TREASURE and reset counter to 0, else increment; forced treasure bypasses the roll but escalation/reset still applies afterwards based on choice",
+    "juzuBracelet": "a MONSTER result is converted to EVENT (monsterChance still resets to 0.10)",
+    "ssserpentHead": "entering an EVENT room grants 50 gold (relicsOnEnterRoom)",
+    "sources": [
+      "src/game/GameContext.cpp:2049-2103 (getEventRoomOutcomeHelper: thresholds, escalation, Tiny Chest every-4th, Juzu, lastRoomWasShop)",
+      "include/game/GameContext.h:205-207 (monsterChance 0.1, shopChance 0.03, treasureChance 0.02 defaults)",
+      "src/game/GameContext.cpp:734-737 (reset on transitionToAct)",
+      "src/game/GameContext.cpp:1596-1599 (SSSERPENT_HEAD +50 gold on EVENT room)",
+      "include/game/SaveFile.h:121-123 (persisted chances)"
+    ]
+  },
+
+  "shrineChance": {
+    "value": 0.25,
+    "roll": "eventRngCopy.random(1.0f) < 0.25 -> shrine branch",
+    "fallbacks": "shrine branch with empty shrine+oneTime lists falls back to getEvent (or INVALID if events also empty); getEvent with no eligible events falls back to getShrine",
+    "shrinePoolComposition": "eligible shrines = act shrine list + one-time special events passing canAddOneTimeEvent; uniform pick eventRngCopy.random(len-1)",
+    "sources": [
+      "include/game/GameContext.h:148 (SHRINE_CHANCE = 0.25f)",
+      "src/game/GameContext.cpp:2032-2047 (generateEvent)",
+      "src/game/GameContext.cpp:1971-2030 (getShrine/getEvent selection and removal)"
+    ]
+  },
+
+  "mapGen": {
+    "width": 7,
+    "height": 15,
+    "pathDensity": 6,
+    "ancestorGap": { "min": 3, "max": 5, "note": "MIN/MAX_ANCESTOR_GAP declared in Map.cpp but not referenced by lightspeed's generation code; the common-ancestor check is getCommonAncestor which only inspects the immediate parent row" },
+    "rngOffsets": { "act1": "seed+1", "act2": "seed+200", "act3": "seed+600", "expr": "act == 1 ? 1 : act*(100*(act-1))" },
+    "paths": {
+      "count": 6,
+      "firstStart": "randRange(mapRng, 0, 6)",
+      "secondStartRule": "path index 1 rerolls its start column while it equals the first path's start",
+      "step": "newX = curX + randRange(-1..1 clamped at edges); then parent-loop randomizer; then clamp against neighbors' existing edges; final row (y=14) always connects to x=3 (boss)",
+      "edgeFilter": "duplicate first-row edges to the same destination are removed"
+    },
+    "roomProportions": {
+      "shop": 0.05,
+      "rest": 0.12,
+      "treasure": 0.0,
+      "elite": 0.08,
+      "eliteAscension1Plus": 0.128,
+      "eliteA1Expr": "0.08 * 1.6, applied when ascensionLevel > 0",
+      "event": 0.22,
+      "countExpr": "count = round(totalRoomCount * chance); remainder of unassigned array filled with MONSTER"
+    },
+    "fixedRows": { "row0": "MONSTER", "row8": "TREASURE", "row14": "REST" },
+    "row13Quirk": "row 13 (restRowBug) nodes are counted as unassigned but NOT added to counts.total, so proportional counts are computed over a total that excludes row 13",
+    "assignment": {
+      "shuffle": "unassigned room array Fisher-Yates shuffled with mapRng.nextInt (not java Random)",
+      "vetoes": {
+        "elite": "not allowed at y <= 4",
+        "rest": "not allowed at y <= 4 or y >= 13",
+        "event": "vetoed only if a sibling already has EVENT",
+        "monster": "vetoed only if a sibling already has MONSTER",
+        "shopRestEliteOther": "vetoed if any parent (previous row via edges) or sibling has the same room"
+      },
+      "rowPropagation": "rows 0 and 8 only seed sibling/parent masks; rows 7 and 13 assign rooms but do not propagate masks to the next row",
+      "fallback": "a node that matches no assignable room becomes MONSTER"
+    },
+    "burningElite": {
+      "when": "act 1 always; acts 2-3 only while the emerald key is not owned",
+      "pick": "mapRng.random(eliteRoomCount - 1) over elite rooms in row-major order",
+      "buff": "mapRng.random(0, 3) -> one of 4 buffs"
+    },
+    "sources": [
+      "src/game/Map.cpp:13-18 (MAP_HEIGHT 15, MAP_WIDTH 7, PATH_DENSITY 6, MIN/MAX_ANCESTOR_GAP 3/5)",
+      "src/game/Map.cpp:22-28 (SHOP 0.05, REST 0.12, TREASURE 0.0, EVENT 0.22, ELITE 0.08 and *1.6)",
+      "src/game/Map.cpp:56-69 (fromSeed: offset expr, createPaths, filter, assignRooms, burning elite)",
+      "src/game/Map.cpp:342-355 (createPaths: 6 iterations, second path start reroll)",
+      "src/game/Map.cpp:308-340 (chooseNewPath / createPathsIteration, final edge to x=3)",
+      "src/game/Map.cpp:447-490 (fixed rows 0/8/14, restRowBug row 13 excluded from total)",
+      "src/game/Map.cpp:492-532 (fillRoomArray round(total*chance), monster fill)",
+      "src/game/Map.cpp:629-693 (assignRoomToNode vetoes: elite y<=4, rest y<=4 and y>=13, event/monster sibling-only, parent+sibling for others, MONSTER fallback)",
+      "src/game/Map.cpp:695-712 (rows 0/8 masks only; rows 7/13 no propagation)",
+      "src/game/Map.cpp:722-733 (assignRooms: A>0 elite chance, mapRng.nextInt shuffle)",
+      "src/game/Map.cpp:743-759 (assignBurningElite: mapRng.random(count-1)); src/game/Map.cpp:66 (buff mapRng.random(0,3))",
+      "src/game/GameContext.cpp:708-712 (acts 2-3 burning elite only without emerald key; act 4 fixed map)"
+    ]
+  },
+
+  "neow": {
+    "rng": "neowRng (options), card contents via helper rngs",
+    "optionCount": 4,
+    "option0": {
+      "drawback": "NONE",
+      "bonusRoll": "neowRng.random(0, 5)",
+      "bonuses": ["THREE_CARDS", "ONE_RANDOM_RARE_CARD", "REMOVE_CARD", "UPGRADE_CARD", "TRANSFORM_CARD", "RANDOM_COLORLESS"]
+    },
+    "option1": {
+      "drawback": "NONE",
+      "bonusRoll": "6 + neowRng.random(0, 4)",
+      "bonuses": ["THREE_SMALL_POTIONS", "RANDOM_COMMON_RELIC", "TEN_PERCENT_HP_BONUS", "THREE_ENEMY_KILL", "HUNDRED_GOLD"]
+    },
+    "option2": {
+      "drawbackRoll": "2 + neowRng.random(0, 3)",
+      "drawbacks": ["TEN_PERCENT_HP_LOSS", "NO_GOLD", "CURSE", "PERCENT_DAMAGE"],
+      "bonusByDrawback": {
+        "TEN_PERCENT_HP_LOSS": ["RANDOM_COLORLESS_2", "REMOVE_TWO", "ONE_RARE_RELIC", "THREE_RARE_CARDS", "TWO_FIFTY_GOLD", "TRANSFORM_TWO_CARDS"],
+        "NO_GOLD": ["RANDOM_COLORLESS_2", "REMOVE_TWO", "ONE_RARE_RELIC", "THREE_RARE_CARDS", "TRANSFORM_TWO_CARDS", "TWENTY_PERCENT_HP_BONUS"],
+        "CURSE": ["RANDOM_COLORLESS_2", "ONE_RARE_RELIC", "THREE_RARE_CARDS", "TWO_FIFTY_GOLD", "TRANSFORM_TWO_CARDS", "TWENTY_PERCENT_HP_BONUS"],
+        "PERCENT_DAMAGE": ["RANDOM_COLORLESS_2", "REMOVE_TWO", "ONE_RARE_RELIC", "THREE_RARE_CARDS", "TWO_FIFTY_GOLD", "TRANSFORM_TWO_CARDS", "TWENTY_PERCENT_HP_BONUS"]
+      },
+      "bonusRoll": "neowRng.random(0, 5) into the drawback-specific 6-entry table, except PERCENT_DAMAGE which is 11 + neowRng.random(0, 6) over all 7 tier-2 bonuses",
+      "exclusions": "TEN_PERCENT_HP_LOSS excludes TWENTY_PERCENT_HP_BONUS; NO_GOLD excludes TWO_FIFTY_GOLD; CURSE excludes REMOVE_TWO"
+    },
+    "option3": {
+      "bonus": "BOSS_RELIC",
+      "drawback": "LOSE_STARTER_RELIC",
+      "extraRoll": "neowRng.random(0, 0) is consumed after assignment"
+    },
+    "drawbackValues": {
+      "TEN_PERCENT_HP_LOSS": "Max HP -10%",
+      "NO_GOLD": "lose all gold",
+      "CURSE": "obtain a random curse",
+      "PERCENT_DAMAGE": "take 30% of current HP as damage",
+      "LOSE_STARTER_RELIC": "lose starter relic"
+    },
+    "bonusValues": {
+      "TEN_PERCENT_HP_BONUS": "Max HP +10%",
+      "TWENTY_PERCENT_HP_BONUS": "Max HP +20%",
+      "HUNDRED_GOLD": 100,
+      "TWO_FIFTY_GOLD": 250,
+      "THREE_ENEMY_KILL": "Neow's Lament (first 3 combats: enemies at 1 HP)",
+      "THREE_SMALL_POTIONS": 3
+    },
+    "cardRewardRarity": {
+      "classCards": "per card: neowRng.randomBoolean(0.33) -> UNCOMMON else COMMON; RARE if rareOnly; duplicates rerolled",
+      "colorless": "per card: neowRng.randomBoolean(0.33) -> UNCOMMON else COMMON promoted to UNCOMMON (effectively always UNCOMMON unless rareOnly); cards drawn with cardRng"
+    },
+    "sources": [
+      "src/game/Neow.cpp:13-75 (getOptions: rolls 0-5, 6+0-4, drawback 2+0-3, per-drawback tables, PERCENT_DAMAGE 11+0-6, boss relic option, trailing random(0,0))",
+      "include/game/Neow.h:26-50 (Bonus enum order)",
+      "include/game/Neow.h:80-99 (Drawback enum order and strings: -10% HP, lose all gold, curse, 30% damage, lose starter relic)",
+      "src/game/Neow.cpp:77-107 (getColorlessCardReward: 0.33 uncommon roll, common promoted)",
+      "src/game/Neow.cpp:109-136 (getCardReward: 0.33 -> UNCOMMON else COMMON)"
+    ]
+  },
+
+  "encounters": {
+    "listLengths": {
+      "weakGeneratedPerAct": { "act1": 3, "act2": 2, "act3": 2 },
+      "strongGenerated": "1 (populateFirstStrongEnemy) + 12 (populateMonsterList numMonsters=12) = 13 appended after the weak entries",
+      "eliteGenerated": 10,
+      "monsterListCapacity": 16,
+      "eliteListCapacity": 10
+    },
+    "rolls": {
+      "weakAndStrong": "rollWeightedIdx(monsterRng.random() float, weights): cumulative weight walk, overflow returns last index",
+      "repeatRules": {
+        "weakAndStrongList": "candidate rerolled if equal to the last entry OR the second-to-last entry",
+        "firstStrong": "rerolled if LARGE_SLIME or LOTS_OF_SLIMES follows SMALL_SLIMES, or THREE_LOUSE follows TWO_LOUSE (checked against the last weak encounter)",
+        "elites": "candidate rerolled if equal to the previous elite; equal 1/3 chance each via rollElite(monsterRng.random())"
+      }
+    },
+    "act1": {
+      "weak": [
+        { "id": "CULTIST", "weight": { "n": 1, "d": 4 } },
+        { "id": "JAW_WORM", "weight": { "n": 1, "d": 4 } },
+        { "id": "TWO_LOUSE", "weight": { "n": 1, "d": 4 } },
+        { "id": "SMALL_SLIMES", "weight": { "n": 1, "d": 4 } }
+      ],
+      "strong": [
+        { "id": "GREMLIN_GANG", "weight": { "n": 2, "d": 32 } },
+        { "id": "LOTS_OF_SLIMES", "weight": { "n": 2, "d": 32 } },
+        { "id": "RED_SLAVER", "weight": { "n": 2, "d": 32 } },
+        { "id": "EXORDIUM_THUGS", "weight": { "n": 3, "d": 32 } },
+        { "id": "EXORDIUM_WILDLIFE", "weight": { "n": 3, "d": 32 } },
+        { "id": "BLUE_SLAVER", "weight": { "n": 4, "d": 32 } },
+        { "id": "LOOTER", "weight": { "n": 4, "d": 32 } },
+        { "id": "LARGE_SLIME", "weight": { "n": 4, "d": 32 } },
+        { "id": "THREE_LOUSE", "weight": { "n": 4, "d": 32 } },
+        { "id": "TWO_FUNGI_BEASTS", "weight": { "n": 4, "d": 32 } }
+      ],
+      "elites": ["GREMLIN_NOB", "LAGAVULIN", "THREE_SENTRIES"],
+      "bosses": ["THE_GUARDIAN", "HEXAGHOST", "SLIME_BOSS"]
+    },
+    "act2": {
+      "weak": [
+        { "id": "SPHERIC_GUARDIAN", "weight": { "n": 1, "d": 5 } },
+        { "id": "CHOSEN", "weight": { "n": 1, "d": 5 } },
+        { "id": "SHELL_PARASITE", "weight": { "n": 1, "d": 5 } },
+        { "id": "THREE_BYRDS", "weight": { "n": 1, "d": 5 } },
+        { "id": "TWO_THIEVES", "weight": { "n": 1, "d": 5 } }
+      ],
+      "strong": [
+        { "id": "CHOSEN_AND_BYRDS", "weight": { "n": 2, "d": 29 } },
+        { "id": "SENTRY_AND_SPHERE", "weight": { "n": 2, "d": 29 } },
+        { "id": "CULTIST_AND_CHOSEN", "weight": { "n": 3, "d": 29 } },
+        { "id": "THREE_CULTIST", "weight": { "n": 3, "d": 29 } },
+        { "id": "SHELLED_PARASITE_AND_FUNGI", "weight": { "n": 3, "d": 29 } },
+        { "id": "SNECKO", "weight": { "n": 4, "d": 29 } },
+        { "id": "SNAKE_PLANT", "weight": { "n": 6, "d": 29 } },
+        { "id": "CENTURION_AND_HEALER", "weight": { "n": 6, "d": 29 } }
+      ],
+      "elites": ["GREMLIN_LEADER", "SLAVERS", "BOOK_OF_STABBING"],
+      "bosses": ["AUTOMATON", "COLLECTOR", "CHAMP"]
+    },
+    "act3": {
+      "weak": [
+        { "id": "THREE_DARKLINGS", "weight": { "n": 1, "d": 3 } },
+        { "id": "ORB_WALKER", "weight": { "n": 1, "d": 3 } },
+        { "id": "THREE_SHAPES", "weight": { "n": 1, "d": 3 } }
+      ],
+      "strong": [
+        { "id": "SPIRE_GROWTH", "weight": { "n": 1, "d": 8 } },
+        { "id": "TRANSIENT", "weight": { "n": 1, "d": 8 } },
+        { "id": "FOUR_SHAPES", "weight": { "n": 1, "d": 8 } },
+        { "id": "MAW", "weight": { "n": 1, "d": 8 } },
+        { "id": "SPHERE_AND_TWO_SHAPES", "weight": { "n": 1, "d": 8 } },
+        { "id": "JAW_WORM_HORDE", "weight": { "n": 1, "d": 8 } },
+        { "id": "THREE_DARKLINGS", "weight": { "n": 1, "d": 8 } },
+        { "id": "WRITHING_MASS", "weight": { "n": 1, "d": 8 } }
+      ],
+      "elites": ["GIANT_HEAD", "NEMESIS", "REPTOMANCER"],
+      "bosses": ["AWAKENED_ONE", "TIME_EATER", "DONU_AND_DECA"]
+    },
+    "act4": {
+      "elite": "SHIELD_AND_SPEAR",
+      "boss": "THE_HEART"
+    },
+    "bossSelection": "indices {0,1,2} shuffled with java.Collections.shuffle(java.Random(monsterRng.randomLong())); boss = shuffled[0]; at act 3 with ascension >= 20 secondBoss = shuffled[1]",
+    "sources": [
+      "include/constants/MonsterEncounters.h:159-169 (weakEnemies, weakWeights 1/4 1/5 1/3, weakCount {4,5,3})",
+      "include/constants/MonsterEncounters.h:171-181 (strongEnemies, strongWeights /16 /29 /8, strongCount {10,8,8})",
+      "include/constants/MonsterEncounters.h:183-187 (elites)",
+      "src/game/GameContext.cpp:532-538 (weak generated: act == 1 ? 3 : 2)",
+      "src/game/GameContext.cpp:540-550 (strong: first + 12)",
+      "src/game/GameContext.cpp:552-581 (rollElite equal thirds, elite list of 10, no immediate repeat)",
+      "src/game/GameContext.cpp:583-598 (boss lists, shuffle, A20 second boss)",
+      "src/game/GameContext.cpp:600-632 (rollWeightedIdx, no repeat within last two)",
+      "src/game/GameContext.cpp:634-693 (populateFirstStrongEnemy slime/louse exclusions)",
+      "src/game/GameContext.cpp:726-728 (act 4: THE_HEART boss, SHIELD_AND_SPEAR elite)",
+      "include/game/GameContext.h:187-190 (monsterList capacity 16, eliteMonsterList capacity 10)"
+    ]
+  },
+
+  "eventPools": {
+    "act1": {
+      "events": ["BIG_FISH", "THE_CLERIC", "DEAD_ADVENTURER", "GOLDEN_IDOL", "WING_STATUE", "WORLD_OF_GOOP", "THE_SSSSSERPENT", "LIVING_WALL", "HYPNOTIZING_COLORED_MUSHROOMS", "SCRAP_OOZE", "SHINING_LIGHT"],
+      "shrines": ["MATCH_AND_KEEP", "GOLDEN_SHRINE", "TRANSMORGRIFIER", "PURIFIER", "UPGRADE_SHRINE", "WHEEL_OF_CHANGE"]
+    },
+    "act2": {
+      "events": ["PLEADING_VAGRANT", "ANCIENT_WRITING", "OLD_BEGGAR", "COLOSSEUM", "CURSED_TOME", "AUGMENTER", "FORGOTTEN_ALTAR", "GHOSTS", "MASKED_BANDITS", "THE_NEST", "THE_LIBRARY", "THE_MAUSOLEUM", "VAMPIRES"],
+      "shrines": ["MATCH_AND_KEEP", "WHEEL_OF_CHANGE", "GOLDEN_SHRINE", "TRANSMORGRIFIER", "PURIFIER", "UPGRADE_SHRINE"]
+    },
+    "act3": {
+      "events": ["FALLING", "MINDBLOOM", "THE_MOAI_HEAD", "MYSTERIOUS_SPHERE", "SENSORY_STONE", "TOMB_OF_LORD_RED_MASK", "WINDING_HALLS"],
+      "shrines": ["MATCH_AND_KEEP", "WHEEL_OF_CHANGE", "GOLDEN_SHRINE", "TRANSMORGRIFIER", "PURIFIER", "UPGRADE_SHRINE"]
+    },
+    "oneTimeAsc0": ["OMINOUS_FORGE", "BONFIRE_SPIRITS", "DESIGNER_IN_SPIRE", "DUPLICATOR", "FACE_TRADER", "THE_DIVINE_FOUNTAIN", "KNOWING_SKULL", "LAB", "NLOTH", "NOTE_FOR_YOURSELF", "SECRET_PORTAL", "THE_JOUST", "WE_MEET_AGAIN", "THE_WOMAN_IN_BLUE"],
+    "oneTimeAsc15": ["OMINOUS_FORGE", "BONFIRE_SPIRITS", "DESIGNER_IN_SPIRE", "DUPLICATOR", "FACE_TRADER", "THE_DIVINE_FOUNTAIN", "KNOWING_SKULL", "LAB", "NLOTH", "SECRET_PORTAL", "THE_JOUST", "WE_MEET_AGAIN", "THE_WOMAN_IN_BLUE"],
+    "oneTimeAsc15Removed": ["NOTE_FOR_YOURSELF"],
+    "spawnConditions": {
+      "oneTime": {
+        "THE_DIVINE_FOUNTAIN": "deck has a curse",
+        "DESIGNER_IN_SPIRE": "act 2 or 3 AND gold >= 75",
+        "DUPLICATOR": "act 2 or 3",
+        "FACE_TRADER": "act 1 or 2",
+        "KNOWING_SKULL": "act 2 AND curHp > 12",
+        "NLOTH": "act 2 AND relic count >= 2",
+        "THE_JOUST": "act 2 AND gold >= 50",
+        "THE_WOMAN_IN_BLUE": "gold >= 50",
+        "SECRET_PORTAL": "act 3 AND play time >= 13m20s (not speedrun pace)"
+      },
+      "actPool": {
+        "DEAD_ADVENTURER": "floorNum > 6",
+        "HYPNOTIZING_COLORED_MUSHROOMS": "floorNum > 6",
+        "THE_MOAI_HEAD": "curHp <= maxHp/2 OR has GOLDEN_IDOL",
+        "THE_CLERIC": "gold >= 35",
+        "OLD_BEGGAR": "gold >= 75",
+        "COLOSSEUM": "curMapNodeY > 7 (and not disabled)"
+      }
+    },
+    "removal": "chosen events/shrines are removed from their list; save files do not store the shrine list (game bug), it is rebuilt from the act on load (acts 2 and 3 both rebuild from the Act2 shrine table, which is identical to Act3's)",
+    "sources": [
+      "include/constants/Events.h:195-196 (oneTimeEventsAsc0 x14, oneTimeEventsAsc15 x13 dropping NOTE_FOR_YOURSELF)",
+      "include/constants/Events.h:198-211 (Act1/Act2/Act3 events and shrines)",
+      "src/game/GameContext.cpp:52-60 (A<15 vs A>=15 one-time list selection)",
+      "src/game/GameContext.cpp:739-748 (act event/shrine list swap on transitionToAct)",
+      "src/game/GameContext.cpp:369-401 (canAddOneTimeEvent conditions)",
+      "src/game/GameContext.cpp:403-427 (canAddEvent conditions)",
+      "src/game/GameContext.cpp:118-133 (shrine list not persisted, rebuilt per act on load)"
+    ]
+  },
+
+  "ascension": {
+    "1": {
+      "wiki": "Elites spawn more often.",
+      "mechanics": "map elite room proportion 0.08 -> 0.08*1.6 = 0.128, applied for ascensionLevel > 0",
+      "sources": ["wiki/Ascension.lua:2", "src/game/Map.cpp:27-28", "src/game/Map.cpp:726"]
+    },
+    "2": {
+      "wiki": "Normal enemies are deadlier.",
+      "mechanics": "combat-side (enemy damage); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:3"]
+    },
+    "3": {
+      "wiki": "Elites are deadlier.",
+      "mechanics": "combat-side (elite damage); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:4"]
+    },
+    "4": {
+      "wiki": "Bosses are deadlier.",
+      "mechanics": "combat-side (boss damage); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:5"]
+    },
+    "5": {
+      "wiki": "Heal less after Boss battles.",
+      "mechanics": "act transition heals round((maxHp - curHp) * 0.75) instead of full heal",
+      "sources": ["wiki/Ascension.lua:6", "src/game/GameContext.cpp:715-719"]
+    },
+    "6": {
+      "wiki": "Start each run damaged.",
+      "mechanics": "starting curHp = round(maxHp * 0.9) instead of maxHp (lightspeed: 'curHp = ascension < 6 ? maxHp : std::round(maxHp * 0.9f)')",
+      "sources": ["wiki/Ascension.lua:7", "src/game/GameContext.cpp:522"]
+    },
+    "7": {
+      "wiki": "Normal enemies are tougher.",
+      "mechanics": "combat-side (enemy HP); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:8"]
+    },
+    "8": {
+      "wiki": "Elites are tougher.",
+      "mechanics": "combat-side (elite HP); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:9"]
+    },
+    "9": {
+      "wiki": "Bosses are tougher.",
+      "mechanics": "combat-side (boss HP); not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:10"]
+    },
+    "10": {
+      "wiki": "Start each run cursed.",
+      "mechanics": "deck starts with ASCENDERS_BANE",
+      "sources": ["wiki/Ascension.lua:11", "src/game/GameContext.cpp:479-481"]
+    },
+    "11": {
+      "wiki": "Fewer Potion Slots.",
+      "mechanics": "potion capacity 3 -> 2",
+      "sources": ["wiki/Ascension.lua:12", "src/game/GameContext.cpp:66", "src/game/GameContext.cpp:203"]
+    },
+    "12": {
+      "wiki": "Upgraded cards appear less often.",
+      "mechanics": "reward upgrade chance halved: act2 0.25 -> 0.125, act3+ 0.50 -> 0.25 (act 1 stays 0)",
+      "sources": ["wiki/Ascension.lua:13", "src/game/Game.cpp:386-402"]
+    },
+    "13": {
+      "wiki": "Poor bosses.",
+      "mechanics": "boss gold reward = round(goldAmt * 0.75)",
+      "sources": ["wiki/Ascension.lua:14", "src/game/GameContext.cpp:1957-1959"]
+    },
+    "14": {
+      "wiki": "Lower Max HP.",
+      "mechanics": "starting maxHp: Ironclad 80 -> 75, Silent 70 -> 66, Defect 75 -> 71, Watcher 72 -> 68",
+      "sources": ["wiki/Ascension.lua:15", "src/game/GameContext.cpp:485-511"]
+    },
+    "15": {
+      "wiki": "Unfavorable Events.",
+      "mechanics": "one-time event pool drops NOTE_FOR_YOURSELF; event variants become unfavorable (lightspeed setupEvent numbers): FORGOTTEN_ALTAR hp cost 0.25 -> 0.35; GOLDEN_IDOL 0.25/0.08 -> 0.35/0.10; LAB 3 potions -> 2; MATCH_AND_KEEP colorless card replaced by a curse; SHINING_LIGHT 0.20 -> 0.30; THE_LIBRARY heal 0.33 -> 0.20; THE_MOAI_HEAD 0.125 -> 0.18; WINDING_HALLS 0.125/0.25 -> 0.18/0.20; WORLD_OF_GOOP gold loss 20-50 -> 35-75",
+      "sources": ["wiki/Ascension.lua:16", "src/game/GameContext.cpp:54-60", "include/constants/Events.h:195-196", "src/game/GameContext.cpp:850-1056 (setupEvent unfavorable = ascension >= 15)"]
+    },
+    "16": {
+      "wiki": "Shops are more costly.",
+      "mechanics": "DISPUTED - see shop.disputed.ascension16Prices (lightspeed applies applyDiscount(0.80f), wiki/common knowledge says +10%)",
+      "sources": ["wiki/Ascension.lua:17", "src/game/Shop.cpp:17-19"]
+    },
+    "17": {
+      "wiki": "Normal enemies have more challenging movesets and abilities.",
+      "mechanics": "combat-side; not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:18"]
+    },
+    "18": {
+      "wiki": "Elites have more challenging movesets and abilities.",
+      "mechanics": "combat-side; not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:19"]
+    },
+    "19": {
+      "wiki": "Bosses have more challenging movesets and abilities.",
+      "mechanics": "combat-side; not a run-structure constant",
+      "sources": ["wiki/Ascension.lua:20"]
+    },
+    "20": {
+      "wiki": "(Max Level) Double boss.",
+      "mechanics": "act 3 gets a second boss (second entry of the shuffled boss order); after the first act-3 boss the game reseeds miscRng/shuffleRng/cardRandomRng with seed+floorNum (floorNum incremented) and fights the second boss",
+      "sources": ["wiki/Ascension.lua:21", "src/game/GameContext.cpp:595-597", "src/game/GameContext.cpp:1153-1165"]
+    }
+  },
+
+  "characters": {
+    "startingGold": 99,
+    "potionSlots": 3,
+    "potionSlotsAscension11Plus": 2,
+    "classes": {
+      "IRONCLAD": { "maxHp": 80, "maxHpA14": 75, "starterRelic": "BURNING_BLOOD" },
+      "SILENT": { "maxHp": 70, "maxHpA14": 66, "starterRelic": "RING_OF_THE_SNAKE" },
+      "DEFECT": { "maxHp": 75, "maxHpA14": 71, "starterRelic": "CRACKED_CORE" },
+      "WATCHER": { "maxHp": 72, "maxHpA14": 68, "starterRelic": "PURE_WATER" }
+    },
+    "startingHpRule": "curHp = maxHp (A<6) else round(maxHp * 0.9)",
+    "sources": [
+      "include/game/GameContext.h:224 (int gold = 99)",
+      "src/game/GameContext.cpp:66 (potionCapacity = ascension < 11 ? 3 : 2)",
+      "src/game/GameContext.cpp:477-523 (initPlayer: maxHp per class and A14, starter relics, A6 hp)",
+      "include/constants/CharacterClasses.h:12-18 (class order IRONCLAD, SILENT, DEFECT, WATCHER)"
+    ]
+  },
+
+  "upgradeChances": {
+    "act1": 0.0,
+    "act2": { "base": 0.25, "ascension12Plus": 0.125 },
+    "act3AndBeyond": { "base": 0.5, "ascension12Plus": 0.25 },
+    "appliesTo": "non-RARE cards in card rewards (cardRng.randomBoolean per card)",
+    "sources": [
+      "src/game/Game.cpp:386-402 (getUpgradedCardChance)",
+      "src/game/GameContext.cpp:1827-1836 (applied per reward card, RARE excluded)"
+    ]
+  }
+}

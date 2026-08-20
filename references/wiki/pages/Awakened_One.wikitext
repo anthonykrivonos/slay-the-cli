@@ -1,0 +1,31 @@
+{{Enemy Infobox|Awakened One}} {{Power Infobox|Curiosity}} {{Power Infobox|Regenerate}} {{Power Infobox|Unawakened}}
+The Awakened One is a [[Boss]] found at the end of [[Act 3]].
+
+== Pattern ==
+{{Intents|Awakened One}}
+
+=== Phase One ===
+Always starts with {{Int|Awakened One|Slash}}.
+
+'''Every turn after:'''
+* {{Int|Awakened One|Soul Strike}} 25% chance
+* {{Int|Awakened One|Slash}} 75% chance
+
+{{Int|Awakened One|Slash}} cannot be used three times in a row. {{Int|Awakened One|Soul Strike}} cannot be used twice in a row.
+
+=== Phase Two ===
+Once its HP reaches 0, it loses {{KW|Curiosity}} and its intent changes to {{Int|Awakened One|Rebirth}}. Any {{KW|Strength}} gained from {{KW|Curiosity}} is kept.
+
+Always starts Phase Two with {{Int|Awakened One|Dark Echo}}. Afterward, it has a 50/50 chance to use {{Int|Awakened One|Tackle}} or {{Int|Awakened One|Sludge}}. It cannot use either of these moves three times in a row.
+
+The remaining {{M|Cultist|Cultists}} will flee when the Awakened One is defeated in Phase Two.
+
+== Trivia ==
+* The {{M|Cultist|Cultists}} in this fight are not {{KW|Minion|Minions}} despite fleeing when the Awakened One is defeated so {{KW|Fatal}} effects will still trigger when killing them.
+* {{R|Matryoshka}} and {{R|Eternal Feather}} both reference this boss in their flavor text.
+* According to {{R|Bird-Faced Urn|Bird-Faced Urn's}} flavor text, the Awakened One is the crow god Mazaleth.
+** Fittingly, the {{R|Bird-Faced Urn}} has an effect triggered by playing {{QueryLink|Cards|type:power|Power}} cards, just like the Awakened One's {{BD|Curiosity}}.
+* A {{C|Ritual Dagger}} is stuck in its chest.
+
+{{EnemyNav}}
+[[Category:Bosses]]

@@ -1,0 +1,33 @@
+{{Enemy Infobox|Nemesis}} {{Power Infobox|Intangible}}
+Nemesis is an [[Elite]] enemy found exclusively in [[Act 3]].
+
+== Pattern ==
+{{Intents|Nemesis}}
+
+On its first turn has a 50/50 chance of using either {{Int|Nemesis|Tri Burn}} or {{Int|Nemesis|Tri Attack}}.
+
+Afterwards it has ''approximately'' these chances:
+* {{Int|Nemesis|Tri Burn}} (35% chance)
+* {{Int|Nemesis|Tri Attack}} (35% chance)
+* {{Int|Nemesis|Scythe}} (30% chance)
+
+Cannot use {{Int|Nemesis|Tri Burn}} or {{Int|Nemesis|Scythe}} twice in a row. Cannot use {{Int|Nemesis|Tri Attack}} three times in a row.
+
+== Found With ==
+
+=== Act 3 ===
+* Solo
+
+== Lore ==
+
+When completing the Act 3 event {{E|Sensory Stone}}, you 'recall' what appear to be memories regarding the pasts of the characters. The {{TS|green||TRIUMPH}} dialogue option may recall a battle between the [[Silent]] and the [[Nemesis]], and her reason for climbing the Spire.
+<blockquote><div style="font-style:italic">{{TS|green|up|TRIUMPH}}<br>
+
+The remains of a {{TS|purple|up|ghostly creature}} sink slowly into the mud before you, barely visible in the moonlight. You have proven yourself amongst your sisters.<br>
+
+Standing victoriously, you wait in silence as the others ceremoniously place the {{TS|gold||creature's skull}} atop your head. The ritual has concluded.<br>
+
+You head towards the Spire...</div></blockquote>
+
+{{EnemyNav}}
+[[Category:Elites]]

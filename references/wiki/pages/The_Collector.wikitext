@@ -1,0 +1,36 @@
+{{Enemy Infobox|The Collector}}
+The Collector is a [[Boss]] found at the end of [[Act 2]].
+
+== Pattern ==
+{{Intents|The Collector}}
+
+Always starts with {{Int|The Collector|Spawn}} and always uses {{Int|The Collector|Mega Debuff}} on turn 4.
+
+Can only have two {{M|Torch Head|Torch Heads}} summoned at a time.
+
+'''If there are 0-1 {{M|Torch Head|Torch Heads}} alive:'''
+* {{Int|The Collector|Spawn}} 25% chance
+* {{Int|The Collector|Fireball}} 45% chance
+* {{Int|The Collector|Buff}} 30% chance
+
+'''If both {{M|Torch Head|Torch Heads}} are alive:'''
+* {{Int|The Collector|Fireball}} 70% chance
+* {{Int|The Collector|Buff}} 30% chance
+
+She cannot use {{Int|The Collector|Buff}} twice in a row and cannot use {{Int|The Collector|Fireball}} 3 times in a row.
+
+= Torch Head =
+{{Enemy Infobox|Torch Head}}
+Torch Head is a {{KW|Minion}} spawned by the Collector.
+
+== Pattern ==
+{{Intents|Torch Head}}
+
+{{Clear}}
+== Trivia ==
+* The Collector is confirmed to be female by one of the developers. (See [https://imgur.com/a/cOqF1p8 Gender of the Collector])
+* The Collector is featured in the banner for Weekly Patch 56.
+
+{{EnemyNav}}
+[[Category:Minions]]
+[[Category:Bosses]]

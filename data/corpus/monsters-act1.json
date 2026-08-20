@@ -1,0 +1,1126 @@
+[
+  {
+    "id": "CULTIST",
+    "name": "Cultist",
+    "category": "normal",
+    "acts": [1, 2, 3],
+    "hp": { "base": [48, 54], "asc": [50, 56], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "CULTIST_INCANTATION": {
+        "intent": "BUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "RITUAL", "amount": 3, "target": "self" }],
+        "asc": {
+          "2": { "effects": [{ "power": "RITUAL", "amount": 4, "target": "self" }] },
+          "17": { "effects": [{ "power": "RITUAL", "amount": 5, "target": "self" }] }
+        }
+      },
+      "CULTIST_DARK_STRIKE": {
+        "intent": "ATTACK",
+        "damage": 6,
+        "hits": 1,
+        "block": null,
+        "effects": []
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always INCANTATION",
+      "spec": "getMove(roll):\n  if lastMove == NONE: return INCANTATION\n  else: return DARK_STRIKE\n(roll is consumed every turn but its value is never used)\nINCANTATION: gain RITUAL R, R = 3 if asc<2, 4 if 2<=asc<17, 5 if asc>=17. RITUAL grants +R STRENGTH at the end of each round, skipping the round it was applied (skipFirst).\nDARK_STRIKE: attack 6 every turn thereafter.",
+      "historyRules": ["INCANTATION exactly once, on turn 1", "DARK_STRIKE every turn after turn 1"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:676-687", "MonsterSpecific.cpp:2280-2287", "Monster.cpp:69-77", "wiki:Cultist", "spire-archive:CULTIST"]
+  },
+  {
+    "id": "JAW_WORM",
+    "name": "Jaw Worm",
+    "category": "normal",
+    "acts": [1, 3],
+    "hp": { "base": [40, 44], "asc": [42, 46], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "JAW_WORM_CHOMP": {
+        "intent": "ATTACK",
+        "damage": 11,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 12 } }
+      },
+      "JAW_WORM_THRASH": {
+        "intent": "ATTACK_DEFEND",
+        "damage": 7,
+        "hits": 1,
+        "block": 5,
+        "effects": []
+      },
+      "JAW_WORM_BELLOW": {
+        "intent": "DEFEND_BUFF",
+        "damage": null,
+        "hits": null,
+        "block": 6,
+        "effects": [{ "power": "STRENGTH", "amount": 3, "target": "self" }],
+        "asc": {
+          "2": { "effects": [{ "power": "STRENGTH", "amount": 4, "target": "self" }] },
+          "17": { "block": 9, "effects": [{ "power": "STRENGTH", "amount": 5, "target": "self" }] }
+        }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always CHOMP (act 1). Act 3 Jaw Worm Horde variant: moveHistory is pre-seeded non-empty, so turn 1 uses the general distribution (25% CHOMP / 30% THRASH / 45% BELLOW)",
+      "spec": "getMove(roll):\n  if firstTurn: return CHOMP\n  if roll < 25:\n    if lastMove == CHOMP: return aiRng.randomBoolean(0.5625) ? BELLOW : THRASH\n    else: return CHOMP\n  elif roll < 55:\n    if lastTwoMoves == THRASH: return aiRng.randomBoolean(0.357) ? CHOMP : BELLOW\n    else: return THRASH\n  elif lastMove == BELLOW: return aiRng.randomBoolean(0.416) ? CHOMP : THRASH\n  else: return BELLOW\nBELLOW: +STRENGTH {asc<2: 3, 2-16: 4, >=17: 5}, +block {asc<17: 6, >=17: 9}.\nAct 3 Jaw Worm Horde: each spawns with +STRENGTH {asc<2: 3, 2-16: 4, >=17: 5} and +block {asc<2: 5, 2-16: 6, >=17: 9} pre-applied (Bellow effects), and rolls its first move from the general (non-firstTurn) distribution.",
+      "historyRules": ["CHOMP never twice in a row", "THRASH never three times in a row", "BELLOW never twice in a row"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:848-867", "MonsterSpecific.cpp:2450-2491", "MonsterGroup.cpp:273-291", "wiki:Jaw_Worm", "spire-archive:JAWWORM"]
+  },
+  {
+    "id": "RED_LOUSE",
+    "name": "Red Louse",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [10, 15], "asc": [11, 16], "ascLevel": 7 },
+    "prebattle": [
+      { "power": "CURL_UP", "amount": [3, 7], "asc": { "7": [4, 8], "17": [9, 12] } }
+    ],
+    "moves": {
+      "RED_LOUSE_BITE": {
+        "intent": "ATTACK",
+        "damage": [5, 7],
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": [6, 8] } }
+      },
+      "RED_LOUSE_GROW": {
+        "intent": "BUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "STRENGTH", "amount": 3, "target": "self" }],
+        "asc": { "17": { "effects": [{ "power": "STRENGTH", "amount": 4, "target": "self" }] } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 25% GROW / 75% BITE)",
+      "spec": "spawn: D = monsterHpRng.random(5,7) (asc>=2: monsterHpRng.random(6,8)); stored once, BITE always deals D.\nprebattle: CURL_UP = monsterHpRng.random over [3,7] (asc>=7: [4,8]; asc>=17: [9,12]).\ngetMove(roll):\n  if roll < 25:\n    if lastMove == GROW and (asc>=17 or lastMoveBefore == GROW): return BITE\n    else: return GROW\n  elif lastTwoMoves == BITE: return GROW\n  else: return BITE\nCURL_UP: the first time it takes unblocked attack damage, gains block equal to the CURL_UP amount (consumed; once per combat).",
+      "historyRules": ["BITE never three times in a row", "GROW never three times in a row (asc<17)", "GROW never twice in a row (asc>=17)"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1003-1013", "MonsterSpecific.cpp:2583-2598", "MonsterSpecific.cpp:293-309", "Monster.cpp:109-135", "Monster.cpp:358-361", "wiki:Louses", "spire-archive:FUZZYLOUSENORMAL"]
+  },
+  {
+    "id": "GREEN_LOUSE",
+    "name": "Green Louse",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [11, 17], "asc": [12, 18], "ascLevel": 7 },
+    "prebattle": [
+      { "power": "CURL_UP", "amount": [3, 7], "asc": { "7": [4, 8], "17": [9, 12] } }
+    ],
+    "moves": {
+      "GREEN_LOUSE_BITE": {
+        "intent": "ATTACK",
+        "damage": [5, 7],
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": [6, 8] } }
+      },
+      "GREEN_LOUSE_SPIT_WEB": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 2, "target": "player" }]
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 25% SPIT_WEB / 75% BITE)",
+      "spec": "spawn: D = monsterHpRng.random(5,7) (asc>=2: monsterHpRng.random(6,8)); stored once, BITE always deals D.\nprebattle: CURL_UP = monsterHpRng.random over [3,7] (asc>=7: [4,8]; asc>=17: [9,12]).\ngetMove(roll):\n  if roll < 25:\n    if lastMove == SPIT_WEB and (asc>=17 or lastMoveBefore == SPIT_WEB): return BITE\n    else: return SPIT_WEB\n  elif lastTwoMoves == BITE: return SPIT_WEB\n  else: return BITE\nCURL_UP: the first time it takes unblocked attack damage, gains block equal to the CURL_UP amount (consumed; once per combat).",
+      "historyRules": ["BITE never three times in a row", "SPIT_WEB never three times in a row (asc<17)", "SPIT_WEB never twice in a row (asc>=17)"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:742-752", "MonsterSpecific.cpp:2313-2328", "MonsterSpecific.cpp:293-309", "Monster.cpp:109-135", "wiki:Louses", "spire-archive:FUZZYLOUSEDEFENSIVE"]
+  },
+  {
+    "id": "ACID_SLIME_S",
+    "name": "Acid Slime (S)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [8, 12], "asc": [9, 13], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "ACID_SLIME_S_LICK": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }]
+      },
+      "ACID_SLIME_S_TACKLE": {
+        "intent": "ATTACK",
+        "damage": 3,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 4 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "asc>=17: always LICK; otherwise 50/50 TACKLE or LICK via aiRng.randomBoolean()",
+      "spec": "getMove(roll) is only consulted on turn 1 (roll consumed, unused):\n  if asc>=17: return LICK\n  elif aiRng.randomBoolean(): return TACKLE\n  else: return LICK\nEvery later move is set in takeTurn: LICK -> TACKLE -> LICK -> ... strict alternation for the rest of combat (no aiRng consumed after turn 1).",
+      "historyRules": ["strict LICK/TACKLE alternation after the first move"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:391-401", "MonsterSpecific.cpp:1889-1901", "wiki:Slimes", "spire-archive:ACIDSLIME_S"]
+  },
+  {
+    "id": "ACID_SLIME_M",
+    "name": "Acid Slime (M)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [28, 32], "asc": [29, 34], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "ACID_SLIME_M_CORROSIVE_SPIT": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 7,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "CARD:SLIMED", "amount": 1, "target": "player" }],
+        "asc": { "2": { "damage": 8 } }
+      },
+      "ACID_SLIME_M_TACKLE": {
+        "intent": "ATTACK",
+        "damage": 10,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 12 } }
+      },
+      "ACID_SLIME_M_LICK": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }]
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll)",
+      "spec": "getMove(roll):\n  if asc>=17:\n    if roll < 40:\n      if lastTwoMoves == CORROSIVE_SPIT: return aiRng.randomBoolean(0.5) ? TACKLE : LICK\n      else: return CORROSIVE_SPIT\n    elif roll < 80:\n      if lastTwoMoves == TACKLE: return aiRng.randomBoolean(0.5) ? CORROSIVE_SPIT : LICK\n      else: return TACKLE\n    elif lastMove == LICK: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : TACKLE\n    else: return LICK\n  else:\n    if roll < 30:\n      if lastTwoMoves == CORROSIVE_SPIT: return aiRng.randomBoolean(0.5) ? TACKLE : LICK\n      else: return CORROSIVE_SPIT\n    elif roll < 70:\n      if lastMove == TACKLE: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : LICK\n      else: return TACKLE\n    elif lastTwoMoves == LICK: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : TACKLE\n    else: return LICK\n(base distribution 30% spit / 40% tackle / 30% lick; asc17 distribution 40% spit / 40% tackle / 20% lick)",
+      "historyRules": [
+        "asc<17: CORROSIVE_SPIT never 3x in a row, TACKLE never twice in a row, LICK never 3x in a row",
+        "asc>=17: CORROSIVE_SPIT never 3x in a row, TACKLE never 3x in a row, LICK never twice in a row"
+      ]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:373-389", "MonsterSpecific.cpp:1903-1974", "wiki:Slimes", "spire-archive:ACIDSLIME_M"]
+  },
+  {
+    "id": "ACID_SLIME_L",
+    "name": "Acid Slime (L)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [65, 69], "asc": [68, 72], "ascLevel": 7 },
+    "prebattle": [{ "power": "SPLIT", "amount": null }],
+    "moves": {
+      "ACID_SLIME_L_CORROSIVE_SPIT": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 11,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "CARD:SLIMED", "amount": 2, "target": "player" }],
+        "asc": { "2": { "damage": 12 } }
+      },
+      "ACID_SLIME_L_TACKLE": {
+        "intent": "ATTACK",
+        "damage": 16,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 18 } }
+      },
+      "ACID_SLIME_L_LICK": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 2, "target": "player" }]
+      },
+      "ACID_SLIME_L_SPLIT": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll)",
+      "spec": "getMove(roll):\n  if asc>=17:\n    if roll < 40:\n      if lastTwoMoves == ACID_SLIME_M_CORROSIVE_SPIT: return aiRng.randomBoolean(0.6) ? TACKLE : LICK   [NOTE: lightspeed checks the MEDIUM slime's spit id here, which this monster never uses, so this branch is constant-false and CORROSIVE_SPIT is unconstrained at asc17 -- see conflicts]\n      else: return CORROSIVE_SPIT\n    elif roll < 70:\n      if lastTwoMoves == TACKLE: return aiRng.randomBoolean(0.6) ? CORROSIVE_SPIT : LICK\n      else: return TACKLE\n    elif lastMove == LICK: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : TACKLE\n    else: return LICK\n  else:\n    if roll < 30:\n      if lastTwoMoves == CORROSIVE_SPIT: return aiRng.randomBoolean(0.5) ? TACKLE : LICK\n      else: return CORROSIVE_SPIT\n    elif roll < 70:\n      if lastMove == TACKLE: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : LICK\n      else: return TACKLE\n    elif lastTwoMoves == LICK: return aiRng.randomBoolean(0.4) ? CORROSIVE_SPIT : TACKLE\n    else: return LICK\n(base distribution 30% spit / 40% tackle / 30% lick; asc17 distribution 40% spit / 30% tackle / 30% lick)\nonHpLost: if curHp <= floor(maxHp/2): the current intent is immediately replaced with SPLIT.\nSPLIT: removed from combat; spawns 2 Acid Slime (M) at slots [idx, idx+1], each with curHp = maxHp = this slime's current HP at split; spawned slimes roll their own move on spawn and do not act this turn; +1 STRENGTH each if the player has Philosopher's Stone.",
+      "historyRules": [
+        "asc<17: CORROSIVE_SPIT never 3x in a row, TACKLE never twice in a row, LICK never 3x in a row",
+        "asc>=17 (as coded): TACKLE never 3x in a row, LICK never twice in a row, CORROSIVE_SPIT unconstrained (see conflicts)"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "ai.asc17 CORROSIVE_SPIT history constraint",
+        "lightspeed": "the roll<40 branch tests lastTwoMoves(ACID_SLIME_M_CORROSIVE_SPIT) (the medium slime's move id), which is always false for Acid Slime (L); Corrosive Spit can therefore repeat indefinitely at asc>=17",
+        "wiki": "wiki:Slimes says at asc17 only Lick is limited to once in a row and other moves 'cannot be used three times in a row', i.e. the real game tests the L slime's own Corrosive Spit id (never 3x in a row)",
+        "note": "almost certainly a move-id typo in sts_lightspeed; real game (AcidSlime_L.getMove) constrains its own spit move"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:351-377", "MonsterSpecific.cpp:1976-2044", "Monster.cpp:499-506", "MonsterSpecific.cpp:3342-3367", "wiki:Slimes", "spire-archive:ACIDSLIME_L"]
+  },
+  {
+    "id": "SPIKE_SLIME_S",
+    "name": "Spike Slime (S)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [10, 14], "asc": [11, 15], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "SPIKE_SLIME_S_TACKLE": {
+        "intent": "ATTACK",
+        "damage": 5,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 6 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always TACKLE",
+      "spec": "getMove(roll): always return TACKLE (roll consumed, unused; one roll is also consumed per later turn via a no-op).",
+      "historyRules": ["TACKLE every turn"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1202-1208", "MonsterSpecific.cpp:2769-2771", "wiki:Slimes", "spire-archive:SPIKESLIME_S"]
+  },
+  {
+    "id": "SPIKE_SLIME_M",
+    "name": "Spike Slime (M)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [28, 32], "asc": [29, 34], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "SPIKE_SLIME_M_FLAME_TACKLE": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 8,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "CARD:SLIMED", "amount": 1, "target": "player" }],
+        "asc": { "2": { "damage": 10 } }
+      },
+      "SPIKE_SLIME_M_LICK": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "FRAIL", "amount": 1, "target": "player" }]
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 30% FLAME_TACKLE / 70% LICK)",
+      "spec": "getMove(roll):\n  if roll < 30:\n    if lastTwoMoves == FLAME_TACKLE: return LICK\n    else: return FLAME_TACKLE\n  elif lastTwoMoves == LICK or (asc>=17 and lastMove == LICK): return FLAME_TACKLE\n  else: return LICK",
+      "historyRules": ["FLAME_TACKLE never 3x in a row", "LICK never 3x in a row (asc<17)", "LICK never twice in a row (asc>=17)"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1170-1183", "MonsterSpecific.cpp:2820-2835", "wiki:Slimes", "spire-archive:SPIKESLIME_M"]
+  },
+  {
+    "id": "SPIKE_SLIME_L",
+    "name": "Spike Slime (L)",
+    "category": "normal",
+    "acts": [1],
+    "hp": { "base": [64, 70], "asc": [67, 73], "ascLevel": 7 },
+    "prebattle": [{ "power": "SPLIT", "amount": null }],
+    "moves": {
+      "SPIKE_SLIME_L_FLAME_TACKLE": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 16,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "CARD:SLIMED", "amount": 2, "target": "player" }],
+        "asc": { "2": { "damage": 18 } }
+      },
+      "SPIKE_SLIME_L_LICK": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "FRAIL", "amount": 2, "target": "player" }],
+        "asc": { "17": { "effects": [{ "power": "FRAIL", "amount": 3, "target": "player" }] } }
+      },
+      "SPIKE_SLIME_L_SPLIT": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 30% FLAME_TACKLE / 70% LICK)",
+      "spec": "getMove(roll):\n  if roll < 30:\n    if lastTwoMoves == FLAME_TACKLE: return LICK\n    else: return FLAME_TACKLE\n  elif lastTwoMoves == LICK or (asc>=17 and lastMove == LICK): return FLAME_TACKLE\n  else: return LICK\nonHpLost: if curHp <= floor(maxHp/2): the current intent is immediately replaced with SPLIT.\nSPLIT: removed from combat; spawns 2 Spike Slime (M) at slots [idx, idx+1], each with curHp = maxHp = this slime's current HP at split; spawned slimes roll their own move on spawn and do not act this turn; +1 STRENGTH each if the player has Philosopher's Stone.",
+      "historyRules": ["FLAME_TACKLE never 3x in a row", "LICK never 3x in a row (asc<17)", "LICK never twice in a row (asc>=17)"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1185-1200", "MonsterSpecific.cpp:2799-2818", "Monster.cpp:499-518", "MonsterSpecific.cpp:3342-3367", "wiki:Slimes", "spire-archive:SPIKESLIME_L"]
+  },
+  {
+    "id": "MAD_GREMLIN",
+    "name": "Mad Gremlin",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [20, 24], "asc": [21, 25], "ascLevel": 7 },
+    "prebattle": [{ "power": "ANGRY", "amount": 1, "asc": { "17": 2 } }],
+    "moves": {
+      "MAD_GREMLIN_SCRATCH": {
+        "intent": "ATTACK",
+        "damage": 4,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 5 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always SCRATCH",
+      "spec": "getMove(roll): always return SCRATCH.\nANGRY: gains STRENGTH equal to the ANGRY amount (1; asc>=17: 2) every time it is hit by an attack, even a fully blocked one (real game: excludes THORNS/HP-loss damage).\nA GENERIC_ESCAPE_MOVE hook exists (escapeNext) but is never triggered in lightspeed; in the real game gremlin minions flee only when Gremlin Leader dies, which ends combat anyway.",
+      "historyRules": ["SCRATCH every turn"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:658-666", "MonsterSpecific.cpp:2505-2507", "MonsterSpecific.cpp:156-158", "Monster.cpp:424-426", "wiki:Gremlins", "spire-archive:GREMLINWARRIOR"]
+  },
+  {
+    "id": "SNEAKY_GREMLIN",
+    "name": "Sneaky Gremlin",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [10, 14], "asc": [11, 15], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "SNEAKY_GREMLIN_PUNCTURE": {
+        "intent": "ATTACK",
+        "damage": 9,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 10 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always PUNCTURE",
+      "spec": "getMove(roll): always return PUNCTURE.\n(escape hook as for Mad Gremlin: never triggers.)",
+      "historyRules": ["PUNCTURE every turn"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:668-674", "MonsterSpecific.cpp:2745-2747", "wiki:Gremlins", "spire-archive:GREMLINTHIEF"]
+  },
+  {
+    "id": "FAT_GREMLIN",
+    "name": "Fat Gremlin",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [13, 17], "asc": [14, 18], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "FAT_GREMLIN_SMASH": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 4,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }],
+        "asc": {
+          "2": { "damage": 5 },
+          "17": {
+            "effects": [
+              { "power": "WEAK", "amount": 1, "target": "player" },
+              { "power": "FRAIL", "amount": 1, "target": "player" }
+            ]
+          }
+        }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always SMASH",
+      "spec": "getMove(roll): always return SMASH.\nSMASH: attack 4 (asc>=2: 5); apply WEAK 1; asc>=17 additionally apply FRAIL 1.\n(escape hook as for Mad Gremlin: never triggers.)",
+      "historyRules": ["SMASH every turn"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:643-656", "MonsterSpecific.cpp:2289-2292", "wiki:Gremlins", "spire-archive:GREMLINFAT"]
+  },
+  {
+    "id": "SHIELD_GREMLIN",
+    "name": "Shield Gremlin",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [12, 15], "asc": [13, 17], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "SHIELD_GREMLIN_PROTECT": {
+        "intent": "DEFEND",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "BLOCK", "amount": 7, "target": "allies" }],
+        "asc": {
+          "7": { "effects": [{ "power": "BLOCK", "amount": 8, "target": "allies" }] },
+          "17": { "effects": [{ "power": "BLOCK", "amount": 11, "target": "allies" }] }
+        }
+      },
+      "SHIELD_GREMLIN_SHIELD_BASH": {
+        "intent": "ATTACK",
+        "damage": 6,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 8 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always PROTECT",
+      "spec": "getMove(roll): always return PROTECT.\nPROTECT: give block {asc<7: 7, 7-16: 8, >=17: 11} to one random not-dying monster other than itself (targets itself only if it is the last one alive; target chosen via aiRng.random(validCount-1)). After the move, if aliveCount <= 1: next move = SHIELD_BASH.\nSHIELD_BASH: attack 6 (asc>=2: 8); repeats every turn for the rest of combat (never switches back to PROTECT).\n(escape hook as for Mad Gremlin: never triggers.)",
+      "historyRules": ["PROTECT every turn while another monster is alive", "SHIELD_BASH every turn once alone (permanent switch)"]
+    },
+    "conflicts": [
+      {
+        "field": "PROTECT block ascension tier",
+        "lightspeed": "block 7 / 8 / 11 with tier thresholds asc>=7 and asc>=17 (getTriIdx(asc, 7, 17))",
+        "wiki": "wiki Enemies.lua intent text shows 'Random enemy gains 7 ({{Asc|2|8}} | {{Asc|17|11}})', i.e. claims the 8-block tier starts at asc 2",
+        "note": "lightspeed's asc7 threshold matches the real game convention for defensive stat upgrades (and matches the Weekly Patch 17 fix note 'Shield Gremlin ... upped values in the wrong Ascension Level'); wiki text is presumed wrong here"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:1071-1085", "MonsterSpecific.cpp:2697-2699", "Actions.cpp:436-457", "wiki:Gremlins", "spire-archive:GREMLINTSUNDERE"]
+  },
+  {
+    "id": "GREMLIN_WIZARD",
+    "name": "Gremlin Wizard",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [21, 25], "asc": [22, 26], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "GREMLIN_WIZARD_CHARGING": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      },
+      "GREMLIN_WIZARD_ULTIMATE_BLAST": {
+        "intent": "ATTACK",
+        "damage": 25,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 30 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always CHARGING (charge counter initialized to 1)",
+      "spec": "turn 1 rollMove: charge = 1; move = CHARGING.\nCHARGING (does nothing): charge += 1; if charge == 3: next = ULTIMATE_BLAST (otherwise move stays CHARGING).\nULTIMATE_BLAST: attack 25 (asc>=2: 30);\n  if asc < 17: charge = 0 and next = CHARGING  -> first blast lands on turn 3 (after 2 charges), every later blast after 3 charges (turns 7, 11, ...).\n  if asc >= 17: move stays ULTIMATE_BLAST -> after the first blast (turn 3) it attacks every turn for the rest of combat.\nNo aiRng roll is consumed after turn 1.\n(escape hook as for Mad Gremlin: never triggers.)",
+      "historyRules": [
+        "asc<17: pattern CHARGING, CHARGING, BLAST, then repeating [CHARGING x3, BLAST]",
+        "asc>=17: CHARGING, CHARGING, BLAST, then BLAST every turn"
+      ]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:772-789", "MonsterSpecific.cpp:2436-2440", "wiki:Gremlins", "spire-archive:GREMLINWIZARD"]
+  },
+  {
+    "id": "LOOTER",
+    "name": "Looter",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [44, 48], "asc": [46, 50], "ascLevel": 7 },
+    "prebattle": [{ "power": "THIEVERY", "amount": 15, "asc": { "17": 20 } }],
+    "moves": {
+      "LOOTER_MUG": {
+        "intent": "ATTACK",
+        "damage": 10,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "STEAL_GOLD", "amount": 15, "target": "player" }],
+        "asc": {
+          "2": { "damage": 11 },
+          "17": { "effects": [{ "power": "STEAL_GOLD", "amount": 20, "target": "player" }] }
+        }
+      },
+      "LOOTER_LUNGE": {
+        "intent": "ATTACK",
+        "damage": 12,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "STEAL_GOLD", "amount": 15, "target": "player" }],
+        "asc": {
+          "2": { "damage": 14 },
+          "17": { "effects": [{ "power": "STEAL_GOLD", "amount": 20, "target": "player" }] }
+        }
+      },
+      "LOOTER_SMOKE_BOMB": {
+        "intent": "DEFEND",
+        "damage": null,
+        "hits": null,
+        "block": 6,
+        "effects": []
+      },
+      "LOOTER_ESCAPE": {
+        "intent": "ESCAPE",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always MUG (and MUG again on turn 2)",
+      "spec": "turn 1 rollMove: MUG. All later moves are chained in takeTurn (no aiRng.random(99) after turn 1).\nMUG: if monsterTurn == 1: aiRng.randomBoolean(0.6) is consumed (in-game dialog roll); steal min(playerGold, THIEVERY) gold; attack 10 (asc>=2: 11);\n  next = MUG if monsterTurn == 1, else aiRng.randomBoolean(0.5) ? SMOKE_BOMB : LUNGE.\nLUNGE: steal min(playerGold, THIEVERY) gold; attack 12 (asc>=2: 14); next = SMOKE_BOMB.\nSMOKE_BOMB: gain 6 block; next = ESCAPE.\nESCAPE: leaves combat (keeps stolen gold; if it was the last targetable monster, combat ends in player victory).\nIf killed before escaping, all gold it stole is recovered by the player after combat.",
+      "historyRules": [
+        "MUG on turns 1 and 2",
+        "turn 3: 50% LUNGE / 50% SMOKE_BOMB",
+        "LUNGE is always followed by SMOKE_BOMB",
+        "SMOKE_BOMB is always followed by ESCAPE"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "moves coverage",
+        "lightspeed": "four moves: MUG, LUNGE (12/14), SMOKE_BOMB (block 6), ESCAPE",
+        "spire-archive": "LOOTER entry only lists MUG and SMOKE_BOMB; LUNGE and ESCAPE are missing from that dataset",
+        "note": "informational source gap, not a numeric disagreement; wiki confirms Lunge 12 ({{Asc|2|14}})"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:897-940", "MonsterSpecific.cpp:2501-2503", "MonsterSpecific.cpp:3333-3340", "BattleContext.cpp:495-508", "wiki:Thieves", "spire-archive:LOOTER"]
+  },
+  {
+    "id": "FUNGI_BEAST",
+    "name": "Fungi Beast",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [22, 28], "asc": [24, 28], "ascLevel": 7 },
+    "prebattle": [{ "power": "SPORE_CLOUD", "amount": 2 }],
+    "moves": {
+      "FUNGI_BEAST_BITE": {
+        "intent": "ATTACK",
+        "damage": 6,
+        "hits": 1,
+        "block": null,
+        "effects": []
+      },
+      "FUNGI_BEAST_GROW": {
+        "intent": "BUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "STRENGTH", "amount": 3, "target": "self" }],
+        "asc": {
+          "2": { "effects": [{ "power": "STRENGTH", "amount": 4, "target": "self" }] },
+          "17": { "effects": [{ "power": "STRENGTH", "amount": 5, "target": "self" }] }
+        }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 60% BITE / 40% GROW)",
+      "spec": "getMove(roll):\n  if roll < 60:\n    if lastTwoMoves == BITE: return GROW\n    else: return BITE\n  elif lastMove == GROW: return BITE\n  else: return GROW\nGROW: +STRENGTH {asc<2: 3, 2-16: 4, >=17: 5}.\nSPORE_CLOUD 2 (prebattle, value always 2): on death, applies 2 VULNERABLE to the player (triggers even if killed during the monster turn).",
+      "historyRules": ["BITE never 3x in a row", "GROW never twice in a row"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:689-701", "MonsterSpecific.cpp:2294-2311", "MonsterSpecific.cpp:182-184", "Monster.cpp:299-301", "wiki:Fungi_Beast", "spire-archive:FUNGIBEAST"]
+  },
+  {
+    "id": "BLUE_SLAVER",
+    "name": "Blue Slaver",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [46, 50], "asc": [48, 52], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "BLUE_SLAVER_STAB": {
+        "intent": "ATTACK",
+        "damage": 12,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 13 } }
+      },
+      "BLUE_SLAVER_RAKE": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 7,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }],
+        "asc": {
+          "2": { "damage": 8 },
+          "17": { "effects": [{ "power": "WEAK", "amount": 2, "target": "player" }] }
+        }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "none special (turn 1 uses the normal roll: 60% STAB / 40% RAKE)",
+      "spec": "getMove(roll):\n  if roll >= 40 and not lastTwoMoves == STAB: return STAB\n  elif (not lastTwoMoves == RAKE) or (asc>=17 and not lastMove == RAKE): return RAKE\n  else: return STAB\n(60% STAB / 40% RAKE; note the asc17 clause in lightspeed is dead code -- whenever it is true, !lastTwoMoves(RAKE) is also true -- so lightspeed asc17 behaves exactly like base; see conflicts)",
+      "historyRules": [
+        "STAB never 3x in a row",
+        "RAKE never 3x in a row (lightspeed, all ascensions)",
+        "asc>=17 per wiki/real game: RAKE never twice in a row (NOT reproduced by lightspeed's expression)"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "ai asc17 RAKE restriction",
+        "lightspeed": "condition '!lastTwoMoves(RAKE) || (asc17 && !lastMove(RAKE))' makes the asc17 term unreachable; RAKE may repeat twice in a row at asc17 (blocked only at 3x)",
+        "wiki": "wiki:Slavers: 'On Ascension 17, Blue Slaver will never use Rake twice in a row' (real game branches on asc17 to a !lastMove(RAKE) check)",
+        "note": "lightspeed appears to have flattened the real game's if/else into a single OR, changing asc17 behavior"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:440-453", "MonsterSpecific.cpp:2046-2058", "wiki:Slavers", "spire-archive:SLAVERBLUE"]
+  },
+  {
+    "id": "RED_SLAVER",
+    "name": "Red Slaver",
+    "category": "normal",
+    "acts": [1, 2],
+    "hp": { "base": [46, 50], "asc": [48, 52], "ascLevel": 7 },
+    "prebattle": [],
+    "moves": {
+      "RED_SLAVER_STAB": {
+        "intent": "ATTACK",
+        "damage": 13,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "2": { "damage": 14 } }
+      },
+      "RED_SLAVER_SCRAPE": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 8,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "VULNERABLE", "amount": 1, "target": "player" }],
+        "asc": {
+          "2": { "damage": 9 },
+          "17": { "effects": [{ "power": "VULNERABLE", "amount": 2, "target": "player" }] }
+        }
+      },
+      "RED_SLAVER_ENTANGLE": {
+        "intent": "STRONG_DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "ENTANGLED", "amount": 1, "target": "player" }]
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always STAB",
+      "spec": "usedEntangle = miscInfo flag (lightspeed NEVER sets it -- see conflicts; the real game sets it when ENTANGLE is used).\ngetMove(roll):\n  if lastMove == NONE: return STAB\n  elif roll >= 75 and not usedEntangle: return ENTANGLE\n  elif roll >= 50 and usedEntangle and not lastTwoMoves == STAB: return STAB\n  elif (not lastTwoMoves == SCRAPE) or (asc>=17 and not lastMove == SCRAPE): return SCRAPE\n  else: return STAB\nAs coded in lightspeed (usedEntangle stuck false): after turn 1 there is a 25% ENTANGLE chance EVERY turn, the roll>=50 STAB branch is unreachable, and rolls < 75 follow the SCRAPE, SCRAPE, STAB loop.\nPer wiki/real game: ENTANGLE once per combat; before it, [SCRAPE, SCRAPE, STAB] loop with 25% ENTANGLE chance per turn; after it, 55% STAB / 45% SCRAPE with no move 3x in a row (asc17: SCRAPE never twice in a row).",
+      "historyRules": [
+        "always STAB on turn 1",
+        "SCRAPE never 3x in a row (lightspeed, all ascensions)",
+        "STAB never 3x in a row (in the post-entangle branch)",
+        "asc>=17 per wiki/real game: SCRAPE never twice in a row after Entangle (NOT reproduced by lightspeed's expression)"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "usedEntangle flag",
+        "lightspeed": "miscInfo is read as usedEntangle but never written; ENTANGLE therefore repeats whenever roll >= 75, and the post-entangle 'roll>=50 -> STAB' branch never executes",
+        "wiki": "wiki:Slavers: Entangle 'can only be used once per combat'; the real game sets usedEntangle=true in takeTurn's Entangle case",
+        "note": "lightspeed omission; real behavior: once per combat"
+      },
+      {
+        "field": "post-entangle STAB probability",
+        "lightspeed": "roll >= 50 -> 50% STAB chance branch",
+        "wiki": "wiki:Slavers: 'After using Entangle, Red Slaver has a 55% chance of using Stab and a 45% chance of using Scrape'",
+        "note": "50 (lightspeed threshold) vs 55% (wiki prose); unresolvable without the game jar -- the wiki percentage would correspond to roll >= 45"
+      },
+      {
+        "field": "ai asc17 SCRAPE restriction",
+        "lightspeed": "'!lastTwoMoves(SCRAPE) || (asc17 && !lastMove(SCRAPE))' -- asc17 term is dead code, SCRAPE may repeat twice at asc17",
+        "wiki": "wiki:Slavers: at asc17, after Entangle, Scrape cannot be used twice in a row (and pre-entangle loop tightens to [SCRAPE, STAB])",
+        "note": "same OR-flattening issue as Blue Slaver"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:1015-1031", "MonsterSpecific.cpp:2773-2796", "wiki:Slavers", "spire-archive:SLAVERRED"]
+  },
+  {
+    "id": "GREMLIN_NOB",
+    "name": "Gremlin Nob",
+    "category": "elite",
+    "acts": [1, 2],
+    "hp": { "base": [82, 86], "asc": [85, 90], "ascLevel": 8 },
+    "prebattle": [],
+    "moves": {
+      "GREMLIN_NOB_BELLOW": {
+        "intent": "BUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "ENRAGE", "amount": 2, "target": "self" }],
+        "asc": { "18": { "effects": [{ "power": "ENRAGE", "amount": 3, "target": "self" }] } }
+      },
+      "GREMLIN_NOB_RUSH": {
+        "intent": "ATTACK",
+        "damage": 14,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "3": { "damage": 16 } }
+      },
+      "GREMLIN_NOB_SKULL_BASH": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 6,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "VULNERABLE", "amount": 2, "target": "player" }],
+        "asc": { "3": { "damage": 8 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always BELLOW",
+      "spec": "getMove(roll):\n  if lastMove == NONE: return BELLOW\n  if asc >= 18:\n    if not lastTwoMoves == SKULL_BASH: return RUSH\n    elif lastTwoMoves == RUSH: return SKULL_BASH\n    else: return RUSH\n    [as literally coded this always yields RUSH, since SKULL_BASH can never enter the history -- see conflicts; real-game asc18 pattern: SKULL_BASH whenever it is not among the last two moves, i.e. BELLOW, then repeating [SKULL_BASH, RUSH, RUSH]]\n  else:\n    if roll < 33 or lastTwoMoves == RUSH: return SKULL_BASH\n    else: return RUSH\nENRAGE (gained from BELLOW): gains STRENGTH equal to the ENRAGE amount (2; asc>=18: 3) every time the player plays a SKILL card.",
+      "historyRules": [
+        "BELLOW exactly once, on turn 1",
+        "asc<18: 33% SKULL_BASH / 67% RUSH; RUSH never 3x in a row (forced SKULL_BASH after two RUSHes); SKULL_BASH has no repeat restriction",
+        "asc>=18 per wiki/real game: SKULL_BASH turn 2, then RUSH, RUSH, SKULL_BASH, RUSH, RUSH, ... (lightspeed as coded: RUSH every turn -- see conflicts)"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "ai asc18 pattern",
+        "lightspeed": "asc18 branch tests '!lastTwoMoves(SKULL_BASH) -> RUSH' first; since SKULL_BASH can then never be chosen, the branch degenerates to RUSH every turn after BELLOW",
+        "wiki": "wiki:Gremlin_Nob: 'At Ascension 18, Gremlin Nob uses Skull Bash on the 2nd turn and uses Bull Rush twice afterwards, then repeats this pattern' (equivalently: SKULL_BASH whenever it was not used in the last two moves, else RUSH)",
+        "note": "lightspeed transcription bug (its first condition checks SKULL_BASH where the real game effectively rations SKULL_BASH once per three turns); wiki/real pattern [SKULL_BASH, RUSH, RUSH] should be treated as correct"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:754-770", "MonsterSpecific.cpp:2402-2434", "BattleContext.cpp:1815-1818", "wiki:Gremlin_Nob", "spire-archive:GREMLINNOB"]
+  },
+  {
+    "id": "LAGAVULIN",
+    "name": "Lagavulin",
+    "category": "elite",
+    "acts": [1],
+    "hp": { "base": [109, 111], "asc": [112, 115], "ascLevel": 8 },
+    "prebattle": [
+      { "power": "ASLEEP", "amount": 1 },
+      { "power": "METALLICIZE", "amount": 8 },
+      { "power": "BLOCK", "amount": 8 }
+    ],
+    "moves": {
+      "LAGAVULIN_SLEEP": {
+        "intent": "SLEEP",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      },
+      "LAGAVULIN_ATTACK": {
+        "intent": "ATTACK",
+        "damage": 18,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "3": { "damage": 20 } }
+      },
+      "LAGAVULIN_SIPHON_SOUL": {
+        "intent": "STRONG_DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [
+          { "power": "DEXTERITY", "amount": -1, "target": "player" },
+          { "power": "STRENGTH", "amount": -1, "target": "player" }
+        ],
+        "asc": {
+          "18": {
+            "effects": [
+              { "power": "DEXTERITY", "amount": -2, "target": "player" },
+              { "power": "STRENGTH", "amount": -2, "target": "player" }
+            ]
+          }
+        }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "rollMove happens once, at combat start: SLEEP if ASLEEP, else SIPHON_SOUL (Dead Adventurer event spawn)",
+      "spec": "Prebattle: only when spawned ASLEEP (the standard elite encounter): METALLICIZE 8 and 8 starting block. The Dead Adventurer event spawns it awake with neither.\nAll moves after the initial roll are chained in takeTurn (one aiRng.random(99) still consumed per turn, unused).\nSLEEP (does nothing): next = ATTACK if (bc.turn == 2 [0-based; i.e. this is game turn 3] or ASLEEP has been removed), else SLEEP. Undisturbed it executes SLEEP on turns 1-3 and first attacks on turn 4.\nWake by damage: any unblocked attack damage or HP loss while ASLEEP removes ASLEEP and reduces METALLICIZE by 8; the already-queued SLEEP move still executes that turn (the real game displays this as a 1-turn Stunned intent), then ATTACK follows.\nATTACK: 18 (asc>=3: 20); next = SIPHON_SOUL if lastTwoMoves == ATTACK else ATTACK.\nSIPHON_SOUL: player DEXTERITY -1 and STRENGTH -1 (asc>=18: -2 and -2), applied immediately (not queued); next = ATTACK.\nAwake cycle: ATTACK, ATTACK, SIPHON_SOUL, repeating (event variant starts at SIPHON_SOUL).",
+      "historyRules": [
+        "asleep: SLEEP turns 1-3 (or until damaged), then attacks",
+        "ATTACK never 3x in a row (forced SIPHON_SOUL after two)",
+        "SIPHON_SOUL never twice in a row (always followed by ATTACK)"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "Metallicize on natural wake",
+        "lightspeed": "METALLICIZE is reduced by 8 (and ASLEEP removed) only when it takes unblocked damage/HP loss while asleep; on the natural turn-3 wake the ASLEEP flag and the 8 METALLICIZE persist",
+        "wiki": "wiki:Lagavulin: 'Once awoken, its Metallicize will be removed' (both wake paths)",
+        "note": "lightspeed simplification; also, the real game shows a separate 1-turn Stunned intent after a damage wake, which lightspeed folds into the pending SLEEP move (same net timing)"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:869-895", "MonsterSpecific.cpp:2493-2499", "MonsterSpecific.cpp:286-291", "Monster.cpp:388-391", "Monster.cpp:448-452", "MonsterGroup.cpp:293-300", "wiki:Lagavulin", "spire-archive:LAGAVULIN"]
+  },
+  {
+    "id": "SENTRY",
+    "name": "Sentry",
+    "category": "elite",
+    "acts": [1, 2],
+    "hp": { "base": [38, 42], "asc": [39, 45], "ascLevel": 8 },
+    "prebattle": [{ "power": "ARTIFACT", "amount": 1 }],
+    "moves": {
+      "SENTRY_BOLT": {
+        "intent": "DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "CARD:DAZED", "amount": 2, "target": "player" }],
+        "asc": { "18": { "effects": [{ "power": "CARD:DAZED", "amount": 3, "target": "player" }] } }
+      },
+      "SENTRY_BEAM": {
+        "intent": "ATTACK",
+        "damage": 9,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "3": { "damage": 10 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "by position: idx % 2 == 0 -> BOLT, idx % 2 == 1 -> BEAM (three-sentry elite: outer two open with BOLT, middle one with BEAM)",
+      "spec": "getMove(roll) is only consulted on turn 1 (roll consumed, unused): return BOLT if idx % 2 == 0 else BEAM.\nEvery later move is set in takeTurn: BOLT -> BEAM -> BOLT -> ... strict alternation for the rest of combat (one aiRng.random(99) consumed per turn, unused).\nBOLT: shuffle 2 (asc>=18: 3) Dazed into the discard pile. BEAM: attack 9 (asc>=3: 10).\nPrebattle: ARTIFACT 1 each.",
+      "historyRules": ["strict BOLT/BEAM alternation, phase fixed by spawn position"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1033-1045", "MonsterSpecific.cpp:2642-2651", "MonsterSpecific.cpp:311-313", "wiki:Sentry", "spire-archive:SENTRY"]
+  },
+  {
+    "id": "SLIME_BOSS",
+    "name": "Slime Boss",
+    "category": "boss",
+    "acts": [1],
+    "hp": { "base": [140, 140], "asc": [150, 150], "ascLevel": 9 },
+    "prebattle": [{ "power": "SPLIT", "amount": null }],
+    "moves": {
+      "SLIME_BOSS_GOOP_SPRAY": {
+        "intent": "STRONG_DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "CARD:SLIMED", "amount": 3, "target": "player" }],
+        "asc": { "19": { "effects": [{ "power": "CARD:SLIMED", "amount": 5, "target": "player" }] } }
+      },
+      "SLIME_BOSS_PREPARING": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      },
+      "SLIME_BOSS_SLAM": {
+        "intent": "ATTACK",
+        "damage": 35,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "4": { "damage": 38 } }
+      },
+      "SLIME_BOSS_SPLIT": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always GOOP_SPRAY",
+      "spec": "turn 1 rollMove: GOOP_SPRAY. Fixed 3-turn loop chained in takeTurn (no aiRng consumed after turn 1):\n  GOOP_SPRAY (3, asc>=19: 5 Slimed into discard pile) -> PREPARING (does nothing) -> SLAM (35, asc>=4: 38) -> GOOP_SPRAY -> ...\nonHpLost: if curHp <= floor(maxHp/2): the current intent is immediately replaced with SPLIT (interrupts whatever was queued, including SLAM).\nSPLIT: removed from combat; spawns SPIKE_SLIME_L at slot 0 and ACID_SLIME_L at slot 2, each with curHp = maxHp = the boss's current HP at split; each spawned slime rolls its own move on spawn and does not act this turn; +1 STRENGTH each if the player has Philosopher's Stone. The spawned large slimes can themselves split at half of their inherited maxHp.",
+      "historyRules": ["fixed loop GOOP_SPRAY -> PREPARING -> SLAM", "SPLIT interrupts at <= 50% HP (exactly once; boss leaves combat)"]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1087-1105", "MonsterSpecific.cpp:2702-2711", "Monster.cpp:508-512", "MonsterSpecific.cpp:3369-3391", "wiki:Slime_Boss", "spire-archive:SLIMEBOSS"]
+  },
+  {
+    "id": "THE_GUARDIAN",
+    "name": "The Guardian",
+    "category": "boss",
+    "acts": [1],
+    "hp": { "base": [240, 240], "asc": [250, 250], "ascLevel": 9 },
+    "prebattle": [
+      { "power": "MODE_SHIFT", "amount": 30, "asc": { "9": 35, "19": 40 } }
+    ],
+    "moves": {
+      "THE_GUARDIAN_CHARGING_UP": {
+        "intent": "DEFEND",
+        "damage": null,
+        "hits": null,
+        "block": 9,
+        "effects": []
+      },
+      "THE_GUARDIAN_FIERCE_BASH": {
+        "intent": "ATTACK",
+        "damage": 32,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "4": { "damage": 36 } }
+      },
+      "THE_GUARDIAN_VENT_STEAM": {
+        "intent": "STRONG_DEBUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [
+          { "power": "VULNERABLE", "amount": 2, "target": "player" },
+          { "power": "WEAK", "amount": 2, "target": "player" }
+        ]
+      },
+      "THE_GUARDIAN_WHIRLWIND": {
+        "intent": "ATTACK",
+        "damage": 5,
+        "hits": 4,
+        "block": null,
+        "effects": []
+      },
+      "THE_GUARDIAN_DEFENSIVE_MODE": {
+        "intent": "BUFF",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": [{ "power": "SHARP_HIDE", "amount": 3, "target": "self" }],
+        "asc": { "19": { "effects": [{ "power": "SHARP_HIDE", "amount": 4, "target": "self" }] } }
+      },
+      "THE_GUARDIAN_ROLL_ATTACK": {
+        "intent": "ATTACK",
+        "damage": 9,
+        "hits": 1,
+        "block": null,
+        "effects": [],
+        "asc": { "4": { "damage": 10 } }
+      },
+      "THE_GUARDIAN_TWIN_SLAM": {
+        "intent": "ATTACK_BUFF",
+        "damage": 8,
+        "hits": 2,
+        "block": null,
+        "effects": [{ "power": "MODE_SHIFT", "amount": null, "target": "self" }]
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always CHARGING_UP",
+      "spec": "All moves are chained in takeTurn after the initial roll (no aiRng consumed after turn 1).\nOffensive (closed) loop: CHARGING_UP (+9 block) -> FIERCE_BASH (32, asc>=4: 36) -> VENT_STEAM (VULNERABLE 2 + WEAK 2) -> WHIRLWIND (5x4) -> CHARGING_UP -> ...\nMODE_SHIFT: D = 30 (asc>=9: 35; asc>=19: 40), applied prebattle and stored as the running threshold. On every HP loss while MODE_SHIFT is active: counter -= hpLost; when it reaches <= 0: MODE_SHIFT removed, gains 20 block (queued), and the current intent is immediately replaced with DEFENSIVE_MODE.\nDefensive (open) loop, fixed: DEFENSIVE_MODE (+SHARP_HIDE 3, asc>=19: 4) -> ROLL_ATTACK (9, asc>=4: 10) -> TWIN_SLAM (8x2; removes SHARP_HIDE; D += 10; re-gains MODE_SHIFT with the new D) -> WHIRLWIND (re-entering the offensive loop at WHIRLWIND).\nEach successive mode shift therefore requires 10 more damage than the previous (30/35/40, then +10 per shift). While in defensive mode there is no MODE_SHIFT power, so HP loss cannot re-trigger it until TWIN_SLAM restores it.",
+      "historyRules": [
+        "fixed offensive loop CHARGING_UP -> FIERCE_BASH -> VENT_STEAM -> WHIRLWIND",
+        "mode shift interrupts the current intent with DEFENSIVE_MODE and grants 20 block",
+        "fixed defensive sequence DEFENSIVE_MODE -> ROLL_ATTACK -> TWIN_SLAM -> WHIRLWIND (then offensive loop resumes)"
+      ]
+    },
+    "conflicts": [],
+    "sources": ["MonsterSpecific.cpp:1322-1361", "MonsterSpecific.cpp:2939-2942", "MonsterSpecific.cpp:315-328", "Monster.cpp:520-531", "wiki:The_Guardian", "spire-archive:THEGUARDIAN"]
+  },
+  {
+    "id": "HEXAGHOST",
+    "name": "Hexaghost",
+    "category": "boss",
+    "acts": [1],
+    "hp": { "base": [250, 250], "asc": [264, 264], "ascLevel": 9 },
+    "prebattle": [],
+    "moves": {
+      "HEXAGHOST_ACTIVATE": {
+        "intent": "UNKNOWN",
+        "damage": null,
+        "hits": null,
+        "block": null,
+        "effects": []
+      },
+      "HEXAGHOST_DIVIDER": {
+        "intent": "ATTACK",
+        "damage": null,
+        "hits": 6,
+        "block": null,
+        "effects": []
+      },
+      "HEXAGHOST_SEAR": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 6,
+        "hits": 1,
+        "block": null,
+        "effects": [{ "power": "CARD:BURN", "amount": 1, "target": "player" }],
+        "asc": { "19": { "effects": [{ "power": "CARD:BURN", "amount": 2, "target": "player" }] } }
+      },
+      "HEXAGHOST_TACKLE": {
+        "intent": "ATTACK",
+        "damage": 5,
+        "hits": 2,
+        "block": null,
+        "effects": [],
+        "asc": { "4": { "damage": 6 } }
+      },
+      "HEXAGHOST_INFLAME": {
+        "intent": "DEFEND_BUFF",
+        "damage": null,
+        "hits": null,
+        "block": 12,
+        "effects": [{ "power": "STRENGTH", "amount": 2, "target": "self" }],
+        "asc": { "19": { "effects": [{ "power": "STRENGTH", "amount": 3, "target": "self" }] } }
+      },
+      "HEXAGHOST_INFERNO": {
+        "intent": "ATTACK_DEBUFF",
+        "damage": 2,
+        "hits": 6,
+        "block": null,
+        "effects": [],
+        "asc": { "4": { "damage": 3 } }
+      }
+    },
+    "ai": {
+      "roll": "aiRng.random(99)",
+      "firstTurn": "always ACTIVATE",
+      "spec": "One aiRng.random(99) is consumed per turn (unused); all moves are chained in takeTurn.\nTurn 1 ACTIVATE: does nothing visible; sets dividerDamage = floor(player.curHp / 12) + 1 using the player's HP at that moment; next = DIVIDER.\nTurn 2 DIVIDER: attack dividerDamage x6; seq = 0; next = SEAR.\nTurns 3+ follow the fixed 7-move loop [SEAR, TACKLE, SEAR, INFLAME, TACKLE, SEAR, INFERNO], driven by counter seq:\n  SEAR: attack 6; add 1 (asc>=19: 2) Burn to the discard pile -- the Burn is created upgraded when bc.turn > 8 (i.e. from game turn 10 onward, which in the fixed pattern is exactly every SEAR after the first INFERNO); next = TACKLE if seq == 0, INFLAME if seq == 2, else INFERNO; seq += 1.\n  TACKLE: attack 5x2 (asc>=4: 6x2); next = SEAR; seq += 1.\n  INFLAME: +12 block, +2 STRENGTH (asc>=19: +3); next = TACKLE; seq += 1.\n  INFERNO: attack 2x6 (asc>=4: 3x6); seq = 0; next = SEAR.\nWith the fixed sequence, INFERNO always lands on game turns 9, 16, 23, ... (see conflicts for the real game's Burn upgrades on Inferno).",
+      "historyRules": [
+        "turn 1 ACTIVATE, turn 2 DIVIDER, then the fixed repeating loop [SEAR, TACKLE, SEAR, INFLAME, TACKLE, SEAR, INFERNO]",
+        "no randomness in move selection at any point"
+      ]
+    },
+    "conflicts": [
+      {
+        "field": "INFERNO Burn effects",
+        "lightspeed": "INFERNO only attacks (2x6 / 3x6); it adds no cards and upgrades nothing; the 'upgraded Sear Burns' rule is modeled by creating upgraded Burns whenever bc.turn > 8",
+        "wiki": "wiki:Hexaghost (Enemies.lua Inferno text): 'Adds 3 Burns+ into your discard pile. Upgrades all Burns. For the rest of combat, any Burn created by Sear will be upgraded' (real game: BurnIncreaseAction + burnUpgraded flag)",
+        "note": "lightspeed omits the 3 added Burn+ and the retroactive upgrade of existing Burns; its turn>8 condition reproduces the Sear-side timing exactly (first Inferno is always turn 9) but not the other two Inferno effects"
+      }
+    ],
+    "sources": ["MonsterSpecific.cpp:791-845", "MonsterSpecific.cpp:2442-2448", "wiki:Hexaghost", "spire-archive:HEXAGHOST"]
+  }
+]

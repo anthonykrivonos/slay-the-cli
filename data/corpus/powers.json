@@ -1,0 +1,2876 @@
+[
+ {
+  "id": "ACCURACY",
+  "name": "Accuracy",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Shivs deal X additional damage.",
+  "sources": {
+   "lightspeed": [
+    "player:ACCURACY"
+   ],
+   "spire": [
+    "ACCURACY"
+   ],
+   "wiki": [
+    "Accuracy"
+   ]
+  }
+ },
+ {
+  "id": "AFTER_IMAGE",
+  "name": "After Image",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play a card, gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "player:AFTER_IMAGE"
+   ],
+   "spire": [
+    "AFTER_IMAGE"
+   ],
+   "wiki": [
+    "After Image"
+   ]
+  }
+ },
+ {
+  "id": "AMPLIFY",
+  "name": "Amplify",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next X Power cards are played twice this turn.",
+  "sources": {
+   "lightspeed": [
+    "player:AMPLIFY"
+   ],
+   "spire": [
+    "AMPLIFY"
+   ],
+   "wiki": [
+    "Amplify"
+   ]
+  }
+ },
+ {
+  "id": "ANGRY",
+  "name": "Angry",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Upon receiving attack damage, gains X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:ANGRY"
+   ],
+   "spire": [
+    "ANGRY"
+   ],
+   "wiki": [
+    "Angry"
+   ]
+  }
+ },
+ {
+  "id": "ARTIFACT",
+  "name": "Artifact",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "Negates X debuffs.",
+  "sources": {
+   "lightspeed": [
+    "player:ARTIFACT",
+    "monster:ARTIFACT"
+   ],
+   "spire": [
+    "ARTIFACT"
+   ],
+   "wiki": [
+    "Artifact"
+   ]
+  }
+ },
+ {
+  "id": "ASLEEP",
+  "name": "Asleep",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Does not act; wakes (gaining Metallicize) when it loses HP or after 3 turns.",
+  "notes": "sts_lightspeed implementation status for Lagavulin's sleep, not a game power id",
+  "sources": {
+   "lightspeed": [
+    "monster:ASLEEP"
+   ],
+   "spire": [],
+   "wiki": []
+  }
+ },
+ {
+  "id": "ATTACK_BURN",
+  "name": "Attack Burn",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "For X turn, whenever you play an Attack, Exhaust it.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "ATTACK_BURN"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "BACK_ATTACK",
+  "name": "Back Attack",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Deals 50% more damage as it is attacking you from behind.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "BACKATTACK"
+   ],
+   "wiki": [
+    "Back Attack"
+   ]
+  }
+ },
+ {
+  "id": "BARRICADE",
+  "name": "Barricade",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "both",
+  "text": "$Block is not removed at the beginning of your turn.",
+  "sources": {
+   "lightspeed": [
+    "player:BARRICADE",
+    "monster:BARRICADE"
+   ],
+   "spire": [
+    "BARRICADE"
+   ],
+   "wiki": [
+    "Barricade"
+   ]
+  }
+ },
+ {
+  "id": "BATTLE_HYMN",
+  "name": "Battle Hymn",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, add X Smites into your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:BATTLE_HYMN"
+   ],
+   "spire": [
+    "BATTLEHYMN"
+   ],
+   "wiki": [
+    "Battle Hymn"
+   ]
+  }
+ },
+ {
+  "id": "BEAT_OF_DEATH",
+  "name": "Beat of Death",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a card, take X damage.",
+  "sources": {
+   "lightspeed": [
+    "monster:BEAT_OF_DEATH"
+   ],
+   "spire": [
+    "BEATOFDEATH"
+   ],
+   "wiki": [
+    "Beat of Death"
+   ]
+  }
+ },
+ {
+  "id": "BERSERK",
+  "name": "Berserk",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, gain X Energy.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "BERSERK"
+   ],
+   "wiki": [
+    "Berserk"
+   ]
+  }
+ },
+ {
+  "id": "BIAS",
+  "name": "Bias",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, lose X $Focus.",
+  "sources": {
+   "lightspeed": [
+    "player:BIAS"
+   ],
+   "spire": [
+    "BIAS"
+   ],
+   "wiki": [
+    "Bias"
+   ]
+  }
+ },
+ {
+  "id": "BLASPHEMER",
+  "name": "Blasphemer",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, die.",
+  "sources": {
+   "lightspeed": [
+    "player:BLASPHEMER"
+   ],
+   "spire": [
+    "ENDTURNDEATH"
+   ],
+   "wiki": [
+    "Blasphemer"
+   ]
+  }
+ },
+ {
+  "id": "BLOCK_RETURN",
+  "name": "Block Return",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "When attacked, you gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "monster:BLOCK_RETURN"
+   ],
+   "spire": [
+    "BLOCKRETURNPOWER"
+   ],
+   "wiki": [
+    "Block Return"
+   ]
+  }
+ },
+ {
+  "id": "BLUR",
+  "name": "Blur",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "$Block is not removed at the beginning of your next X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:BLUR"
+   ],
+   "spire": [
+    "BLUR"
+   ],
+   "wiki": [
+    "Blur"
+   ]
+  }
+ },
+ {
+  "id": "BRUTALITY",
+  "name": "Brutality",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, lose X HP and draw X cards.",
+  "sources": {
+   "lightspeed": [
+    "player:BRUTALITY"
+   ],
+   "spire": [
+    "BRUTALITY"
+   ],
+   "wiki": [
+    "Brutality"
+   ]
+  }
+ },
+ {
+  "id": "BUFFER",
+  "name": "Buffer",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Prevent the next X times you would lose HP.",
+  "sources": {
+   "lightspeed": [
+    "player:BUFFER"
+   ],
+   "spire": [
+    "BUFFER"
+   ],
+   "wiki": [
+    "Buffer"
+   ]
+  }
+ },
+ {
+  "id": "BURST",
+  "name": "Burst",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next X Skills are played twice this turn.",
+  "sources": {
+   "lightspeed": [
+    "player:BURST"
+   ],
+   "spire": [
+    "BURST"
+   ],
+   "wiki": [
+    "Burst"
+   ]
+  }
+ },
+ {
+  "id": "CANNOT_CHANGE_STANCE",
+  "name": "Cannot Change Stance",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Cannot change your stance this turn.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "CANNOTCHANGESTANCEPOWER"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "CHOKED",
+  "name": "Choked",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a card this turn, loses X HP.",
+  "sources": {
+   "lightspeed": [
+    "monster:CHOKED"
+   ],
+   "spire": [
+    "CHOKED"
+   ],
+   "wiki": [
+    "Choked"
+   ]
+  }
+ },
+ {
+  "id": "COLLECT",
+  "name": "Collect",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "At the start of your next X turns, put a Miracle+ into your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:COLLECT"
+   ],
+   "spire": [
+    "COLLECT"
+   ],
+   "wiki": [
+    "Collect"
+   ]
+  }
+ },
+ {
+  "id": "COMBUST",
+  "name": "Combust",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of your turn, lose X HP and deal damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:COMBUST"
+   ],
+   "spire": [
+    "COMBUST"
+   ],
+   "wiki": [
+    "Combust"
+   ]
+  }
+ },
+ {
+  "id": "CONFUSED",
+  "name": "Confused",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you draw a card, randomize its cost.",
+  "sources": {
+   "lightspeed": [
+    "player:CONFUSED"
+   ],
+   "spire": [
+    "CONFUSION"
+   ],
+   "wiki": [
+    "Confused"
+   ]
+  }
+ },
+ {
+  "id": "CONSERVE",
+  "name": "Conserve",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Energy is conserved this turn.Energy is conserved for the next X",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "CONSERVE"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "CONSTRICTED",
+  "name": "Constricted",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Take X damage at the end of your turn.",
+  "sources": {
+   "lightspeed": [
+    "player:CONSTRICTED"
+   ],
+   "spire": [
+    "CONSTRICTED"
+   ],
+   "wiki": [
+    "Constricted"
+   ]
+  }
+ },
+ {
+  "id": "CORPSE_EXPLOSION",
+  "name": "Corpse Explosion",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "On death, deal damage equal to Max HP X times to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "monster:CORPSE_EXPLOSION"
+   ],
+   "spire": [
+    "CORPSEEXPLOSIONPOWER"
+   ],
+   "wiki": [
+    "Corpse Explosion"
+   ]
+  }
+ },
+ {
+  "id": "CORRUPTION",
+  "name": "Corruption",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Skills cost 0. Whenever you play a Skill, $Exhaust it.",
+  "sources": {
+   "lightspeed": [
+    "player:CORRUPTION"
+   ],
+   "spire": [
+    "CORRUPTION"
+   ],
+   "wiki": [
+    "Corruption"
+   ]
+  }
+ },
+ {
+  "id": "CREATIVE_AI",
+  "name": "Creative AI",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, add X random Power cards into your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:CREATIVE_AI"
+   ],
+   "spire": [
+    "CREATIVE_AI"
+   ],
+   "wiki": [
+    "Creative AI"
+   ]
+  }
+ },
+ {
+  "id": "CURIOSITY",
+  "name": "Curiosity",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a Power card, gains X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:CURIOSITY"
+   ],
+   "spire": [
+    "CURIOSITY"
+   ],
+   "wiki": [
+    "Curiosity"
+   ]
+  }
+ },
+ {
+  "id": "CURL_UP",
+  "name": "Curl Up",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Gains X $Block upon first receiving attack damage.",
+  "sources": {
+   "lightspeed": [
+    "monster:CURL_UP"
+   ],
+   "spire": [
+    "CURL_UP"
+   ],
+   "wiki": [
+    "Curl Up"
+   ]
+  }
+ },
+ {
+  "id": "DARK_EMBRACE",
+  "name": "Dark Embrace",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever a card is $Exhausted, draw X cards.",
+  "sources": {
+   "lightspeed": [
+    "player:DARK_EMBRACE"
+   ],
+   "spire": [
+    "DARK_EMBRACE"
+   ],
+   "wiki": [
+    "Dark Embrace"
+   ]
+  }
+ },
+ {
+  "id": "DEMON_FORM",
+  "name": "Demon Form",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, gain X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "player:DEMON_FORM"
+   ],
+   "spire": [
+    "DEMON_FORM"
+   ],
+   "wiki": [
+    "Demon Form"
+   ]
+  }
+ },
+ {
+  "id": "DEVA",
+  "name": "Deva",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, gain X times and increase this gain by Y.",
+  "sources": {
+   "lightspeed": [
+    "player:DEVA"
+   ],
+   "spire": [
+    "DEVAFORM"
+   ],
+   "wiki": [
+    "Deva"
+   ]
+  }
+ },
+ {
+  "id": "DEVOTION",
+  "name": "Devotion",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, gain X $Mantra.",
+  "sources": {
+   "lightspeed": [
+    "player:DEVOTION"
+   ],
+   "spire": [
+    "DEVOTIONPOWER"
+   ],
+   "wiki": [
+    "Devotion"
+   ]
+  }
+ },
+ {
+  "id": "DEXTERITY",
+  "name": "Dexterity",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Increase $Block gained from cards by X.",
+  "sources": {
+   "lightspeed": [
+    "player:DEXTERITY"
+   ],
+   "spire": [
+    "DEXTERITY"
+   ],
+   "wiki": [
+    "Dexterity"
+   ]
+  }
+ },
+ {
+  "id": "DOUBLE_DAMAGE",
+  "name": "Double Damage",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "Attacks deal double damage for X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:DOUBLE_DAMAGE"
+   ],
+   "spire": [
+    "DOUBLE_DAMAGE"
+   ],
+   "wiki": [
+    "Double Damage"
+   ]
+  }
+ },
+ {
+  "id": "DOUBLE_TAP",
+  "name": "Double Tap",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next X Attacks are played twice this turn.",
+  "sources": {
+   "lightspeed": [
+    "player:DOUBLE_TAP"
+   ],
+   "spire": [
+    "DOUBLE_TAP"
+   ],
+   "wiki": [
+    "Double Tap"
+   ]
+  }
+ },
+ {
+  "id": "DRAW",
+  "name": "Draw",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, draw X additional cards.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "DRAW"
+   ],
+   "wiki": [
+    "Draw"
+   ]
+  }
+ },
+ {
+  "id": "DRAW_CARD_NEXT_TURN",
+  "name": "Draw Card",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Draw X additional cards next turn.",
+  "sources": {
+   "lightspeed": [
+    "player:DRAW_CARD_NEXT_TURN"
+   ],
+   "spire": [
+    "DRAW_CARD"
+   ],
+   "wiki": [
+    "Draw Card"
+   ]
+  }
+ },
+ {
+  "id": "DRAW_REDUCTION",
+  "name": "Draw Reduction",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": true,
+  "owner": "player",
+  "text": "Draw X less cards next turn.",
+  "sources": {
+   "lightspeed": [
+    "player:DRAW_REDUCTION"
+   ],
+   "spire": [
+    "DRAW_REDUCTION"
+   ],
+   "wiki": [
+    "Draw Reduction"
+   ]
+  }
+ },
+ {
+  "id": "DUPLICATION",
+  "name": "Duplication",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next card is played twice this turn.Your next X",
+  "sources": {
+   "lightspeed": [
+    "player:DUPLICATION"
+   ],
+   "spire": [
+    "DUPLICATIONPOWER"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "ECHO_FORM",
+  "name": "Echo Form",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "The first X cards you play each turn are played twice.",
+  "sources": {
+   "lightspeed": [
+    "player:ECHO_FORM"
+   ],
+   "spire": [
+    "ECHO_FORM"
+   ],
+   "wiki": [
+    "Echo Form"
+   ]
+  }
+ },
+ {
+  "id": "ELECTRO",
+  "name": "Electro",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "$Lightning hits ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:ELECTRO"
+   ],
+   "spire": [
+    "ELECTRO"
+   ],
+   "wiki": [
+    "Electro"
+   ]
+  }
+ },
+ {
+  "id": "ENERGIZED",
+  "name": "Energized",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Gain X additional Energy next turn.",
+  "notes": "two game power ids (Energized, EnergizedBlue) with identical behavior; merged",
+  "sources": {
+   "lightspeed": [
+    "player:ENERGIZED"
+   ],
+   "spire": [
+    "ENERGIZED",
+    "ENERGIZEDBLUE"
+   ],
+   "wiki": [
+    "Energized (Silent)",
+    "Energized (Defect)"
+   ]
+  }
+ },
+ {
+  "id": "ENRAGE",
+  "name": "Enrage",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a Skill card, gains X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:ENRAGE"
+   ],
+   "spire": [
+    "ANGER"
+   ],
+   "wiki": [
+    "Enrage"
+   ]
+  }
+ },
+ {
+  "id": "ENTANGLED",
+  "name": "Entangled",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "You may not play any Attacks this turn.",
+  "sources": {
+   "lightspeed": [
+    "player:ENTANGLED"
+   ],
+   "spire": [
+    "ENTANGLED"
+   ],
+   "wiki": [
+    "Entangled"
+   ]
+  }
+ },
+ {
+  "id": "ENVENOM",
+  "name": "Envenom",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you deal unblocked damage, apply X $Poison.",
+  "sources": {
+   "lightspeed": [
+    "player:ENVENOM"
+   ],
+   "spire": [
+    "ENVENOM"
+   ],
+   "wiki": [
+    "Envenom"
+   ]
+  }
+ },
+ {
+  "id": "EQUILIBRIUM",
+  "name": "Equilibrium",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "Retain your hand for X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:EQUILIBRIUM"
+   ],
+   "spire": [
+    "EQUILIBRIUM"
+   ],
+   "wiki": [
+    "Equilibrium"
+   ]
+  }
+ },
+ {
+  "id": "ESTABLISHMENT",
+  "name": "Establishment",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever a card is $Retained, lower its cost by X.",
+  "sources": {
+   "lightspeed": [
+    "player:ESTABLISHMENT"
+   ],
+   "spire": [
+    "ESTABLISHMENTPOWER"
+   ],
+   "wiki": [
+    "Establishment"
+   ]
+  }
+ },
+ {
+  "id": "EVOLVE",
+  "name": "Evolve",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you draw a Status card, draw X cards.",
+  "sources": {
+   "lightspeed": [
+    "player:EVOLVE"
+   ],
+   "spire": [
+    "EVOLVE"
+   ],
+   "wiki": [
+    "Evolve"
+   ]
+  }
+ },
+ {
+  "id": "EXPLOSIVE",
+  "name": "Explosive",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "monster",
+  "text": "Explodes after X turns, dealing some amount of damage.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "EXPLOSIVE"
+   ],
+   "wiki": [
+    "Explosive"
+   ]
+  }
+ },
+ {
+  "id": "FADING",
+  "name": "Fading",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "monster",
+  "text": "Dies in X turns.",
+  "sources": {
+   "lightspeed": [
+    "monster:FADING"
+   ],
+   "spire": [
+    "FADING"
+   ],
+   "wiki": [
+    "Fading"
+   ]
+  }
+ },
+ {
+  "id": "FASTING",
+  "name": "Fasting",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, lose X Energy.",
+  "sources": {
+   "lightspeed": [
+    "player:FASTING"
+   ],
+   "spire": [
+    "ENERGYDOWNPOWER"
+   ],
+   "wiki": [
+    "Fasting"
+   ]
+  }
+ },
+ {
+  "id": "FEEL_NO_PAIN",
+  "name": "Feel No Pain",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you $Exhaust a card, gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "player:FEEL_NO_PAIN"
+   ],
+   "spire": [
+    "FEEL_NO_PAIN"
+   ],
+   "wiki": [
+    "Feel No Pain"
+   ]
+  }
+ },
+ {
+  "id": "FIRE_BREATHING",
+  "name": "Fire Breathing",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you draw a Status or Curse card, deal X damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:FIRE_BREATHING"
+   ],
+   "spire": [
+    "FIRE_BREATHING"
+   ],
+   "wiki": [
+    "Fire Breathing"
+   ]
+  }
+ },
+ {
+  "id": "FLAME_BARRIER",
+  "name": "Flame Barrier",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "When attacked, deals X damage back.",
+  "sources": {
+   "lightspeed": [
+    "player:FLAME_BARRIER"
+   ],
+   "spire": [
+    "FLAME_BARRIER"
+   ],
+   "wiki": [
+    "Flame Barrier"
+   ]
+  }
+ },
+ {
+  "id": "FLIGHT",
+  "name": "Flying",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Takes 50% less attack damage. Cancelled if dealt attack damage X times in one turn. Resets charges at the start of next turn if not fully removed.",
+  "sources": {
+   "lightspeed": [
+    "monster:FLIGHT"
+   ],
+   "spire": [
+    "FLIGHT"
+   ],
+   "wiki": [
+    "Flying"
+   ]
+  }
+ },
+ {
+  "id": "FOCUS",
+  "name": "Focus",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Increases the effectiveness of Orbs by X.",
+  "sources": {
+   "lightspeed": [
+    "player:FOCUS"
+   ],
+   "spire": [
+    "FOCUS"
+   ],
+   "wiki": [
+    "Focus"
+   ]
+  }
+ },
+ {
+  "id": "FORESIGHT",
+  "name": "Foresight",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, $Scry X.",
+  "sources": {
+   "lightspeed": [
+    "player:FORESIGHT"
+   ],
+   "spire": [
+    "WIREHEADINGPOWER"
+   ],
+   "wiki": [
+    "Foresight"
+   ]
+  }
+ },
+ {
+  "id": "FRAIL",
+  "name": "Frail",
+  "kind": "debuff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "Gain 25% less $Block from cards for X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:FRAIL"
+   ],
+   "spire": [
+    "FRAIL"
+   ],
+   "wiki": [
+    "Frail"
+   ]
+  }
+ },
+ {
+  "id": "FREE_ATTACK_POWER",
+  "name": "Free Attack Power",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Ignore energy cost on the next X Attacks you play.",
+  "sources": {
+   "lightspeed": [
+    "player:FREE_ATTACK_POWER"
+   ],
+   "spire": [
+    "FREEATTACKPOWER"
+   ],
+   "wiki": [
+    "Free Attack Power"
+   ]
+  }
+ },
+ {
+  "id": "GENERIC_STRENGTH_UP",
+  "name": "Strength Up",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "At the end of its turn, gains $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:GENERIC_STRENGTH_UP"
+   ],
+   "spire": [
+    "GENERIC_STRENGTH_UP_POWER"
+   ],
+   "wiki": [
+    "Strength Up"
+   ]
+  }
+ },
+ {
+  "id": "GROWTH",
+  "name": "Growth",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "At the end of its turn, gains X Strength.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "GROWTHPOWER"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "HEATSINK",
+  "name": "Heatsink",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play a Power card, draw X cards.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "HEATSINK"
+   ],
+   "wiki": [
+    "Heatsink"
+   ]
+  }
+ },
+ {
+  "id": "HELLO_WORLD",
+  "name": "Hello",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, add X random Common cards into your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:HELLO_WORLD"
+   ],
+   "spire": [
+    "HELLO"
+   ],
+   "wiki": [
+    "Hello"
+   ]
+  }
+ },
+ {
+  "id": "HEX",
+  "name": "Hex",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play a non-Attack card, shuffle X Dazed into your draw pile.",
+  "sources": {
+   "lightspeed": [
+    "player:HEX"
+   ],
+   "spire": [
+    "HEX"
+   ],
+   "wiki": [
+    "Hex"
+   ]
+  }
+ },
+ {
+  "id": "INFINITE_BLADES",
+  "name": "Infinite Blades",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, add X Shivs to your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:INFINITE_BLADES"
+   ],
+   "spire": [
+    "INFINITE_BLADES"
+   ],
+   "wiki": [
+    "Infinite Blades"
+   ]
+  }
+ },
+ {
+  "id": "INTANGIBLE",
+  "name": "Intangible",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "both",
+  "text": "Reduce ALL damage taken and HP loss to 1.",
+  "notes": "player variant (IntangiblePlayerPower) decrements at end of the player's turn; monster variant at end of its owner's turn",
+  "sources": {
+   "lightspeed": [
+    "player:INTANGIBLE",
+    "monster:INTANGIBLE"
+   ],
+   "spire": [
+    "INTANGIBLE",
+    "INTANGIBLEPLAYER"
+   ],
+   "wiki": [
+    "Intangible"
+   ]
+  }
+ },
+ {
+  "id": "INVINCIBLE",
+  "name": "Invincible",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Can only lose X more HP this turn.",
+  "sources": {
+   "lightspeed": [
+    "monster:INVINCIBLE"
+   ],
+   "spire": [
+    "INVINCIBLE"
+   ],
+   "wiki": [
+    "Invincible"
+   ]
+  }
+ },
+ {
+  "id": "JUGGERNAUT",
+  "name": "Juggernaut",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you gain $Block, deal X damage to a random enemy.",
+  "sources": {
+   "lightspeed": [
+    "player:JUGGERNAUT"
+   ],
+   "spire": [
+    "JUGGERNAUT"
+   ],
+   "wiki": [
+    "Juggernaut"
+   ]
+  }
+ },
+ {
+  "id": "LIFE_LINK",
+  "name": "Life Link",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "If other Darklings are still alive, revives in 2 turns.",
+  "notes": "sts_lightspeed models this as the REGROW boolean status on Darklings",
+  "sources": {
+   "lightspeed": [
+    "monster:REGROW"
+   ],
+   "spire": [
+    "LIFE_LINK"
+   ],
+   "wiki": [
+    "Life Link"
+   ]
+  }
+ },
+ {
+  "id": "LIGHTNING_MASTERY",
+  "name": "Lightning Mastery",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Lightning strikes ALL enemies.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "LIGHTNING_MASTERY"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "LIKE_WATER",
+  "name": "Like Water",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of your turn, if you are in $Calm, gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "player:LIKE_WATER"
+   ],
+   "spire": [
+    "LIKEWATERPOWER"
+   ],
+   "wiki": [
+    "Like Water"
+   ]
+  }
+ },
+ {
+  "id": "LIVE_FOREVER",
+  "name": "Live Forever",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of your turn, gain X Plated Armor.",
+  "notes": "unused/beta power (the Live Forever wish card grants Plated Armor directly)",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "ANGELFORM"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "LOCK_ON",
+  "name": "Lock-On",
+  "kind": "debuff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "monster",
+  "text": "Receives 50% more damage from Orbs for X turns.",
+  "sources": {
+   "lightspeed": [
+    "monster:LOCK_ON"
+   ],
+   "spire": [
+    "LOCKON"
+   ],
+   "wiki": [
+    "Lock-On"
+   ]
+  }
+ },
+ {
+  "id": "LOOP",
+  "name": "Loop",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, trigger the passive ability of your next Orb X times.",
+  "sources": {
+   "lightspeed": [
+    "player:LOOP"
+   ],
+   "spire": [
+    "LOOP"
+   ],
+   "wiki": [
+    "Loop"
+   ]
+  }
+ },
+ {
+  "id": "LOSE_DEXTERITY",
+  "name": "Dexterity Down",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of this turn, lose X $Dexterity.",
+  "sources": {
+   "lightspeed": [
+    "player:LOSE_DEXTERITY"
+   ],
+   "spire": [
+    "DEXLOSS"
+   ],
+   "wiki": [
+    "Dexterity Down"
+   ]
+  }
+ },
+ {
+  "id": "LOSE_STRENGTH",
+  "name": "Strength Down",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of this turn, lose X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "player:LOSE_STRENGTH"
+   ],
+   "spire": [
+    "FLEX"
+   ],
+   "wiki": [
+    "Strength Down"
+   ]
+  }
+ },
+ {
+  "id": "MAGNETISM",
+  "name": "Magnetism",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, add X random Colorless cards into your hand.",
+  "sources": {
+   "lightspeed": [
+    "player:MAGNETISM"
+   ],
+   "spire": [
+    "MAGNETISM"
+   ],
+   "wiki": [
+    "Magnetism"
+   ]
+  }
+ },
+ {
+  "id": "MALLEABLE",
+  "name": "Malleable",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Upon receiving attack damage, gains X $Block. $Block gain increases as $Malleable is triggered. Resets at the start of your turn.",
+  "sources": {
+   "lightspeed": [
+    "monster:MALLEABLE"
+   ],
+   "spire": [
+    "MALLEABLE"
+   ],
+   "wiki": [
+    "Malleable"
+   ]
+  }
+ },
+ {
+  "id": "MANTRA",
+  "name": "Mantra",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "When you obtain 10 $Mantra, enter $Divinity.",
+  "sources": {
+   "lightspeed": [
+    "player:MANTRA"
+   ],
+   "spire": [
+    "MANTRA"
+   ],
+   "wiki": [
+    "Mantra"
+   ]
+  }
+ },
+ {
+  "id": "MARK",
+  "name": "Mark",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play Pressure Points, lose X HP.",
+  "sources": {
+   "lightspeed": [
+    "monster:MARK"
+   ],
+   "spire": [
+    "PATHTOVICTORYPOWER"
+   ],
+   "wiki": [
+    "Mark"
+   ]
+  }
+ },
+ {
+  "id": "MASTER_REALITY",
+  "name": "Master Reality",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever a card is created, it is $Upgraded.",
+  "sources": {
+   "lightspeed": [
+    "player:MASTER_REALITY"
+   ],
+   "spire": [],
+   "wiki": [
+    "Master Reality"
+   ]
+  }
+ },
+ {
+  "id": "MAYHEM",
+  "name": "Mayhem",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, play the top X cards of your draw pile.",
+  "sources": {
+   "lightspeed": [
+    "player:MAYHEM"
+   ],
+   "spire": [
+    "MAYHEM"
+   ],
+   "wiki": [
+    "Mayhem"
+   ]
+  }
+ },
+ {
+  "id": "MENTAL_FORTRESS",
+  "name": "Mental Fortress",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you switch $Stances, gain X $Block.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "CONTROLLED"
+   ],
+   "wiki": [
+    "Mental Fortress"
+   ]
+  }
+ },
+ {
+  "id": "METALLICIZE",
+  "name": "Metallicize",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "At the end of every turn, gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "player:METALLICIZE",
+    "monster:METALLICIZE"
+   ],
+   "spire": [
+    "METALLICIZE"
+   ],
+   "wiki": [
+    "Metallicize"
+   ]
+  }
+ },
+ {
+  "id": "MINION",
+  "name": "Minion",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Minions abandon combat without their leader.",
+  "sources": {
+   "lightspeed": [
+    "monster:MINION"
+   ],
+   "spire": [
+    "MINION"
+   ],
+   "wiki": [
+    "Minion"
+   ]
+  }
+ },
+ {
+  "id": "MINION_LEADER",
+  "name": "Minion Leader",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "When this creature dies, its minions abandon combat.",
+  "notes": "sts_lightspeed implementation status marking the leader whose death removes minions, not a game power id",
+  "sources": {
+   "lightspeed": [
+    "monster:MINION_LEADER"
+   ],
+   "spire": [],
+   "wiki": []
+  }
+ },
+ {
+  "id": "MODE_SHIFT",
+  "name": "Mode Shift",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "After losing X HP, gains 20 $Block and changes current Intent to Defensive Mode.",
+  "sources": {
+   "lightspeed": [
+    "monster:MODE_SHIFT"
+   ],
+   "spire": [
+    "MODE_SHIFT"
+   ],
+   "wiki": [
+    "Mode Shift"
+   ]
+  }
+ },
+ {
+  "id": "NEXT_TURN_BLOCK",
+  "name": "Next Turn Block",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Gain X $Block next turn.",
+  "sources": {
+   "lightspeed": [
+    "player:NEXT_TURN_BLOCK"
+   ],
+   "spire": [
+    "NEXT_TURN_BLOCK"
+   ],
+   "wiki": [
+    "Next Turn Block"
+   ]
+  }
+ },
+ {
+  "id": "NIGHTMARE",
+  "name": "Nightmare",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Add X copies of the chosen card into your hand next turn.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "NIGHT_TERROR"
+   ],
+   "wiki": [
+    "Nightmare"
+   ]
+  }
+ },
+ {
+  "id": "NIRVANA",
+  "name": "Nirvana",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you $Scry, gain X $Block.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "NIRVANA"
+   ],
+   "wiki": [
+    "Nirvana"
+   ]
+  }
+ },
+ {
+  "id": "NO_BLOCK",
+  "name": "No Block",
+  "kind": "debuff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "You cannot gain $Block from cards.",
+  "sources": {
+   "lightspeed": [
+    "player:NO_BLOCK"
+   ],
+   "spire": [
+    "NOBLOCKPOWER"
+   ],
+   "wiki": [
+    "No Block"
+   ]
+  }
+ },
+ {
+  "id": "NO_DRAW",
+  "name": "No Draw",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "You may not draw additional cards this turn.",
+  "sources": {
+   "lightspeed": [
+    "player:NO_DRAW"
+   ],
+   "spire": [
+    "NO_DRAW"
+   ],
+   "wiki": [
+    "No Draw"
+   ]
+  }
+ },
+ {
+  "id": "NO_SKILLS",
+  "name": "No Skills",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "You cannot play Skills this turn.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "NOSKILLS"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "NOXIOUS_FUMES",
+  "name": "Noxious Fumes",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, apply X $Poison to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:NOXIOUS_FUMES"
+   ],
+   "spire": [
+    "NOXIOUS_FUMES"
+   ],
+   "wiki": [
+    "Noxious Fumes"
+   ]
+  }
+ },
+ {
+  "id": "NULLIFY_ATTACK",
+  "name": "Nullify Attack",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Fully Blocks one Attack each turn.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "NULLIFY_ATTACK"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "OMEGA",
+  "name": "Omega",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of your turn, deal X damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:OMEGA"
+   ],
+   "spire": [
+    "OMEGAPOWER"
+   ],
+   "wiki": [
+    "Omega"
+   ]
+  }
+ },
+ {
+  "id": "PAINFUL_STABS",
+  "name": "Painful Stabs",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you receive attack damage from this enemy, add X Wounds into your discard pile.",
+  "sources": {
+   "lightspeed": [
+    "monster:PAINFUL_STABS"
+   ],
+   "spire": [
+    "PAINFUL_STABS"
+   ],
+   "wiki": [
+    "Painful Stabs"
+   ]
+  }
+ },
+ {
+  "id": "PANACHE",
+  "name": "Panache",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "If you play X more cards this turn, deal Y damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:PANACHE"
+   ],
+   "spire": [
+    "PANACHE"
+   ],
+   "wiki": [
+    "Panache"
+   ]
+  }
+ },
+ {
+  "id": "PEN_NIB",
+  "name": "Pen Nib",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next Attack deals double damage.",
+  "sources": {
+   "lightspeed": [
+    "player:PEN_NIB"
+   ],
+   "spire": [
+    "PEN_NIB"
+   ],
+   "wiki": [
+    "Pen Nib"
+   ]
+  }
+ },
+ {
+  "id": "PHANTASMAL",
+  "name": "Phantasmal",
+  "kind": "buff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "player",
+  "text": "Deal Double Damage for the next X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:PHANTASMAL"
+   ],
+   "spire": [
+    "PHANTASMAL"
+   ],
+   "wiki": [
+    "Phantasmal"
+   ]
+  }
+ },
+ {
+  "id": "PLATED_ARMOR",
+  "name": "Plated Armor",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "At the end of your turn, receive X $Block. Receiving unblocked damage reduces $Plated Armor by 1.",
+  "sources": {
+   "lightspeed": [
+    "player:PLATED_ARMOR",
+    "monster:PLATED_ARMOR"
+   ],
+   "spire": [
+    "PLATED_ARMOR"
+   ],
+   "wiki": [
+    "Plated Armor"
+   ]
+  }
+ },
+ {
+  "id": "POISON",
+  "name": "Poison",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": true,
+  "owner": "monster",
+  "text": "At the start of its turn, loses X HP, then reduce $Poison by 1.",
+  "sources": {
+   "lightspeed": [
+    "monster:POISON"
+   ],
+   "spire": [
+    "POISON"
+   ],
+   "wiki": [
+    "Poison"
+   ]
+  }
+ },
+ {
+  "id": "RAGE",
+  "name": "Rage",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play an Attack this turn, gain X $Block.",
+  "sources": {
+   "lightspeed": [
+    "player:RAGE"
+   ],
+   "spire": [
+    "RAGE"
+   ],
+   "wiki": [
+    "Rage"
+   ]
+  }
+ },
+ {
+  "id": "REACTIVE",
+  "name": "Reactive",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Upon receiving attack damage, changes its Intent.",
+  "sources": {
+   "lightspeed": [
+    "monster:REACTIVE"
+   ],
+   "spire": [
+    "COMPULSIVE"
+   ],
+   "wiki": [
+    "Reactive"
+   ]
+  }
+ },
+ {
+  "id": "REBOUND",
+  "name": "Rebound",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "The next card you play this turn is put on top of your draw pile.",
+  "sources": {
+   "lightspeed": [
+    "player:REBOUND"
+   ],
+   "spire": [
+    "REBOUND"
+   ],
+   "wiki": [
+    "Rebound"
+   ]
+  }
+ },
+ {
+  "id": "RECHARGING_CORE",
+  "name": "RechargingCore",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "If you end your turn with no Orbs, channel 1 Lightning.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "RECHARGINGCORE"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "REGEN",
+  "name": "Regen",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": true,
+  "owner": "both",
+  "text": "Regen heals X HP at the end of your turn. <br>Each turn, $Regen is reduced by 1.",
+  "sources": {
+   "lightspeed": [
+    "player:REGEN",
+    "monster:REGEN"
+   ],
+   "spire": [
+    "REGENERATION"
+   ],
+   "wiki": [
+    "Regen"
+   ]
+  }
+ },
+ {
+  "id": "REGENERATE",
+  "name": "Regenerate",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "At the end of its turn, heals X HP.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "REGENERATE"
+   ],
+   "wiki": [
+    "Regenerate"
+   ]
+  }
+ },
+ {
+  "id": "REPAIR",
+  "name": "Repair",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of combat, heal X HP.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "REPAIR"
+   ],
+   "wiki": [
+    "Repair"
+   ]
+  }
+ },
+ {
+  "id": "RETAIN_CARDS",
+  "name": "Retain Cards",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, you may $Retain X cards.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "RETAIN_CARDS"
+   ],
+   "wiki": [
+    "Retain Cards"
+   ]
+  }
+ },
+ {
+  "id": "RITUAL",
+  "name": "Ritual",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "Gain X $Strength every turn.",
+  "sources": {
+   "lightspeed": [
+    "player:RITUAL",
+    "monster:RITUAL"
+   ],
+   "spire": [
+    "RITUAL"
+   ],
+   "wiki": [
+    "Ritual"
+   ]
+  }
+ },
+ {
+  "id": "RUPTURE",
+  "name": "Rupture",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you lose HP from a card, gain X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "player:RUPTURE"
+   ],
+   "spire": [
+    "RUPTURE"
+   ],
+   "wiki": [
+    "Rupture"
+   ]
+  }
+ },
+ {
+  "id": "RUSHDOWN",
+  "name": "Rushdown",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you enter $Wrath, draw X cards.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "ADAPTATION"
+   ],
+   "wiki": [
+    "Rushdown"
+   ]
+  }
+ },
+ {
+  "id": "SADISTIC",
+  "name": "Sadistic",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you apply a debuff to a enemy, deal X damage.",
+  "sources": {
+   "lightspeed": [
+    "player:SADISTIC"
+   ],
+   "spire": [
+    "SADISTIC"
+   ],
+   "wiki": [
+    "Sadistic"
+   ]
+  }
+ },
+ {
+  "id": "SHACKLED",
+  "name": "Shackled",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "At the end of its turn, gains X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:SHACKLED"
+   ],
+   "spire": [
+    "SHACKLED"
+   ],
+   "wiki": [
+    "Shackled"
+   ]
+  }
+ },
+ {
+  "id": "SHARP_HIDE",
+  "name": "Sharp Hide",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play an Attack, take X damage.",
+  "sources": {
+   "lightspeed": [
+    "monster:SHARP_HIDE"
+   ],
+   "spire": [
+    "SHARP_HIDE"
+   ],
+   "wiki": [
+    "Sharp Hide"
+   ]
+  }
+ },
+ {
+  "id": "SHIFTING",
+  "name": "Shifting",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Upon losing HP, loses that much $Strength until the end of the turn.",
+  "sources": {
+   "lightspeed": [
+    "monster:SHIFTING"
+   ],
+   "spire": [
+    "SHIFTING"
+   ],
+   "wiki": [
+    "Shifting"
+   ]
+  }
+ },
+ {
+  "id": "SKILL_BURN",
+  "name": "Skill Burn",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "For X turn, whenever you play a Skill, Exhaust it.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "SKILL_BURN"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "SLOW",
+  "name": "Slow",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a card, target receives 10% more damage from Attacks this turn. (Receives (X+10)% more damage)",
+  "sources": {
+   "lightspeed": [
+    "monster:SLOW"
+   ],
+   "spire": [
+    "SLOW"
+   ],
+   "wiki": [
+    "Slow"
+   ]
+  }
+ },
+ {
+  "id": "SPLIT",
+  "name": "Split",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "When its HP is at or below 50%, it will split into 2 smaller Slimes with its current HP.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "SPLIT"
+   ],
+   "wiki": [
+    "Split"
+   ]
+  }
+ },
+ {
+  "id": "SPORE_CLOUD",
+  "name": "Spore Cloud",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "On death, applies X $Vulnerable.",
+  "sources": {
+   "lightspeed": [
+    "monster:SPORE_CLOUD"
+   ],
+   "spire": [
+    "SPORE_CLOUD"
+   ],
+   "wiki": [
+    "Spore Cloud"
+   ]
+  }
+ },
+ {
+  "id": "STASIS",
+  "name": "Stasis",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "On death, a stolen card is returned to your hand.",
+  "sources": {
+   "lightspeed": [
+    "monster:STASIS"
+   ],
+   "spire": [
+    "STASIS"
+   ],
+   "wiki": [
+    "Stasis"
+   ]
+  }
+ },
+ {
+  "id": "STATIC_DISCHARGE",
+  "name": "Static Discharge",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you receive attack damage, $Channel X $Lightning.",
+  "sources": {
+   "lightspeed": [
+    "player:STATIC_DISCHARGE"
+   ],
+   "spire": [
+    "STATICDISCHARGE"
+   ],
+   "wiki": [
+    "Static Discharge"
+   ]
+  }
+ },
+ {
+  "id": "STORM",
+  "name": "Storm",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play a Power card, $Channel X $Lightning.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "STORM"
+   ],
+   "wiki": [
+    "Storm"
+   ]
+  }
+ },
+ {
+  "id": "STRENGTH",
+  "name": "Strength",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "Increases attack damage by X.",
+  "sources": {
+   "lightspeed": [
+    "player:STRENGTH",
+    "monster:STRENGTH"
+   ],
+   "spire": [
+    "STRENGTH"
+   ],
+   "wiki": [
+    "Strength"
+   ]
+  }
+ },
+ {
+  "id": "STRIKE_UP",
+  "name": "Strike Up",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Cards containing Strike deal X additional damage.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "STRIKEUP"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "STUDY",
+  "name": "Study",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of your turn, shuffle X Insights into your draw pile.",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "STUDY"
+   ],
+   "wiki": [
+    "Study"
+   ]
+  }
+ },
+ {
+  "id": "SURROUNDED",
+  "name": "Surrounded",
+  "kind": "debuff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Receive 50% more damage if attacked from behind. Use targeting cards or potions to change your orientation.",
+  "sources": {
+   "lightspeed": [
+    "player:SURROUNDED"
+   ],
+   "spire": [
+    "SURROUNDED"
+   ],
+   "wiki": [
+    "Surrounded"
+   ]
+  }
+ },
+ {
+  "id": "THE_BOMB",
+  "name": "The Bomb",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the end of X turns, deal Y damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:THE_BOMB"
+   ],
+   "spire": [
+    "THEBOMB"
+   ],
+   "wiki": [
+    "The Bomb"
+   ]
+  }
+ },
+ {
+  "id": "THIEVERY",
+  "name": "Thievery",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Steals X Gold whenever it attacks. Stolen gold is returned if this enemy is killed.",
+  "sources": {
+   "lightspeed": [
+    "monster:THIEVERY"
+   ],
+   "spire": [
+    "THIEVERY"
+   ],
+   "wiki": [
+    "Thievery"
+   ]
+  }
+ },
+ {
+  "id": "THORNS",
+  "name": "Thorns",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "both",
+  "text": "Inflict X damage on the attacker when hit.",
+  "sources": {
+   "lightspeed": [
+    "player:THORNS",
+    "monster:THORNS"
+   ],
+   "spire": [
+    "THORNS"
+   ],
+   "wiki": [
+    "Thorns"
+   ]
+  }
+ },
+ {
+  "id": "THOUSAND_CUTS",
+  "name": "Thousand Cuts",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you play a card, deal X damage to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:THOUSAND_CUTS"
+   ],
+   "spire": [
+    "THOUSAND_CUTS"
+   ],
+   "wiki": [
+    "Thousand Cuts"
+   ]
+  }
+ },
+ {
+  "id": "TIME_MAZE",
+  "name": "Time Maze",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play X cards, your turn is ended",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "TIMEMAZEPOWER"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "TIME_WARP",
+  "name": "Time Warp",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "Whenever you play a certain number of cards, ends your turn and gains X $Strength.",
+  "sources": {
+   "lightspeed": [
+    "monster:TIME_WARP"
+   ],
+   "spire": [
+    "TIME_WARP"
+   ],
+   "wiki": [
+    "Time Warp"
+   ]
+  }
+ },
+ {
+  "id": "TOOLS_OF_THE_TRADE",
+  "name": "Tools Of The Trade",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, draw X cards and discard X cards.",
+  "sources": {
+   "lightspeed": [
+    "player:TOOLS_OF_THE_TRADE"
+   ],
+   "spire": [
+    "TOOLS_OF_THE_TRADE"
+   ],
+   "wiki": [
+    "Tools Of The Trade"
+   ]
+  }
+ },
+ {
+  "id": "UNAWAKENED",
+  "name": "Unawakened",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "monster",
+  "text": "This enemy hasn't awakened yet...",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "UNAWAKENED"
+   ],
+   "wiki": [
+    "Unawakened"
+   ]
+  }
+ },
+ {
+  "id": "VAULT",
+  "name": "Vault",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Receives X damage at the start of your next turn.",
+  "notes": "internal helper power for the Vault card's extra turn",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "VAULT"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "VIGOR",
+  "name": "Vigor",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Your next attack deals X additional damage per hit.",
+  "sources": {
+   "lightspeed": [
+    "player:VIGOR"
+   ],
+   "spire": [
+    "VIGOR"
+   ],
+   "wiki": [
+    "Vigor"
+   ]
+  }
+ },
+ {
+  "id": "VULNERABLE",
+  "name": "Vulnerable",
+  "kind": "debuff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "both",
+  "text": "Receive 50% more damage from Attacks for X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:VULNERABLE",
+    "monster:VULNERABLE"
+   ],
+   "spire": [
+    "VULNERABLE"
+   ],
+   "wiki": [
+    "Vulnerable"
+   ]
+  }
+ },
+ {
+  "id": "WAVE_OF_THE_HAND",
+  "name": "Wave of the Hand",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you gain $Block, apply X $Weak to ALL enemies.",
+  "sources": {
+   "lightspeed": [
+    "player:WAVE_OF_THE_HAND"
+   ],
+   "spire": [
+    "WAVEOFTHEHANDPOWER"
+   ],
+   "wiki": [
+    "Wave of the Hand"
+   ]
+  }
+ },
+ {
+  "id": "WEAK",
+  "name": "Weak",
+  "kind": "debuff",
+  "stacking": "duration",
+  "turnBased": true,
+  "owner": "both",
+  "text": "Attacks deal 25% less damage for X turns.",
+  "sources": {
+   "lightspeed": [
+    "player:WEAK",
+    "monster:WEAK"
+   ],
+   "spire": [
+    "WEAKENED"
+   ],
+   "wiki": [
+    "Weak"
+   ]
+  }
+ },
+ {
+  "id": "WINTER",
+  "name": "Winter",
+  "kind": "buff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Whenever you channel a Frost orb, gain X Block.",
+  "notes": "unused/beta power in V2.3.4 game code; no obtainable source",
+  "sources": {
+   "lightspeed": [],
+   "spire": [
+    "WINTER"
+   ],
+   "wiki": []
+  }
+ },
+ {
+  "id": "WRAITH_FORM",
+  "name": "Wraith Form",
+  "kind": "debuff",
+  "stacking": "intensity",
+  "turnBased": false,
+  "owner": "player",
+  "text": "At the start of your turn, lose X $Dexterity.",
+  "sources": {
+   "lightspeed": [
+    "player:WRAITH_FORM"
+   ],
+   "spire": [
+    "WRAITH_FORM_V2"
+   ],
+   "wiki": [
+    "Wraith Form"
+   ]
+  }
+ },
+ {
+  "id": "WRATH_NEXT_TURN",
+  "name": "Simmering Rage",
+  "kind": "buff",
+  "stacking": "none",
+  "turnBased": false,
+  "owner": "player",
+  "text": "Enter $Wrath at the start of your turn.",
+  "sources": {
+   "lightspeed": [
+    "player:WRATH_NEXT_TURN"
+   ],
+   "spire": [
+    "WRATHNEXTTURNPOWER"
+   ],
+   "wiki": [
+    "Simmering Rage"
+   ]
+  }
+ }
+]

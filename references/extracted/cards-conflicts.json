@@ -1,0 +1,21 @@
+{
+ "conflicts": [],
+ "missing": {
+  "spire": [
+   "BECOME_ALMIGHTY",
+   "BETA",
+   "EXPUNGER",
+   "FAME_AND_FORTUNE",
+   "INSIGHT",
+   "LIVE_FOREVER",
+   "MIRACLE",
+   "OMEGA",
+   "SAFETY",
+   "SHIV",
+   "SMITE",
+   "THROUGH_VIOLENCE"
+  ],
+  "wiki": []
+ },
+ "unusedWiki": []
+}

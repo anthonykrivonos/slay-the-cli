@@ -1,0 +1,54 @@
+{{Under Construction}}{{Enemy Infobox|Orb Walker}}{{Power Infobox|Strength Up}}
+'''Orb Walker''' is a normal [[Monsters|Enemy]] encountered exclusively in [[Act 3]]. It can also be encountered in the {{E|Mysterious Sphere}} [[Event]].
+
+== Pattern ==
+{{Intents|Orb Walker}}
+'''Orb Walker''' will use one of the following actions each turn:
+* {{Int|Orb Walker|Laser}} (60% chance)
+* {{Int|Orb Walker|Claw}} (40% chance)
+'''Orb Walker''' cannot use either action three times in a row.
+
+== In Party With ==
+=== Act 3 ===
+As an easy pool encounter:
+* Solo
+
+In the {{E|Mysterious Sphere}} [[Event]] alongside:
+* 1 other '''Orb Walker'''
+
+== Tips ==
+
+* The Orb Walker scales strength somewhat quickly, with the added threat of diluting your draw pile with [[Burn|Burns]]. End the fight quickly and, if necessary, consider taking damage in early turns to play critical cards.
+* {{KW|Weak}} is effective at blocking large amounts of damage if the fight is drawn out.
+
+== Trivia ==
+* '''Orb Walker''' appears in the artwork of {{C|Evaluate}}.
+
+== Update History ==
+* Weekly Patch 50: The Final Act
+** Awakened One and Orb Walkers were not shuffling their status cards into the player's draw pile, but into a fixed position.
+
+* Weekly Patch 46: Adrenaline
+** Double Orb Walker elite encounter removed from the game.
+** The Mysterious Sphere event in Act 3 now uses the Double Orb Walker combat.
+
+* Weekly Patch 25: Building Blocks
+** Mysterious Sphere event enemies now attack in the correct order
+
+* Weekly Patch 17: Patched in the Face
+** Fixed issue where Shield Gremlin and Orb Walker had upped values in the wrong Ascension Level.
+
+* Weekly Patch 10: Quality of Life
+** We updated the animations for several monsters! Affected monsters include: Orb Walkers
+
+* Weekly Patch 6: We're Back!
+** For the 2 Orb Walker encounter they now attack left -> right.
+
+* Weekly Patch 2: Slimes!
+** Double Orb Walkers migrate to the elite pool.
+
+* Day 1 Patch
+** Updating y position of orb walker for dual Orb Walkers combat.
+
+{{EnemyNav}}
+[[Category:Monsters]]

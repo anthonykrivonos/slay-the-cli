@@ -1,0 +1,12 @@
+{{Enemy Infobox|Transient}} {{Power Infobox|Fading}} {{Power Infobox|Shifting}}
+The Transient is a normal [[Monsters|Enemy]] found exclusively in [[Act 3]].
+
+== Pattern ==
+{{Intents|Transient}}
+
+== Found With ==
+=== Act 3 ===
+* Solo
+
+{{EnemyNav}}
+[[Category:Monsters]]

@@ -1,0 +1,10517 @@
+[
+ {
+  "id": "ACCURACY",
+  "name": "Accuracy",
+  "gameId": "Accuracy",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "{{C|Shiv|Shivs}} deal [4|6] additional damage."
+ },
+ {
+  "id": "ACROBATICS",
+  "name": "Acrobatics",
+  "gameId": "Acrobatics",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw [3|4] cards.<br>Discard 1 card."
+ },
+ {
+  "id": "ADRENALINE",
+  "name": "Adrenaline",
+  "gameId": "Adrenaline",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Gain [@GE|@GE @GE].<br>Draw 2 cards.<br>$Exhaust."
+ },
+ {
+  "id": "AFTER_IMAGE",
+  "name": "After Image",
+  "gameId": "After Image",
+  "color": "green",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]Whenever you play a card, gain 1 $Block."
+ },
+ {
+  "id": "AGGREGATE",
+  "name": "Aggregate",
+  "gameId": "Aggregate",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain @BE for every [4|3] cards in your draw pile."
+ },
+ {
+  "id": "ALCHEMIZE",
+  "name": "Alchemize",
+  "gameId": "Venomology",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Obtain a random potion.<br>$Exhaust."
+ },
+ {
+  "id": "ALL_FOR_ONE",
+  "name": "All for One",
+  "gameId": "All For One",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [10|14] damage.<br>Put all cost 0 cards from your discard pile into your hand."
+ },
+ {
+  "id": "ALL_OUT_ATTACK",
+  "name": "All-Out Attack",
+  "gameId": "All Out Attack",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [10|14] damage to ALL enemies.<br>Discard 1 card at random."
+ },
+ {
+  "id": "ALPHA",
+  "name": "Alpha",
+  "gameId": "Alpha",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. ]Shuffle a {{C|Beta}} into your draw pile. $Exhaust."
+ },
+ {
+  "id": "AMPLIFY",
+  "name": "Amplify",
+  "gameId": "Amplify",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "This turn, your next [Power card is|2 Power cards are] played twice."
+ },
+ {
+  "id": "ANGER",
+  "name": "Anger",
+  "gameId": "Anger",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|8] damage.<br>Add a copy of this card into your discard pile."
+ },
+ {
+  "id": "APOTHEOSIS",
+  "name": "Apotheosis",
+  "gameId": "Apotheosis",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "$Upgrade ALL your cards for the rest of combat.<br>$Exhaust."
+ },
+ {
+  "id": "APPARITION",
+  "name": "Apparition",
+  "gameId": "Ghostly",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "[$Ethereal. <br>|]Gain 1 $Intangible. <br>$Exhaust."
+ },
+ {
+  "id": "ARMAMENTS",
+  "name": "Armaments",
+  "gameId": "Armaments",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain 5 $Block.<br>$Upgrade [a card|all cards] in your hand for the rest of combat."
+ },
+ {
+  "id": "ASCENDERS_BANE",
+  "name": "Ascender's Bane",
+  "gameId": "AscendersBane",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "special",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "special",
+  "text": "$Unplayable. <br>$Ethereal. <br>Cannot be removed from your deck.",
+  "noUpgrade": true
+ },
+ {
+  "id": "AUTO_SHIELDS",
+  "name": "Auto-Shields",
+  "gameId": "Auto Shields",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 11,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 15,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "If you have no $Block, gain [11|15] $Block."
+ },
+ {
+  "id": "A_THOUSAND_CUTS",
+  "name": "A Thousand Cuts",
+  "gameId": "A Thousand Cuts",
+  "color": "green",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you play a card, deal [1|2] damage to ALL enemies."
+ },
+ {
+  "id": "BACKFLIP",
+  "name": "Backflip",
+  "gameId": "Backflip",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [5|8] $Block.<br>Draw 2 cards."
+ },
+ {
+  "id": "BACKSTAB",
+  "name": "Backstab",
+  "gameId": "Backstab",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 11,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "innate"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 15,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "$Innate.<br>Deal [11|15] damage.<br>$Exhaust."
+ },
+ {
+  "id": "BALL_LIGHTNING",
+  "name": "Ball Lightning",
+  "gameId": "Ball Lightning",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 1,
+   "hits": 1
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 1,
+   "hits": 1,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage. $Channel 1 $Lightning."
+ },
+ {
+  "id": "BANDAGE_UP",
+  "name": "Bandage Up",
+  "gameId": "Bandage Up",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Heal [4|6] HP.<br>$Exhaust."
+ },
+ {
+  "id": "BANE",
+  "name": "Bane",
+  "gameId": "Bane",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage.<br>If the enemy has $Poison, deal [7|10] damage again."
+ },
+ {
+  "id": "BARRAGE",
+  "name": "Barrage",
+  "gameId": "Barrage",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|6] damage for each $Channeled Orb."
+ },
+ {
+  "id": "BARRICADE",
+  "name": "Barricade",
+  "gameId": "Barricade",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Block is not removed at the start of your turn."
+ },
+ {
+  "id": "BASH",
+  "name": "Bash",
+  "gameId": "Bash",
+  "color": "red",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 10,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Deal [8|10] damage.<br>Apply [2|3] $Vulnerable."
+ },
+ {
+  "id": "BATTLE_HYMN",
+  "name": "Battle Hymn",
+  "gameId": "BattleHymn",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]At the start of each turn add a {{C|Smite}} into your hand."
+ },
+ {
+  "id": "BATTLE_TRANCE",
+  "name": "Battle Trance",
+  "gameId": "Battle Trance",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw [3|4] cards.<br>You cannot draw additional cards this turn."
+ },
+ {
+  "id": "BEAM_CELL",
+  "name": "Beam Cell",
+  "gameId": "Beam Cell",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 4,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [3|4] damage.<br>Apply [1|2] $Vulnerable."
+ },
+ {
+  "id": "BECOME_ALMIGHTY",
+  "name": "Become Almighty",
+  "gameId": "BecomeAlmighty",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "special",
+  "cost": -2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Gain [3|4] $Strength.",
+  "unobtainable": true
+ },
+ {
+  "id": "BERSERK",
+  "name": "Berserk",
+  "gameId": "Berserk",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|1] $Vulnerable.<br>At the start of your turn, gain @RE."
+ },
+ {
+  "id": "BETA",
+  "name": "Beta",
+  "gameId": "Beta",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "Shuffle an {{C|Omega}} into draw pile. <br>$Exhaust."
+ },
+ {
+  "id": "BIASED_COGNITION",
+  "name": "Biased Cognition",
+  "gameId": "Biased Cognition",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [4|5] $Focus.<br>At the start of your turn, lose 1 $Focus."
+ },
+ {
+  "id": "BITE",
+  "name": "Bite",
+  "gameId": "Bite",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Deal [7|8] damage.<br>Heal [2|3] HP."
+ },
+ {
+  "id": "BLADE_DANCE",
+  "name": "Blade Dance",
+  "gameId": "Blade Dance",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Add [3|4] {{C|Shiv|Shivs}} into your hand."
+ },
+ {
+  "id": "BLASPHEMY",
+  "name": "Blasphemy",
+  "gameId": "Blasphemy",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Retain. ]Enter $Divinity. Die next turn. $Exhaust"
+ },
+ {
+  "id": "BLIND",
+  "name": "Blind",
+  "gameId": "Blind",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Apply 2 $Weak[| to ALL enemies]."
+ },
+ {
+  "id": "BLIZZARD",
+  "name": "Blizzard",
+  "gameId": "Blizzard",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 0,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 0,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal damage equal to [2|3] times the number of $Frost $Channeled this combat to ALL enemies."
+ },
+ {
+  "id": "BLOODLETTING",
+  "name": "Bloodletting",
+  "gameId": "Bloodletting",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Lose 3 HP.<br>Gain [@RE @RE|@RE @RE @RE]."
+ },
+ {
+  "id": "BLOOD_FOR_BLOOD",
+  "name": "Blood for Blood",
+  "gameId": "Blood for Blood",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 4,
+  "target": "enemy",
+  "values": {
+   "damage": 18,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": 22,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Costs 1 less @RE<br>for each time you lose HP this combat.<br>Deal [18|22] damage."
+ },
+ {
+  "id": "BLUDGEON",
+  "name": "Bludgeon",
+  "gameId": "Bludgeon",
+  "color": "red",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "enemy",
+  "values": {
+   "damage": 32,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": 42,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [32|42] damage."
+ },
+ {
+  "id": "BLUR",
+  "name": "Blur",
+  "gameId": "Blur",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [5|8] $Block.<br>$Block is not removed at the start of your next turn."
+ },
+ {
+  "id": "BODY_SLAM",
+  "name": "Body Slam",
+  "gameId": "Body Slam",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 0,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 0,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal damage equal to your $Block."
+ },
+ {
+  "id": "BOOT_SEQUENCE",
+  "name": "Boot Sequence",
+  "gameId": "BootSequence",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 10,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "innate"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 13,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "$Innate.<br>Gain [10|13] $Block.<br>$Exhaust."
+ },
+ {
+  "id": "BOUNCING_FLASK",
+  "name": "Bouncing Flask",
+  "gameId": "Bouncing Flask",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply 3 $Poison to a random enemy [3|4] times."
+ },
+ {
+  "id": "BOWLING_BASH",
+  "name": "Bowling Bash",
+  "gameId": "BowlingBash",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage for each enemy in combat."
+ },
+ {
+  "id": "BRILLIANCE",
+  "name": "Brilliance",
+  "gameId": "Brilliance",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": 0,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 16,
+   "block": null,
+   "magic": 0,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [12|16] damage. Deals additional damage equal to $Mantra gained this combat."
+ },
+ {
+  "id": "BRUTALITY",
+  "name": "Brutality",
+  "gameId": "Brutality",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate.<br>]At the start of your turn, lose 1 HP and draw 1 card."
+ },
+ {
+  "id": "BUFFER",
+  "name": "Buffer",
+  "gameId": "Buffer",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Prevent the next [time|2 times] you would lose HP."
+ },
+ {
+  "id": "BULLET_TIME",
+  "name": "Bullet Time",
+  "gameId": "Bullet Time",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "You cannot draw additional cards this turn. Reduce the cost of all cards in your hand to 0 this turn."
+ },
+ {
+  "id": "BULLSEYE",
+  "name": "Bullseye",
+  "gameId": "Lockon",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 11,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|11] damage.<br>Apply [2|3] $Lock On."
+ },
+ {
+  "id": "BURN",
+  "name": "Burn",
+  "gameId": "Burn",
+  "color": "colorless",
+  "type": "status",
+  "rarity": "common",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "$Unplayable.<br>At the end of your turn, take [2|4] damage."
+ },
+ {
+  "id": "BURNING_PACT",
+  "name": "Burning Pact",
+  "gameId": "Burning Pact",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Exhaust 1 card.<br>Draw [2|3] cards."
+ },
+ {
+  "id": "BURST",
+  "name": "Burst",
+  "gameId": "Burst",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "This turn, your next [Skill is|2 Skills are] played twice."
+ },
+ {
+  "id": "CALCULATED_GAMBLE",
+  "name": "Calculated Gamble",
+  "gameId": "Calculated Gamble",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Discard your hand,<br>then draw that many cards.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "CALTROPS",
+  "name": "Caltrops",
+  "gameId": "Caltrops",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you are attacked, deal [3|5] damage back."
+ },
+ {
+  "id": "CAPACITOR",
+  "name": "Capacitor",
+  "gameId": "Capacitor",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Orb slots."
+ },
+ {
+  "id": "CARNAGE",
+  "name": "Carnage",
+  "gameId": "Carnage",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 20,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 28,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "class",
+  "text": "$Ethereal.<br>Deal [20|28] damage."
+ },
+ {
+  "id": "CARVE_REALITY",
+  "name": "Carve Reality",
+  "gameId": "CarveReality",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|10] damage. Add a {{C|Smite}} into your hand."
+ },
+ {
+  "id": "CATALYST",
+  "name": "Catalyst",
+  "gameId": "Catalyst",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "[Double|Triple] the enemy's $Poison.<br>$Exhaust."
+ },
+ {
+  "id": "CHAOS",
+  "name": "Chaos",
+  "gameId": "Chaos",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Channel [1|2] random [Orb|Orbs]."
+ },
+ {
+  "id": "CHARGE_BATTERY",
+  "name": "Charge Battery",
+  "gameId": "Conserve Battery",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 10,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|10] $Block.<br>Next turn, gain @BE."
+ },
+ {
+  "id": "CHILL",
+  "name": "Chill",
+  "gameId": "Chill",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]$Channel 1 $Frost for each enemy in combat.<br>$Exhaust."
+ },
+ {
+  "id": "CHOKE",
+  "name": "Choke",
+  "gameId": "Choke",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 12,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 12 damage.<br>Whenever you play a card this turn, the enemy loses [3|5] HP."
+ },
+ {
+  "id": "CHRYSALIS",
+  "name": "Chrysalis",
+  "gameId": "Chrysalis",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": 3
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": 3,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Shuffle [3|5] random Skills into your draw pile. They cost 0 this combat.<br>$Exhaust."
+ },
+ {
+  "id": "CLASH",
+  "name": "Clash",
+  "gameId": "Clash",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 18,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Can only be played if every card in your hand is an Attack.<br>Deal [14|18] damage."
+ },
+ {
+  "id": "CLAW",
+  "name": "Claw",
+  "gameId": "Gash",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 5,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [3|5] damage.<br>Increase the damage of ALL Claw cards by 2 this combat."
+ },
+ {
+  "id": "CLEAVE",
+  "name": "Cleave",
+  "gameId": "Cleave",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 11,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|11] damage to ALL enemies."
+ },
+ {
+  "id": "CLOAK_AND_DAGGER",
+  "name": "Cloak and Dagger",
+  "gameId": "Cloak And Dagger",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 6,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 6,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain 6 $Block.<br>Add [1|2] {{C|Shiv|[Shiv|Shivs]}} into your hand."
+ },
+ {
+  "id": "CLOTHESLINE",
+  "name": "Clothesline",
+  "gameId": "Clothesline",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 14,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [12|14] damage.<br>Apply [2|3] $Weak."
+ },
+ {
+  "id": "CLUMSY",
+  "name": "Clumsy",
+  "gameId": "Clumsy",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "curse",
+  "text": "$Unplayable. <br>$Ethereal.",
+  "noUpgrade": true
+ },
+ {
+  "id": "COLD_SNAP",
+  "name": "Cold Snap",
+  "gameId": "Cold Snap",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": 1,
+   "hits": 1
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": 1,
+   "hits": 1,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|9] damage. $Channel 1 $Frost."
+ },
+ {
+  "id": "COLLECT",
+  "name": "Collect",
+  "gameId": "Collect",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Put a {{C|Miracle|Miracle+}} into your hand at the start of your next [X|X+1] turns. $Exhaust"
+ },
+ {
+  "id": "COMBUST",
+  "name": "Combust",
+  "gameId": "Combust",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of your turn, lose 1 HP and deal [5|7] damage to ALL enemies."
+ },
+ {
+  "id": "COMPILE_DRIVER",
+  "name": "Compile Driver",
+  "gameId": "Compile Driver",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage.<br>Draw 1 card for each unique Orb you have."
+ },
+ {
+  "id": "CONCENTRATE",
+  "name": "Concentrate",
+  "gameId": "Concentrate",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Discard [3|2] cards.<br>Gain @GE @GE."
+ },
+ {
+  "id": "CONCLUDE",
+  "name": "Conclude",
+  "gameId": "Conclude",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 16,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [12|16] damage to ALL enemies. End your turn."
+ },
+ {
+  "id": "CONJURE_BLADE",
+  "name": "Conjure Blade",
+  "gameId": "ConjureBlade",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Shuffle an {{C|Expunger}}[| with X+1] into your draw pile. <br>$Exhaust."
+ },
+ {
+  "id": "CONSECRATE",
+  "name": "Consecrate",
+  "gameId": "Consecrate",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "allenemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|8] damage to ALL enemies."
+ },
+ {
+  "id": "CONSUME",
+  "name": "Consume",
+  "gameId": "Consume",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Focus.<br>Lose 1 $Orb slot."
+ },
+ {
+  "id": "COOLHEADED",
+  "name": "Coolheaded",
+  "gameId": "Coolheaded",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Channel 1 $Frost.<br>Draw [1|2] [card|cards]."
+ },
+ {
+  "id": "CORE_SURGE",
+  "name": "Core Surge",
+  "gameId": "Core Surge",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 11,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 15,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [11|15] damage.<br>Gain 1 $Artifact.<br>$Exhaust."
+ },
+ {
+  "id": "CORPSE_EXPLOSION",
+  "name": "Corpse Explosion",
+  "gameId": "Corpse Explosion",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 9,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply [6|9] $Poison.<br>When the enemy dies, deal damage equal to its max HP to ALL enemies."
+ },
+ {
+  "id": "CORRUPTION",
+  "name": "Corruption",
+  "gameId": "Corruption",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Skills cost 0.<br>Whenever you play a Skill, $Exhaust it."
+ },
+ {
+  "id": "CREATIVE_AI",
+  "name": "Creative AI",
+  "gameId": "Creative AI",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, add a random Power card into your hand."
+ },
+ {
+  "id": "CRESCENDO",
+  "name": "Crescendo",
+  "gameId": "Crescendo",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. <br>Enter $Wrath. <br>$Exhaust."
+ },
+ {
+  "id": "CRIPPLING_CLOUD",
+  "name": "Crippling Cloud",
+  "gameId": "Crippling Poison",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Apply [4|7] $Poison and 2 $Weak to ALL enemies.<br>$Exhaust."
+ },
+ {
+  "id": "CRUSH_JOINTS",
+  "name": "Crush Joints",
+  "gameId": "CrushJoints",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|10] damage. If the last card played this combat was a {{QueryLink|Cards|type:Skill|Skill}}, apply [1|2] $Vulnerable."
+ },
+ {
+  "id": "CURSE_OF_THE_BELL",
+  "name": "Curse of the Bell",
+  "gameId": "CurseOfTheBell",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "special",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "$Unplayable. <br>Cannot be removed from your deck.",
+  "noUpgrade": true
+ },
+ {
+  "id": "CUT_THROUGH_FATE",
+  "name": "Cut Through Fate",
+  "gameId": "CutThroughFate",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|9] damage. <br>$Scry [2|3]. <br>Draw 1 card."
+ },
+ {
+  "id": "DAGGER_SPRAY",
+  "name": "Dagger Spray",
+  "gameId": "Dagger Spray",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|6] damage to ALL enemies twice."
+ },
+ {
+  "id": "DAGGER_THROW",
+  "name": "Dagger Throw",
+  "gameId": "Dagger Throw",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [9|12] damage.<br>Draw 1 card. <br>Discard 1 card."
+ },
+ {
+  "id": "DARKNESS",
+  "name": "Darkness",
+  "gameId": "Darkness",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Channel 1 $Dark.[|<br>Trigger the passive ability of ALL $Dark orbs.]"
+ },
+ {
+  "id": "DARK_EMBRACE",
+  "name": "Dark Embrace",
+  "gameId": "Dark Embrace",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever a card is $Exhausted,<br>draw 1 card."
+ },
+ {
+  "id": "DARK_SHACKLES",
+  "name": "Dark Shackles",
+  "gameId": "Dark Shackles",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 9,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 15,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Enemy loses [9|15] $Strength this turn.<br>$Exhaust."
+ },
+ {
+  "id": "DASH",
+  "name": "Dash",
+  "gameId": "Dash",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": 10,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 13,
+   "block": 13,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [10|13] $Block.<br>Deal [10|13] damage."
+ },
+ {
+  "id": "DAZED",
+  "name": "Dazed",
+  "gameId": "Dazed",
+  "color": "colorless",
+  "type": "status",
+  "rarity": "common",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "special",
+  "text": "$Unplayable.<br>$Ethereal.",
+  "noUpgrade": true
+ },
+ {
+  "id": "DEADLY_POISON",
+  "name": "Deadly Poison",
+  "gameId": "Deadly Poison",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply [5|7] $Poison."
+ },
+ {
+  "id": "DECAY",
+  "name": "Decay",
+  "gameId": "Decay",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>At the end of your turn, take 2 damage.",
+  "noUpgrade": true
+ },
+ {
+  "id": "DECEIVE_REALITY",
+  "name": "Deceive Reality",
+  "gameId": "DeceiveReality",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 4,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [4|7] $Block. <br>Add a {{C|Safety}} into your hand."
+ },
+ {
+  "id": "DEEP_BREATH",
+  "name": "Deep Breath",
+  "gameId": "Deep Breath",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Shuffle your discard pile into your draw pile.<br>Draw [1 card|2 cards]."
+ },
+ {
+  "id": "DEFEND_BLUE",
+  "name": "Defend",
+  "gameId": "Defend_B",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:starter_defend"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [5|8] $Block."
+ },
+ {
+  "id": "DEFEND_GREEN",
+  "name": "Defend",
+  "gameId": "Defend_G",
+  "color": "green",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:starter_defend"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [5|8] $Block."
+ },
+ {
+  "id": "DEFEND_PURPLE",
+  "name": "Defend",
+  "gameId": "Defend_P",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:starter_defend"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [5|8] $Block."
+ },
+ {
+  "id": "DEFEND_RED",
+  "name": "Defend",
+  "gameId": "Defend_R",
+  "color": "red",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:starter_defend"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [5|8] $Block."
+ },
+ {
+  "id": "DEFLECT",
+  "name": "Deflect",
+  "gameId": "Deflect",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 4,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [4|7] $Block."
+ },
+ {
+  "id": "DEFRAGMENT",
+  "name": "Defragment",
+  "gameId": "Defragment",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [1|2] $Focus."
+ },
+ {
+  "id": "DEMON_FORM",
+  "name": "Demon Form",
+  "gameId": "Demon Form",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, gain [2|3] $Strength."
+ },
+ {
+  "id": "DEUS_EX_MACHINA",
+  "name": "Deus Ex Machina",
+  "gameId": "DeusExMachina",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "$Unplayable. <br>When you draw this card, add [2|3] {{C|Miracle|Miracles}} to your hand and $Exhaust."
+ },
+ {
+  "id": "DEVA_FORM",
+  "name": "Deva Form",
+  "gameId": "DevaForm",
+  "color": "purple",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "[$Ethereal.<br>|]At the start of your turn, gain @PE <br>and increase this gain by 1."
+ },
+ {
+  "id": "DEVOTION",
+  "name": "Devotion",
+  "gameId": "Devotion",
+  "color": "purple",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, gain [2|3] $Mantra."
+ },
+ {
+  "id": "DIE_DIE_DIE",
+  "name": "Die Die Die",
+  "gameId": "Die Die Die",
+  "color": "green",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 13,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 17,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [13|17] damage to ALL enemies.<br>$Exhaust."
+ },
+ {
+  "id": "DISARM",
+  "name": "Disarm",
+  "gameId": "Disarm",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Enemy loses [2|3] $Strength.<br>$Exhaust."
+ },
+ {
+  "id": "DISCOVERY",
+  "name": "Discovery",
+  "gameId": "Discovery",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Choose 1 of 3 random cards to add into your hand. It costs 0 this turn.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "DISTRACTION",
+  "name": "Distraction",
+  "gameId": "Distraction",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Add a random Skill into your hand.<br>It costs 0 this turn.<br>$Exhaust."
+ },
+ {
+  "id": "DODGE_AND_ROLL",
+  "name": "Dodge and Roll",
+  "gameId": "Dodge and Roll",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 4,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 6,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [4|6] $Block.<br>Next turn, gain [4|6] $Block."
+ },
+ {
+  "id": "DOOM_AND_GLOOM",
+  "name": "Doom and Gloom",
+  "gameId": "Doom and Gloom",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 14,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [10|14] damage to ALL enemies.<br>$Channel 1 $Dark."
+ },
+ {
+  "id": "DOPPELGANGER",
+  "name": "Doppelganger",
+  "gameId": "Doppelganger",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Next turn, draw [X|X+1] cards and gain [X|X+1] @GE.<br>$Exhaust."
+ },
+ {
+  "id": "DOUBLE_ENERGY",
+  "name": "Double Energy",
+  "gameId": "Double Energy",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Double your $Energy.<br>$Exhaust."
+ },
+ {
+  "id": "DOUBLE_TAP",
+  "name": "Double Tap",
+  "gameId": "Double Tap",
+  "color": "red",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "This turn, your next [Attack is|2 Attacks are] played twice."
+ },
+ {
+  "id": "DOUBT",
+  "name": "Doubt",
+  "gameId": "Doubt",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>At the end of your turn, gain 1 $Weak.",
+  "noUpgrade": true
+ },
+ {
+  "id": "DRAMATIC_ENTRANCE",
+  "name": "Dramatic Entrance",
+  "gameId": "Dramatic Entrance",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "allenemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "innate"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "innate"
+   ]
+  },
+  "pool": "colorless",
+  "text": "$Innate.<br>Deal [8|12] damage to ALL enemies.<br>$Exhaust."
+ },
+ {
+  "id": "DROPKICK",
+  "name": "Dropkick",
+  "gameId": "Dropkick",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|8] damage.<br>If the enemy has $Vulnerable, gain @RE and draw 1 card."
+ },
+ {
+  "id": "DUALCAST",
+  "name": "Dualcast",
+  "gameId": "Dualcast",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "$Evoke your next Orb twice."
+ },
+ {
+  "id": "DUAL_WIELD",
+  "name": "Dual Wield",
+  "gameId": "Dual Wield",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Choose an Attack or Power card. Add [a copy|2 copies] of that card into your hand."
+ },
+ {
+  "id": "ECHO_FORM",
+  "name": "Echo Form",
+  "gameId": "Echo Form",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "[$Ethereal. <br>|]The first card you play each turn is played twice."
+ },
+ {
+  "id": "ELECTRODYNAMICS",
+  "name": "Electrodynamics",
+  "gameId": "Electrodynamics",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": 2
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": 2,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Lightning now hits ALL enemies.<br>$Channel [2|3] $Lightning."
+ },
+ {
+  "id": "EMPTY_BODY",
+  "name": "Empty Body",
+  "gameId": "EmptyBody",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:empty"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 10,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|10] $Block. Exit your $Stance."
+ },
+ {
+  "id": "EMPTY_FIST",
+  "name": "Empty Fist",
+  "gameId": "EmptyFist",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "tag:empty"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [9|14] damage. Exit your $Stance."
+ },
+ {
+  "id": "EMPTY_MIND",
+  "name": "Empty Mind",
+  "gameId": "EmptyMind",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "tag:empty"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Exit your $Stance. Draw [2|3] cards."
+ },
+ {
+  "id": "ENDLESS_AGONY",
+  "name": "Endless Agony",
+  "gameId": "Endless Agony",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Whenever you draw this card, add a copy of it into your hand.<br>Deal [4|6] damage.<br>$Exhaust."
+ },
+ {
+  "id": "ENLIGHTENMENT",
+  "name": "Enlightenment",
+  "gameId": "Enlightenment",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Reduce the cost of all cards in your hand to 1 this [turn|combat]."
+ },
+ {
+  "id": "ENTRENCH",
+  "name": "Entrench",
+  "gameId": "Entrench",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Double your $Block."
+ },
+ {
+  "id": "ENVENOM",
+  "name": "Envenom",
+  "gameId": "Envenom",
+  "color": "green",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever an Attack deals unblocked damage, apply 1 $Poison."
+ },
+ {
+  "id": "EQUILIBRIUM",
+  "name": "Equilibrium",
+  "gameId": "Undo",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 13,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 16,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [13|16] $Block.<br>$Retain your hand this turn."
+ },
+ {
+  "id": "ERUPTION",
+  "name": "Eruption",
+  "gameId": "Eruption",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Deal 9 damage. Enter $Wrath."
+ },
+ {
+  "id": "ESCAPE_PLAN",
+  "name": "Escape Plan",
+  "gameId": "Escape Plan",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 3,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw 1 card.<br>If you draw a Skill, gain [3|5] $Block."
+ },
+ {
+  "id": "ESTABLISHMENT",
+  "name": "Establishment",
+  "gameId": "Establishment",
+  "color": "purple",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. ]Whenever a card is $Retained, lower its cost by 1."
+ },
+ {
+  "id": "EVALUATE",
+  "name": "Evaluate",
+  "gameId": "Evaluate",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 6,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 10,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [6|10] $Block. Shuffle an {{C|Insight}} into your draw pile."
+ },
+ {
+  "id": "EVISCERATE",
+  "name": "Eviscerate",
+  "gameId": "Eviscerate",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 3,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Costs 1 less @GE for each card discarded this turn.<br>Deal [7|9] damage 3 times."
+ },
+ {
+  "id": "EVOLVE",
+  "name": "Evolve",
+  "gameId": "Evolve",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you draw a {{QueryLink|Cards|type:Status|Status}} card, draw [1|2] [card|cards]."
+ },
+ {
+  "id": "EXHUME",
+  "name": "Exhume",
+  "gameId": "Exhume",
+  "color": "red",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Put a card from your $Exhaust pile into your hand.<br>$Exhaust."
+ },
+ {
+  "id": "EXPERTISE",
+  "name": "Expertise",
+  "gameId": "Expertise",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw cards until you have [6|7] in your hand."
+ },
+ {
+  "id": "EXPUNGER",
+  "name": "Expunger",
+  "gameId": "Expunger",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 15,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Deal [9|15] damage X times."
+ },
+ {
+  "id": "FAME_AND_FORTUNE",
+  "name": "Fame and Fortune",
+  "gameId": "FameAndFortune",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": -2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 25,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 25,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Gain [25|30] Gold",
+  "unobtainable": true
+ },
+ {
+  "id": "FASTING",
+  "name": "Fasting",
+  "gameId": "Fasting2",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [3|4] $Strength. <br>Gain [3|4] $Dexterity. <br>Gain 1 less @PE at the start of each turn."
+ },
+ {
+  "id": "FEAR_NO_EVIL",
+  "name": "Fear No Evil",
+  "gameId": "FearNoEvil",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 11,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|11] damage. If the enemy intends to Attack, enter $Calm."
+ },
+ {
+  "id": "FEED",
+  "name": "Feed",
+  "gameId": "Feed",
+  "color": "red",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [10|12] damage.<br>If $Fatal, raise your Max HP by [3|4]. $Exhaust."
+ },
+ {
+  "id": "FEEL_NO_PAIN",
+  "name": "Feel No Pain",
+  "gameId": "Feel No Pain",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever a card is $Exhausted,<br>gain [3|4] $Block."
+ },
+ {
+  "id": "FIEND_FIRE",
+  "name": "Fiend Fire",
+  "gameId": "Fiend Fire",
+  "color": "red",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "$Exhaust your hand.<br>Deal [7|10] damage for each card $Exhausted.<br>$Exhaust."
+ },
+ {
+  "id": "FINESSE",
+  "name": "Finesse",
+  "gameId": "Finesse",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 2,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 4,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Gain [2|4] $Block.<br>Draw 1 card."
+ },
+ {
+  "id": "FINISHER",
+  "name": "Finisher",
+  "gameId": "Finisher",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|8] damage for each Attack played this turn."
+ },
+ {
+  "id": "FIRE_BREATHING",
+  "name": "Fire Breathing",
+  "gameId": "Fire Breathing",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 10,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you draw a {{QueryLink|Cards|type:Status|Status}} or {{QueryLink|Cards|type:Curse|Curse}} card, deal [6|10] damage to ALL enemies."
+ },
+ {
+  "id": "FISSION",
+  "name": "Fission",
+  "gameId": "Fission",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "[Remove|$Evoke] all your Orbs. Gain @BE and draw 1 card for each Orb [removed|$Evoked].<br>$Exhaust."
+ },
+ {
+  "id": "FLAME_BARRIER",
+  "name": "Flame Barrier",
+  "gameId": "Flame Barrier",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 12,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 16,
+   "magic": 6,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [12|16] $Block.<br>Whenever you are attacked this turn, deal [4|6] damage back."
+ },
+ {
+  "id": "FLASH_OF_STEEL",
+  "name": "Flash of Steel",
+  "gameId": "Flash of Steel",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Deal [3|6] damage.<br>Draw 1 card."
+ },
+ {
+  "id": "FLECHETTES",
+  "name": "Flechettes",
+  "gameId": "Flechettes",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|6] damage for each Skill in your hand."
+ },
+ {
+  "id": "FLEX",
+  "name": "Flex",
+  "gameId": "Flex",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|4] $Strength.<br>At the end of this turn, lose [2|4] $Strength."
+ },
+ {
+  "id": "FLURRY_OF_BLOWS",
+  "name": "Flurry of Blows",
+  "gameId": "FlurryOfBlows",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|6] damage.<br>Whenever you change $Stances, return this from the discard pile to your hand."
+ },
+ {
+  "id": "FLYING_KNEE",
+  "name": "Flying Knee",
+  "gameId": "Flying Knee",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 11,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|11] damage.<br>Next turn, gain @GE."
+ },
+ {
+  "id": "FLYING_SLEEVES",
+  "name": "Flying Sleeves",
+  "gameId": "FlyingSleeves",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. <br>Deal [4|6] damage twice."
+ },
+ {
+  "id": "FOLLOW_UP",
+  "name": "Follow-Up",
+  "gameId": "FollowUp",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 11,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|11] damage. <br>If the previous card played was an Attack, gain @PE."
+ },
+ {
+  "id": "FOOTWORK",
+  "name": "Footwork",
+  "gameId": "Footwork",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Dexterity."
+ },
+ {
+  "id": "FORCE_FIELD",
+  "name": "Force Field",
+  "gameId": "Force Field",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 4,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 12,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 4,
+   "damage": null,
+   "block": 16,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Costs 1 less @BE for each Power card played this combat.<br>Gain [12|16] $Block."
+ },
+ {
+  "id": "FOREIGN_INFLUENCE",
+  "name": "Foreign Influence",
+  "gameId": "ForeignInfluence",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Choose 1 of 3 Attacks of any color to add to your hand.[ |It costs 0 this turn.] $Exhaust."
+ },
+ {
+  "id": "FORESIGHT",
+  "name": "Foresight",
+  "gameId": "Wireheading",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, $Scry [3|4]."
+ },
+ {
+  "id": "FORETHOUGHT",
+  "name": "Forethought",
+  "gameId": "Forethought",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Put [a card|any number of cards] from your hand to the bottom of your draw pile. [It costs|They cost] 0 until played."
+ },
+ {
+  "id": "FTL",
+  "name": "FTL",
+  "gameId": "FTL",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|6] damage. If you have played less than [3|4] cards this turn, draw 1 card."
+ },
+ {
+  "id": "FUSION",
+  "name": "Fusion",
+  "gameId": "Fusion",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": 1
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": 1,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Channel 1 $Plasma."
+ },
+ {
+  "id": "GENETIC_ALGORITHM",
+  "name": "Genetic Algorithm",
+  "gameId": "Genetic Algorithm",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Gain 1 $Block. Permanently increase this card's $Block by [2|3].<br>$Exhaust."
+ },
+ {
+  "id": "GHOSTLY_ARMOR",
+  "name": "Ghostly Armor",
+  "gameId": "Ghostly Armor",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 10,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 13,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "class",
+  "text": "$Ethereal.<br>Gain [10|13] $Block."
+ },
+ {
+  "id": "GLACIER",
+  "name": "Glacier",
+  "gameId": "Glacier",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": 2,
+   "hits": 2
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 10,
+   "magic": 2,
+   "hits": 2,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|10] $Block.<br>$Channel 2 $Frost."
+ },
+ {
+  "id": "GLASS_KNIFE",
+  "name": "Glass Knife",
+  "gameId": "Glass Knife",
+  "color": "green",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|12] damage twice. Decrease the damage of this card by 2 this combat."
+ },
+ {
+  "id": "GOOD_INSTINCTS",
+  "name": "Good Instincts",
+  "gameId": "Good Instincts",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 6,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 9,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Gain [6|9] $Block."
+ },
+ {
+  "id": "GO_FOR_THE_EYES",
+  "name": "Go for the Eyes",
+  "gameId": "Go for the Eyes",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 4,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [3|4] damage.<br>If the enemy intends to attack, apply [1|2] $Weak."
+ },
+ {
+  "id": "GRAND_FINALE",
+  "name": "Grand Finale",
+  "gameId": "Grand Finale",
+  "color": "green",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "allenemy",
+  "values": {
+   "damage": 50,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 60,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Can only be played if there are no cards in your draw pile.<br>Deal [50|60] damage to ALL enemies."
+ },
+ {
+  "id": "HALT",
+  "name": "Halt",
+  "gameId": "Halt",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 3,
+   "magic": 9,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 4,
+   "magic": 9,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [3|4] $Block. <br>If you are in $Wrath, gain [9|14] additional $Block."
+ },
+ {
+  "id": "HAND_OF_GREED",
+  "name": "Hand of Greed",
+  "gameId": "HandOfGreed",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 20,
+   "block": null,
+   "magic": 20,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 25,
+   "block": null,
+   "magic": 25,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Deal [20|25] damage.<br>If $Fatal, gain [20|25] Gold."
+ },
+ {
+  "id": "HAVOC",
+  "name": "Havoc",
+  "gameId": "Havoc",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Play the top card of your draw pile and $Exhaust it."
+ },
+ {
+  "id": "HEADBUTT",
+  "name": "Headbutt",
+  "gameId": "Headbutt",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [9|12] damage.<br>Put a card from your discard pile on top of your draw pile."
+ },
+ {
+  "id": "HEATSINKS",
+  "name": "Heatsinks",
+  "gameId": "Heatsinks",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you play a Power card, draw [1|2] [card|cards]."
+ },
+ {
+  "id": "HEAVY_BLADE",
+  "name": "Heavy Blade",
+  "gameId": "Heavy Blade",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 14,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 14,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 14 damage.<br>$Strength affects this card [3|5] times."
+ },
+ {
+  "id": "HEEL_HOOK",
+  "name": "Heel Hook",
+  "gameId": "Heel Hook",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|8] damage. <br>If the enemy has $Weak, <br>gain @GE and draw 1 card."
+ },
+ {
+  "id": "HELLO_WORLD",
+  "name": "Hello World",
+  "gameId": "Hello World",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]At the start of your turn, add a random Common card into your hand."
+ },
+ {
+  "id": "HEMOKINESIS",
+  "name": "Hemokinesis",
+  "gameId": "Hemokinesis",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 15,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 20,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Lose 2 HP.<br>Deal [15|20] damage."
+ },
+ {
+  "id": "HOLOGRAM",
+  "name": "Hologram",
+  "gameId": "Hologram",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 3,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [3|5] $Block.<br>Put a card from your discard pile into your hand.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "HYPERBEAM",
+  "name": "Hyperbeam",
+  "gameId": "Hyperbeam",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": 26,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 34,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [26|34] damage to ALL enemies.<br>Lose 3 $Focus."
+ },
+ {
+  "id": "IMMOLATE",
+  "name": "Immolate",
+  "gameId": "Immolate",
+  "color": "red",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": 21,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 28,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [21|28] damage to ALL enemies.<br>Add a {{C|Burn}} into your discard pile."
+ },
+ {
+  "id": "IMPATIENCE",
+  "name": "Impatience",
+  "gameId": "Impatience",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "If you have no Attacks in your hand, draw [2|3] cards."
+ },
+ {
+  "id": "IMPERVIOUS",
+  "name": "Impervious",
+  "gameId": "Impervious",
+  "color": "red",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 30,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 40,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Gain [30|40] $Block.<br>$Exhaust."
+ },
+ {
+  "id": "INDIGNATION",
+  "name": "Indignation",
+  "gameId": "Indignation",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "If you are in $Wrath, apply [3|5] $Vulnerable to ALL enemies, otherwise enter $Wrath."
+ },
+ {
+  "id": "INFERNAL_BLADE",
+  "name": "Infernal Blade",
+  "gameId": "Infernal Blade",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Add a random Attack into your hand.<br>It costs 0 this turn.<br>$Exhaust."
+ },
+ {
+  "id": "INFINITE_BLADES",
+  "name": "Infinite Blades",
+  "gameId": "Infinite Blades",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. ]At the start of your turn, add a {{C|Shiv}} into your hand."
+ },
+ {
+  "id": "INFLAME",
+  "name": "Inflame",
+  "gameId": "Inflame",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Strength."
+ },
+ {
+  "id": "INJURY",
+  "name": "Injury",
+  "gameId": "Injury",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.",
+  "noUpgrade": true
+ },
+ {
+  "id": "INNER_PEACE",
+  "name": "Inner Peace",
+  "gameId": "InnerPeace",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "If you are in $Calm, draw [3|4] cards, otherwise Enter $Calm."
+ },
+ {
+  "id": "INSIGHT",
+  "name": "Insight",
+  "gameId": "Insight",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "special",
+  "text": "$Retain. <br>Draw [2|3] cards. <br>$Exhaust."
+ },
+ {
+  "id": "INTIMIDATE",
+  "name": "Intimidate",
+  "gameId": "Intimidate",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "allenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Apply [1|2] $Weak to ALL enemies.<br>$Exhaust."
+ },
+ {
+  "id": "IRON_WAVE",
+  "name": "Iron Wave",
+  "gameId": "Iron Wave",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 7,
+   "block": 7,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [5|7] $Block.<br>Deal [5|7] damage."
+ },
+ {
+  "id": "JAX",
+  "name": "J.A.X.",
+  "gameId": "J.A.X.",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Lose 3 HP.<br>Gain [2|3] $Strength."
+ },
+ {
+  "id": "JACK_OF_ALL_TRADES",
+  "name": "Jack of All Trades",
+  "gameId": "Jack Of All Trades",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Add [1|2] random Colorless [card|cards] into your hand.<br>$Exhaust."
+ },
+ {
+  "id": "JUDGMENT",
+  "name": "Judgment",
+  "gameId": "Judgement",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 30,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 40,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "If the enemy has [30|40] or less HP, set their HP to 0."
+ },
+ {
+  "id": "JUGGERNAUT",
+  "name": "Juggernaut",
+  "gameId": "Juggernaut",
+  "color": "red",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you gain $Block, deal [5|7] damage to a random enemy."
+ },
+ {
+  "id": "JUST_LUCKY",
+  "name": "Just Lucky",
+  "gameId": "JustLucky",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": 2,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 4,
+   "block": 3,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Scry [1|2]. <br>Gain [2|3] $Block. <br>Deal [3|4] damage."
+ },
+ {
+  "id": "LEAP",
+  "name": "Leap",
+  "gameId": "Leap",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 9,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 12,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [9|12] $Block."
+ },
+ {
+  "id": "LEG_SWEEP",
+  "name": "Leg Sweep",
+  "gameId": "Leg Sweep",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": 11,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 14,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply [2|3] $Weak.<br>Gain [11|14] $Block."
+ },
+ {
+  "id": "LESSON_LEARNED",
+  "name": "Lesson Learned",
+  "gameId": "LessonLearned",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 13,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [10|13] damage. <br>If $Fatal, $Upgrade a random card in your deck. <br>$Exhaust."
+ },
+ {
+  "id": "LIKE_WATER",
+  "name": "Like Water",
+  "gameId": "LikeWater",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of your turn, if you are in $Calm, gain [5|7] $Block."
+ },
+ {
+  "id": "LIMIT_BREAK",
+  "name": "Limit Break",
+  "gameId": "Limit Break",
+  "color": "red",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Double your $Strength.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "LIVE_FOREVER",
+  "name": "Live Forever",
+  "gameId": "LiveForever",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "special",
+  "cost": -2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "Gain [6|8] $Plated Armor.",
+  "unobtainable": true
+ },
+ {
+  "id": "LOOP",
+  "name": "Loop",
+  "gameId": "Loop",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, trigger the passive ability of your next Orb [1 time|2 times]."
+ },
+ {
+  "id": "MACHINE_LEARNING",
+  "name": "Machine Learning",
+  "gameId": "Machine Learning",
+  "color": "blue",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]At the start of your turn, draw 1 additional card."
+ },
+ {
+  "id": "MADNESS",
+  "name": "Madness",
+  "gameId": "Madness",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Reduce the cost of a random card in your hand to 0 this combat.<br>$Exhaust."
+ },
+ {
+  "id": "MAGNETISM",
+  "name": "Magnetism",
+  "gameId": "Magnetism",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "At the start of your turn, add a random Colorless card into your hand."
+ },
+ {
+  "id": "MALAISE",
+  "name": "Malaise",
+  "gameId": "Malaise",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Enemy loses [X|X+1] $Strength. Apply [X|X+1] $Weak.<br>$Exhaust."
+ },
+ {
+  "id": "MASTERFUL_STAB",
+  "name": "Masterful Stab",
+  "gameId": "Masterful Stab",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 16,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Costs 1 additional @GE for each time you lose HP this combat.<br>Deal [12|16] damage."
+ },
+ {
+  "id": "MASTER_OF_STRATEGY",
+  "name": "Master of Strategy",
+  "gameId": "Master of Strategy",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Draw [3|4] cards.<br>$Exhaust."
+ },
+ {
+  "id": "MASTER_REALITY",
+  "name": "Master Reality",
+  "gameId": "MasterReality",
+  "color": "purple",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever a card is created during combat, $Upgrade it."
+ },
+ {
+  "id": "MAYHEM",
+  "name": "Mayhem",
+  "gameId": "Mayhem",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "At the start of your turn, play the top card of your draw pile."
+ },
+ {
+  "id": "MEDITATE",
+  "name": "Meditate",
+  "gameId": "Meditate",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Put [1 card|2 cards] from your discard pile into your hand and $Retain [it|them]. Enter $Calm. End your turn."
+ },
+ {
+  "id": "MELTER",
+  "name": "Melter",
+  "gameId": "Melter",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Remove all $Block from the enemy.<br>Deal [10|14] damage."
+ },
+ {
+  "id": "MENTAL_FORTRESS",
+  "name": "Mental Fortress",
+  "gameId": "MentalFortress",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you switch $Stances, gain [4|6] $Block."
+ },
+ {
+  "id": "METALLICIZE",
+  "name": "Metallicize",
+  "gameId": "Metallicize",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of your turn, gain [3|4] $Block."
+ },
+ {
+  "id": "METAMORPHOSIS",
+  "name": "Metamorphosis",
+  "gameId": "Metamorphosis",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": 3
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": 3,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Shuffle [3|5] random Attacks into your draw pile. They cost 0 this combat.<br>$Exhaust."
+ },
+ {
+  "id": "METEOR_STRIKE",
+  "name": "Meteor Strike",
+  "gameId": "Meteor Strike",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 5,
+  "target": "enemy",
+  "values": {
+   "damage": 24,
+   "block": null,
+   "magic": 3,
+   "hits": 3
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 5,
+   "damage": 30,
+   "block": null,
+   "magic": 3,
+   "hits": 3,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [24|30] damage. <br>$Channel 3 $Plasma."
+ },
+ {
+  "id": "MIND_BLAST",
+  "name": "Mind Blast",
+  "gameId": "Mind Blast",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 0,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "innate"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 0,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "colorless",
+  "text": "$Innate.<br>Deal damage equal to the number of cards in your draw pile."
+ },
+ {
+  "id": "MIRACLE",
+  "name": "Miracle",
+  "gameId": "Miracle",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "special",
+  "text": "$Retain. <br>Gain [@PE|@PE @PE]. <br>$Exhaust."
+ },
+ {
+  "id": "MULTI_CAST",
+  "name": "Multi-Cast",
+  "gameId": "Multi-Cast",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Evoke your next Orb [X|X+1] times."
+ },
+ {
+  "id": "NECRONOMICURSE",
+  "name": "Necronomicurse",
+  "gameId": "Necronomicurse",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "special",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "$Unplayable.<br>There is no escape from this curse.",
+  "noUpgrade": true
+ },
+ {
+  "id": "NEUTRALIZE",
+  "name": "Neutralize",
+  "gameId": "Neutralize",
+  "color": "green",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 4,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Deal [3|4] damage.<br>Apply [1|2] $Weak."
+ },
+ {
+  "id": "NIGHTMARE",
+  "name": "Nightmare",
+  "gameId": "Night Terror",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Choose a card.<br>Next turn, add 3 copies of that card into your hand. $Exhaust."
+ },
+ {
+  "id": "NIRVANA",
+  "name": "Nirvana",
+  "gameId": "Nirvana",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you $Scry, gain [3|4] $Block."
+ },
+ {
+  "id": "NORMALITY",
+  "name": "Normality",
+  "gameId": "Normality",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>While in hand, you cannot play more than 3 cards this turn.",
+  "noUpgrade": true
+ },
+ {
+  "id": "NOXIOUS_FUMES",
+  "name": "Noxious Fumes",
+  "gameId": "Noxious Fumes",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, apply [2|3] $Poison to ALL enemies."
+ },
+ {
+  "id": "OFFERING",
+  "name": "Offering",
+  "gameId": "Offering",
+  "color": "red",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Lose 6 HP.<br>Gain @RE @RE.<br>Draw [3|5] cards.<br>$Exhaust."
+ },
+ {
+  "id": "OMEGA",
+  "name": "Omega",
+  "gameId": "Omega",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "special",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 50,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": 60,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "At the end of your turn, deal [50|60] damage to ALL enemies."
+ },
+ {
+  "id": "OMNISCIENCE",
+  "name": "Omniscience",
+  "gameId": "Omniscience",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 4,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Choose a card in your draw pile. Play the chosen card twice and $Exhaust it. $Exhaust."
+ },
+ {
+  "id": "OUTMANEUVER",
+  "name": "Outmaneuver",
+  "gameId": "Outmaneuver",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Next turn,<br>gain [@GE @GE|@GE @GE @GE]."
+ },
+ {
+  "id": "OVERCLOCK",
+  "name": "Overclock",
+  "gameId": "Steam Power",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw [2|3] cards.<br>Add a {{C|Burn}} into your discard pile."
+ },
+ {
+  "id": "PAIN",
+  "name": "Pain",
+  "gameId": "Pain",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>While in hand, lose 1 HP when other cards are played.",
+  "noUpgrade": true
+ },
+ {
+  "id": "PANACEA",
+  "name": "Panacea",
+  "gameId": "Panacea",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Gain [1|2] $Artifact.<br>$Exhaust."
+ },
+ {
+  "id": "PANACHE",
+  "name": "Panache",
+  "gameId": "Panache",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 10,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 14,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Every time you play 5 cards in a single turn, deal [10|14] damage to ALL enemies."
+ },
+ {
+  "id": "PANIC_BUTTON",
+  "name": "Panic Button",
+  "gameId": "PanicButton",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 30,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 40,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Gain [30|40] $Block. You cannot gain $Block from cards for 2 turns.<br>$Exhaust."
+ },
+ {
+  "id": "PARASITE",
+  "name": "Parasite",
+  "gameId": "Parasite",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>If transformed or removed from your deck, lose 3 Max HP.",
+  "noUpgrade": true
+ },
+ {
+  "id": "PERFECTED_STRIKE",
+  "name": "Perfected Strike",
+  "gameId": "Perfected Strike",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 6,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal 6 damage.<br>Deals [2|3] additional damage for ALL your cards containing \"Strike\"."
+ },
+ {
+  "id": "PERSEVERANCE",
+  "name": "Perseverance",
+  "gameId": "Perseverance",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 7,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. Gain [5|7] $Block. Whenever this card is $Retained, increase its $Block by [2|3]."
+ },
+ {
+  "id": "PHANTASMAL_KILLER",
+  "name": "Phantasmal Killer",
+  "gameId": "Phantasmal Killer",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Next turn, your Attacks deal double damage."
+ },
+ {
+  "id": "PIERCING_WAIL",
+  "name": "Piercing Wail",
+  "gameId": "PiercingWail",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 8,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "ALL enemies lose [6|8] $Strength this turn.<br>$Exhaust."
+ },
+ {
+  "id": "POISONED_STAB",
+  "name": "Poisoned Stab",
+  "gameId": "Poisoned Stab",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|8] damage.<br>Apply [3|4] $Poison."
+ },
+ {
+  "id": "POMMEL_STRIKE",
+  "name": "Pommel Strike",
+  "gameId": "Pommel Strike",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [9|10] damage.<br>Draw [1|2] [card|cards]."
+ },
+ {
+  "id": "POWER_THROUGH",
+  "name": "Power Through",
+  "gameId": "Power Through",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 15,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 20,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Add 2 {{C|Wound|Wounds}} into your hand.<br>Gain [15|20] $Block."
+ },
+ {
+  "id": "PRAY",
+  "name": "Pray",
+  "gameId": "Pray",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [3|4] $Mantra. Shuffle an {{C|Insight}} into your draw pile."
+ },
+ {
+  "id": "PREDATOR",
+  "name": "Predator",
+  "gameId": "Predator",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 15,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 20,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [15|20] damage.<br>Next turn, draw 2 additional cards."
+ },
+ {
+  "id": "PREPARED",
+  "name": "Prepared",
+  "gameId": "Prepared",
+  "color": "green",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw [1|2] [card|cards].<br>Discard [1|2] [card|cards]."
+ },
+ {
+  "id": "PRESSURE_POINTS",
+  "name": "Pressure Points",
+  "gameId": "PathToVictory",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 8,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 11,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply [8|11] Mark. ALL enemies lose HP equal to their Mark."
+ },
+ {
+  "id": "PRIDE",
+  "name": "Pride",
+  "gameId": "Pride",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "special",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "innate"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "$Innate.<br>At the end of your turn, put a copy of this card on top of your draw pile. $Exhaust.",
+  "noUpgrade": true
+ },
+ {
+  "id": "PROSTRATE",
+  "name": "Prostrate",
+  "gameId": "Prostrate",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 4,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 4,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Mantra. <br>Gain 4 $Block."
+ },
+ {
+  "id": "PROTECT",
+  "name": "Protect",
+  "gameId": "Protect",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 12,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 16,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. Gain [12|16] $Block."
+ },
+ {
+  "id": "PUMMEL",
+  "name": "Pummel",
+  "gameId": "Pummel",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 2,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 2,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal 2 damage [4|5] times.<br>$Exhaust."
+ },
+ {
+  "id": "PURITY",
+  "name": "Purity",
+  "gameId": "Purity",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "$Exhaust up to [3|5] cards in your hand.<br>$Exhaust."
+ },
+ {
+  "id": "QUICK_SLASH",
+  "name": "Quick Slash",
+  "gameId": "Quick Slash",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|12] damage.<br>Draw 1 card."
+ },
+ {
+  "id": "RAGE",
+  "name": "Rage",
+  "gameId": "Rage",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you play an Attack this turn, gain [3|5] $Block."
+ },
+ {
+  "id": "RAGNAROK",
+  "name": "Ragnarok",
+  "gameId": "Ragnarok",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "allenemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": 5,
+   "hits": 5
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": 6,
+   "block": null,
+   "magic": 6,
+   "hits": 5,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|6] damage to a random enemy [5|6] times."
+ },
+ {
+  "id": "RAINBOW",
+  "name": "Rainbow",
+  "gameId": "Rainbow",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Channel 1 $Lightning.<br>$Channel 1 $Frost.<br>$Channel 1 $Dark.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "RAMPAGE",
+  "name": "Rampage",
+  "gameId": "Rampage",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 8,
+   "block": null,
+   "magic": 8,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 8 damage.<br>Increase this card's damage by [5|8] this combat."
+ },
+ {
+  "id": "REACH_HEAVEN",
+  "name": "Reach Heaven",
+  "gameId": "ReachHeaven",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 15,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [10|15] damage. Shuffle a {{C|Through Violence}} into your draw pile."
+ },
+ {
+  "id": "REAPER",
+  "name": "Reaper",
+  "gameId": "Reaper",
+  "color": "red",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [4|5] damage to ALL enemies. Heal HP equal to unblocked damage.<br>$Exhaust."
+ },
+ {
+  "id": "REBOOT",
+  "name": "Reboot",
+  "gameId": "Reboot",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 6,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Shuffle ALL your cards into your draw pile.<br>Draw [4|6] cards.<br>$Exhaust."
+ },
+ {
+  "id": "REBOUND",
+  "name": "Rebound",
+  "gameId": "Rebound",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [9|12] damage.<br>Put the next card you play this turn on top of your draw pile."
+ },
+ {
+  "id": "RECKLESS_CHARGE",
+  "name": "Reckless Charge",
+  "gameId": "Reckless Charge",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage.<br>Shuffle a {{C|Dazed}} into your draw pile."
+ },
+ {
+  "id": "RECURSION",
+  "name": "Recursion",
+  "gameId": "Redo",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Evoke your next Orb.<br>$Channel the Orb that was just $Evoked."
+ },
+ {
+  "id": "RECYCLE",
+  "name": "Recycle",
+  "gameId": "Recycle",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Exhaust a card.<br>Gain @BE equal to its cost."
+ },
+ {
+  "id": "REFLEX",
+  "name": "Reflex",
+  "gameId": "Reflex",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Unplayable.<br>If this card is discarded from your hand, draw [2|3] cards."
+ },
+ {
+  "id": "REGRET",
+  "name": "Regret",
+  "gameId": "Regret",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>At the end of your turn, lose HP equal to the number of cards in your hand.",
+  "noUpgrade": true
+ },
+ {
+  "id": "REINFORCED_BODY",
+  "name": "Reinforced Body",
+  "gameId": "Reinforced Body",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": 9,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|9] $Block X times."
+ },
+ {
+  "id": "REPROGRAM",
+  "name": "Reprogram",
+  "gameId": "Reprogram",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Lose [1|2] $Focus. <br>Gain [1|2] $Strength. <br>Gain [1|2] $Dexterity."
+ },
+ {
+  "id": "RIDDLE_WITH_HOLES",
+  "name": "Riddle with Holes",
+  "gameId": "Riddle With Holes",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [3|4] damage 5 times."
+ },
+ {
+  "id": "RIP_AND_TEAR",
+  "name": "Rip and Tear",
+  "gameId": "Rip and Tear",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 2,
+   "hits": 2
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": 2,
+   "hits": 2,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|9] damage to a random enemy twice."
+ },
+ {
+  "id": "RITUAL_DAGGER",
+  "name": "Ritual Dagger",
+  "gameId": "RitualDagger",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 15,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "Deal 15 damage. If $Fatal, permanently increase this card's damage by [3|5].<br>$Exhaust."
+ },
+ {
+  "id": "RUPTURE",
+  "name": "Rupture",
+  "gameId": "Rupture",
+  "color": "red",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you lose HP from a card,<br>gain [1|2] $Strength."
+ },
+ {
+  "id": "RUSHDOWN",
+  "name": "Rushdown",
+  "gameId": "Adaptation",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you enter $Wrath, draw 2 cards."
+ },
+ {
+  "id": "SADISTIC_NATURE",
+  "name": "Sadistic Nature",
+  "gameId": "Sadistic Nature",
+  "color": "colorless",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Whenever you apply a debuff to an enemy, they take [5|7] damage."
+ },
+ {
+  "id": "SAFETY",
+  "name": "Safety",
+  "gameId": "Safety",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "special",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 12,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 16,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "special",
+  "text": "$Retain. <br>Gain [12|16] $Block. <br>$Exhaust."
+ },
+ {
+  "id": "SANCTITY",
+  "name": "Sanctity",
+  "gameId": "Sanctity",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 6,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 9,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [6|9] $Block. <br>If the last card played this combat was a Skill, draw 2 cards."
+ },
+ {
+  "id": "SANDS_OF_TIME",
+  "name": "Sands of Time",
+  "gameId": "SandsOfTime",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 4,
+  "target": "enemy",
+  "values": {
+   "damage": 20,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 4,
+   "damage": 26,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. <br>Deal [20|26] damage. <br>When $Retained, lower its cost by 1 this combat."
+ },
+ {
+  "id": "SASH_WHIP",
+  "name": "Sash Whip",
+  "gameId": "SashWhip",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 8,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [8|10] damage. If the last card played this combat was an Attack, apply [1|2] $Weak."
+ },
+ {
+  "id": "SCRAPE",
+  "name": "Scrape",
+  "gameId": "Scrape",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 10,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage.<br>Draw [4|5] cards.<br>Discard all cards drawn this way that do not cost 0."
+ },
+ {
+  "id": "SCRAWL",
+  "name": "Scrawl",
+  "gameId": "Scrawl",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Draw cards until your hand is full. <br>$Exhaust."
+ },
+ {
+  "id": "SEARING_BLOW",
+  "name": "Searing Blow",
+  "gameId": "Searing Blow",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "multiUpgrade"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [12|16] damage.<br>Can be $Upgraded any number of times."
+ },
+ {
+  "id": "SECOND_WIND",
+  "name": "Second Wind",
+  "gameId": "Second Wind",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Exhaust all non-Attack cards in your hand. Gain [5|7] $Block for each card $Exhausted."
+ },
+ {
+  "id": "SECRET_TECHNIQUE",
+  "name": "Secret Technique",
+  "gameId": "Secret Technique",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Put a Skill from your draw pile into your hand.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "SECRET_WEAPON",
+  "name": "Secret Weapon",
+  "gameId": "Secret Weapon",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Put an Attack from your draw pile into your hand.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "SEEING_RED",
+  "name": "Seeing Red",
+  "gameId": "Seeing Red",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain @RE @RE.<br>$Exhaust."
+ },
+ {
+  "id": "SEEK",
+  "name": "Seek",
+  "gameId": "Seek",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Put [1|2] [card|cards] from your draw pile into your hand.<br>$Exhaust."
+ },
+ {
+  "id": "SELF_REPAIR",
+  "name": "Self Repair",
+  "gameId": "Self Repair",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 7,
+   "hits": null
+  },
+  "flags": [
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 10,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of combat, heal [7|10] HP."
+ },
+ {
+  "id": "SENTINEL",
+  "name": "Sentinel",
+  "gameId": "Sentinel",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 5,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [5|8] $Block.<br>If this card is $Exhausted,<br>gain [@RE@RE|@RE@RE@RE]."
+ },
+ {
+  "id": "SETUP",
+  "name": "Setup",
+  "gameId": "Setup",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Put a card from your hand on top of your draw pile.<br>It costs 0 until played."
+ },
+ {
+  "id": "SEVER_SOUL",
+  "name": "Sever Soul",
+  "gameId": "Sever Soul",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 16,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 22,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Exhaust all non-Attack cards in your hand.<br>Deal [16|22] damage."
+ },
+ {
+  "id": "SHAME",
+  "name": "Shame",
+  "gameId": "Shame",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>At the end of your turn, gain 1 $Frail.",
+  "noUpgrade": true
+ },
+ {
+  "id": "SHIV",
+  "name": "Shiv",
+  "gameId": "Shiv",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "Deal [4|6] damage.<br>$Exhaust."
+ },
+ {
+  "id": "SHOCKWAVE",
+  "name": "Shockwave",
+  "gameId": "Shockwave",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "allenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Apply [3|5] $Weak and $Vulnerable to ALL enemies.<br>$Exhaust."
+ },
+ {
+  "id": "SHRUG_IT_OFF",
+  "name": "Shrug It Off",
+  "gameId": "Shrug It Off",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 11,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [8|11] $Block.<br>Draw 1 card."
+ },
+ {
+  "id": "SIGNATURE_MOVE",
+  "name": "Signature Move",
+  "gameId": "SignatureMove",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 30,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 40,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Can only be played if this is the only Attack in your hand. <br>Deal [30|40] damage."
+ },
+ {
+  "id": "SIMMERING_FURY",
+  "name": "Simmering Fury",
+  "gameId": "Vengeance",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your next turn, enter $Wrath and draw [2|3] cards."
+ },
+ {
+  "id": "SKEWER",
+  "name": "Skewer",
+  "gameId": "Skewer",
+  "color": "green",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": -1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -1,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|10] damage X times."
+ },
+ {
+  "id": "SKIM",
+  "name": "Skim",
+  "gameId": "Skim",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Draw [3|4] cards."
+ },
+ {
+  "id": "SLICE",
+  "name": "Slice",
+  "gameId": "Slice",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|9] damage."
+ },
+ {
+  "id": "SLIMED",
+  "name": "Slimed",
+  "gameId": "Slimed",
+  "color": "colorless",
+  "type": "status",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "special",
+  "text": "$Exhaust.",
+  "noUpgrade": true
+ },
+ {
+  "id": "SMITE",
+  "name": "Smite",
+  "gameId": "Smite",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 16,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "special",
+  "text": "$Retain. <br>Deal [12|16] damage. <br>$Exhaust."
+ },
+ {
+  "id": "SNEAKY_STRIKE",
+  "name": "Sneaky Strike",
+  "gameId": "Underhanded Strike",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 16,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [12|16] damage.<br>If you have discarded a card this turn,<br>gain @GE @GE."
+ },
+ {
+  "id": "SPIRIT_SHIELD",
+  "name": "Spirit Shield",
+  "gameId": "SpiritShield",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [3|4] $Block for each card in your hand."
+ },
+ {
+  "id": "SPOT_WEAKNESS",
+  "name": "Spot Weakness",
+  "gameId": "Spot Weakness",
+  "color": "red",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "selfandenemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "If the enemy intends to attack, gain [3|4] $Strength."
+ },
+ {
+  "id": "STACK",
+  "name": "Stack",
+  "gameId": "Stack",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 0,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 3,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain $Block equal to the number of cards in your discard pile[|+3]."
+ },
+ {
+  "id": "STATIC_DISCHARGE",
+  "name": "Static Discharge",
+  "gameId": "Static Discharge",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you receive unblocked attack damage, $Channel [1|2] $Lightning."
+ },
+ {
+  "id": "STEAM_BARRIER",
+  "name": "Steam Barrier",
+  "gameId": "Steam",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 6,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [6|8] $Block. Decrease this card's $Block by 1 this combat."
+ },
+ {
+  "id": "STORM",
+  "name": "Storm",
+  "gameId": "Storm",
+  "color": "blue",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Innate. <br>]Whenever you play a {{QueryLink|Cards|type:Power|Power}} card, $Channel 1 $Lightning."
+ },
+ {
+  "id": "STORM_OF_STEEL",
+  "name": "Storm of Steel",
+  "gameId": "Storm of Steel",
+  "color": "green",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Discard your hand.<br>Add 1 {{C|Shiv}}[|+] into your hand for each card discarded."
+ },
+ {
+  "id": "STREAMLINE",
+  "name": "Streamline",
+  "gameId": "Streamline",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 15,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 20,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [15|20] damage.<br>Reduce this card's cost by 1 this combat."
+ },
+ {
+  "id": "STRIKE_BLUE",
+  "name": "Strike",
+  "gameId": "Strike_B",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:starter_strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "basic",
+  "text": "Deal [6|9] damage."
+ },
+ {
+  "id": "STRIKE_GREEN",
+  "name": "Strike",
+  "gameId": "Strike_G",
+  "color": "green",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:starter_strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "basic",
+  "text": "Deal [6|9] damage."
+ },
+ {
+  "id": "STRIKE_PURPLE",
+  "name": "Strike",
+  "gameId": "Strike_P",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:starter_strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "basic",
+  "text": "Deal [6|9] damage."
+ },
+ {
+  "id": "STRIKE_RED",
+  "name": "Strike",
+  "gameId": "Strike_R",
+  "color": "red",
+  "type": "attack",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:starter_strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "basic",
+  "text": "Deal [6|9] damage."
+ },
+ {
+  "id": "STUDY",
+  "name": "Study",
+  "gameId": "Study",
+  "color": "purple",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of your turn, shuffle an {{C|Insight}} into your draw pile."
+ },
+ {
+  "id": "SUCKER_PUNCH",
+  "name": "Sucker Punch",
+  "gameId": "Sucker Punch",
+  "color": "green",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [7|9] damage.<br>Apply [1|2] $Weak."
+ },
+ {
+  "id": "SUNDER",
+  "name": "Sunder",
+  "gameId": "Sunder",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 3,
+  "target": "enemy",
+  "values": {
+   "damage": 24,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": 32,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [24|32] damage.<br>If this kills an enemy, gain @BE @BE @BE."
+ },
+ {
+  "id": "SURVIVOR",
+  "name": "Survivor",
+  "gameId": "Survivor",
+  "color": "green",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 11,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [8|11] $Block.<br>Discard 1 card."
+ },
+ {
+  "id": "SWEEPING_BEAM",
+  "name": "Sweeping Beam",
+  "gameId": "Sweeping Beam",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 6,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 9,
+   "block": null,
+   "magic": 1,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [6|9] damage to ALL enemies.<br>Draw 1 card."
+ },
+ {
+  "id": "SWIFT_STRIKE",
+  "name": "Swift Strike",
+  "gameId": "Swift Strike",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 10,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Deal [7|10] damage."
+ },
+ {
+  "id": "SWIVEL",
+  "name": "Swivel",
+  "gameId": "Swivel",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 11,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [8|11] $Block. <br>The next Attack you play costs 0."
+ },
+ {
+  "id": "SWORD_BOOMERANG",
+  "name": "Sword Boomerang",
+  "gameId": "Sword Boomerang",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 3,
+   "hits": 3
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 3,
+   "block": null,
+   "magic": 4,
+   "hits": 3,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 3 damage to a random enemy [3|4] times."
+ },
+ {
+  "id": "TACTICIAN",
+  "name": "Tactician",
+  "gameId": "Tactician",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "$Unplayable.<br>If this card is discarded from your hand, gain [@GE|@GE @GE]."
+ },
+ {
+  "id": "TALK_TO_THE_HAND",
+  "name": "Talk to the Hand",
+  "gameId": "TalkToTheHand",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 7,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [5|7] damage. Whenever you attack this enemy, gain [2|3] $Block. <br>$Exhaust."
+ },
+ {
+  "id": "TANTRUM",
+  "name": "Tantrum",
+  "gameId": "Tantrum",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 3,
+   "block": null,
+   "magic": 3,
+   "hits": 3
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 3,
+   "block": null,
+   "magic": 4,
+   "hits": 3,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 3 damage [3|4] times. Enter $Wrath. Shuffle this card into your draw pile."
+ },
+ {
+  "id": "TEMPEST",
+  "name": "Tempest",
+  "gameId": "Tempest",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "$Channel [X|X+1] $Lightning.<br>$Exhaust."
+ },
+ {
+  "id": "TERROR",
+  "name": "Terror",
+  "gameId": "Terror",
+  "color": "green",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Apply 99 $Vulnerable.<br>$Exhaust."
+ },
+ {
+  "id": "THE_BOMB",
+  "name": "The Bomb",
+  "gameId": "The Bomb",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 40,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 50,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "At the end of 3 turns, deal [40|50] damage to ALL enemies."
+ },
+ {
+  "id": "THINKING_AHEAD",
+  "name": "Thinking Ahead",
+  "gameId": "Thinking Ahead",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Draw 2 cards.<br>Put a card from your hand on top of your draw pile.[<br>$Exhaust.|]"
+ },
+ {
+  "id": "THIRD_EYE",
+  "name": "Third Eye",
+  "gameId": "ThirdEye",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 9,
+   "magic": 5,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|9] $Block. <br>$Scry [3|5]."
+ },
+ {
+  "id": "THROUGH_VIOLENCE",
+  "name": "Through Violence",
+  "gameId": "ThroughViolence",
+  "color": "colorless",
+  "type": "attack",
+  "rarity": "special",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 20,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": 30,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "special",
+  "text": "$Retain. <br>Deal [20|30] damage. <br>$Exhaust."
+ },
+ {
+  "id": "THUNDERCLAP",
+  "name": "Thunderclap",
+  "gameId": "Thunderclap",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "allenemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|7] damage and apply 1 $Vulnerable to ALL enemies."
+ },
+ {
+  "id": "THUNDER_STRIKE",
+  "name": "Thunder Strike",
+  "gameId": "Thunder Strike",
+  "color": "blue",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "allenemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 0,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 3,
+   "damage": 9,
+   "block": null,
+   "magic": 0,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [7|9] damage to a random enemy for each $Lightning $Channeled this combat."
+ },
+ {
+  "id": "TOOLS_OF_THE_TRADE",
+  "name": "Tools of the Trade",
+  "gameId": "Tools of the Trade",
+  "color": "green",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the start of your turn, draw 1 card and discard 1 card."
+ },
+ {
+  "id": "TRANQUILITY",
+  "name": "Tranquility",
+  "gameId": "ClearTheMind",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "selfRetain"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust",
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. <br>Enter $Calm. <br>$Exhaust."
+ },
+ {
+  "id": "TRANSMUTATION",
+  "name": "Transmutation",
+  "gameId": "Transmutation",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": -1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": -1,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Add X random[| $Upgraded] Colorless cards into your hand. They cost 0 this turn.<br>$Exhaust."
+ },
+ {
+  "id": "TRIP",
+  "name": "Trip",
+  "gameId": "Trip",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "colorless",
+  "text": "Apply 2 $Vulnerable[| to ALL enemies]."
+ },
+ {
+  "id": "TRUE_GRIT",
+  "name": "True Grit",
+  "gameId": "True Grit",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 7,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": 9,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [7|9] $Block.<br>$Exhaust 1 card[ at random|]."
+ },
+ {
+  "id": "TURBO",
+  "name": "TURBO",
+  "gameId": "Turbo",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [@BE @BE|@BE @BE @BE].<br>Add a {{C|Void}} into your discard pile."
+ },
+ {
+  "id": "TWIN_STRIKE",
+  "name": "Twin Strike",
+  "gameId": "Twin Strike",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 7,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [5|7] damage twice."
+ },
+ {
+  "id": "UNLOAD",
+  "name": "Unload",
+  "gameId": "Unload",
+  "color": "green",
+  "type": "attack",
+  "rarity": "rare",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 14,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": 18,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [14|18] damage.<br>Discard all non-Attack cards in your hand."
+ },
+ {
+  "id": "UPPERCUT",
+  "name": "Uppercut",
+  "gameId": "Uppercut",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 13,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 13,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal 13 damage.<br>Apply [1|2] $Weak.<br>Apply [1|2] $Vulnerable."
+ },
+ {
+  "id": "VAULT",
+  "name": "Vault",
+  "gameId": "Vault",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "all",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Take an extra turn after this one. <br>End your turn. <br>$Exhaust."
+ },
+ {
+  "id": "VIGILANCE",
+  "name": "Vigilance",
+  "gameId": "Vigilance",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": 8,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": 12,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "Gain [8|12] $Block. <br>Enter $Calm."
+ },
+ {
+  "id": "VIOLENCE",
+  "name": "Violence",
+  "gameId": "Violence",
+  "color": "colorless",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 0,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 4,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "colorless",
+  "text": "Put [3|4] random Attacks from your draw pile into your hand.<br>$Exhaust."
+ },
+ {
+  "id": "VOID",
+  "name": "Void",
+  "gameId": "Void",
+  "color": "colorless",
+  "type": "status",
+  "rarity": "common",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "ethereal"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "ethereal"
+   ]
+  },
+  "pool": "special",
+  "text": "$Unplayable.<br>$Ethereal.<br>Whenever this card is drawn, lose 1 $Energy.",
+  "noUpgrade": true
+ },
+ {
+  "id": "WALLOP",
+  "name": "Wallop",
+  "gameId": "Wallop",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 9,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [9|12] damage. Gain $Block equal to unblocked damage dealt."
+ },
+ {
+  "id": "WARCRY",
+  "name": "Warcry",
+  "gameId": "Warcry",
+  "color": "red",
+  "type": "skill",
+  "rarity": "common",
+  "cost": 0,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Draw [1|2] [card|cards].<br>Put a card from your hand onto the top of your draw pile.<br>$Exhaust."
+ },
+ {
+  "id": "WAVE_OF_THE_HAND",
+  "name": "Wave of the Hand",
+  "gameId": "WaveOfTheHand",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Whenever you gain $Block this turn, apply [1|2] $Weak to ALL enemies."
+ },
+ {
+  "id": "WEAVE",
+  "name": "Weave",
+  "gameId": "Weave",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 0,
+  "target": "enemy",
+  "values": {
+   "damage": 4,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": 6,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [4|6] damage. Whenever you $Scry, return this from the discard pile to your hand."
+ },
+ {
+  "id": "WELL_LAID_PLANS",
+  "name": "Well-Laid Plans",
+  "gameId": "Well Laid Plans",
+  "color": "green",
+  "type": "power",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "At the end of your turn, $Retain up to [1|2] [card|cards]."
+ },
+ {
+  "id": "WHEEL_KICK",
+  "name": "Wheel Kick",
+  "gameId": "WheelKick",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 15,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": 20,
+   "block": null,
+   "magic": 2,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [15|20] damage. Draw 2 cards."
+ },
+ {
+  "id": "WHIRLWIND",
+  "name": "Whirlwind",
+  "gameId": "Whirlwind",
+  "color": "red",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": -1,
+  "target": "allenemy",
+  "values": {
+   "damage": 5,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -1,
+   "damage": 8,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Deal [5|8] damage to ALL enemies X times."
+ },
+ {
+  "id": "WHITE_NOISE",
+  "name": "White Noise",
+  "gameId": "White Noise",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "exhaust"
+  ],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Add a random Power card into your hand.<br>It costs 0 this turn.<br>$Exhaust."
+ },
+ {
+  "id": "WILD_STRIKE",
+  "name": "Wild Strike",
+  "gameId": "Wild Strike",
+  "color": "red",
+  "type": "attack",
+  "rarity": "common",
+  "cost": 1,
+  "target": "enemy",
+  "values": {
+   "damage": 12,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 1,
+   "damage": 17,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "Deal [12|17] damage.<br>Shuffle a {{C|Wound}} into your draw pile."
+ },
+ {
+  "id": "WINDMILL_STRIKE",
+  "name": "Windmill Strike",
+  "gameId": "WindmillStrike",
+  "color": "purple",
+  "type": "attack",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "enemy",
+  "values": {
+   "damage": 7,
+   "block": null,
+   "magic": 4,
+   "hits": null
+  },
+  "flags": [
+   "selfRetain",
+   "strike",
+   "tag:strike"
+  ],
+  "upgrade": {
+   "cost": 2,
+   "damage": 10,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "selfRetain",
+    "strike"
+   ]
+  },
+  "pool": "class",
+  "text": "$Retain. <br>Deal [7|10] damage. <br>When $Retained, increase its damage by [4|5] this combat."
+ },
+ {
+  "id": "WISH",
+  "name": "Wish",
+  "gameId": "Wish",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "none",
+  "values": {
+   "damage": 3,
+   "block": 6,
+   "magic": 25,
+   "hits": null
+  },
+  "flags": [
+   "exhaust",
+   "tag:healing"
+  ],
+  "upgrade": {
+   "cost": 3,
+   "damage": 4,
+   "block": 8,
+   "magic": 30,
+   "hits": null,
+   "flags": [
+    "exhaust"
+   ]
+  },
+  "pool": "class",
+  "text": "Choose one: Gain [6|8] $Plated Armor, [3|4] $Strength, or [25|30] Gold. $Exhaust."
+ },
+ {
+  "id": "WORSHIP",
+  "name": "Worship",
+  "gameId": "Worship",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 2,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 2,
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null,
+   "flags": [
+    "selfRetain"
+   ]
+  },
+  "pool": "class",
+  "text": "[|$Retain. ]Gain 5 $Mantra."
+ },
+ {
+  "id": "WOUND",
+  "name": "Wound",
+  "gameId": "Wound",
+  "color": "colorless",
+  "type": "status",
+  "rarity": "common",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "special",
+  "text": "$Unplayable.",
+  "noUpgrade": true
+ },
+ {
+  "id": "WRAITH_FORM",
+  "name": "Wraith Form",
+  "gameId": "Wraith Form v2",
+  "color": "green",
+  "type": "power",
+  "rarity": "rare",
+  "cost": 3,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 2,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 3,
+   "damage": null,
+   "block": null,
+   "magic": 3,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Gain [2|3] $Intangible.<br>At the end of your turn, lose 1 $Dexterity."
+ },
+ {
+  "id": "WREATH_OF_FLAME",
+  "name": "Wreath of Flame",
+  "gameId": "WreathOfFlame",
+  "color": "purple",
+  "type": "skill",
+  "rarity": "uncommon",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 5,
+   "hits": null
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 1,
+   "damage": null,
+   "block": null,
+   "magic": 8,
+   "hits": null,
+   "flags": []
+  },
+  "pool": "class",
+  "text": "Your next Attack deals [5|8] additional damage."
+ },
+ {
+  "id": "WRITHE",
+  "name": "Writhe",
+  "gameId": "Writhe",
+  "color": "curse",
+  "type": "curse",
+  "rarity": "curse",
+  "cost": -2,
+  "target": "none",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null
+  },
+  "flags": [
+   "innate"
+  ],
+  "upgrade": {
+   "cost": -2,
+   "damage": null,
+   "block": null,
+   "magic": null,
+   "hits": null,
+   "flags": [
+    "innate"
+   ]
+  },
+  "pool": "curse",
+  "text": "$Unplayable.<br>$Innate.",
+  "noUpgrade": true
+ },
+ {
+  "id": "ZAP",
+  "name": "Zap",
+  "gameId": "Zap",
+  "color": "blue",
+  "type": "skill",
+  "rarity": "basic",
+  "cost": 1,
+  "target": "self",
+  "values": {
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": 1
+  },
+  "flags": [],
+  "upgrade": {
+   "cost": 0,
+   "damage": null,
+   "block": null,
+   "magic": 1,
+   "hits": 1,
+   "flags": []
+  },
+  "pool": "basic",
+  "text": "$Channel 1 $Lightning."
+ }
+]

@@ -1,0 +1,59 @@
+{{Ambox
+| title = WARNING!
+| color = red
+| icon = GremlinNob.png
+| message = ''This page is under construction. Information may be wrong or incomplete.''
+}}
+
+
+{{Enemy Infobox|Chosen}}
+{{Keyword Infobox|Hex}}'''The Chosen''' is a normal [[Monsters|Enemy]] encountered exclusively in [[Act 2]].
+
+== Pattern ==
+{{Intents|Chosen}}
+Always starts with {{Int|Chosen|Poke}} followed by {{Int|Chosen|Hex}}. After that, repeats the following pattern for the rest of the combat:
+#{{Int|Chosen|Debilitate}} (50% chance) or {{Int|Chosen|Drain}} (50% chance)
+#{{Int|Chosen|Poke}} (60% chance) or {{Int|Chosen|Zap}} (40% chance)
+
+On {{Asc|17|Ascension}}, '''Chosen''' always starts with {{Int|Chosen|Hex}} instead of {{Int|Chosen|Poke}}.
+
+== In Party With ==
+=== Act 2 ===
+As an easy pool encounter:
+* Solo
+
+As a hard pool encounter alongside either:
+* 1 {{M|Byrd}}
+* 1 {{M|Cultist}}
+<!--
+== Tips ==
+* You can block Hex with Artifact.
+-->
+== Lore ==
+'''Chosen''' are implied to be connected to the {{M|Cultist|Cultists}} and {{M|Awakened One}} in some way, as they all share a blue crow motif.
+
+== Trivia ==
+* The '''Chosen''' is the only thing in the game that can apply {{KW|Hex}}.
+* '''Chosen''' appears in the artwork of {{C|Immolate}}.
+
+== Update History ==
+* Weekly Patch 32: Face Trader
+** The Chosen enemy's AI is now less random.
+
+* Weekly Patch 19: Seed
+** Fixed the turn order for Chosen + Byrd encounter. Chosen no longer applies Vulnerable before Byrd attacks.
+
+* Weekly Patch 10: Quality of Life
+** Adding Cultist + Chosen encounter into City.
+
+* Weekly Patch 7: Setting Up All the Things
+** Hex Power wording improvements.
+
+* Weekly Patch 6: We're Back!
+** The Chosen gets new animations.
+
+* Weekly Patch 3: Balance Balance Balance
+** Chosen enemy buffed.
+
+{{EnemyNav}}
+[[Category:Monsters]]

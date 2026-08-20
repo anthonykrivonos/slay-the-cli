@@ -1,0 +1,102 @@
+'''Gremlins''' are encountered as normal [[Monsters|Enemies]] in [[Act 1]]. In [[Act 2]], Gremlins appear only as {{KW|Minion|Minions}} in the {{M|Gremlin Leader|Gremlin Leader's}} [[Elite]] encounter.
+{{TOC limit|2}}
+
+== Fat Gremlin ==
+{{Enemy Infobox|Fat Gremlin}}
+'''Fat Gremlins''' focus on applying {{KW|Weak}}.
+
+=== Pattern ===
+{{Intents|Fat Gremlin}}
+'''Fat Gremlin''' uses {{Int|Fat Gremlin|Smash}} every turn.
+{{Clear}}
+
+== Mad Gremlin ==
+{{Enemy Infobox|Mad Gremlin}} {{Power Infobox|Angry}}
+'''Mad Gremlins''' will do more damage as they are attacked.
+
+=== Pattern ===
+{{Intents|Mad Gremlin}}
+'''Mad Gremlin''' uses {{Int|Mad Gremlin|Scratch}} every turn.
+{{Clear}}
+
+== Shield Gremlin ==
+{{Enemy Infobox|Shield Gremlin}}
+'''Shield Gremlins''' focus on giving {{KW|Block}} to their allies.
+
+=== Pattern ===
+{{Intents|Shield Gremlin}}
+'''Shield Gremlin''' uses {{Int|Shield Gremlin|Protect}} every turn. If it is the only enemy left, it will switch to using {{Int|Shield Gremlin|Shield Bash}} every turn.
+{{Clear}}
+
+== Sneaky Gremlin ==
+{{Enemy Infobox|Sneaky Gremlin}}
+'''Sneaky Gremlins''' focus on doing consistent damage each turn.
+
+=== Pattern ===
+{{Intents|Sneaky Gremlin}}
+'''Sneaky Gremlin''' uses {{Int|Sneaky Gremlin|Puncture}} every turn.
+{{Clear}}
+
+== Gremlin Wizard ==
+{{Enemy Infobox|Gremlin Wizard}}
+'''Gremlin Wizards''' charge up before unleashing a powerful attack.
+
+=== Pattern ===
+{{Intents|Gremlin Wizard}}
+'''Gremlin Wizard''' will always start by using {{Int|Gremlin Wizard|Charging}} twice in a row, then using {{Int|Gremlin Wizard|Ultimate Blast}}. After that and for the rest of combat, '''Gremlin Wizard''' will use {{Int|Gremlin Wizard|Charging}} three times in a row before using {{Int|Gremlin Wizard|Ultimate Blast}}.
+
+On {{Asc|17|Ascension}}, '''Gremlin Wizard''' will use {{Int|Gremlin Wizard|Charging}} twice in a row, then use {{Int|Gremlin Wizard|Ultimate Blast}} every turn for the rest of combat.
+{{Clear}}
+
+== In Party With ==
+=== Act 1 ===
+In the '''Gremlin Gang''' encounter, randomly choosing from the following list for a total of 4 enemies:
+* 2 {{M|Fat Gremlin|Fat Gremlins}}
+* 2 {{M|Sneaky Gremlin|Sneaky Gremlins}}
+* 2 {{M|Mad Gremlin|Mad Gremlins}}
+* 1 {{M|Shield Gremlin}}
+* 1 {{M|Gremlin Wizard}}
+
+=== Act 2 ===
+As {{KW|Minion|Minions}} in an Elite encounter consisting of:
+* 2 random '''Gremlins'''
+* 1 {{M|Gremlin Leader}}
+
+= Tips =
+* Gremlins summoned by {{M|Gremlin Leader}} will always have the {{KW|Minion}} [[Buff]], so the effects of {{KW|Fatal}} will not work on them.
+
+= Trivia =
+* The {{E|Wheel of Change}} and {{E|Match and Keep}} [[Events]] are run by Gremlins.
+* {{R|Gremlin Visage}} is a reference to Gremlins, although it doesn't resemble any of the types seen in the game.
+** {{R|Gremlin Horn}} also references Gremlins, specifically {{M|Gremlin Nob}}.
+* Mad Gremlin appears in the artwork of {{C|Riddle with Holes}} and {{C|Trip}}.
+* An unidentified Gremlin appears in the artwork of {{C|Cleave}}, {{C|Hemokinesis}}, {{C|Reckless Charge}}, {{C|Sever Soul}}, {{C|Eviscerate}}, {{C|Noxious Fumes}}, {{C|Rip and Tear}}, {{C|Bowling Bash}} and {{C|Expunger}}.
+
+= Update History =
+* Patch V1.1: The Dealer
+** Fixed enemy order issues in Slime Boss, Gremlin Leader, and Reptomancer encounters.
+
+* Weekly Patch 39: We Meet Again!
+** Asc 17 Gremlin Wizard no longer attacks a turn early, but now keeps attacking.
+
+* Weekly Patch 33: Terror
+** Gremlin Leader summon used the incorrect RNG, resulting in different enemies for the same seed.
+
+* Weekly Patch 21: Channel Lightning
+** Gremlin Leader's minion summon is now seeded.
+
+* Weekly Patch 17: Patched in the Face
+** Fixed issue where Shield Gremlin and Orb Walker had upped values in the wrong Ascension Level.
+
+* Weekly Patch 15: Surprise Patch
+** Fixed issue where Gremlin Thief stopped using Ascension 2 damage after first hit.
+
+* Weekly Patch 14: Bullet Time
+** In Fast Mode, Gremlin Leader's minions spawn a lot faster.
+
+* Weekly Patch 6: We're Back!
+** Little gremlins no longer yell about escaping if they're dead. Corpses don't yell.
+
+{{EnemyNav}}
+[[Category:Monsters]]
+[[Category:Minions]]

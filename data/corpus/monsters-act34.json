@@ -1,0 +1,1223 @@
+{
+  "meta": {
+    "corpus": "Slay the Spire V2.3.4 — Act 3 + Act 4 monsters (exact AI transcription)",
+    "primarySource": "references/sts_lightspeed (MonsterSpecific.cpp is ground truth; disagreements with other sources are listed per-entity under conflicts)",
+    "crossChecks": [
+      "references/spire-archive/data/sts1/monsters.json",
+      "references/wiki/Enemies.lua",
+      "references/wiki/pages/*.wikitext"
+    ],
+    "conventions": {
+      "damage": "base damage per hit BEFORE strength/weak/vulnerable/back-attack modifiers; hits = number of hits (null = not an attack)",
+      "asc": "keys are ascension thresholds; an entry overrides the listed fields at that ascension level and above",
+      "hp.ascLevel": "ascension level at which the asc HP range is used instead of base",
+      "effects.power": "lightspeed MonsterStatus / PlayerStatus enum names; 'AddCard:<CARD>:<pile>' means create card copies (pile: discard | drawShuffle | drawTop | masterDeck)",
+      "ai.roll": "every Monster::rollMove consumes aiRng.random(99) even when the outcome is forced; bc.noOpRollMove() also consumes one aiRng.random(99) for RNG-stream parity; extra rolls consumed inside getMove are spelled out in ai.spec",
+      "turnNumber": "getMonsterTurnNumber() = battle turn, 1-based"
+    }
+  },
+  "monsters": [
+    {
+      "id": "DARKLING",
+      "name": "Darkling",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [48, 56], "asc": [50, 59], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "REGROW", "amount": null }
+      ],
+      "moves": {
+        "DARKLING_NIP": {
+          "intent": "attack",
+          "damage": null,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "DARKLING_CHOMP": {
+          "intent": "attack",
+          "damage": 8,
+          "hits": 2,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 9 } }
+        },
+        "DARKLING_HARDEN": {
+          "intent": "defend",
+          "damage": null,
+          "hits": null,
+          "block": 12,
+          "effects": [],
+          "asc": { "17": { "effects": [{ "power": "STRENGTH", "amount": 2, "target": "self" }] } }
+        },
+        "DARKLING_REGROW": {
+          "intent": "unknown",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "DARKLING_REINCARNATE": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "roll < 50 -> HARDEN, else NIP (applies to all three Darklings)",
+        "spec": "NIP damage: miscInfo is rolled once at monster construction with monsterHpRng: asc>=2 ? random(9,13) : random(7,11); NIP deals miscInfo + (asc>=2 ? 2 : 0). getMove(roll): (1) if firstTurn: roll<50 -> HARDEN else NIP. (2) if halfDead -> REINCARNATE. (3) if roll<40: if lastMove != CHOMP and this monster's idx != 1 -> CHOMP; else roll = aiRng.random(40,99) and fall through. (4) if roll<70: if lastMove != HARDEN -> HARDEN; else NIP. (5) else (roll>=70): if not lastTwoMoves(NIP) -> NIP; else recurse the whole getMove with a fresh roll = aiRng.random(0,99). Move handlers: CHOMP -> addToBot RollMove; HARDEN -> gain 12 block (+2 STRENGTH at asc>=17), rollMove immediately; NIP -> addToBot RollMove; REGROW -> does nothing, rollMove immediately; REINCARNATE -> curHp = maxHp/2 (integer), halfDead=false, monstersAlive++, re-gain REGROW power, +1 STRENGTH if player has Philosopher's Stone, rollMove immediately. Death/revive cycle (Monster::die with REGROW power): monstersAlive--; if monstersAlive == 0 -> PLAYER_VICTORY (the whole group can never be simultaneously dead/half-dead: killing the last living Darkling wins even while others are regrowing); otherwise the Darkling clears ALL status effects and strength, sets block 0, becomes halfDead (untargetable) and its move becomes REGROW. It still takes turns while halfDead: next turn executes REGROW (nothing) and rolls -> REINCARNATE (because halfDead); the turn after that it executes REINCARNATE and revives at 50% max HP. Net: revives 2 turns after death (wiki power name: Life Link).",
+        "historyRules": [
+          "CHOMP cannot be used twice in a row",
+          "CHOMP is never used by the middle Darkling (spawn idx 1)",
+          "HARDEN cannot be used twice in a row",
+          "NIP cannot be used three times in a row",
+          "while halfDead the rolled move is always REINCARNATE"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "moves.DARKLING_CHOMP.hits",
+          "lightspeed": "single hit (attackPlayerHelper(asc2?9:8) with default times=1)",
+          "wiki": "Deals 8x2 (asc2: 9x2) damage - two hits",
+          "spireArchive": "hits: 2",
+          "resolution": "recorded hits=2: wiki + spire-archive agree and the decompiled game issues two DamageActions; lightspeed's single hit is a simplification/bug (halves Chomp's total damage)"
+        },
+        {
+          "field": "moves.DARKLING_NIP.damage (asc2 range)",
+          "lightspeed": "constructor rolls random(9,13) at asc>=2 AND the move adds +2 at asc>=2 -> effective 11-15",
+          "wiki": "N between 9-13 at asc2 (7-11 base)",
+          "spireArchive": "damage null",
+          "resolution": "unresolved without game JAR; lightspeed recorded as primary (rng call random(9,13) at asc2 matters for seed parity), wiki implies the +2 should not stack on the 9-13 roll"
+        },
+        {
+          "field": "spireArchive move id",
+          "spireArchive": "lists Darkling's Regrow move under id COUNT",
+          "resolution": "mapping quirk only"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:152-154,1437-1477,3002-3045", "Monster.cpp:124-130,283-325", "wiki:Darkling", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "ORB_WALKER",
+      "name": "Orb Walker",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [90, 96], "asc": [92, 102], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "GENERIC_STRENGTH_UP", "amount": 3, "asc": { "17": { "amount": 5 } } }
+      ],
+      "moves": {
+        "ORB_WALKER_LASER": {
+          "intent": "attack_debuff",
+          "damage": 10,
+          "hits": 1,
+          "block": null,
+          "effects": [
+            { "power": "AddCard:BURN:drawShuffle", "amount": 1, "target": "player" },
+            { "power": "AddCard:BURN:discard", "amount": 1, "target": "player" }
+          ],
+          "asc": { "2": { "damage": 11 } }
+        },
+        "ORB_WALKER_CLAW": {
+          "intent": "attack",
+          "damage": 15,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 16 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule (same distribution from turn 1)",
+        "spec": "getMove(roll): if roll<40: CLAW unless lastTwoMoves(CLAW) -> then LASER; else (roll>=40): LASER unless lastTwoMoves(LASER) -> then CLAW. Both move handlers addToBot RollMove. Strength Up power (GENERIC_STRENGTH_UP): gains that much STRENGTH at the end of every round.",
+        "historyRules": [
+          "CLAW cannot be used three times in a row",
+          "LASER cannot be used three times in a row"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:32-35,200-202,990-1001,2568-2581", "wiki:Orb_Walker", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "SPIKER",
+      "name": "Spiker",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [42, 56], "asc": [44, 60], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "THORNS", "amount": 3, "asc": { "2": { "amount": 4 }, "17": { "amount": 7 } } }
+      ],
+      "moves": {
+        "SPIKER_CUT": {
+          "intent": "attack",
+          "damage": 7,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 9 } }
+        },
+        "SPIKER_SPIKE": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "THORNS", "amount": 2, "target": "self" }],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule",
+        "spec": "miscInfo counts SPIKE uses (incremented when SPIKE executes). getMove(roll): if miscInfo > 5 OR (roll < 50 AND lastMove != CUT) -> CUT; else SPIKE. CUT handler addToBot RollMove; SPIKE handler increments use count, gains 2 THORNS, rollMove immediately.",
+        "historyRules": [
+          "CUT cannot be used twice in a row (while SPIKE is still available)",
+          "SPIKE can be used at most 6 times per combat; afterwards CUT is used every turn"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "category",
+          "spireArchive": "type: Elite",
+          "wiki": "Type: Normal (act 3 hallway Shapes encounters)",
+          "resolution": "Normal - spire-archive mislabels the Shapes"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:204-208,1398-1407,2976-2983", "wiki:Shapes", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "REPULSOR",
+      "name": "Repulsor",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [29, 35], "asc": [31, 38], "ascLevel": 7 },
+      "prebattle": [],
+      "moves": {
+        "REPULSOR_BASH": {
+          "intent": "attack",
+          "damage": 11,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 13 } }
+        },
+        "REPULSOR_REPULSE": {
+          "intent": "debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "AddCard:DAZED:drawShuffle", "amount": 2, "target": "player" }],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule",
+        "spec": "getMove(roll): if roll < 20 AND lastMove != BASH -> BASH; else REPULSE. BASH handler addToBot RollMove; REPULSE handler shuffles 2 DAZED into draw pile immediately (executed during the monster turn, not queued) then rollMove immediately.",
+        "historyRules": [
+          "BASH cannot be used twice in a row (Daze is 80%, Attack 20%)"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:1388-1396,2967-2974", "wiki:Shapes", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "EXPLODER",
+      "name": "Exploder",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [30, 30], "asc": [30, 35], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "EXPLOSIVE", "amount": 3 }
+      ],
+      "moves": {
+        "EXPLODER_SLAM": {
+          "intent": "attack",
+          "damage": 9,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 11 } }
+        },
+        "EXPLODER_EXPLODE": {
+          "intent": "unknown",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [
+            { "power": "NonAttackDamage", "amount": 30, "target": "player" },
+            { "power": "Suicide(triggerRelics=true)", "amount": null, "target": "self" }
+          ],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always SLAM (getMove only ever returns SLAM; called on turn 1)",
+        "spec": "Fixed pattern SLAM, SLAM, EXPLODE. SLAM handler: attack 9/11; if lastTwoMoves(SLAM) (i.e. this was the second consecutive SLAM) -> setMove EXPLODE else setMove SLAM; noOpRollMove. EXPLODE handler: addToBot DamagePlayer(30) - non-attack damage: blockable and capped by player Intangible but NOT modified by strength/weak/vulnerable/back-attack; then addToBot Suicide(triggerRelics=true) - the Exploder dies (a real death: on-death triggers such as Gremlin Horn fire); noOpRollMove. The in-game EXPLOSIVE power is just the 3-turn countdown display for this fixed pattern; lightspeed does not track a power counter (comment: 'game adds explosive power').",
+        "historyRules": [
+          "explodes on its 3rd turn, always (Attack, Attack, Explode)"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "moves.EXPLODER_EXPLODE (spire-archive)",
+          "spireArchive": "lists the explode move as id BLOCK with null damage",
+          "resolution": "archive data-quality issue; explode deals 30"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:160-161,1372-1386,2962-2965", "Actions.cpp:91-96", "Player.cpp:174-207", "wiki:Shapes", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "TRANSIENT",
+      "name": "Transient",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [999, 999], "asc": [999, 999], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "SHIFTING", "amount": null },
+        { "power": "FADING", "amount": 5, "asc": { "17": { "amount": 6 } } }
+      ],
+      "moves": {
+        "TRANSIENT_ATTACK": {
+          "intent": "attack",
+          "damage": 30,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 40 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always TRANSIENT_ATTACK (only move)",
+        "spec": "getMove always returns TRANSIENT_ATTACK. Damage at execution = (asc>=2 ? 40 : 30) + 10 * (monsterTurnNumber - 1); turn 1 = 30/40, turn 2 = 40/50, etc. Handler: attack; if FADING == 1 at execution time -> addToBot Suicide(triggerRelics=false) (fades away: hp set to 0 and monstersAlive--, but Monster::die is NOT called - no on-death relic/power triggers; if it was the only monster the player still wins); then noOpRollMove; then decrement FADING by 1. So with Fading 5 it attacks on turns 1-5 and disappears at the end of its 5th turn (6 turns / 6 attacks at asc17+). SHIFTING (on taking unblocked HP loss): loses STRENGTH equal to the HP lost and gains SHACKLED for the same amount; SHACKLED restores that STRENGTH at the end of the monster's own turn - i.e. damaging it during your turn weakens only its next attack this cycle. HP is a fixed 999 at all ascensions and consumes NO monsterHpRng call at init.",
+        "historyRules": []
+      },
+      "conflicts": [
+        {
+          "field": "category",
+          "spireArchive": "type: Elite",
+          "wiki": "Type: Normal (act 3 hard-pool hallway fight)",
+          "resolution": "Normal"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:119-124,172-175,1496-1508,3065-3067", "Monster.cpp:327-337,393-396", "wiki:Transient", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "THE_MAW",
+      "name": "The Maw",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [300, 300], "asc": [300, 300], "ascLevel": 7 },
+      "prebattle": [],
+      "moves": {
+        "THE_MAW_ROAR": {
+          "intent": "strong_debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [
+            { "power": "WEAK", "amount": 3, "target": "player" },
+            { "power": "FRAIL", "amount": 3, "target": "player" }
+          ],
+          "asc": { "17": { "effects": [
+            { "power": "WEAK", "amount": 5, "target": "player" },
+            { "power": "FRAIL", "amount": 5, "target": "player" }
+          ] } }
+        },
+        "THE_MAW_DROOL": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "STRENGTH", "amount": 3, "target": "self" }],
+          "asc": { "17": { "effects": [{ "power": "STRENGTH", "amount": 5, "target": "self" }] } }
+        },
+        "THE_MAW_SLAM": {
+          "intent": "attack",
+          "damage": 25,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 30 } }
+        },
+        "THE_MAW_NOM": {
+          "intent": "attack",
+          "damage": 5,
+          "hits": null,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always ROAR",
+        "spec": "getMove(roll): if firstTurn -> ROAR. else if roll < 50 AND lastMove != NOM -> NOM. else if lastMove != SLAM -> SLAM. else DROOL. NOM hit count at execution = floor((monsterTurnNumber + 1) / 2) = ceil(turn/2) hits of 5 (turn 2 -> 1 hit... turn 3 -> 2 hits, turn 5 -> 3 hits, etc.; damage scales with how long the fight lasts). Handlers: ROAR applies Weak+Frail immediately, rollMove immediately. DROOL buffs immediately, rollMove immediately. SLAM attacks, addToBot RollMove. NOM attacks, then FORCES next move = DROOL (setMove, no AI choice) and noOpRollMove. Consequently the 'roll<50 && last!=NOM' branch is never blocked by history in practice (NOM is always followed by DROOL). HP is a fixed 300 at every ascension (the only enemy whose max HP never scales) and consumes NO monsterHpRng call at init.",
+        "historyRules": [
+          "after NOM the next move is always DROOL (hard-coded)",
+          "SLAM cannot be used twice in a row (falls through to DROOL)"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:119-124,1410-1435,2985-3000", "wiki:The_Maw", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "SPIRE_GROWTH",
+      "name": "Spire Growth",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [170, 170], "asc": [190, 190], "ascLevel": 7 },
+      "prebattle": [],
+      "moves": {
+        "SPIRE_GROWTH_QUICK_TACKLE": {
+          "intent": "attack",
+          "damage": 16,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 18 } }
+        },
+        "SPIRE_GROWTH_SMASH": {
+          "intent": "attack",
+          "damage": 22,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 25 } }
+        },
+        "SPIRE_GROWTH_CONSTRICT": {
+          "intent": "strong_debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "CONSTRICTED", "amount": 10, "target": "player" }],
+          "asc": { "17": { "effects": [{ "power": "CONSTRICTED", "amount": 12, "target": "player" }] } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule",
+        "spec": "getMove(roll): useConstrict = (player does NOT have CONSTRICTED) AND lastMove != CONSTRICT AND (asc >= 17 OR roll >= 50). if useConstrict -> CONSTRICT. else if roll < 50 AND not lastTwoMoves(QUICK_TACKLE) -> QUICK_TACKLE. else if not lastTwoMoves(SMASH) -> SMASH. else QUICK_TACKLE. At asc17+ Constrict is used whenever it is legal (regardless of roll); below asc17 it needs roll >= 50. CONSTRICT handler applies the debuff immediately then addToBot RollMove; attacks addToBot RollMove.",
+        "historyRules": [
+          "CONSTRICT never used while the player is already Constricted",
+          "CONSTRICT cannot be used twice in a row",
+          "QUICK_TACKLE cannot be used three times in a row",
+          "SMASH cannot be used three times in a row"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:1479-1494,3047-3063", "wiki:Spire_Growth", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "WRITHING_MASS",
+      "name": "Writhing Mass",
+      "category": "normal",
+      "acts": [3],
+      "hp": { "base": [160, 160], "asc": [175, 175], "ascLevel": 7 },
+      "prebattle": [
+        { "power": "REACTIVE", "amount": null },
+        { "power": "MALLEABLE", "amount": 3 }
+      ],
+      "moves": {
+        "WRITHING_MASS_STRONG_STRIKE": {
+          "intent": "attack",
+          "damage": 32,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 38 } }
+        },
+        "WRITHING_MASS_MULTI_STRIKE": {
+          "intent": "attack",
+          "damage": 7,
+          "hits": 3,
+          "block": null,
+          "effects": [],
+          "asc": { "2": { "damage": 9 } }
+        },
+        "WRITHING_MASS_FLAIL": {
+          "intent": "attack_defend",
+          "damage": 15,
+          "hits": 1,
+          "block": 16,
+          "effects": [],
+          "asc": { "2": { "damage": 16, "block": 18 } }
+        },
+        "WRITHING_MASS_WITHER": {
+          "intent": "attack_debuff",
+          "damage": 10,
+          "hits": 1,
+          "block": null,
+          "effects": [
+            { "power": "WEAK", "amount": 2, "target": "player" },
+            { "power": "VULNERABLE", "amount": 2, "target": "player" }
+          ],
+          "asc": { "2": { "damage": 12 } }
+        },
+        "WRITHING_MASS_IMPLANT": {
+          "intent": "strong_debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "AddCard:PARASITE:masterDeck", "amount": 1, "target": "player" }],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "roll < 33 -> MULTI_STRIKE; roll < 66 -> FLAIL; else WITHER (~1/3 each)",
+        "spec": "miscInfo = haveUsedImplant flag. getMove(roll), non-first turn - loop with band re-rolls: (band A, roll<10) if lastMove != STRONG_STRIKE -> STRONG_STRIKE; else roll = aiRng.random(10,99), fall through. (band B, roll<20) if !haveUsedImplant AND lastMove != IMPLANT -> IMPLANT; else if aiRng.randomBoolean(0.1) -> STRONG_STRIKE; else roll = aiRng.random(20,99), fall through. (band C, roll<40) if lastMove != WITHER -> WITHER; else if aiRng.randomBoolean(0.4): roll = aiRng.random(0,19); if that roll < 10 -> STRONG_STRIKE; else if !haveUsedImplant -> IMPLANT; else if aiRng.randomBoolean(0.1) -> STRONG_STRIKE; else roll = aiRng.random(20,99) and CONTINUE loop from band C; else (the 0.4 fails) roll = aiRng.random(40,99), fall through. (band D, roll<70) if lastMove != MULTI_STRIKE -> MULTI_STRIKE; else if aiRng.randomBoolean(0.3) -> FLAIL; else roll = aiRng.random(0,39) and CONTINUE loop from band A. (band E, roll>=70) if lastMove != FLAIL -> FLAIL; else WITHER. Base distribution: STRONG_STRIKE 10%, IMPLANT 10%, WITHER 20%, MULTI_STRIKE 30%, FLAIL 30%. IMPLANT handler: set haveUsedImplant; if player lacks OMAMORI and has DARKSTONE_PERIAPT -> player maxHP +6 immediately; rollMove immediately. The PARASITE curse is added to the master deck when the battle ends (exitBattle): if the player has OMAMORI its counter is consumed instead; the curse is granted once Implant has been used even if the Writhing Mass is later killed. Attack handlers addToBot RollMove (FLAIL also addToBot MonsterGainBlock). REACTIVE power: on each instance of unblocked attack damage, queues intent re-rolls; when they resolve, rollMove is invoked once per hit taken (each consumes aiRng.random(99) and possible band re-rolls; the final result becomes the new intent; the current intent counts as lastMove so a Reactive reroll also cannot repeat it). MALLEABLE: on each unblocked attack-damage instance gains block equal to current Malleable value then value +1; value resets to 3 at end of the monster's turn.",
+        "historyRules": [
+          "no move can be used (or Reactive-rerolled into) twice in a row",
+          "IMPLANT can only be used once per combat",
+          "wiki conditional table (percent chance of NEXT move given last used move) - Parasite row: after Block ~14%, after Debuff 12.5%, after MultiHit ~14%, after BigHit ~11%; Block row: after Parasite ~33%, after Debuff 37.5%, after MultiHit ~43%, after BigHit ~33%; Debuff row: after Parasite ~22%, after Block ~29%, after MultiHit ~29%, after BigHit ~22%; MultiHit row: after Parasite ~33%, after Block ~43%, after Debuff 37.5%, after BigHit ~33%; BigHit row: after Parasite ~11%, after Block ~14%, after Debuff 12.5%, after MultiHit ~14% (approximations from the reroll cascade above)"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "prebattle.MALLEABLE.amount",
+          "lightspeed": "3 (and end-of-turn reset hardcoded to 3)",
+          "wiki": "Malleable 4 (Snake Plant is listed at 3, so the wiki distinguishes deliberately)",
+          "resolution": "unresolved without game JAR; lightspeed recorded as primary, but wiki is likely game-correct (block amounts do not affect the RNG stream so a wrong value would survive lightspeed's seed tests)"
+        },
+        {
+          "field": "ai.firstTurn move set",
+          "lightspeed": "MULTI_STRIKE / FLAIL(Block Attack) / WITHER(Debuff Attack)",
+          "wiki": "prose says Multi Hit / BIG Hit / Debuff Attack",
+          "resolution": "lightspeed recorded; wiki prose likely wrong (lightspeed matches the decompiled 33/66 band structure over moves 1,2,3 = MultiStrike, Flail, Wither)"
+        },
+        {
+          "field": "moves.WRITHING_MASS_FLAIL.block (asc2)",
+          "lightspeed": "block 16, 18 at asc>=2",
+          "wiki": "Gains 16 Block at all ascensions",
+          "spireArchive": "block null",
+          "resolution": "lightspeed recorded as primary; unverifiable without JAR"
+        },
+        {
+          "field": "category",
+          "spireArchive": "type: Elite",
+          "wiki": "Type: Normal (act 3 hard-pool hallway fight)",
+          "resolution": "Normal"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:210-215,1510-1543,3069-3155", "Monster.cpp:47-49,369-383", "BattleContext.cpp:459-469", "Actions.cpp:133-143", "wiki:Writhing_Mass", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "GIANT_HEAD",
+      "name": "Giant Head",
+      "category": "elite",
+      "acts": [3],
+      "hp": { "base": [500, 500], "asc": [520, 520], "ascLevel": 8 },
+      "prebattle": [
+        { "power": "SLOW", "amount": 0 }
+      ],
+      "moves": {
+        "GIANT_HEAD_COUNT": {
+          "intent": "attack",
+          "damage": 13,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "GIANT_HEAD_GLARE": {
+          "intent": "debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }],
+          "asc": {}
+        },
+        "GIANT_HEAD_IT_IS_TIME": {
+          "intent": "attack",
+          "damage": 30,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "3": { "damage": 40 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule (Count/Glare 50/50)",
+        "spec": "getMove(roll): if monsterTurnNumber >= 4 at roll time -> IT_IS_TIME (rolls happen during the monster's turn for the NEXT turn, so It Is Time is first USED on turn 5 and repeats forever). else if roll < 50: GLARE unless lastTwoMoves(GLARE) -> then COUNT. else: COUNT unless lastTwoMoves(COUNT) -> then GLARE. IT_IS_TIME damage at execution = (asc>=3 ? 40 : 30) + 5 * min(monsterTurnNumber - 5, 6); first use (turn 5) +0, growing +5 per turn to a cap of +30 -> max 60 (asc3+: 70). Handlers: COUNT attack, addToBot RollMove; GLARE applies Weak immediately, rollMove immediately; IT_IS_TIME attack, forces next move = IT_IS_TIME via noOpRollMove path (the >= 4 turn check makes every subsequent roll return it). SLOW power: starts at 0, +1 per card the player plays; the Giant Head takes (10*X)% more attack damage this turn; resets to 0 at end of each round.",
+        "historyRules": [
+          "GLARE cannot be used three times in a row",
+          "COUNT cannot be used three times in a row",
+          "from turn 5 on, always IT_IS_TIME"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "ai IT_IS_TIME start turn at asc18",
+          "lightspeed": "no ascension branch; It Is Time always starts turn 5",
+          "wiki": "at Ascension 18+ the Count/Glare phase lasts only 3 turns (countdown starts at '3..'), so It Is Time starts on turn 4",
+          "resolution": "lightspeed gap; real game almost certainly starts one turn earlier at A18 per wiki - implementers should add the asc18 branch (and note the damage formula's turnNumber-5 term likely becomes turnNumber-4 at A18); unverifiable exactly without JAR"
+        },
+        {
+          "field": "moves.GIANT_HEAD_IT_IS_TIME.damage (spire-archive)",
+          "spireArchive": "damage 5, damage_ascension 15",
+          "lightspeed": "30/40 base + 5-per-turn scaling",
+          "resolution": "archive is wrong (appears to have stored only the per-turn increment)"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:163-166,1545-1561,3157-3179", "MonsterMoveDamage.cpp:74-79", "Monster.cpp:79-81", "BattleContext.cpp:1954-1956", "wiki:Giant_Head", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "NEMESIS",
+      "name": "Nemesis",
+      "category": "elite",
+      "acts": [3],
+      "hp": { "base": [185, 185], "asc": [200, 200], "ascLevel": 8 },
+      "prebattle": [],
+      "moves": {
+        "NEMESIS_ATTACK": {
+          "intent": "attack",
+          "damage": 6,
+          "hits": 3,
+          "block": null,
+          "effects": [],
+          "asc": { "3": { "damage": 7 } }
+        },
+        "NEMESIS_SCYTHE": {
+          "intent": "attack",
+          "damage": 45,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "NEMESIS_DEBUFF": {
+          "intent": "debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "AddCard:BURN:discard", "amount": 3, "target": "player" }],
+          "asc": { "3": { "effects": [{ "power": "AddCard:BURN:discard", "amount": 5, "target": "player" }] } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "roll < 50 -> ATTACK (Tri Attack), else DEBUFF (Tri Burn); never Scythe turn 1",
+        "spec": "getMove(roll), non-first turn: (roll<30) if SCYTHE not in last two moves -> SCYTHE; else if aiRng.randomBoolean(): ATTACK unless lastTwoMoves(ATTACK) -> then DEBUFF; else (bool false): DEBUFF unless lastMove(DEBUFF) -> then ATTACK. (30<=roll<65) if not lastTwoMoves(ATTACK) -> ATTACK; else if (!aiRng.randomBoolean() OR SCYTHE in last two) -> DEBUFF; else SCYTHE. (roll>=65) if lastMove != DEBUFF -> DEBUFF; else if aiRng.randomBoolean() AND SCYTHE not in last two -> SCYTHE; else ATTACK. Intangible cycle: after executing ANY move, if it does not currently have INTANGIBLE it gains INTANGIBLE 2 (ATTACK/SCYTHE queue the buff via addToBot; DEBUFF buffs immediately). INTANGIBLE decrements at the end of the monster's turn, so: turn 1 not intangible -> gains 2 -> end-of-turn 1; turn 2 intangible (all damage to it capped at 1) -> end-of-turn 0; turn 3 not intangible -> re-gains... i.e. intangible on every even-numbered turn. DEBUFF handler creates the Burns immediately and rolls immediately; attack handlers addToBot RollMove.",
+        "historyRules": [
+          "SCYTHE cannot be used if it was either of the last two moves",
+          "DEBUFF (Tri Burn) cannot be used twice in a row",
+          "ATTACK (Tri Attack) cannot be used three times in a row",
+          "intangible every other turn (gains Intangible 2 after acting on any turn it is not intangible)"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "moves.NEMESIS_DEBUFF burn count ascension threshold",
+          "lightspeed": "asc >= 3 -> 5 Burns",
+          "wiki": "3 Burns, 5 at Ascension 18+",
+          "resolution": "lightspeed recorded as primary per instructions, but wiki is likely game-correct (A18 is the elite 'harder mechanics' tier; card counts do not affect the RNG stream so lightspeed's seed tests would not catch an asc3/asc18 mixup)"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:1563-1585,2513-2566", "Monster.cpp:55-57", "wiki:Nemesis", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "REPTOMANCER",
+      "name": "Reptomancer",
+      "category": "elite",
+      "acts": [3],
+      "hp": { "base": [180, 190], "asc": [190, 200], "ascLevel": 8 },
+      "prebattle": [
+        { "power": "MINION_LEADER", "amount": null }
+      ],
+      "moves": {
+        "REPTOMANCER_SUMMON": {
+          "intent": "unknown",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "SummonDaggers", "amount": 1, "target": "allies" }],
+          "asc": { "18": { "effects": [{ "power": "SummonDaggers", "amount": 2, "target": "allies" }] } }
+        },
+        "REPTOMANCER_SNAKE_STRIKE": {
+          "intent": "attack_debuff",
+          "damage": 13,
+          "hits": 2,
+          "block": null,
+          "effects": [{ "power": "WEAK", "amount": 1, "target": "player" }],
+          "asc": { "3": { "damage": 16 } }
+        },
+        "REPTOMANCER_BIG_BITE": {
+          "intent": "attack",
+          "damage": 30,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "3": { "damage": 34 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always SUMMON (the canSpawn cap is NOT consulted on turn 1: at asc18 this brings the fight to 4 daggers)",
+        "spec": "getMove(roll): if firstTurn -> SUMMON. Otherwise loop: (roll<33) if lastMove != SNAKE_STRIKE -> SNAKE_STRIKE; else roll = aiRng.random(33,99), fall through. (roll<66) if not lastTwoMoves(SUMMON) AND canSpawn -> SUMMON; else SNAKE_STRIKE. (roll>=66) if lastMove != BIG_BITE -> BIG_BITE; else roll = aiRng.random(0,65) and repeat the loop. canSpawn = bc.monsters.monstersAlive < 4. SUMMON handler: reptomancerSummon(asc>=18 ? 2 : 1): open slots are searched in fixed order [4,1,3,0] (Reptomancer occupies slot 2); each summoned DAGGER is constructed (hp roll 20-25 via monsterHpRng), gets MINION, has its move preset to DAGGER_STAB (no AI roll for the move itself, but bc.noOpRollMove() consumes one aiRng.random(99) per dagger), gains +1 STRENGTH if player has Philosopher's Stone, and SKIPS its turn on the round it was summoned; then Reptomancer rollMove immediately. Attack handlers addToBot RollMove. MINION_LEADER: killing the Reptomancer ends the fight (all Daggers flee).",
+        "historyRules": [
+          "SNAKE_STRIKE cannot be used twice in a row",
+          "BIG_BITE cannot be used twice in a row",
+          "SUMMON cannot be used three times in a row",
+          "SUMMON is skipped (Snake Strike instead) when the spawn cap is reached"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "ai spawn cap",
+          "lightspeed": "canSpawn = monstersAlive < 4 (so at most 3 daggers alive alongside the living Reptomancer; the forced first-turn Summon at asc18 can still produce 4 daggers momentarily)",
+          "wiki": "Only 4 Daggers can be in play at any time; Spawn Dagger with 4 daggers in play becomes Snake Strike",
+          "resolution": "unresolved without game JAR - the exact cap expression differs (lightspeed counts all alive monsters incl. Reptomancer; wiki counts daggers only)"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:104-107,238-240,1587-1601,2600-2636,3517-3560", "MonsterGroup.cpp:339-345", "wiki:Reptomancer", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "DAGGER",
+      "name": "Dagger",
+      "category": "minion",
+      "acts": [3],
+      "hp": { "base": [20, 25], "asc": [20, 25], "ascLevel": 8 },
+      "prebattle": [
+        { "power": "MINION", "amount": null }
+      ],
+      "moves": {
+        "DAGGER_STAB": {
+          "intent": "attack_debuff",
+          "damage": 9,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "AddCard:WOUND:discard", "amount": 1, "target": "player" }],
+          "asc": {}
+        },
+        "DAGGER_EXPLODE": {
+          "intent": "attack",
+          "damage": 25,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "Suicide(triggerRelics=true)", "amount": null, "target": "self" }],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always STAB (getMove only returns DAGGER_STAB; summoned daggers also have STAB preset and skip the summon round)",
+        "spec": "Fixed two-turn life: STAB (attack 9, Wound to discard, setMove EXPLODE, noOpRollMove) then EXPLODE (attack 25 - a real ATTACK, modified by strength/weak/vulnerable - then addToBot Suicide(triggerRelics=true): the dagger dies, triggering on-death effects). No ascension scaling of damage or HP. The Snake Dagger is a Minion: it flees/disappears when Reptomancer dies.",
+        "historyRules": [
+          "STAB then EXPLODE, always"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "hp.ascLevel",
+          "lightspeed": "initHp groups DAGGER with the asc>=8 (elite) tier; the schema convention for minions is 7, but the base and asc ranges are identical (20-25) so it has no observable effect",
+          "resolution": "recorded 8 per code"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:91-102,148-150,1603-1614,2638-2640,3539-3560", "wiki:Reptomancer", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "AWAKENED_ONE",
+      "name": "Awakened One",
+      "category": "boss",
+      "acts": [3],
+      "hp": { "base": [300, 300], "asc": [300, 320], "ascLevel": 9 },
+      "prebattle": [
+        { "power": "STRENGTH", "amount": 0, "asc": { "4": { "amount": 2 } } },
+        { "power": "CURIOSITY", "amount": 1, "asc": { "19": { "amount": 2 } } },
+        { "power": "REGEN", "amount": 10, "asc": { "19": { "amount": 15 } } }
+      ],
+      "moves": {
+        "AWAKENED_ONE_SLASH": {
+          "intent": "attack",
+          "damage": 20,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "AWAKENED_ONE_SOUL_STRIKE": {
+          "intent": "attack",
+          "damage": 6,
+          "hits": 4,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "AWAKENED_ONE_REBIRTH": {
+          "intent": "unknown",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "AWAKENED_ONE_DARK_ECHO": {
+          "intent": "attack",
+          "damage": 40,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        },
+        "AWAKENED_ONE_SLUDGE": {
+          "intent": "attack_debuff",
+          "damage": 18,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "AddCard:VOID:drawShuffle", "amount": 1, "target": "player" }],
+          "asc": {}
+        },
+        "AWAKENED_ONE_TACKLE": {
+          "intent": "attack",
+          "damage": 10,
+          "hits": 3,
+          "block": null,
+          "effects": [],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "phase 1 always opens with SLASH; phase 2 always opens with DARK_ECHO",
+        "spec": "miscInfo = phase2 flag. getMove(roll): if halfDead -> REBIRTH. PHASE 1 (miscInfo false): if firstTurn -> SLASH. if roll < 25: SOUL_STRIKE unless lastMove(SOUL_STRIKE) -> then SLASH. else: SLASH unless lastTwoMoves(SLASH) -> then SOUL_STRIKE. PHASE 2: if roll < 50: SLUDGE unless lastTwoMoves(SLUDGE) -> then TACKLE; else TACKLE unless lastTwoMoves(TACKLE) -> then SLUDGE. Half-death (Monster::die when phase 1): becomes halfDead (untargetable, keeps taking turns), removes all debuffs (negative STRENGTH set to 0 etc.), removes CURIOSITY, move forced to REBIRTH, the pending card queue is CLEARED (remaining queued player cards this action fizzle). REBIRTH handler (executes on its next turn): maxHp set to (asc>=9 ? 320 : 300), curHp = maxHp (full heal), halfDead = false, phase2 flag set, strength = max(0, strength) (POSITIVE strength - e.g. from Curiosity and the asc4 +2 - is KEPT), monstersAlive++, gains MINION_LEADER (killing it in phase 2 now ends the fight; the two Cultists flee), next move forced DARK_ECHO, noOpRollMove. CURIOSITY (phase 1 only): whenever the player plays a Power card the Awakened One gains 1 (asc19: 2) STRENGTH - see conflicts: lightspeed has this trigger commented out. REGEN 10/15: heals at the end of each of its turns (persists into phase 2). Encounter: 2 Cultists + Awakened One; the Cultists are NOT minions (Fatal etc. triggers work on them).",
+        "historyRules": [
+          "phase 1: SLASH cannot be used three times in a row",
+          "phase 1: SOUL_STRIKE cannot be used twice in a row",
+          "phase 2: SLUDGE cannot be used three times in a row",
+          "phase 2: TACKLE cannot be used three times in a row",
+          "while halfDead the rolled move is always REBIRTH"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "hp.asc",
+          "lightspeed": "monsterHpRange asc row is {300,320}: at asc9+ initHp calls hpRng.random(300,320) - a RANDOM roll consuming one monsterHpRng call",
+          "wiki": "AscHP 320 (flat)",
+          "spireArchive": "320-320",
+          "resolution": "lightspeed recorded as primary (RNG-call parity is seed-tested); note REBIRTH then OVERWRITES maxHp to a flat 320 (asc9+) / 300, so phase 2 max HP is always the flat value regardless of the phase 1 roll"
+        },
+        {
+          "field": "prebattle.CURIOSITY trigger",
+          "lightspeed": "the on-power-card strength gain is commented out in BattleContext::onUsePowerCard (not implemented)",
+          "wiki": "Curiosity: whenever you play a Power card, gains X Strength (X = 1, asc19 2)",
+          "resolution": "real game behavior is the wiki text; implement the trigger - lightspeed gap"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:186-193,1680-1737,3230-3278", "Monster.cpp:286-291", "MonsterGroup.cpp:179-183", "BattleContext.cpp:1877-1881", "wiki:Awakened_One", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "TIME_EATER",
+      "name": "Time Eater",
+      "category": "boss",
+      "acts": [3],
+      "hp": { "base": [456, 456], "asc": [480, 480], "ascLevel": 9 },
+      "prebattle": [
+        { "power": "TIME_WARP", "amount": 0 }
+      ],
+      "moves": {
+        "TIME_EATER_REVERBERATE": {
+          "intent": "attack",
+          "damage": 7,
+          "hits": 3,
+          "block": null,
+          "effects": [],
+          "asc": { "4": { "damage": 8 } }
+        },
+        "TIME_EATER_HEAD_SLAM": {
+          "intent": "attack_debuff",
+          "damage": 26,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "DRAW_REDUCTION", "amount": 1, "target": "player" }],
+          "asc": {
+            "4": { "damage": 32 },
+            "19": { "effects": [
+              { "power": "DRAW_REDUCTION", "amount": 1, "target": "player" },
+              { "power": "AddCard:SLIMED:discard", "amount": 2, "target": "player" }
+            ] }
+          }
+        },
+        "TIME_EATER_RIPPLE": {
+          "intent": "defend_debuff",
+          "damage": null,
+          "hits": null,
+          "block": 20,
+          "effects": [
+            { "power": "WEAK", "amount": 1, "target": "player" },
+            { "power": "VULNERABLE", "amount": 1, "target": "player" }
+          ],
+          "asc": { "19": { "effects": [
+            { "power": "WEAK", "amount": 1, "target": "player" },
+            { "power": "VULNERABLE", "amount": 1, "target": "player" },
+            { "power": "FRAIL", "amount": 1, "target": "player" }
+          ] } }
+        },
+        "TIME_EATER_HASTE": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [
+            { "power": "HealToHalfMaxHp", "amount": null, "target": "self" },
+            { "power": "RemoveOwnDebuffs", "amount": null, "target": "self" }
+          ],
+          "asc": { "19": { "block": 32 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "no special rule (normal distribution from turn 1)",
+        "spec": "miscInfo = usedHaste flag. getMove(roll): if !usedHaste AND curHp < maxHp/2 -> HASTE (the roll was still consumed). (roll<45) REVERBERATE unless lastTwoMoves(REVERBERATE); else roll = aiRng.random(50,99), fall through. (roll<80) HEAD_SLAM unless lastMove(HEAD_SLAM); else if aiRng.randomBoolean(0.66) -> REVERBERATE; else RIPPLE. (roll>=80) if lastMove(RIPPLE): roll = aiRng.random(74); if that roll < 45 -> REVERBERATE else HEAD_SLAM. else RIPPLE. Base distribution ~ Reverberate 45% / Head Slam 35% / Ripple 20%. HASTE handler (once per combat): set usedHaste; curHp = maxHp/2 (integer division - heals UP to exactly half, it only triggers below half); asc19+: gains 32 block; removes its own debuffs (including SHACKLED, so pending strength-restore is lost). RIPPLE handler applies the debuffs immediately and rolls immediately; HASTE rolls immediately; attacks addToBot RollMove. TIME_WARP power (counter starts 0, shown on the boss): whenever the player plays a card (cards whose on-use triggers fire), if the counter is 11 (i.e. this is the 12th card) -> counter resets to 0, Time Eater gains 2 STRENGTH, and the player's turn ENDS immediately; otherwise counter +1. Cards played after the forced end still on the queue are cleared by the end-turn sequence.",
+        "historyRules": [
+          "HASTE is used exactly once, on the first roll after dropping below 50% HP",
+          "REVERBERATE cannot be used three times in a row",
+          "HEAD_SLAM cannot be used twice in a row",
+          "RIPPLE cannot be used twice in a row"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "moves.TIME_EATER_HASTE.block (asc19)",
+          "lightspeed": "32",
+          "wiki": "Gains 32 Block at asc19",
+          "spireArchive": "block: 26",
+          "resolution": "32 - lightspeed and wiki agree; archive value is stale/wrong"
+        },
+        {
+          "field": "moves.TIME_EATER_REVERBERATE / HEAD_SLAM damage (spire-archive)",
+          "spireArchive": "damage null for both",
+          "resolution": "archive missing data; 7x3/8x3 and 26/32 per lightspeed+wiki"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:223-226,1616-1648,3181-3220", "BattleContext.cpp:1941-1957", "wiki:Time_Eater", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "DONU",
+      "name": "Donu",
+      "category": "boss",
+      "acts": [3],
+      "hp": { "base": [250, 250], "asc": [265, 265], "ascLevel": 9 },
+      "prebattle": [
+        { "power": "ARTIFACT", "amount": 2, "asc": { "19": { "amount": 3 } } }
+      ],
+      "moves": {
+        "DONU_CIRCLE_OF_POWER": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "STRENGTH", "amount": 3, "target": "allies" }],
+          "asc": {}
+        },
+        "DONU_BEAM": {
+          "intent": "attack",
+          "damage": 10,
+          "hits": 2,
+          "block": null,
+          "effects": [],
+          "asc": { "4": { "damage": 12 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always CIRCLE_OF_POWER (getMove only ever returns it; consulted once at battle init)",
+        "spec": "Strict alternation, no further AI rolls after the initial one: CIRCLE_OF_POWER (both Deca [slot 0] and Donu gain 3 STRENGTH; applied even if Deca is dead - harmless) -> setMove BEAM; BEAM (attack 10x2 / asc4 12x2) -> setMove CIRCLE_OF_POWER. Neither handler consumes aiRng. Donu occupies slot 1 (Deca slot 0). Turn phasing vs Deca: turn 1 Deca Beam + Donu Circle of Power; turn 2 Deca Square + Donu Beam; repeat.",
+        "historyRules": [
+          "alternates CIRCLE_OF_POWER / BEAM forever, starting with CIRCLE_OF_POWER"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:195-198,1650-1659,3226-3228", "MonsterGroup.cpp:235-238", "wiki:Donu_and_Deca", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "DECA",
+      "name": "Deca",
+      "category": "boss",
+      "acts": [3],
+      "hp": { "base": [250, 250], "asc": [265, 265], "ascLevel": 9 },
+      "prebattle": [
+        { "power": "ARTIFACT", "amount": 2, "asc": { "19": { "amount": 3 } } }
+      ],
+      "moves": {
+        "DECA_BEAM": {
+          "intent": "attack_debuff",
+          "damage": 10,
+          "hits": 2,
+          "block": null,
+          "effects": [{ "power": "AddCard:DAZED:discard", "amount": 2, "target": "player" }],
+          "asc": { "4": { "damage": 12 } }
+        },
+        "DECA_SQUARE_OF_PROTECTION": {
+          "intent": "defend",
+          "damage": null,
+          "hits": null,
+          "block": 16,
+          "effects": [{ "power": "Block", "amount": 16, "target": "allies" }],
+          "asc": { "19": { "effects": [
+            { "power": "Block", "amount": 16, "target": "allies" },
+            { "power": "PLATED_ARMOR", "amount": 3, "target": "allies" }
+          ] } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always BEAM (getMove only ever returns it; consulted once at battle init)",
+        "spec": "Strict alternation, no further AI rolls after the initial one: BEAM (attack 10x2 / asc4 12x2, then 2 DAZED to discard) -> setMove SQUARE_OF_PROTECTION; SQUARE_OF_PROTECTION (Deca AND Donu [slot 1] each gain 16 block; asc19+: each also gains 3 PLATED_ARMOR) -> setMove BEAM. Neither handler consumes aiRng. Deca occupies slot 0 (Donu slot 1).",
+        "historyRules": [
+          "alternates BEAM / SQUARE_OF_PROTECTION forever, starting with BEAM"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:195-198,1661-1678,3222-3224", "MonsterGroup.cpp:235-238", "wiki:Donu_and_Deca", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "SPIRE_SHIELD",
+      "name": "Spire Shield",
+      "category": "elite",
+      "acts": [4],
+      "hp": { "base": [110, 110], "asc": [125, 125], "ascLevel": 8 },
+      "prebattle": [
+        { "power": "SURROUNDED", "amount": null, "target": "player" },
+        { "power": "ARTIFACT", "amount": 1, "asc": { "18": { "amount": 2 } } }
+      ],
+      "moves": {
+        "SPIRE_SHIELD_BASH": {
+          "intent": "attack_debuff",
+          "damage": 12,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "FOCUS(-1)|STRENGTH(-1)", "amount": 1, "target": "player" }],
+          "asc": { "3": { "damage": 14 } }
+        },
+        "SPIRE_SHIELD_FORTIFY": {
+          "intent": "defend",
+          "damage": null,
+          "hits": null,
+          "block": 30,
+          "effects": [{ "power": "Block", "amount": 30, "target": "allies" }],
+          "asc": {}
+        },
+        "SPIRE_SHIELD_SMASH": {
+          "intent": "attack_defend",
+          "damage": 34,
+          "hits": 1,
+          "block": null,
+          "effects": [{ "power": "BlockEqualToDamageDealt", "amount": null, "target": "self" }],
+          "asc": { "3": { "damage": 38 }, "18": { "block": 99, "effects": [] } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "aiRng.randomBoolean(): true -> FORTIFY, false -> BASH (50/50; the aiRng.random(99) roll itself is consumed but ignored)",
+        "spec": "getMove is only consulted at battle init and after SMASH; it ignores the roll value and uses aiRng.randomBoolean(): true -> FORTIFY, false -> BASH. Handlers hard-code the cycle so SMASH lands every 3rd turn (turns 3, 6, 9...): BASH: attack 12/14; if player has any orb slots -> queue SpireShieldDebuff (aiRng.randomBoolean(): true -> player FOCUS -1, false -> player STRENGTH -1), else player STRENGTH -1 immediately; next move = FORTIFY if the move BEFORE this one was SMASH or none (start of a 3-turn block), else SMASH; noOpRollMove. FORTIFY: self +30 block AND Spire Spear (slot 1) +30 block; next move = BASH if move-before was SMASH or none, else SMASH; noOpRollMove. SMASH: damageOutput = fully modified damage (34/38 + strength, x1.5 back-attack if applicable, weak, player vulnerable); attack with it and gain block = that damageOutput (asc18+: flat 99 block instead); addToBot RollMove (-> next 3-turn block starts with the 50/50). Back Attack: prebattle the PLAYER gains SURROUNDED; each attack from this enemy deals x1.5 damage while the player is not facing it - the player faces the monster they last targeted (facing this one also counts if the faced monster is dead/escaped). Spire Shield is in slot 0 (left), Spire Spear slot 1 (right). ARTIFACT 1 (asc18: 2).",
+        "historyRules": [
+          "SMASH every 3rd turn starting turn 3",
+          "between Smashes: BASH and FORTIFY once each, in an order chosen 50/50"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "back-attack modeling",
+          "lightspeed": "the x1.5 is keyed off the player's SURROUNDED status inside calculateDamageToPlayer",
+          "wiki": "keyed off the enemies' Back Attack power; 'Surrounded... does not actually add any damage bonus' (it gates targeting/Smoke Bomb)",
+          "resolution": "equivalent outcome in this fight (both enemies always have Back Attack and the player is always Surrounded); implement per real game: Back Attack on each spire elite, Surrounded on player"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:261-265,1739-1773,3292-3301", "Monster.cpp:561-599", "Actions.cpp:529-537", "MonsterGroup.cpp:361-364", "wiki:Spire_Shield_and_Spire_Spear", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "SPIRE_SPEAR",
+      "name": "Spire Spear",
+      "category": "elite",
+      "acts": [4],
+      "hp": { "base": [160, 160], "asc": [180, 180], "ascLevel": 8 },
+      "prebattle": [
+        { "power": "ARTIFACT", "amount": 1, "asc": { "18": { "amount": 2 } } }
+      ],
+      "moves": {
+        "SPIRE_SPEAR_BURN_STRIKE": {
+          "intent": "attack_debuff",
+          "damage": 5,
+          "hits": 2,
+          "block": null,
+          "effects": [{ "power": "AddCard:BURN:discard", "amount": 2, "target": "player" }],
+          "asc": {
+            "3": { "damage": 6 },
+            "18": { "effects": [{ "power": "AddCard:BURN:drawTop", "amount": 2, "target": "player" }] }
+          }
+        },
+        "SPIRE_SPEAR_PIERCER": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [{ "power": "STRENGTH", "amount": 2, "target": "allies" }],
+          "asc": {}
+        },
+        "SPIRE_SPEAR_SKEWER": {
+          "intent": "attack",
+          "damage": 10,
+          "hits": 3,
+          "block": null,
+          "effects": [],
+          "asc": { "3": { "hits": 4 } }
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always BURN_STRIKE",
+        "spec": "getMove is consulted at battle init (firstTurn -> BURN_STRIKE) and after SKEWER; it ignores the roll value and uses aiRng.randomBoolean(): true -> PIERCER, false -> BURN_STRIKE. Handlers hard-code the cycle so SKEWER lands every 3rd turn (turns 2, 5, 8...): BURN_STRIKE: attack 5x2/6x2; below asc18 add 2 BURN to the discard pile, at asc18+ put 2 BURN on TOP of the draw pile (MakeTempCardInDrawPile(BURN, 2, toBottom=false)); next move = PIERCER if the move BEFORE this one was SKEWER, else SKEWER; noOpRollMove. PIERCER: Spire Shield (slot 0) AND self each gain 2 STRENGTH; next move = BURN_STRIKE if move-before was SKEWER, else SKEWER; noOpRollMove. SKEWER: attack 10 x 3 (asc3+: x4); addToBot RollMove (-> next block's 50/50). Back Attack / Surrounded: same mechanic as Spire Shield (x1.5 when the player is not facing this enemy). ARTIFACT 1 (asc18: 2). Spire Spear is in slot 1 (right side).",
+        "historyRules": [
+          "turn 1 always BURN_STRIKE",
+          "SKEWER every 3rd turn starting turn 2",
+          "between Skewers: BURN_STRIKE and PIERCER once each, in an order chosen 50/50"
+        ]
+      },
+      "conflicts": [],
+      "sources": ["MonsterSpecific.cpp:267-270,1775-1804,3303-3312", "MonsterGroup.cpp:361-364", "wiki:Spire_Shield_and_Spire_Spear", "wiki:Enemies.lua", "spire-archive"]
+    },
+    {
+      "id": "CORRUPT_HEART",
+      "name": "Corrupt Heart",
+      "category": "boss",
+      "acts": [4],
+      "hp": { "base": [750, 750], "asc": [800, 800], "ascLevel": 9 },
+      "prebattle": [
+        { "power": "BEAT_OF_DEATH", "amount": 1, "asc": { "19": { "amount": 2 } } },
+        { "power": "INVINCIBLE", "amount": 300, "asc": { "19": { "amount": 200 } } }
+      ],
+      "moves": {
+        "CORRUPT_HEART_DEBILITATE": {
+          "intent": "strong_debuff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [
+            { "power": "VULNERABLE", "amount": 2, "target": "player" },
+            { "power": "WEAK", "amount": 2, "target": "player" },
+            { "power": "FRAIL", "amount": 2, "target": "player" },
+            { "power": "AddCard:DAZED:drawShuffle", "amount": 1, "target": "player" },
+            { "power": "AddCard:SLIMED:drawShuffle", "amount": 1, "target": "player" },
+            { "power": "AddCard:WOUND:drawShuffle", "amount": 1, "target": "player" },
+            { "power": "AddCard:BURN:drawShuffle", "amount": 1, "target": "player" },
+            { "power": "AddCard:VOID:drawShuffle", "amount": 1, "target": "player" }
+          ],
+          "asc": {}
+        },
+        "CORRUPT_HEART_BLOOD_SHOTS": {
+          "intent": "attack",
+          "damage": 2,
+          "hits": 12,
+          "block": null,
+          "effects": [],
+          "asc": { "4": { "hits": 15 } }
+        },
+        "CORRUPT_HEART_ECHO": {
+          "intent": "attack",
+          "damage": 40,
+          "hits": 1,
+          "block": null,
+          "effects": [],
+          "asc": { "4": { "damage": 45 } }
+        },
+        "CORRUPT_HEART_BUFF": {
+          "intent": "buff",
+          "damage": null,
+          "hits": null,
+          "block": null,
+          "effects": [
+            { "power": "ClearNegativeStrengthThenStrength", "amount": 2, "target": "self" },
+            { "power": "EscalatingBuff(1:ARTIFACT 2, 2:BEAT_OF_DEATH +1, 3:PAINFUL_STABS, 4:STRENGTH +10, 5+:STRENGTH +50)", "amount": null, "target": "self" }
+          ],
+          "asc": {}
+        }
+      },
+      "ai": {
+        "roll": "aiRng.random(99)",
+        "firstTurn": "always DEBILITATE",
+        "spec": "getMove(roll): if firstTurn -> DEBILITATE. Otherwise (only reached from DEBILITATE's or BUFF's rollMove - the attacks set their successor directly): the roll value is ignored; aiRng.randomBoolean(): true -> BLOOD_SHOTS, false -> ECHO. Handlers: DEBILITATE applies Vuln 2 / Weak 2 / Frail 2 and shuffles 1 each of DAZED, SLIMED, WOUND, BURN, VOID into the DRAW pile (all immediately), then rollMove. BLOOD_SHOTS: attack 2 x 12 (asc4+: x15); if monsterTurnNumber % 3 == 0 -> next move = BUFF else next = ECHO; noOpRollMove. ECHO: attack 40/45; if monsterTurnNumber % 3 == 0 -> next = BUFF else next = BLOOD_SHOTS; noOpRollMove. BUFF: strength = max(0, strength) + 2 (clears negative strength, then +2); buffCount = monsterTurnNumber / 3 (integer): 1 -> ARTIFACT 2; 2 -> BEAT_OF_DEATH +1; 3 -> PAINFUL_STABS; 4 -> STRENGTH +10; 5 or more -> STRENGTH +50 (every subsequent buff); then rollMove (50/50 attack). Resulting fixed cycle: turn 1 DEBILITATE; turns 2-3 the two attacks in a random order; turn 4 BUFF (Artifact 2); turns 5-6 attacks (random order); turn 7 BUFF (Beat of Death +1); turn 10 BUFF (Painful Stabs); turn 13 BUFF (Strength +10); turn 16, 19, 22... BUFF (Strength +50 each). Note the attack pair alternates: the post-BUFF/DEBILITATE 50/50 picks the first attack, then the handlers force the OTHER attack next turn. Powers: BEAT_OF_DEATH X - the player takes X non-attack (blockable) damage after every card they play; INVINCIBLE X - the Heart can lose at most X HP per turn, and the cap RESETS to 300 (asc19: 200) at the start of each of its turns; PAINFUL_STABS (once gained) - every attack hit from the Heart that makes the player lose HP adds 1 WOUND to the discard pile.",
+        "historyRules": [
+          "turn 1 always DEBILITATE",
+          "BUFF every 3rd turn starting turn 4 (set when an attack executes on a turn number divisible by 3)",
+          "on non-buff turns the two attacks alternate; after DEBILITATE or BUFF the next attack is chosen 50/50"
+        ]
+      },
+      "conflicts": [
+        {
+          "field": "moves.CORRUPT_HEART_DEBILITATE card counts",
+          "lightspeed": "1 each of Dazed/Slimed/Wound/Burn/Void shuffled into the draw pile",
+          "wiki": "same (1 each into draw pile)",
+          "resolution": "all sources agree on 1 each; recorded here explicitly because the workstream brief guessed 2 each"
+        }
+      ],
+      "sources": ["MonsterSpecific.cpp:142-146,1806-1862,3280-3290", "Monster.cpp:32-34,348-351", "BattleContext.cpp:1958-1960", "Player.cpp:250-252", "wiki:Corrupt_Heart", "wiki:Enemies.lua", "spire-archive"]
+    }
+  ],
+  "encounters": {
+    "act3_notes": "Act 3 ('The Beyond') hallway pools that involve this file's monsters, plus the act 3 boss fights; exact spawn logic from MonsterGroup.cpp.",
+    "ORB_WALKER": { "act": 3, "layout": ["ORB_WALKER"], "notes": "easy-pool solo fight" },
+    "MYSTERIOUS_SPHERE_EVENT": { "act": 3, "layout": ["ORB_WALKER", "ORB_WALKER"], "notes": "act 3 event fight (Mysterious Sphere); identical Orb Walkers, no extra buffs" },
+    "THREE_DARKLINGS": { "act": 3, "layout": ["DARKLING", "DARKLING", "DARKLING"], "notes": "the middle Darkling (idx 1) never uses Chomp; each Darkling rolls its own Nip damage at construction" },
+    "THREE_SHAPES": { "act": 3, "layout": ["<shape>", "<shape>", "<shape>"], "notes": "3 draws WITHOUT replacement via miscRng from pool [REPULSOR, REPULSOR, EXPLODER, EXPLODER, SPIKER, SPIKER] (at most 2 of a kind); draw i uses miscRng.random(lastIdx) with lastIdx 5,4,3" },
+    "FOUR_SHAPES": { "act": 3, "layout": ["<shape>", "<shape>", "<shape>", "<shape>"], "notes": "4 draws without replacement from the same 6-shape pool" },
+    "SPHERE_AND_TWO_SHAPES": { "act": 3, "layout": ["<shape>", "<shape>", "SPHERIC_GUARDIAN"], "notes": "each shape drawn uniformly WITH replacement from [SPIKER, REPULSOR, EXPLODER] via miscRng.random(2)" },
+    "MAW": { "act": 3, "layout": ["THE_MAW"] },
+    "TRANSIENT": { "act": 3, "layout": ["TRANSIENT"] },
+    "SPIRE_GROWTH": { "act": 3, "layout": ["SPIRE_GROWTH"] },
+    "WRITHING_MASS": { "act": 3, "layout": ["WRITHING_MASS"] },
+    "JAW_WORM_HORDE": {
+      "act": 3,
+      "layout": ["JAW_WORM", "JAW_WORM", "JAW_WORM"],
+      "notes": "act 3 hard-pool variant of the act 1 Jaw Worm (entity itself documented by the act 1 agent). Spawn rules: 3 Jaw Worms; each is pre-buffed with STRENGTH 3 (asc2+: 4, asc17+: 5) and Block 5 (asc2+: 6, asc17+: 9); each worm's moveHistory[0] is pre-set to a non-INVALID sentinel so firstTurn() is FALSE - the act 1 'always Chomp on turn 1' rule is skipped and the normal 25/30/45 Chomp/Thrash/Bellow distribution applies from turn 1 (with no real history constraints active since the sentinel matches no Jaw Worm move).",
+      "conflicts": [
+        {
+          "field": "pre-battle block",
+          "lightspeed": "5 base, 6 at asc2+, 9 at asc17+",
+          "wiki": "Jaw Worm (Hard) StartsWith Block 6 (asc17: 9) - no asc2 branch, base shown as 6",
+          "resolution": "lightspeed recorded as primary"
+        }
+      ]
+    },
+    "GIANT_HEAD": { "act": 3, "layout": ["GIANT_HEAD"] },
+    "NEMESIS": { "act": 3, "layout": ["NEMESIS"] },
+    "REPTOMANCER": {
+      "act": 3,
+      "layout": ["(empty)", "DAGGER", "REPTOMANCER", "(empty)", "DAGGER"],
+      "notes": "starts with daggers in slots 1 and 4, Reptomancer in slot 2; slots 0 and 3 empty. Summoned daggers fill dead/empty slots in search order [4, 1, 3, 0]. Daggers are minions of the Reptomancer (fight ends when it dies)."
+    },
+    "AWAKENED_ONE": {
+      "act": 3,
+      "layout": ["CULTIST", "CULTIST", "AWAKENED_ONE"],
+      "notes": "boss fight; the two Cultists are NOT minions (killing them triggers Fatal etc.; they only flee once the reborn Awakened One dies, because it gains MINION_LEADER at rebirth)"
+    },
+    "DONU_AND_DECA": { "act": 3, "layout": ["DECA", "DONU"], "notes": "Deca slot 0, Donu slot 1. Turn 1: Deca Beam, Donu Circle of Power; they alternate out of phase thereafter." },
+    "TIME_EATER": { "act": 3, "layout": ["TIME_EATER"] },
+    "SHIELD_AND_SPEAR": {
+      "act": 4,
+      "layout": ["SPIRE_SHIELD", "SPIRE_SPEAR"],
+      "notes": "act 4 elite; Spire Shield slot 0 (left of player), Spire Spear slot 1 (right). Pre-battle the player gains SURROUNDED; each elite's attacks deal x1.5 while the player is not facing the attacker (player faces the last-targeted living monster). Smoke Bomb cannot be used while Surrounded."
+    },
+    "THE_HEART": { "act": 4, "layout": ["CORRUPT_HEART"] }
+  },
+  "notes": {
+    "hpRolls": {
+      "ORB_WALKER": "initHp consumes and DISCARDS one extra monsterHpRng.random(90, 96) call before the real HP roll (game quirk; matters for RNG-stream parity)",
+      "REPTOMANCER": "initHp consumes and DISCARDS one extra monsterHpRng.random(180, 190) call before the real HP roll",
+      "THE_MAW": "fixed 300 HP; initHp makes NO monsterHpRng call",
+      "TRANSIENT": "fixed 999 HP; initHp makes NO monsterHpRng call",
+      "DARKLING": "in addition to the HP roll, construct() rolls Nip damage: monsterHpRng.random(7,11) (asc2+: random(9,13))"
+    },
+    "rngParity": "Monster::rollMove always consumes aiRng.random(99); bc.noOpRollMove() consumes one aiRng.random(99); moves that force a successor via setMove typically call noOpRollMove for parity with the real game's rollMove(0..99) call - exceptions that consume NOTHING: DONU and DECA move handlers.",
+    "surrounded": "calculateDamageToPlayer applies, in order: +strength, x1.5 back-attack (if player SURROUNDED and not facing attacker), x0.75 weak (x0.6 with Paper Krane), x1.5 player vulnerable (x1.25 with Odd Mushroom), x2 wrath, floor, min 1 vs player Intangible, clamp >= 0."
+  }
+}

@@ -1,0 +1,1645 @@
+{
+  "meta": {
+    "game": "Slay the Spire V2.3.4",
+    "domain": "events",
+    "notes": [
+      "All summary/label text is original functional paraphrase, not game prose.",
+      "verified=true means every mechanical fact in the entry is confirmed by sts_lightspeed GameContext.cpp; verified=false means some fields rely on spire-archive/wiki and are listed in needsJarVerification.",
+      "rounding on pct amounts: floor|round|ceil, matching lightspeed fractionMaxHp modes (default floor).",
+      "loseHp kind: 'damage' = lightspeed damagePlayer (interacts with damage modifiers e.g. Intangible/Tungsten Rod semantics differ), 'hpLoss' = playerLoseHp.",
+      "randomRelicTier roll (relicRng): 50% common, 33% uncommon, 17% rare (act 4: 0/100/0). 'screenless' relics reroll BOTTLED_FLAME/BOTTLED_LIGHTNING/BOTTLED_TORNADO/WHETSTONE.",
+      "spire-archive choice lists include post-outcome UI buttons ([Continue]/[Leave]) that are not real decisions; these are omitted here and not flagged as conflicts.",
+      "Event selection: eventRng rolls shrine-vs-event (SHRINE_CHANCE=0.25); chosen event is removed from its pool. canSpawn preconditions per GameContext.cpp canAddEvent/canAddOneTimeEvent.",
+      "Neow is covered by the meta corpus, not this file."
+    ],
+    "pools": { "act1": 11, "act2": 13, "act3": 7, "shrine": 6, "oneTime": 14 },
+    "a15PoolChange": "NOTE_FOR_YOURSELF is absent from the one-time pool at ascension >= 15 (Events.h oneTimeEventsAsc15)."
+  },
+  "eventCombatEncounters": {
+    "LAGAVULIN_EVENT": { "event": "DEAD_ADVENTURER", "note": "Lagavulin variant that starts awake (no sleep phase)." },
+    "COLOSSEUM_EVENT_SLAVERS": { "event": "COLOSSEUM", "note": "Blue Slaver + Red Slaver; fight yields no rewards." },
+    "COLOSSEUM_EVENT_NOBS": { "event": "COLOSSEUM", "note": "Taskmaster + Gremlin Nob; treated as elite combat for most effects, but Black Star does not add a second relic." },
+    "MASKED_BANDITS_EVENT": { "event": "MASKED_BANDITS", "note": "Pointy + Romeo + Bear." },
+    "MUSHROOMS_EVENT": { "event": "HYPNOTIZING_COLORED_MUSHROOMS", "note": "3 Fungi Beasts." },
+    "MYSTERIOUS_SPHERE_EVENT": { "event": "MYSTERIOUS_SPHERE", "note": "2 Orb Walkers; not an elite combat for relic triggers." }
+  },
+  "events": [
+    {
+      "id": "BIG_FISH",
+      "gameId": "Big Fish",
+      "name": "Big Fish",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "Three dangling baits offer a heal, max HP, or a cursed relic box; one must be picked.",
+      "options": [
+        {
+          "label": "Banana: heal 1/3 of max HP",
+          "requires": null,
+          "outcomes": [{ "effect": "healHp", "amount": "pct:0.3333", "rounding": "floor", "id": null }],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Donut: gain 5 max HP",
+          "requires": null,
+          "outcomes": [{ "effect": "gainMaxHp", "amount": 5, "id": null }],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Box: obtain a random relic and the Regret curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" },
+            { "effect": "obtainCurse", "amount": 1, "id": "REGRET" }
+          ],
+          "random": { "rng": "relicRng", "roll": "relic tier 50% common / 33% uncommon / 17% rare, then relic from that pool" },
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:855-857,2526-2552", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "THE_CLERIC",
+      "gameId": "The Cleric",
+      "name": "The Cleric",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": { "minGold": 35 },
+      "summary": "A friendly cleric sells healing or a card removal.",
+      "options": [
+        {
+          "label": "Heal: pay 35 gold, heal 25% of max HP",
+          "requires": { "minGold": 35 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 35, "id": null },
+            { "effect": "healHp", "amount": "pct:0.25", "rounding": "floor", "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Purify: pay 50 gold, remove a card",
+          "requires": { "minGold": 50 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 50, "id": null },
+            { "effect": "removeCard", "amount": 1, "id": null }
+          ],
+          "random": null,
+          "a15": { "loseGold": 75, "requires": { "minGold": 75 } }
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "spire-archive describes the heal as 1/3 max HP; lightspeed (fractionMaxHp(0.25)) and wiki:The_Cleric agree on 25% of max HP rounded down."
+      ],
+      "sources": ["GameContext.cpp:415-416,1013-1015,3257-3278", "spire-archive", "wiki:The_Cleric"]
+    },
+    {
+      "id": "DEAD_ADVENTURER",
+      "gameId": "Dead Adventurer",
+      "name": "Dead Adventurer",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": { "minFloor": 7 },
+      "summary": "Looting a fallen adventurer up to three times risks the returning elite that killed them.",
+      "options": [
+        {
+          "label": "Search (repeatable up to 3): roll for elite ambush, else claim the next of three shuffled rewards (30 gold / random relic / nothing)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": null, "detail": "ambush chance = phase*25 + 25 (%); roll miscRng.random(99) < chance. No ambush: grant reward[phase] from [gold30, nothing, relic] shuffled at setup (java shuffle seeded miscRng.randomLong()); relic = screenless, tier via relicRng 50/33/17; then phase+1" },
+            { "effect": "startCombat", "amount": null, "id": "DEAD_ADVENTURER_ELITE", "detail": "on ambush: fight encounter chosen at setup, uniform miscRng.random(2) over THREE_SENTRIES / GREMLIN_NOB / LAGAVULIN_EVENT (Lagavulin starts awake)", "combatRewards": { "gold": { "rng": "miscRng", "min": 25, "max": 35, "bonus": "+30 per unclaimed gold reward remaining" }, "relic": "random tier (relicRng 50/33/17) if relic reward unclaimed", "cardReward": true, "potions": "standard roll" } }
+          ],
+          "random": { "rng": "miscRng", "roll": "ambush: random(99) < 25+25*priorSearches; setup: rewards shuffle + encounter random(2)" },
+          "a15": { "detail": "base ambush chance 35 instead of 25 (35/60/85 by search)" }
+        },
+        { "label": "Leave: no effect (available before each search)", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:405-407,867-875,2600-2655", "spire-archive", "wiki:Dead_Adventurer"]
+    },
+    {
+      "id": "GOLDEN_IDOL",
+      "gameId": "Golden Idol",
+      "name": "Golden Idol",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "A golden idol sits on a pedestal; taking it triggers a trap that must be answered.",
+      "options": [
+        {
+          "label": "Take: obtain Golden Idol relic, then choose one trap outcome below",
+          "requires": null,
+          "outcomes": [{ "effect": "obtainRelic", "amount": null, "id": "GOLDEN_IDOL" }],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null },
+        {
+          "label": "Trap - Outrun: obtain the Injury curse",
+          "requires": { "tookIdol": true },
+          "outcomes": [{ "effect": "obtainCurse", "amount": 1, "id": "INJURY" }],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Trap - Smash: take damage equal to 25% of max HP",
+          "requires": { "tookIdol": true },
+          "outcomes": [{ "effect": "loseHp", "kind": "damage", "amount": "pct:0.25", "rounding": "floor", "id": null }],
+          "random": null,
+          "a15": { "amount": "pct:0.35" }
+        },
+        {
+          "label": "Trap - Hide: lose 8% of max HP permanently",
+          "requires": { "tookIdol": true },
+          "outcomes": [{ "effect": "loseMaxHp", "amount": "pct:0.08", "rounding": "floor", "id": null }],
+          "random": null,
+          "a15": { "amount": "pct:0.10" }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:939-942,2844-2873", "spire-archive", "wiki:Golden_Idol_(Event)"]
+    },
+    {
+      "id": "WING_STATUE",
+      "gameId": "Golden Wing",
+      "name": "Wing Statue",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "A winged statue trades pain for a card removal, or can be smashed for gold.",
+      "options": [
+        {
+          "label": "Pray: take 7 damage, remove a card",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "damage", "amount": 7, "id": null },
+            { "effect": "removeCard", "amount": 1, "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Destroy: gain 50-80 gold (needs an attack dealing 10+ damage in one hit)",
+          "requires": { "deckHasAttackWithSingleHitDamageAtLeast": 10 },
+          "outcomes": [{ "effect": "gainGold", "amount": null, "id": null }],
+          "random": { "rng": "miscRng", "roll": "uniform int 50-80 inclusive" },
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": false,
+      "conflicts": [
+        "spire-archive says Pray costs 25% HP; lightspeed (damagePlayer(7)) and wiki:Wing_Statue agree on flat 7 damage.",
+        "lightspeed does not gate Destroy on owning an attack that deals 10+ damage in a single hit (wiki:Wing_Statue); requirement taken from wiki."
+      ],
+      "needsJarVerification": ["Exact single-hit >=10 damage card qualification rules for the Destroy option (e.g. which multi-hit/X-cost cards count)."],
+      "sources": ["GameContext.cpp:2898-2918", "spire-archive", "wiki:Wing_Statue"]
+    },
+    {
+      "id": "WORLD_OF_GOOP",
+      "gameId": "World of Goop",
+      "name": "World of Goop",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "Gold has spilled into burning slime; wade in for it or abandon some of your own gold.",
+      "options": [
+        {
+          "label": "Gather gold: take 11 damage, gain 75 gold",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "damage", "amount": 11, "id": null },
+            { "effect": "gainGold", "amount": 75, "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Leave it: lose 20-50 gold (capped at current gold)",
+          "requires": null,
+          "outcomes": [{ "effect": "loseGold", "amount": null, "id": null }],
+          "random": { "rng": "miscRng", "roll": "uniform int 20-50 inclusive, rolled at event setup, min(current gold, roll)" },
+          "a15": { "roll": "uniform int 35-75 inclusive" }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1050-1056,3581-3595", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "THE_SSSSSERPENT",
+      "gameId": "Liars Game",
+      "name": "The Ssssserpent",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "A serpent offers gold for agreeing with its worldview; agreement is cursed.",
+      "options": [
+        {
+          "label": "Agree: gain 175 gold, obtain the Doubt curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "gainGold", "amount": 175, "id": null },
+            { "effect": "obtainCurse", "amount": 1, "id": "DOUBT" }
+          ],
+          "random": null,
+          "a15": { "gainGold": 150 }
+        },
+        { "label": "Disagree: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "spire-archive lists the payout as 150 gold with no ascension note; lightspeed and wiki give 175 base, 150 at A15+."
+      ],
+      "sources": ["GameContext.cpp:2953-2966", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "LIVING_WALL",
+      "gameId": "Living Wall",
+      "name": "Living Wall",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "Trapping walls demand one deck alteration before letting you pass.",
+      "options": [
+        { "label": "Forget: remove a card", "requires": null, "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null }], "random": null, "a15": null },
+        { "label": "Change: transform a card", "requires": null, "outcomes": [{ "effect": "transformCard", "amount": 1, "id": null }], "random": { "rng": "miscRng", "roll": "transform result rolled with miscRng" }, "a15": null },
+        { "label": "Grow: upgrade a card", "requires": null, "outcomes": [{ "effect": "upgradeCard", "amount": 1, "id": null }], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2968-2985", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "HYPNOTIZING_COLORED_MUSHROOMS",
+      "gameId": "Mushrooms",
+      "name": "Hypnotizing Colored Mushrooms",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": { "minFloor": 7 },
+      "summary": "A mushroom-filled corridor compels you to fight the fungus or eat it.",
+      "options": [
+        {
+          "label": "Stomp: fight 3 Fungi Beasts; victory adds Odd Mushroom and 20-30 gold to the rewards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "MUSHROOMS_EVENT", "combatRewards": { "gold": { "rng": "miscRng", "min": 20, "max": 30 }, "relic": "ODD_MUSHROOM", "cardReward": true, "potions": "standard roll" } }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Eat: heal 25% of max HP, obtain the Parasite curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "healHp", "amount": "pct:0.25", "rounding": "floor", "id": null },
+            { "effect": "obtainCurse", "amount": 1, "id": "PARASITE" }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed's Eat branch (GameContext.cpp:3083-3085) grants 99 gold (50 at A15) instead of healing + Parasite; this contradicts spire-archive and wiki:Hypnotizing_Colored_Mushrooms and appears to be a copy-paste bug from The Nest. Corpus follows wiki/spire-archive."
+      ],
+      "needsJarVerification": ["Eat branch: confirm heal = floor(0.25 * maxHp) and Parasite grant; confirm no A15 change."],
+      "sources": ["GameContext.cpp:405-407,3069-3091", "spire-archive", "wiki:Hypnotizing_Colored_Mushrooms"]
+    },
+    {
+      "id": "SCRAP_OOZE",
+      "gameId": "Scrap Ooze",
+      "name": "Scrap Ooze",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "Reaching into a scrap-filled ooze costs HP per attempt with a rising chance to pull out a relic.",
+      "options": [
+        {
+          "label": "Reach inside (repeatable): take 3 damage; relic chance starts at 25% and rises 10% per attempt",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "damage", "amount": 3, "id": null },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "on success: screenless relic, tier via relicRng 50/33/17; event ends. On failure: may try again or leave." }
+          ],
+          "random": { "rng": "miscRng", "roll": "chance = 25 + 10*priorAttempts; lightspeed succeeds when random(99) >= 99 - chance (window of chance+1 values)" },
+          "a15": { "loseHp": 5 }
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "wiki states the success chance as exactly 25%/35%/45%...; lightspeed's formula (roll >= 99 - chance over 0..99) yields chance+1 percent. Off-by-one needs JAR confirmation."
+      ],
+      "needsJarVerification": ["Exact success comparison in ScrapOoze.java (chance vs chance+1 percent)."],
+      "sources": ["GameContext.cpp:3179-3198", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "SHINING_LIGHT",
+      "gameId": "Shining Light",
+      "name": "Shining Light",
+      "pool": "act1",
+      "acts": [1],
+      "canSpawn": null,
+      "summary": "A glowing light upgrades random cards in exchange for a chunk of HP.",
+      "options": [
+        {
+          "label": "Enter: take damage equal to 20% of max HP; upgrade 2 random upgradeable cards (1 if only one exists)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "damage", "amount": "pct:0.20", "rounding": "round", "id": null },
+            { "effect": "upgradeCard", "amount": 2, "id": null, "detail": "upgradeable card indices shuffled with java shuffle seeded miscRng.randomLong(); first two upgraded" }
+          ],
+          "random": { "rng": "miscRng", "roll": "shuffle of upgradeable card list" },
+          "a15": { "amount": "pct:0.30" }
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1009-1011,3233-3255", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "PLEADING_VAGRANT",
+      "gameId": "Addict",
+      "name": "Pleading Vagrant",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "A vagrant offers a relic for coin; it can also simply be robbed at the cost of a curse.",
+      "options": [
+        {
+          "label": "Offer gold: pay 85 gold, obtain a random relic",
+          "requires": { "minGold": 85 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 85, "id": null },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" }
+          ],
+          "random": { "rng": "relicRng", "roll": "relic tier 50/33/17 then relic" },
+          "a15": null
+        },
+        {
+          "label": "Rob: obtain a random relic and the Shame curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" },
+            { "effect": "obtainCurse", "amount": 1, "id": "SHAME" }
+          ],
+          "random": { "rng": "relicRng", "roll": "relic tier 50/33/17 then relic" },
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2470-2496", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "ANCIENT_WRITING",
+      "gameId": "Back to Basics",
+      "name": "Ancient Writing",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "Glowing glyphs grant either a card removal or upgrades to every starter Strike and Defend.",
+      "options": [
+        { "label": "Elegance: remove a card", "requires": null, "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null }], "random": null, "a15": null },
+        {
+          "label": "Simplicity: upgrade all starter Strikes and Defends",
+          "requires": null,
+          "outcomes": [{ "effect": "upgradeCard", "amount": null, "id": null, "detail": "every starter Strike/Defend variant in deck that can still upgrade" }],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2498-2510", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "OLD_BEGGAR",
+      "gameId": "Beggar",
+      "name": "Old Beggar",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": { "minGold": 75 },
+      "summary": "A beggar removes a card from your deck in exchange for alms.",
+      "options": [
+        {
+          "label": "Offer gold: pay 75 gold, remove a card",
+          "requires": { "minGold": 75 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 75, "id": null },
+            { "effect": "removeCard", "amount": 1, "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:418-419,2512-2524", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "COLOSSEUM",
+      "gameId": "Colosseum",
+      "name": "The Colosseum",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": { "mapRowGreaterThan": 7, "note": "second half of the act map (curMapNodeY > 7); lightspeed also has a disableColosseum config flag" },
+      "summary": "You are thrown into an arena: a forced fight, then a choice to flee or face a harder bout for big rewards.",
+      "options": [
+        {
+          "label": "Fight (forced): battle Blue Slaver + Red Slaver with no combat rewards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "COLOSSEUM_EVENT_SLAVERS", "combatRewards": null, "detail": "no rewards; potion drop chance still advances invisibly" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Cowardice (after first fight): escape, event ends", "requires": { "wonFirstFight": true }, "outcomes": [], "random": null, "a15": null },
+        {
+          "label": "Victory (after first fight): battle Taskmaster + Gremlin Nob; win 100 gold, a rare relic, an uncommon relic, and a card reward",
+          "requires": { "wonFirstFight": true },
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "COLOSSEUM_EVENT_NOBS", "combatRewards": { "gold": 100, "relics": ["RANDOM_RARE", "RANDOM_UNCOMMON"], "cardReward": true, "potions": "standard roll", "note": "elite combat for most triggers; Black Star adds no extra relic" } }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed does not implement this event (GameContext.cpp:2554-2556 is a stub; spawns are normally disabled via disableColosseum). All mechanics here are from wiki:The_Colosseum and spire-archive.",
+        "wiki flags The Colosseum as affected by Ascension 15 but documents no option changes; the A15 effect (if any) is unknown."
+      ],
+      "needsJarVerification": ["Entire event flow, reward composition and ordering, and any A15 modifier in Colosseum.java."],
+      "sources": ["GameContext.cpp:421-422,2554-2556", "spire-archive", "wiki:The_Colosseum"]
+    },
+    {
+      "id": "CURSED_TOME",
+      "gameId": "Cursed Tome",
+      "name": "Cursed Tome",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "A sinister book charges escalating HP per page and finally offers one of three book relics.",
+      "options": [
+        { "label": "Read: begin reading (no cost); or Leave immediately for no effect", "requires": null, "outcomes": [], "random": null, "a15": null },
+        {
+          "label": "Continue x3: lose 1 HP, then 2 HP, then 3 HP across the three pages",
+          "requires": { "reading": true },
+          "outcomes": [{ "effect": "loseHp", "kind": "hpLoss", "amount": null, "id": null, "detail": "page n costs n HP (n = 1,2,3)" }],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Take: lose 10 HP; obtain Necronomicon, Enchiridion, or Nilry's Codex (uniform)",
+          "requires": { "readAllPages": true },
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": 10, "id": null },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "via reward screen" }
+          ],
+          "random": { "rng": "miscRng", "roll": "random(2): 0=NECRONOMICON, 1=ENCHIRIDION, 2=NILRYS_CODEX" },
+          "a15": { "loseHp": 15 }
+        },
+        {
+          "label": "Stop (instead of Take): lose 3 HP, no relic",
+          "requires": { "readAllPages": true },
+          "outcomes": [{ "effect": "loseHp", "kind": "hpLoss", "amount": 3, "id": null }],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:863-865,2558-2598", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "AUGMENTER",
+      "gameId": "Drug Dealer",
+      "name": "Augmenter",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "A back-alley scientist offers a mutagen card, a double transform, or an unstable strength relic.",
+      "options": [
+        { "label": "Test J.A.X.: obtain the J.A.X. card", "requires": null, "outcomes": [{ "effect": "obtainCard", "amount": 1, "id": "JAX" }], "random": null, "a15": null },
+        {
+          "label": "Become test subject: transform 2 cards",
+          "requires": null,
+          "outcomes": [{ "effect": "transformCard", "amount": 2, "id": null }],
+          "random": { "rng": "miscRng", "roll": "transform results rolled with miscRng" },
+          "a15": null
+        },
+        { "label": "Ingest mutagens: obtain Mutagenic Strength relic", "requires": null, "outcomes": [{ "effect": "obtainRelic", "amount": null, "id": "MUTAGENIC_STRENGTH" }], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2698-2719", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "FORGOTTEN_ALTAR",
+      "gameId": "Forgotten Altar",
+      "name": "Forgotten Altar",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "An altar demands sacrifice: trade the Golden Idol, bleed for max HP, or desecrate it and be cursed.",
+      "options": [
+        {
+          "label": "Offer Golden Idol: replace Golden Idol with Bloody Idol",
+          "requires": { "hasRelic": "GOLDEN_IDOL" },
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": "BLOODY_IDOL", "detail": "GOLDEN_IDOL relic replaced in place by BLOODY_IDOL" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Sacrifice: gain 5 max HP, lose HP equal to 25% of max HP",
+          "requires": null,
+          "outcomes": [
+            { "effect": "gainMaxHp", "amount": 5, "id": null },
+            { "effect": "loseHp", "kind": "hpLoss", "amount": "pct:0.25", "rounding": "round", "id": null, "detail": "hp loss computed at event setup from pre-gain max HP" }
+          ],
+          "random": null,
+          "a15": { "amount": "pct:0.35" }
+        },
+        { "label": "Desecrate: obtain the Decay curse", "requires": null, "outcomes": [{ "effect": "obtainCurse", "amount": 1, "id": "DECAY" }], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "spire-archive's option text mentions gaining Darkstone Periapt; lightspeed and wiki agree the offer swaps Golden Idol for Bloody Idol."
+      ],
+      "sources": ["GameContext.cpp:931-933,2785-2809", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "GHOSTS",
+      "gameId": "Ghosts",
+      "name": "Council of Ghosts",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "Spectral figures offer Apparition cards in exchange for half your max HP.",
+      "options": [
+        {
+          "label": "Accept: lose 50% of max HP permanently (capped at max HP - 1), obtain 5 Apparition cards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseMaxHp", "amount": "pct:0.50", "rounding": "ceil", "id": null, "detail": "min(maxHp-1, ceil(0.5*maxHp))" },
+            { "effect": "obtainCard", "amount": 5, "id": "APPARITION" }
+          ],
+          "random": null,
+          "a15": { "obtainCard": 3 }
+        },
+        { "label": "Refuse: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:935-937,2829-2842", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "MASKED_BANDITS",
+      "gameId": "Masked Bandits",
+      "name": "Masked Bandits",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "Bandits demand every coin you carry; refusing starts a fight for their leader's mask.",
+      "options": [
+        { "label": "Pay: lose ALL gold", "requires": null, "outcomes": [{ "effect": "loseGold", "amount": null, "id": null, "detail": "all current gold" }], "random": null, "a15": null },
+        {
+          "label": "Fight: battle the bandits; victory yields Red Mask, 25-35 gold, and a card reward",
+          "requires": null,
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "MASKED_BANDITS_EVENT", "combatRewards": { "gold": { "rng": "miscRng", "min": 25, "max": 35 }, "relic": "RED_MASK", "cardReward": true, "potions": "none in lightspeed reward list" } }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "needsJarVerification": ["Whether the bandit fight's reward screen includes a potion roll (lightspeed omits addPotionRewards here, unlike its other event fights)."],
+      "sources": ["GameContext.cpp:2987-3008", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "THE_NEST",
+      "gameId": "Nest",
+      "name": "The Nest",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "Infiltrating a cult offers either a quick gold grab or a bloody initiation for a ritual blade.",
+      "options": [
+        {
+          "label": "Smash and grab: gain 99 gold",
+          "requires": null,
+          "outcomes": [{ "effect": "gainGold", "amount": 99, "id": null }],
+          "random": null,
+          "a15": { "gainGold": 50 }
+        },
+        {
+          "label": "Stay in line: take 6 damage, obtain the Ritual Dagger card",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "damage", "amount": 6, "id": null },
+            { "effect": "obtainCard", "amount": 1, "id": "RITUAL_DAGGER" }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3115-3129", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "THE_LIBRARY",
+      "gameId": "The Library",
+      "name": "The Library",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "An abandoned library lets you study one of twenty cards or nap for a heal.",
+      "options": [
+        {
+          "label": "Read: choose 1 of 20 distinct class cards to obtain",
+          "requires": null,
+          "outcomes": [{ "effect": "obtainCard", "amount": 1, "id": null, "detail": "20 unique cards, each rolled: rarity via event card-rarity roll, then class card of that rarity via cardRng; duplicates rerolled; list generated in reverse display order" }],
+          "random": { "rng": "cardRng", "roll": "20x (rollCardRarity(EVENT) then class card of rarity); uniqueness enforced" },
+          "a15": null
+        },
+        {
+          "label": "Sleep: heal 33% of max HP",
+          "requires": null,
+          "outcomes": [{ "effect": "healHp", "amount": "pct:0.33", "rounding": "round", "id": null }],
+          "random": null,
+          "a15": { "amount": "pct:0.20" }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1017-1019,3300-3324", "spire-archive", "wiki:The_Library"]
+    },
+    {
+      "id": "THE_MAUSOLEUM",
+      "gameId": "The Mausoleum",
+      "name": "The Mausoleum",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "A leaking sarcophagus holds a relic; opening it risks a curse.",
+      "options": [
+        {
+          "label": "Open coffin: obtain a random relic; 50% chance to also obtain the Writhe curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "random relic (wiki/spire-archive; missing from lightspeed - tier distribution unverified)" },
+            { "effect": "obtainCurse", "amount": 1, "id": "WRITHE", "detail": "only on failed 50% roll" }
+          ],
+          "random": { "rng": "miscRng", "roll": "randomBoolean(): true => cursed (50%)" },
+          "a15": { "detail": "curse is guaranteed" }
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed's handler (GameContext.cpp:3326-3341) only rolls the Writhe curse and never grants the relic; spire-archive and wiki agree Open Coffin yields a relic. Corpus includes the relic."
+      ],
+      "needsJarVerification": ["Relic tier/pool used by TheMausoleum.java and the order of relic grant vs curse roll."],
+      "sources": ["GameContext.cpp:3326-3341", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "VAMPIRES",
+      "gameId": "Vampires",
+      "name": "Vampires(?)",
+      "pool": "act2",
+      "acts": [2],
+      "canSpawn": null,
+      "summary": "A blood cult converts your starter Strikes into Bites for a price paid in max HP or a Blood Vial.",
+      "options": [
+        {
+          "label": "Offer Blood Vial: lose the Blood Vial relic; remove all starter Strikes; obtain 5 Bite cards",
+          "requires": { "hasRelic": "BLOOD_VIAL" },
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": "BLOOD_VIAL", "detail": "BLOOD_VIAL relic removed" },
+            { "effect": "removeCard", "amount": null, "id": null, "detail": "all starter Strike cards (base Strikes only)" },
+            { "effect": "obtainCard", "amount": 5, "id": "BITE" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Accept: lose 30% of max HP (capped at max HP - 1); remove all starter Strikes; obtain 5 Bite cards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseMaxHp", "amount": "pct:0.30", "rounding": "ceil", "id": null, "detail": "min(maxHp-1, ceil(0.3*maxHp))" },
+            { "effect": "removeCard", "amount": null, "id": null, "detail": "all starter Strike cards (base Strikes only)" },
+            { "effect": "obtainCard", "amount": 5, "id": "BITE" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Refuse: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1029-1031,3460-3482", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "FALLING",
+      "gameId": "Falling",
+      "name": "Falling",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "Mid-fall you must jettison one card: a preselected random skill, power, or attack.",
+      "options": [
+        {
+          "label": "Land: lose the shown skill card",
+          "requires": { "deckHasType": "SKILL" },
+          "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null, "detail": "specific skill chosen uniformly at event setup" }],
+          "random": { "rng": "miscRng", "roll": "at setup: uniform index among deck cards of each type" },
+          "a15": null
+        },
+        {
+          "label": "Channel: lose the shown power card",
+          "requires": { "deckHasType": "POWER" },
+          "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null, "detail": "specific power chosen uniformly at event setup" }],
+          "random": { "rng": "miscRng", "roll": "at setup: uniform index among deck cards of each type" },
+          "a15": null
+        },
+        {
+          "label": "Strike: lose the shown attack card",
+          "requires": { "deckHasType": "ATTACK" },
+          "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null, "detail": "specific attack chosen uniformly at event setup" }],
+          "random": { "rng": "miscRng", "roll": "at setup: uniform index among deck cards of each type" },
+          "a15": null
+        },
+        { "label": "Land on your head (only if no option is available): no card lost", "requires": { "noEligibleCards": true }, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": false,
+      "conflicts": [
+        "The real game excludes bottled cards from Falling's selection; lightspeed marks this as a TODO (GameContext.cpp:886) and does not exclude them."
+      ],
+      "needsJarVerification": ["Bottled-card exclusion and behavior when all three card types are absent."],
+      "sources": ["GameContext.cpp:886-929,2757-2783", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "MINDBLOOM",
+      "gameId": "Mindbloom",
+      "name": "Mindbloom",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "Your thoughts become real: fight a phantom Act 1 boss, upgrade everything, or take gold/health with a curse.",
+      "options": [
+        {
+          "label": "I am War: fight a random Act 1 boss; victory yields a rare relic, 50 gold, potions, and a card reward",
+          "requires": null,
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "RANDOM_ACT1_BOSS", "detail": "uniform among THE_GUARDIAN / HEXAGHOST / SLIME_BOSS (java shuffle seeded miscRng.randomLong(), take first)", "combatRewards": { "gold": 50, "relic": "random RARE (relicRng)", "cardReward": true, "potions": "standard roll" } }
+          ],
+          "random": { "rng": "miscRng", "roll": "boss shuffle" },
+          "a15": { "gold": 25 }
+        },
+        {
+          "label": "I am Awake: upgrade every upgradeable card; obtain Mark of the Bloom (can no longer heal)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "upgradeCard", "amount": null, "id": null, "detail": "all upgradeable cards" },
+            { "effect": "obtainRelic", "amount": null, "id": "MARK_OF_THE_BLOOM" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "I am Rich: gain 999 gold, obtain 2 Normality curses (floors 40 and below)",
+          "requires": { "maxFloor": 40 },
+          "outcomes": [
+            { "effect": "gainGold", "amount": 999, "id": null },
+            { "effect": "obtainCurse", "amount": 2, "id": "NORMALITY" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "I am Healthy: heal to full, obtain the Doubt curse (floors 41+, replaces I am Rich)",
+          "requires": { "minFloor": 41 },
+          "outcomes": [
+            { "effect": "healHp", "amount": null, "id": null, "detail": "heal to full (maxHp)" },
+            { "effect": "obtainCurse", "amount": 1, "id": "DOUBT" }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed offers all four options unconditionally; the real game shows I am Rich only on floors <= 40 and I am Healthy on floors >= 41 (wiki:Mind_Bloom)."
+      ],
+      "needsJarVerification": ["Exact floor threshold comparison (<=40 vs <40) in MindBloom.java."],
+      "sources": ["GameContext.cpp:3015-3067", "spire-archive", "wiki:Mind_Bloom"]
+    },
+    {
+      "id": "THE_MOAI_HEAD",
+      "gameId": "The Moai Head",
+      "name": "The Moai Head",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": { "anyOf": [{ "curHpAtMostPctOfMax": 0.5 }, { "hasRelic": "GOLDEN_IDOL" }] },
+      "summary": "A stone head swallows the wounded whole, or swallows a Golden Idol for a fortune.",
+      "options": [
+        {
+          "label": "Jump inside: lose 12.5% of max HP permanently, then heal to full",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseMaxHp", "amount": "pct:0.125", "rounding": "round", "id": null, "detail": "maxHp floored at 1; with MARK_OF_THE_BLOOM the full heal does nothing and 0 HP means death" },
+            { "effect": "healHp", "amount": null, "id": null, "detail": "heal to full" }
+          ],
+          "random": null,
+          "a15": { "amount": "pct:0.18" }
+        },
+        {
+          "label": "Offer Golden Idol: lose the Golden Idol relic, gain 333 gold",
+          "requires": { "hasRelic": "GOLDEN_IDOL" },
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": "GOLDEN_IDOL", "detail": "GOLDEN_IDOL relic removed" },
+            { "effect": "gainGold", "amount": 333, "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:409-413,1021-1023,3343-3372", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "MYSTERIOUS_SPHERE",
+      "gameId": "Mysterious Sphere",
+      "name": "Mysterious Sphere",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "A guarded bone sphere hides a rare relic; cracking it wakes its sentries.",
+      "options": [
+        {
+          "label": "Open sphere: fight 2 Orb Walkers; victory yields a rare relic, 45-55 gold, potions, and a card reward",
+          "requires": null,
+          "outcomes": [
+            { "effect": "startCombat", "amount": null, "id": "MYSTERIOUS_SPHERE_EVENT", "combatRewards": { "gold": { "rng": "miscRng", "min": 45, "max": 55 }, "relic": "random RARE (screenless)", "cardReward": true, "potions": "standard roll" } }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed's Leave branch (GameContext.cpp:3104-3106) grants 99 gold (50 at A15); wiki:Mysterious_Sphere says leaving does nothing. Appears to be a copy-paste bug from The Nest; corpus follows wiki."
+      ],
+      "needsJarVerification": ["Confirm Leave grants nothing and there is no A15 modifier."],
+      "sources": ["GameContext.cpp:1180-1191,3093-3113", "spire-archive", "wiki:Mysterious_Sphere"]
+    },
+    {
+      "id": "SENSORY_STONE",
+      "gameId": "Sensory Stone",
+      "name": "Sensory Stone",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "A memory-stone dispenses colorless card rewards; deeper recall costs HP.",
+      "options": [
+        {
+          "label": "Recall 1: receive 1 colorless card reward",
+          "requires": null,
+          "outcomes": [{ "effect": "obtainCard", "amount": 1, "id": null, "detail": "one colorless card reward (pick 1 of the offered colorless cards, skippable)" }],
+          "random": { "rng": "cardRng", "roll": "colorless card reward generation" },
+          "a15": null
+        },
+        {
+          "label": "Recall 2: lose 5 HP, receive 2 colorless card rewards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": 5, "id": null },
+            { "effect": "obtainCard", "amount": 2, "id": null, "detail": "two separate colorless card rewards" }
+          ],
+          "random": { "rng": "cardRng", "roll": "colorless card reward generation" },
+          "a15": null
+        },
+        {
+          "label": "Recall 3: lose 10 HP, receive 3 colorless card rewards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": 10, "id": null },
+            { "effect": "obtainCard", "amount": 3, "id": null, "detail": "three separate colorless card rewards" }
+          ],
+          "random": { "rng": "cardRng", "roll": "colorless card reward generation" },
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3214-3231", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "TOMB_OF_LORD_RED_MASK",
+      "gameId": "Tomb of Lord Red Mask",
+      "name": "Tomb of Lord Red Mask",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "A tomb pays tribute to mask-wearers and sells its mask for everything you own.",
+      "options": [
+        {
+          "label": "Don the Red Mask: gain 222 gold (requires the Red Mask relic)",
+          "requires": { "hasRelic": "RED_MASK" },
+          "outcomes": [{ "effect": "gainGold", "amount": 222, "id": null }],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Offer gold: lose ALL gold, obtain the Red Mask relic",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseGold", "amount": null, "id": null, "detail": "all current gold" },
+            { "effect": "obtainRelic", "amount": null, "id": "RED_MASK" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3409-3431", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "WINDING_HALLS",
+      "gameId": "Winding Halls",
+      "name": "Winding Halls",
+      "pool": "act3",
+      "acts": [3],
+      "canSpawn": null,
+      "summary": "Lost in shifting halls, you choose between madness, a cursed rest, or backtracking at a max HP cost.",
+      "options": [
+        {
+          "label": "Embrace madness: lose 12.5% of max HP, obtain 2 Madness cards",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": "pct:0.125", "rounding": "round", "id": null },
+            { "effect": "obtainCard", "amount": 2, "id": "MADNESS" }
+          ],
+          "random": null,
+          "a15": { "amount": "pct:0.18" }
+        },
+        {
+          "label": "Press on: heal 25% of max HP, obtain the Writhe curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "healHp", "amount": "pct:0.25", "rounding": "round", "id": null },
+            { "effect": "obtainCurse", "amount": 1, "id": "WRITHE" }
+          ],
+          "random": null,
+          "a15": { "amount": "pct:0.20" }
+        },
+        {
+          "label": "Retrace your steps: lose 5% of max HP permanently",
+          "requires": null,
+          "outcomes": [{ "effect": "loseMaxHp", "amount": "pct:0.05", "rounding": "round", "id": null }],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1044-1048,3556-3579", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "MATCH_AND_KEEP",
+      "gameId": "Match and Keep",
+      "name": "Match and Keep",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A 12-card memory game: five flip attempts, matched pairs join your deck (curses included).",
+      "options": [
+        {
+          "label": "Play: flip 2 of 12 face-down cards per attempt, 5 attempts; each matched pair is obtained",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainCard", "amount": null, "id": null, "detail": "pool = 2 copies each of 6 cards: random rare / uncommon / common class card (cardRng), uncommon colorless (colorless pool shuffled with shuffleRng), random curse (cardRng), class starter (BASH/NEUTRALIZE/ZAP/ERUPTION). Grid placement: indices [0..5,0..5] java-shuffled seeded miscRng.randomLong(); slot for shuffle position i is (i%3)*4 + (i%4)" }
+          ],
+          "random": { "rng": "cardRng+shuffleRng+miscRng", "roll": "card identities via cardRng (colorless via shuffleRng); board layout via miscRng.randomLong() seeded java shuffle" },
+          "a15": { "detail": "the uncommon colorless slot is replaced by a second random curse (cardRng)" }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:963-996,2403-2426", "spire-archive", "wiki:Match_and_Keep"]
+    },
+    {
+      "id": "GOLDEN_SHRINE",
+      "gameId": "Golden Shrine",
+      "name": "Golden Shrine",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A gilded shrine gives modest gold when honored or a fortune plus a curse when defiled.",
+      "options": [
+        { "label": "Pray: gain 100 gold", "requires": null, "outcomes": [{ "effect": "gainGold", "amount": 100, "id": null }], "random": null, "a15": { "gainGold": 50 } },
+        {
+          "label": "Desecrate: gain 275 gold, obtain the Regret curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "gainGold", "amount": 275, "id": null },
+            { "effect": "obtainCurse", "amount": 1, "id": "REGRET" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2875-2896", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "TRANSMORGRIFIER",
+      "gameId": "Transmorgrifier",
+      "name": "Transmogrifier",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A shrine that transforms one card.",
+      "options": [
+        {
+          "label": "Pray: transform a card",
+          "requires": null,
+          "outcomes": [{ "effect": "transformCard", "amount": 1, "id": null }],
+          "random": { "rng": "miscRng", "roll": "transform result rolled with miscRng" },
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3433-3445", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "PURIFIER",
+      "gameId": "Purifier",
+      "name": "Purifier",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A shrine that removes one card.",
+      "options": [
+        { "label": "Pray: remove a card", "requires": null, "outcomes": [{ "effect": "removeCard", "amount": 1, "id": null }], "random": null, "a15": null },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3166-3177", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "UPGRADE_SHRINE",
+      "gameId": "Upgrade Shrine",
+      "name": "Upgrade Shrine",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A shrine that upgrades one card.",
+      "options": [
+        { "label": "Pray: upgrade a card", "requires": null, "outcomes": [{ "effect": "upgradeCard", "amount": 1, "id": null }], "random": null, "a15": null },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3447-3458", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "WHEEL_OF_CHANGE",
+      "gameId": "Wheel of Change",
+      "name": "Wheel of Change",
+      "pool": "shrine",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A gremlin forces one spin of a six-outcome prize wheel; results range from riches to injury.",
+      "options": [
+        {
+          "label": "Spin (forced): uniform roll over gold / relic / full heal / Decay curse / card removal / HP loss",
+          "requires": null,
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": null, "detail": "exactly one result applies; see random" }
+          ],
+          "random": {
+            "rng": "miscRng",
+            "roll": "random(5), uniform 0-5",
+            "results": {
+              "0": "gainGold: act * 100",
+              "1": "obtainRelic: screenless random relic, tier via relicRng 50/33/17, via reward screen",
+              "2": "healHp: to full",
+              "3": "obtainCurse: DECAY",
+              "4": "removeCard: choose 1",
+              "5": "loseHp (hpLoss): floor(0.10 * maxHp); A15: floor(0.15 * maxHp)"
+            }
+          },
+          "a15": { "detail": "result 5 HP loss uses 15% of max HP instead of 10%" }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:3515-3554", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "OMINOUS_FORGE",
+      "gameId": "Accursed Blacksmith",
+      "name": "Ominous Forge",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "An abandoned forge upgrades a card, or its stash yields a relic bound to a curse.",
+      "options": [
+        { "label": "Forge: upgrade a card", "requires": null, "outcomes": [{ "effect": "upgradeCard", "amount": 1, "id": null }], "random": null, "a15": null },
+        {
+          "label": "Rummage: obtain Warped Tongs relic and the Pain curse",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainCurse", "amount": 1, "id": "PAIN" },
+            { "effect": "obtainRelic", "amount": null, "id": "WARPED_TONGS" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:2448-2468", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "BONFIRE_SPIRITS",
+      "gameId": "Bonfire Elementals",
+      "name": "Bonfire Spirits",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "Fire spirits consume one offered card and repay you according to its rarity.",
+      "options": [
+        {
+          "label": "Offer a card (mandatory): remove it; reward scales with rarity",
+          "requires": null,
+          "outcomes": [
+            { "effect": "removeCard", "amount": 1, "id": null, "detail": "any non-bottled card that can be removed (canTransform)" },
+            { "effect": "other", "amount": null, "id": null, "detail": "by offered rarity: CURSE => obtain SPIRIT_POOP relic; BASIC => nothing; COMMON/SPECIAL => heal 5; UNCOMMON => heal 10; RARE => gain 10 max HP and heal to full" }
+          ],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:859-861,3661-3693", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "DESIGNER_IN_SPIRE",
+      "gameId": "Designer",
+      "name": "Designer In-Spire",
+      "pool": "oneTime",
+      "acts": [2, 3],
+      "canSpawn": { "acts": [2, 3], "minGold": 75 },
+      "summary": "A snob designer sells deck services; each visit rolls which variant of two services is offered.",
+      "options": [
+        {
+          "label": "Adjustments: pay 40 gold; upgrade a chosen card OR upgrade 2 random cards (variant rolled at setup)",
+          "requires": { "minGold": 40 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 40, "id": null },
+            { "effect": "upgradeCard", "amount": null, "id": null, "detail": "variant A: choose 1 card to upgrade; variant B: 2 random cards upgraded (miscRng)" }
+          ],
+          "random": { "rng": "miscRng", "roll": "setup: randomBoolean() picks upgrade variant; separate randomBoolean() picks clean-up variant" },
+          "a15": { "loseGold": 50, "requires": { "minGold": 50 } }
+        },
+        {
+          "label": "Clean up: pay 60 gold; remove a chosen card OR transform 2 random cards (variant rolled at setup)",
+          "requires": { "minGold": 60 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 60, "id": null },
+            { "effect": "other", "amount": null, "id": null, "detail": "variant A: choose 1 card to remove; variant B: 2 random cards transformed (miscRng)" }
+          ],
+          "random": { "rng": "miscRng", "roll": "variant fixed at event setup" },
+          "a15": { "loseGold": 75, "requires": { "minGold": 75 } }
+        },
+        {
+          "label": "Full service: pay 90 gold; remove a chosen card, then upgrade a random card",
+          "requires": { "minGold": 90 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 90, "id": null },
+            { "effect": "removeCard", "amount": 1, "id": null },
+            { "effect": "upgradeCard", "amount": 1, "id": null, "detail": "random card (miscRng)" }
+          ],
+          "random": { "rng": "miscRng", "roll": "random upgrade target" },
+          "a15": { "loseGold": 110, "requires": { "minGold": 110 } }
+        },
+        {
+          "label": "Punch: lose 3 HP",
+          "requires": null,
+          "outcomes": [{ "effect": "loseHp", "kind": "hpLoss", "amount": 3, "id": null }],
+          "random": null,
+          "a15": { "amount": 5 }
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed's handler (GameContext.cpp:2657-2696) has missing break statements (case 3 falls into case 4 into case 5) and charges no gold for the upgrade-2-random variant; costs/variants here follow wiki:Designer_In-Spire, which matches lightspeed's intact branches (40/50, 60/75, 90/110, punch 3/5)."
+      ],
+      "needsJarVerification": ["Which select screens are player-choice vs random per variant, and per-option gold gating when below a service's cost."],
+      "sources": ["GameContext.cpp:374-375,877-880,2657-2696", "spire-archive", "wiki:Designer_In-Spire"]
+    },
+    {
+      "id": "DUPLICATOR",
+      "gameId": "Duplicator",
+      "name": "Duplicator",
+      "pool": "oneTime",
+      "acts": [2, 3],
+      "canSpawn": { "acts": [2, 3] },
+      "summary": "An altar that copies one card in your deck.",
+      "options": [
+        { "label": "Pray: duplicate a card (gain a copy)", "requires": null, "outcomes": [{ "effect": "obtainCard", "amount": 1, "id": null, "detail": "exact copy of a chosen deck card" }], "random": null, "a15": null },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:377-378,2721-2732", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "FACE_TRADER",
+      "gameId": "Face Trader",
+      "name": "Face Trader",
+      "pool": "oneTime",
+      "acts": [1, 2],
+      "canSpawn": { "acts": [1, 2] },
+      "summary": "A mask peddler pays gold to touch your face, or swaps it for a random face relic.",
+      "options": [
+        {
+          "label": "Touch: take damage equal to 10% of max HP (min 1), gain 75 gold",
+          "requires": null,
+          "outcomes": [
+            { "effect": "gainGold", "amount": 75, "id": null },
+            { "effect": "loseHp", "kind": "damage", "amount": "pct:0.10", "rounding": "floor", "id": null, "detail": "max(1, floor(0.10*maxHp))" }
+          ],
+          "random": null,
+          "a15": { "gainGold": 50 }
+        },
+        {
+          "label": "Trade: obtain a random face relic you do not own",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM_FACE", "detail": "uniform among un-owned of CULTIST_HEADPIECE / FACE_OF_CLERIC / GREMLIN_VISAGE / NLOTHS_HUNGRY_FACE / SSSERPENT_HEAD; CIRCLET if all owned" }
+          ],
+          "random": { "rng": "miscRng", "roll": "candidate list java-shuffled seeded miscRng.randomLong(); first taken" },
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "In-game/wiki text advertises 50% good face / 50% bad face; the implementation draws uniformly from all un-owned faces (5-way including the neutral Cultist Headpiece)."
+      ],
+      "sources": ["GameContext.cpp:380-381,882-884,2734-2755", "spire-archive", "wiki:Face_Trader"]
+    },
+    {
+      "id": "THE_DIVINE_FOUNTAIN",
+      "gameId": "Fountain of Cleansing",
+      "name": "The Divine Fountain",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": { "deckHasCurse": true },
+      "summary": "Sacred water washes away every removable curse.",
+      "options": [
+        {
+          "label": "Drink: remove all removable curses from your deck",
+          "requires": null,
+          "outcomes": [
+            { "effect": "removeCard", "amount": null, "id": null, "detail": "every CURSE card except ASCENDERS_BANE, NECRONOMICURSE, CURSE_OF_THE_BELL" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:371-372,2811-2827", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "KNOWING_SKULL",
+      "gameId": "Knowing Skull",
+      "name": "Knowing Skull",
+      "pool": "oneTime",
+      "acts": [2],
+      "canSpawn": { "acts": [2], "minCurHp": 13 },
+      "summary": "A flaming skull sells gold, a colorless card, or a potion for HP; each purchase raises that item's price.",
+      "options": [
+        {
+          "label": "Riches: lose X HP, gain 90 gold (repeatable; X rises 1 per purchase of this option)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": null, "id": null, "detail": "X = max(6, floor(0.10*maxHp)) + timesThisOptionChosen" },
+            { "effect": "gainGold", "amount": 90, "id": null }
+          ],
+          "random": null,
+          "a15": null
+        },
+        {
+          "label": "Success: lose X HP, obtain a random uncommon colorless card (repeatable; X rises 1 per purchase)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": null, "id": null, "detail": "X = max(6, floor(0.10*maxHp)) + timesThisOptionChosen" },
+            { "effect": "obtainCard", "amount": 1, "id": null, "detail": "uncommon colorless; lightspeed: colorless pool shuffled with shuffleRng, first uncommon taken" }
+          ],
+          "random": { "rng": "shuffleRng", "roll": "colorless pool shuffle" },
+          "a15": null
+        },
+        {
+          "label": "A pick me up: lose X HP, obtain a random potion (repeatable; X rises 1 per purchase; works even with full slots, potion lost)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseHp", "kind": "hpLoss", "amount": null, "id": null, "detail": "X = max(6, floor(0.10*maxHp)) + timesThisOptionChosen" },
+            { "effect": "obtainPotion", "amount": 1, "id": null, "detail": "random potion via potionRng" }
+          ],
+          "random": { "rng": "potionRng", "roll": "random potion" },
+          "a15": null
+        },
+        {
+          "label": "How do I leave: lose base X HP (no increment), event ends",
+          "requires": null,
+          "outcomes": [{ "effect": "loseHp", "kind": "hpLoss", "amount": null, "id": null, "detail": "base X = max(6, floor(0.10*maxHp)); lightspeed hardcodes 6" }],
+          "random": null,
+          "a15": null
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed uses a flat base cost of 6 HP for every option (GameContext.cpp:944-948); wiki:Knowing_Skull says base X = 10% of max HP with a minimum of 6. Corpus follows wiki; the two agree only when maxHp <= ~69."
+      ],
+      "needsJarVerification": ["Base cost formula/rounding in KnowingSkull.java and whether the leave cost also scales with prior purchases."],
+      "sources": ["GameContext.cpp:383-384,944-948,2920-2946", "spire-archive", "wiki:Knowing_Skull"]
+    },
+    {
+      "id": "LAB",
+      "gameId": "Lab",
+      "name": "Lab",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "An alchemy lab hands over free potions, no choice involved.",
+      "options": [
+        {
+          "label": "Search (automatic): receive 3 random potions via the reward screen",
+          "requires": null,
+          "outcomes": [{ "effect": "obtainPotion", "amount": 3, "id": null, "detail": "each rolled with potionRng" }],
+          "random": { "rng": "potionRng", "roll": "3 independent random potions (2 at A15+)" },
+          "a15": { "obtainPotion": 2 }
+        }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:950-961", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "NLOTH",
+      "gameId": "Nloth",
+      "name": "N'loth",
+      "pool": "oneTime",
+      "acts": [2],
+      "canSpawn": { "acts": [2], "minRelics": 2 },
+      "summary": "A hungry creature eats one of two randomly chosen relics you own and leaves its gift behind.",
+      "options": [
+        {
+          "label": "Offer relic A: lose that relic, obtain N'loth's Gift",
+          "requires": null,
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": null, "detail": "one of two owned relics chosen at setup is removed (relic indices java-shuffled seeded miscRng.randomLong(); first two shown)" },
+            { "effect": "obtainRelic", "amount": null, "id": "NLOTHS_GIFT" }
+          ],
+          "random": { "rng": "miscRng", "roll": "setup: shuffle of owned relic indices; offers index 0 and 1" },
+          "a15": null
+        },
+        {
+          "label": "Offer relic B: lose that relic, obtain N'loth's Gift",
+          "requires": null,
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": null, "detail": "the second offered relic is removed" },
+            { "effect": "obtainRelic", "amount": null, "id": "NLOTHS_GIFT" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:386-387,998-1007,3131-3153", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "NOTE_FOR_YOURSELF",
+      "gameId": "Note For Yourself",
+      "name": "Note For Yourself",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": { "maxAscension": 14 },
+      "summary": "A hidden note swaps a stored card from a past run for one of your current cards.",
+      "options": [
+        {
+          "label": "Take and give: obtain the stored card, then choose a deck card to remove (it is stored for a future run)",
+          "requires": null,
+          "outcomes": [
+            { "effect": "obtainCard", "amount": 1, "id": null, "detail": "card persisted in the save profile; IRON_WAVE on a fresh profile; lightspeed exposes it as the noteForYourselfCard config" },
+            { "effect": "removeCard", "amount": 1, "id": null, "detail": "chosen card is written back to the profile for the next encounter" }
+          ],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Ignore: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["Events.h:195-196", "GameContext.cpp:3155-3164", "spire-archive", "wiki:A_Note_For_Yourself"]
+    },
+    {
+      "id": "SECRET_PORTAL",
+      "gameId": "Secret Portal",
+      "name": "Secret Portal",
+      "pool": "oneTime",
+      "acts": [3],
+      "canSpawn": { "acts": [3], "minPlaytimeSeconds": 800 },
+      "summary": "A portal offers an instant jump to the Act 3 boss, skipping every floor between.",
+      "options": [
+        {
+          "label": "Enter the portal: travel immediately to the act boss room",
+          "requires": null,
+          "outcomes": [{ "effect": "other", "amount": null, "id": null, "detail": "map position set to the boss row (y=14); proceeds directly to the boss fight, skipping all remaining floors and rewards" }],
+          "random": null,
+          "a15": null
+        },
+        { "label": "Leave: no effect", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [
+        "The 800-second playtime requirement is from wiki:Secret_Portal; lightspeed abstracts it as a speedrunPace flag (canAddOneTimeEvent: act==3 && !speedrunPace)."
+      ],
+      "sources": ["GameContext.cpp:395-396,3200-3212", "spire-archive", "wiki:Secret_Portal"]
+    },
+    {
+      "id": "THE_JOUST",
+      "gameId": "The Joust",
+      "name": "The Joust",
+      "pool": "oneTime",
+      "acts": [2],
+      "canSpawn": { "acts": [2], "minGold": 50 },
+      "summary": "A forced 50-gold wager on a duel between a knight and his pet's murderer.",
+      "options": [
+        {
+          "label": "Bet on the murderer: pay 50 gold; 70% chance to win 100 gold",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseGold", "amount": 50, "id": null },
+            { "effect": "gainGold", "amount": 100, "id": null, "detail": "only if the owner loses (70%)" }
+          ],
+          "random": { "rng": "miscRng", "roll": "single randomBoolean(0.3): true = owner wins (30%)" },
+          "a15": null
+        },
+        {
+          "label": "Bet on the owner: pay 50 gold; 30% chance to win 250 gold",
+          "requires": null,
+          "outcomes": [
+            { "effect": "loseGold", "amount": 50, "id": null },
+            { "effect": "gainGold", "amount": 250, "id": null, "detail": "only if the owner wins (30%)" }
+          ],
+          "random": { "rng": "miscRng", "roll": "same single randomBoolean(0.3) roll" },
+          "a15": null
+        }
+      ],
+      "verified": true,
+      "conflicts": [
+        "spire-archive labels the 100-gold bet 'Bet on Owner' and the 250-gold bet 'Bet on Murderer'; wiki:The_Joust has it reversed (murderer = 70%/100, owner = 30%/250). Probabilities and payouts match lightspeed either way; labels follow wiki."
+      ],
+      "sources": ["GameContext.cpp:389-390,3280-3298", "spire-archive", "wiki:The_Joust"]
+    },
+    {
+      "id": "WE_MEET_AGAIN",
+      "gameId": "WeMeetAgain",
+      "name": "We Meet Again!",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": null,
+      "summary": "A stranger claims friendship and trades a random relic for a potion, gold, or a card.",
+      "options": [
+        {
+          "label": "Give potion: lose a random held potion, obtain a random relic",
+          "requires": { "minPotions": 1 },
+          "outcomes": [
+            { "effect": "other", "amount": null, "id": null, "detail": "potion slot chosen uniformly at setup (java shuffle of filled slots seeded miscRng) is emptied" },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" }
+          ],
+          "random": { "rng": "miscRng+relicRng", "roll": "potion pick at setup (miscRng); relic tier+id (relicRng)" },
+          "a15": null
+        },
+        {
+          "label": "Give gold: lose a random 50-150 gold amount, obtain a random relic",
+          "requires": { "minGold": 50 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": null, "id": null, "detail": "amount = miscRng.random(50, min(150, gold)) rolled at setup" },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" }
+          ],
+          "random": { "rng": "miscRng+relicRng", "roll": "gold amount at setup (miscRng); relic tier+id (relicRng)" },
+          "a15": null
+        },
+        {
+          "label": "Give card: lose a random non-basic, non-curse card, obtain a random relic",
+          "requires": { "deckHasNonBasicNonCurseCard": true },
+          "outcomes": [
+            { "effect": "removeCard", "amount": 1, "id": null, "detail": "eligible card indices java-shuffled at setup (miscRng); first taken (earliest identical copy removed)" },
+            { "effect": "obtainRelic", "amount": null, "id": "RANDOM", "detail": "screenless relic, tier via relicRng 50/33/17" }
+          ],
+          "random": { "rng": "miscRng+relicRng", "roll": "card pick at setup (miscRng); relic tier+id (relicRng)" },
+          "a15": null
+        },
+        { "label": "Attack: no effect, event ends", "requires": null, "outcomes": [], "random": null, "a15": null }
+      ],
+      "verified": true,
+      "conflicts": [],
+      "sources": ["GameContext.cpp:1033-1042,3484-3512", "spire-archive", "wiki:Events.lua"]
+    },
+    {
+      "id": "THE_WOMAN_IN_BLUE",
+      "gameId": "The Woman in Blue",
+      "name": "The Woman in Blue",
+      "pool": "oneTime",
+      "acts": [1, 2, 3],
+      "canSpawn": { "minGold": 50 },
+      "summary": "A pushy shopkeeper insists you buy 1-3 random potions; refusing has a price at high ascension.",
+      "options": [
+        {
+          "label": "Buy 1 potion: pay 20 gold, receive 1 random potion",
+          "requires": { "minGold": 20 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 20, "id": null },
+            { "effect": "obtainPotion", "amount": 1, "id": null, "detail": "potionRng, via reward screen" }
+          ],
+          "random": { "rng": "potionRng", "roll": "random potion per purchase" },
+          "a15": null
+        },
+        {
+          "label": "Buy 2 potions: pay 30 gold, receive 2 random potions",
+          "requires": { "minGold": 30 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 30, "id": null },
+            { "effect": "obtainPotion", "amount": 2, "id": null, "detail": "potionRng, via reward screen" }
+          ],
+          "random": { "rng": "potionRng", "roll": "random potion per purchase" },
+          "a15": null
+        },
+        {
+          "label": "Buy 3 potions: pay 40 gold, receive 3 random potions",
+          "requires": { "minGold": 40 },
+          "outcomes": [
+            { "effect": "loseGold", "amount": 40, "id": null },
+            { "effect": "obtainPotion", "amount": 3, "id": null, "detail": "potionRng, via reward screen" }
+          ],
+          "random": { "rng": "potionRng", "roll": "random potion per purchase" },
+          "a15": null
+        },
+        {
+          "label": "Leave: no effect (at A15+: lose 5% of max HP)",
+          "requires": null,
+          "outcomes": [],
+          "random": null,
+          "a15": { "outcomes": [{ "effect": "loseHp", "kind": "hpLoss", "amount": "pct:0.05", "rounding": "ceil", "id": null }] }
+        }
+      ],
+      "verified": false,
+      "conflicts": [
+        "lightspeed's purchase branches (GameContext.cpp:3374-3407) never deduct gold; spire-archive and wiki agree the purchases cost 20/30/40 gold. Corpus includes the costs."
+      ],
+      "needsJarVerification": ["Gold costs and whether purchase options are gated by current gold in TheWomanInBlue.java."],
+      "sources": ["GameContext.cpp:392-393,1025-1027,3374-3407", "spire-archive", "wiki:Events.lua"]
+    }
+  ]
+}

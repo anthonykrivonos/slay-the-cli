@@ -1,0 +1,56 @@
+The Shapes are a group of enemies encountered in [[Act 3]].
+
+== Exploder ==
+{{Enemy Infobox|Exploder}}
+{{Keyword Infobox|Explosive}}
+Exploders explode. Profound knowledge.
+
+=== Pattern ===
+{{Intents|Exploder}}
+Always uses this pattern:
+* {{Int|Exploder|Attack}}
+* {{Int|Exploder|Attack}}
+* {{Int|Exploder|Explode}}
+
+{{Clear}}
+== Repulsor ==
+{{Enemy Infobox|Repulsor}}
+{{Small Card Infobox|Dazed}}
+Repulsor repeatedly gives the player {{C|Dazed}}.
+
+=== Pattern ===
+{{Intents|Repulsor}}
+'''On all turns:'''
+* {{Int|Repulsor|Attack}} 20% chance
+* {{Int|Repulsor|Daze}} 80% chance
+
+Cannot use {{Int|Repulsor|Attack}} twice in a row.
+
+{{Clear}}
+
+== Spiker ==
+{{Enemy Infobox|Spiker}}
+{{Keyword Infobox|Thorns}}
+Spikers focus on building up {{KW|Thorns}} to make them more dangerous to kill as the battle progresses.
+
+=== Pattern ===
+{{Intents|Spiker}}
+On every turn, it has a 50/50 chance of using either {{Int|Spiker|Attack}} or {{Int|Spiker|Buff Thorns}}.
+
+Cannot use {{Int|Spiker|Attack}} twice in a row. Cannot use {{Int|Spiker|Buff Thorns}} once it has been used 6 times and will instead using {{Int|Spiker|Attack}}.
+
+{{Clear}}
+== Found With ==
+=== Act 3 ===
+In the Easy Pool's '''3 Shapes''' encounter with:
+* Three random Shapes (No more than two of the same shape)
+
+In the Hard Pool's '''4 Shapes''' encounter with:
+* Four random Shapes (No more than two of the same shape)
+
+In the '''Spheric Guardian''' encounter with:
+* {{M|Spheric Guardian}}
+* Two random Shapes
+
+{{EnemyNav}}
+[[Category:Monsters]]

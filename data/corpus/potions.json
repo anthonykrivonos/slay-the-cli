@@ -1,0 +1,974 @@
+[
+ {
+  "id": "AMBROSIA",
+  "name": "Ambrosia",
+  "gameId": "Ambrosia",
+  "rarity": "rare",
+  "class": "purple",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "purple"
+  ],
+  "text": "Enter $Divinity.",
+  "sources": {
+   "lightspeed": "Potions.h:AMBROSIA",
+   "spire": "AMBROSIA",
+   "wiki": "Ambrosia"
+  }
+ },
+ {
+  "id": "ANCIENT_POTION",
+  "name": "Ancient Potion",
+  "gameId": "Ancient Potion",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [1|2] $Artifact.",
+  "sources": {
+   "lightspeed": "Potions.h:ANCIENT_POTION",
+   "spire": "ANCIENT_POTION",
+   "wiki": "Ancient Potion"
+  }
+ },
+ {
+  "id": "ATTACK_POTION",
+  "name": "Attack Potion",
+  "gameId": "AttackPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Choose 1 of 3 random Attack cards to add[|two copies of it] to your hand. [It costs|They cost] 0 this turn.",
+  "sources": {
+   "lightspeed": "Potions.h:ATTACK_POTION",
+   "spire": "ATTACKPOTION",
+   "wiki": "Attack Potion"
+  }
+ },
+ {
+  "id": "BLESSING_OF_THE_FORGE",
+  "name": "Blessing of the Forge",
+  "gameId": "BlessingOfTheForge",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "$Upgrade all cards in your hand for the rest of combat.",
+  "sources": {
+   "lightspeed": "Potions.h:BLESSING_OF_THE_FORGE",
+   "spire": "BLESSINGOFTHEFORGE",
+   "wiki": "Blessing of the Forge"
+  }
+ },
+ {
+  "id": "BLOCK_POTION",
+  "name": "Block Potion",
+  "gameId": "Block Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 12,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [12|24] $Block.",
+  "sources": {
+   "lightspeed": "Potions.h:BLOCK_POTION",
+   "spire": "BLOCK_POTION",
+   "wiki": "Block Potion"
+  }
+ },
+ {
+  "id": "BLOOD_POTION",
+  "name": "Blood Potion",
+  "gameId": "BloodPotion",
+  "rarity": "common",
+  "class": "red",
+  "targeted": false,
+  "potency": {
+   "base": 20,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red"
+  ],
+  "text": "Heal for [20%|40%] of your Max HP.",
+  "sources": {
+   "lightspeed": "Potions.h:BLOOD_POTION",
+   "spire": "BLOODPOTION",
+   "wiki": "Blood Potion"
+  }
+ },
+ {
+  "id": "BOTTLED_MIRACLE",
+  "name": "Bottled Miracle",
+  "gameId": "BottledMiracle",
+  "rarity": "common",
+  "class": "purple",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "purple"
+  ],
+  "text": "Add [2|4] Miracles to your hand.",
+  "sources": {
+   "lightspeed": "Potions.h:BOTTLED_MIRACLE",
+   "spire": "BOTTLEDMIRACLE",
+   "wiki": "Bottled Miracle"
+  }
+ },
+ {
+  "id": "COLORLESS_POTION",
+  "name": "Colorless Potion",
+  "gameId": "ColorlessPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Choose 1 of 3 random Colorless cards to add[|2 copies of] to your hand. [It costs|They cost] 0 this turn.",
+  "sources": {
+   "lightspeed": "Potions.h:COLORLESS_POTION",
+   "spire": "COLORLESSPOTION",
+   "wiki": "Colorless Potion"
+  }
+ },
+ {
+  "id": "CULTIST_POTION",
+  "name": "Cultist Potion",
+  "gameId": "CultistPotion",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [1|2] $Ritual.",
+  "sources": {
+   "lightspeed": "Potions.h:CULTIST_POTION",
+   "spire": "CULTISTPOTION",
+   "wiki": "Cultist Potion"
+  }
+ },
+ {
+  "id": "CUNNING_POTION",
+  "name": "Cunning Potion",
+  "gameId": "CunningPotion",
+  "rarity": "uncommon",
+  "class": "green",
+  "targeted": false,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "green"
+  ],
+  "text": "Add [3|6] Shivs+ to your hand.",
+  "sources": {
+   "lightspeed": "Potions.h:CUNNING_POTION",
+   "spire": "CUNNINGPOTION",
+   "wiki": "Cunning Potion"
+  }
+ },
+ {
+  "id": "DEXTERITY_POTION",
+  "name": "Dexterity Potion",
+  "gameId": "Dexterity Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [2|4] $Dexterity.",
+  "sources": {
+   "lightspeed": "Potions.h:DEXTERITY_POTION",
+   "spire": "DEXTERITY_POTION",
+   "wiki": "Dexterity Potion"
+  }
+ },
+ {
+  "id": "DISTILLED_CHAOS",
+  "name": "Distilled Chaos",
+  "gameId": "DistilledChaos",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Play the top [3|6] cards of your draw pile.",
+  "sources": {
+   "lightspeed": "Potions.h:DISTILLED_CHAOS",
+   "spire": "DISTILLEDCHAOS",
+   "wiki": "Distilled Chaos"
+  }
+ },
+ {
+  "id": "DUPLICATION_POTION",
+  "name": "Duplication Potion",
+  "gameId": "DuplicationPotion",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "This turn, your next [card is|two cards are] played twice.",
+  "sources": {
+   "lightspeed": "Potions.h:DUPLICATION_POTION",
+   "spire": "DUPLICATIONPOTION",
+   "wiki": "Duplication Potion"
+  }
+ },
+ {
+  "id": "ELIXIR_POTION",
+  "name": "Elixir",
+  "gameId": "ElixirPotion",
+  "rarity": "uncommon",
+  "class": "red",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "red"
+  ],
+  "text": "$Exhaust any number of cards in your hand.",
+  "sources": {
+   "lightspeed": "Potions.h:ELIXIR_POTION",
+   "spire": "ELIXIRPOTION",
+   "wiki": "Elixir"
+  }
+ },
+ {
+  "id": "ENERGY_POTION",
+  "name": "Energy Potion",
+  "gameId": "Energy Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [2|4] $Energy.",
+  "sources": {
+   "lightspeed": "Potions.h:ENERGY_POTION",
+   "spire": "ENERGY_POTION",
+   "wiki": "Energy Potion"
+  }
+ },
+ {
+  "id": "ENTROPIC_BREW",
+  "name": "Entropic Brew",
+  "gameId": "EntropicBrew",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Fill all your empty potion slots with random potions.",
+  "sources": {
+   "lightspeed": "Potions.h:ENTROPIC_BREW",
+   "spire": "ENTROPICBREW",
+   "wiki": "Entropic Brew"
+  }
+ },
+ {
+  "id": "ESSENCE_OF_DARKNESS",
+  "name": "Essence of Darkness",
+  "gameId": "EssenceOfDarkness",
+  "rarity": "rare",
+  "class": "blue",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "blue"
+  ],
+  "text": "Channel [1|2] $Dark for each orb slot.",
+  "sources": {
+   "lightspeed": "Potions.h:ESSENCE_OF_DARKNESS",
+   "spire": "ESSENCEOFDARKNESS",
+   "wiki": "Essence of Darkness"
+  }
+ },
+ {
+  "id": "ESSENCE_OF_STEEL",
+  "name": "Essence of Steel",
+  "gameId": "EssenceOfSteel",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 4,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [4|8] $Plated Armor.",
+  "sources": {
+   "lightspeed": "Potions.h:ESSENCE_OF_STEEL",
+   "spire": "ESSENCEOFSTEEL",
+   "wiki": "Essence of Steel"
+  }
+ },
+ {
+  "id": "EXPLOSIVE_POTION",
+  "name": "Explosive Potion",
+  "gameId": "Explosive Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 10,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Deal [10|20] damage to all enemies.",
+  "sources": {
+   "lightspeed": "Potions.h:EXPLOSIVE_POTION",
+   "spire": "EXPLOSIVE_POTION",
+   "wiki": "Explosive Potion"
+  }
+ },
+ {
+  "id": "FAIRY_POTION",
+  "name": "Fairy in a Bottle",
+  "gameId": "FairyPotion",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 30,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "When you would die, heal to [30%|60%] of your Max HP instead and discard this potion.",
+  "sources": {
+   "lightspeed": "Potions.h:FAIRY_POTION",
+   "spire": "FAIRYPOTION",
+   "wiki": "Fairy in a Bottle"
+  }
+ },
+ {
+  "id": "FEAR_POTION",
+  "name": "Fear Potion",
+  "gameId": "FearPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": true,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Apply [3|6] $Vulnerable to target enemy.",
+  "sources": {
+   "lightspeed": "Potions.h:FEAR_POTION",
+   "spire": "FEARPOTION",
+   "wiki": "Fear Potion"
+  }
+ },
+ {
+  "id": "FIRE_POTION",
+  "name": "Fire Potion",
+  "gameId": "Fire Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": true,
+  "potency": {
+   "base": 20,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Deal [20|40] damage to target enemy.",
+  "sources": {
+   "lightspeed": "Potions.h:FIRE_POTION",
+   "spire": "FIRE_POTION",
+   "wiki": "Fire Potion"
+  }
+ },
+ {
+  "id": "FLEX_POTION",
+  "name": "Flex Potion",
+  "gameId": "SteroidPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 5,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [5|10] $Strength. At the end of your turn, lose [5|10] $Strength.",
+  "sources": {
+   "lightspeed": "Potions.h:FLEX_POTION",
+   "spire": "STEROIDPOTION",
+   "wiki": "Flex Potion"
+  }
+ },
+ {
+  "id": "FOCUS_POTION",
+  "name": "Focus Potion",
+  "gameId": "FocusPotion",
+  "rarity": "common",
+  "class": "blue",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "blue"
+  ],
+  "text": "Gain [2|4] $Focus.",
+  "sources": {
+   "lightspeed": "Potions.h:FOCUS_POTION",
+   "spire": "FOCUSPOTION",
+   "wiki": "Focus Potion"
+  }
+ },
+ {
+  "id": "FRUIT_JUICE",
+  "name": "Fruit Juice",
+  "gameId": "Fruit Juice",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 5,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [5|10] Max HP.",
+  "sources": {
+   "lightspeed": "Potions.h:FRUIT_JUICE",
+   "spire": "FRUIT_JUICE",
+   "wiki": "Fruit Juice"
+  }
+ },
+ {
+  "id": "GAMBLERS_BREW",
+  "name": "Gambler's Brew",
+  "gameId": "GamblersBrew",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Discard any number of cards, then draw that many.",
+  "sources": {
+   "lightspeed": "Potions.h:GAMBLERS_BREW",
+   "spire": "GAMBLERSBREW",
+   "wiki": "Gambler's Brew"
+  }
+ },
+ {
+  "id": "GHOST_IN_A_JAR",
+  "name": "Ghost in a Jar",
+  "gameId": "GhostInAJar",
+  "rarity": "rare",
+  "class": "green",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "green"
+  ],
+  "text": "Gain [1|2] $Intangible.",
+  "sources": {
+   "lightspeed": "Potions.h:GHOST_IN_A_JAR",
+   "spire": "GHOSTINAJAR",
+   "wiki": "Ghost in a Jar"
+  }
+ },
+ {
+  "id": "HEART_OF_IRON",
+  "name": "Heart of Iron",
+  "gameId": "HeartOfIron",
+  "rarity": "rare",
+  "class": "red",
+  "targeted": false,
+  "potency": {
+   "base": 6,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red"
+  ],
+  "text": "Gain [6|12] $Metallicize.",
+  "sources": {
+   "lightspeed": "Potions.h:HEART_OF_IRON",
+   "spire": "HEARTOFIRON",
+   "wiki": "Heart of Iron"
+  }
+ },
+ {
+  "id": "LIQUID_BRONZE",
+  "name": "Liquid Bronze",
+  "gameId": "LiquidBronze",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [3|6] $Thorns.",
+  "sources": {
+   "lightspeed": "Potions.h:LIQUID_BRONZE",
+   "spire": "LIQUIDBRONZE",
+   "wiki": "Liquid Bronze"
+  }
+ },
+ {
+  "id": "LIQUID_MEMORIES",
+  "name": "Liquid Memories",
+  "gameId": "LiquidMemories",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Choose [a card|2 cards] in your discard pile and return it to your hand. [It costs|They cost] 0 this turn.",
+  "sources": {
+   "lightspeed": "Potions.h:LIQUID_MEMORIES",
+   "spire": "LIQUIDMEMORIES",
+   "wiki": "Liquid Memories"
+  }
+ },
+ {
+  "id": "POISON_POTION",
+  "name": "Poison Potion",
+  "gameId": "Poison Potion",
+  "rarity": "common",
+  "class": "green",
+  "targeted": true,
+  "potency": {
+   "base": 6,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "green"
+  ],
+  "text": "Apply [6|12] $Poison to target enemy.",
+  "sources": {
+   "lightspeed": "Potions.h:POISON_POTION",
+   "spire": "POISON_POTION",
+   "wiki": "Poison Potion"
+  }
+ },
+ {
+  "id": "POTION_OF_CAPACITY",
+  "name": "Potion of Capacity",
+  "gameId": "PotionOfCapacity",
+  "rarity": "uncommon",
+  "class": "blue",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "blue"
+  ],
+  "text": "Gain [2|4] $Orb slots.",
+  "sources": {
+   "lightspeed": "Potions.h:POTION_OF_CAPACITY",
+   "spire": "POTIONOFCAPACITY",
+   "wiki": "Potion of Capacity"
+  }
+ },
+ {
+  "id": "POWER_POTION",
+  "name": "Power Potion",
+  "gameId": "PowerPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Choose 1 of 3 random Power cards to add[|two copies of it] to your hand. [It costs|They cost] 0 this turn.",
+  "sources": {
+   "lightspeed": "Potions.h:POWER_POTION",
+   "spire": "POWERPOTION",
+   "wiki": "Power Potion"
+  }
+ },
+ {
+  "id": "REGEN_POTION",
+  "name": "Regen Potion",
+  "gameId": "Regen Potion",
+  "rarity": "uncommon",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 5,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [5|10] $Regeneration.",
+  "sources": {
+   "lightspeed": "Potions.h:REGEN_POTION",
+   "spire": "REGEN_POTION",
+   "wiki": "Regen Potion"
+  }
+ },
+ {
+  "id": "SKILL_POTION",
+  "name": "Skill Potion",
+  "gameId": "SkillPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 1,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Choose 1 of 3 random Skill cards to add[|two copies of] to your hand. [It costs|They cost] 0 this turn.",
+  "sources": {
+   "lightspeed": "Potions.h:SKILL_POTION",
+   "spire": "SKILLPOTION",
+   "wiki": "Skill Potion"
+  }
+ },
+ {
+  "id": "SMOKE_BOMB",
+  "name": "Smoke Bomb",
+  "gameId": "SmokeBomb",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Escape from a non-boss combat. Receive no rewards.",
+  "sources": {
+   "lightspeed": "Potions.h:SMOKE_BOMB",
+   "spire": "SMOKEBOMB",
+   "wiki": "Smoke Bomb"
+  }
+ },
+ {
+  "id": "SNECKO_OIL",
+  "name": "Snecko Oil",
+  "gameId": "SneckoOil",
+  "rarity": "rare",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 5,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Draw [5|10] Cards. Randomize the cost of cards in your hand",
+  "sources": {
+   "lightspeed": "Potions.h:SNECKO_OIL",
+   "spire": "SNECKOOIL",
+   "wiki": "Snecko Oil"
+  }
+ },
+ {
+  "id": "SPEED_POTION",
+  "name": "Speed Potion",
+  "gameId": "SpeedPotion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 5,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [5|10] $Dexterity. At the end of your turn, lose [5|10] $Dexterity.",
+  "sources": {
+   "lightspeed": "Potions.h:SPEED_POTION",
+   "spire": "SPEEDPOTION",
+   "wiki": "Speed Potion"
+  }
+ },
+ {
+  "id": "STANCE_POTION",
+  "name": "Stance Potion",
+  "gameId": "StancePotion",
+  "rarity": "uncommon",
+  "class": "purple",
+  "targeted": false,
+  "potency": {
+   "base": null,
+   "sacredBarkDoubles": false
+  },
+  "inClassPool": [
+   "purple"
+  ],
+  "text": "Enter $Calm or $Wrath.",
+  "sources": {
+   "lightspeed": "Potions.h:STANCE_POTION",
+   "spire": "STANCEPOTION",
+   "wiki": "Stance Potion"
+  }
+ },
+ {
+  "id": "STRENGTH_POTION",
+  "name": "Strength Potion",
+  "gameId": "Strength Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 2,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Gain [2|4] $Strength.",
+  "sources": {
+   "lightspeed": "Potions.h:STRENGTH_POTION",
+   "spire": "STRENGTH_POTION",
+   "wiki": "Strength Potion"
+  }
+ },
+ {
+  "id": "SWIFT_POTION",
+  "name": "Swift Potion",
+  "gameId": "Swift Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": false,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Draw [3|6] cards.",
+  "sources": {
+   "lightspeed": "Potions.h:SWIFT_POTION",
+   "spire": "SWIFT_POTION",
+   "wiki": "Swift Potion"
+  }
+ },
+ {
+  "id": "WEAK_POTION",
+  "name": "Weak Potion",
+  "gameId": "Weak Potion",
+  "rarity": "common",
+  "class": "shared",
+  "targeted": true,
+  "potency": {
+   "base": 3,
+   "sacredBarkDoubles": true
+  },
+  "inClassPool": [
+   "red",
+   "green",
+   "blue",
+   "purple"
+  ],
+  "text": "Apply [3|6] $Weak to target enemy.",
+  "sources": {
+   "lightspeed": "Potions.h:WEAK_POTION",
+   "spire": "WEAK_POTION",
+   "wiki": "Weak Potion"
+  }
+ }
+]

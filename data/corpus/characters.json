@@ -1,0 +1,159 @@
+[
+ {
+  "id": "IRONCLAD",
+  "name": "Ironclad",
+  "color": "red",
+  "maxHp": 80,
+  "startingEnergy": 3,
+  "startingHandSize": 5,
+  "startingDeck": [
+   {
+    "card": "STRIKE_RED",
+    "count": 5
+   },
+   {
+    "card": "DEFEND_RED",
+    "count": 4
+   },
+   {
+    "card": "BASH",
+    "count": 1
+   }
+  ],
+  "masterDeckSize": 10,
+  "startingRelic": {
+   "id": "BURNING_BLOOD",
+   "name": "Burning Blood"
+  },
+  "startingGold": 99,
+  "startingPotionSlots": 3,
+  "orbSlots": 0,
+  "ascension14MaxHpLoss": 5,
+  "sources": {
+   "lightspeed": "CharacterClasses.h:IRONCLAD",
+   "spire": "IRONCLAD",
+   "constants": "V2.3.4 CharSelectInfo"
+  }
+ },
+ {
+  "id": "SILENT",
+  "name": "Silent",
+  "color": "green",
+  "maxHp": 70,
+  "startingEnergy": 3,
+  "startingHandSize": 5,
+  "startingDeck": [
+   {
+    "card": "STRIKE_GREEN",
+    "count": 5
+   },
+   {
+    "card": "DEFEND_GREEN",
+    "count": 5
+   },
+   {
+    "card": "SURVIVOR",
+    "count": 1
+   },
+   {
+    "card": "NEUTRALIZE",
+    "count": 1
+   }
+  ],
+  "masterDeckSize": 12,
+  "startingRelic": {
+   "id": "RING_OF_THE_SNAKE",
+   "name": "Ring of the Snake"
+  },
+  "startingGold": 99,
+  "startingPotionSlots": 3,
+  "orbSlots": 0,
+  "ascension14MaxHpLoss": 4,
+  "notes": "All characters draw 5 cards per turn; the Silent's extra 2 cards on turn 1 come from Ring of the Snake, not the character.",
+  "sources": {
+   "lightspeed": "CharacterClasses.h:SILENT",
+   "spire": "THE_SILENT",
+   "constants": "V2.3.4 CharSelectInfo"
+  }
+ },
+ {
+  "id": "DEFECT",
+  "name": "Defect",
+  "color": "blue",
+  "maxHp": 75,
+  "startingEnergy": 3,
+  "startingHandSize": 5,
+  "startingDeck": [
+   {
+    "card": "STRIKE_BLUE",
+    "count": 4
+   },
+   {
+    "card": "DEFEND_BLUE",
+    "count": 4
+   },
+   {
+    "card": "ZAP",
+    "count": 1
+   },
+   {
+    "card": "DUALCAST",
+    "count": 1
+   }
+  ],
+  "masterDeckSize": 10,
+  "startingRelic": {
+   "id": "CRACKED_CORE",
+   "name": "Cracked Core"
+  },
+  "startingGold": 99,
+  "startingPotionSlots": 3,
+  "orbSlots": 3,
+  "ascension14MaxHpLoss": 4,
+  "sources": {
+   "lightspeed": "CharacterClasses.h:DEFECT",
+   "spire": "DEFECT",
+   "constants": "V2.3.4 CharSelectInfo"
+  }
+ },
+ {
+  "id": "WATCHER",
+  "name": "Watcher",
+  "color": "purple",
+  "maxHp": 72,
+  "startingEnergy": 3,
+  "startingHandSize": 5,
+  "startingDeck": [
+   {
+    "card": "STRIKE_PURPLE",
+    "count": 4
+   },
+   {
+    "card": "DEFEND_PURPLE",
+    "count": 4
+   },
+   {
+    "card": "ERUPTION",
+    "count": 1
+   },
+   {
+    "card": "VIGILANCE",
+    "count": 1
+   }
+  ],
+  "masterDeckSize": 10,
+  "startingRelic": {
+   "id": "PURE_WATER",
+   "name": "Pure Water"
+  },
+  "startingGold": 99,
+  "startingPotionSlots": 3,
+  "orbSlots": 0,
+  "ascension14MaxHpLoss": 4,
+  "sources": {
+   "lightspeed": "CharacterClasses.h:WATCHER",
+   "spire": "WATCHER",
+   "constants": "V2.3.4 CharSelectInfo"
+  }
+ }
+]

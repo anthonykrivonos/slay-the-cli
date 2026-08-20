@@ -1,0 +1,62 @@
+{
+ "mantraThreshold": 10,
+ "stances": [
+  {
+   "id": "NEUTRAL",
+   "name": "Neutral",
+   "attackDamageDealtMultiplier": 1,
+   "attackDamageReceivedMultiplier": 1,
+   "onEnter": null,
+   "onExit": null,
+   "autoExit": null,
+   "sources": {
+    "spire": "NEUTRAL",
+    "lightspeed": "PlayerStatusEffects.h:Stance::NEUTRAL"
+   }
+  },
+  {
+   "id": "CALM",
+   "name": "Calm",
+   "attackDamageDealtMultiplier": 1,
+   "attackDamageReceivedMultiplier": 1,
+   "onEnter": null,
+   "onExit": "Gain 2 Energy (3 with the Violet Lotus relic).",
+   "autoExit": null,
+   "sources": {
+    "spire": "CALM",
+    "wiki": "Keywords.lua:Calm",
+    "lightspeed": "PlayerStatusEffects.h:Stance::CALM"
+   }
+  },
+  {
+   "id": "WRATH",
+   "name": "Wrath",
+   "attackDamageDealtMultiplier": 2,
+   "attackDamageReceivedMultiplier": 2,
+   "onEnter": null,
+   "onExit": null,
+   "autoExit": null,
+   "notes": "Multipliers apply to attack damage only (dealt by your attack cards, and received from enemy attacks).",
+   "sources": {
+    "spire": "WRATH",
+    "wiki": "Keywords.lua:Wrath",
+    "lightspeed": "PlayerStatusEffects.h:Stance::WRATH"
+   }
+  },
+  {
+   "id": "DIVINITY",
+   "name": "Divinity",
+   "attackDamageDealtMultiplier": 3,
+   "attackDamageReceivedMultiplier": 1,
+   "onEnter": "Gain 3 Energy.",
+   "onExit": null,
+   "autoExit": "Exit this stance (to Neutral) at the start of your next turn.",
+   "notes": "Entered by reaching 10 Mantra (excess Mantra carries over) or directly via effects that say Enter Divinity (Blasphemy, Ambrosia).",
+   "sources": {
+    "spire": "DIVINITY",
+    "wiki": "Keywords.lua:Divinity",
+    "lightspeed": "PlayerStatusEffects.h:Stance::DIVINITY"
+   }
+  }
+ ]
+}

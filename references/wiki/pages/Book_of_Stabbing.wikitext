@@ -1,0 +1,21 @@
+{{Enemy Infobox|Book of Stabbing}} {{Power Infobox|Painful Stabs}}
+Book of Stabbing is an [[Elite]] enemy found exclusively in [[Act 2]].
+
+== Pattern ==
+{{Intents|Book of Stabbing}}
+
+15% chance to use {{Int|Book of Stabbing|Big Stab}} and an 85% chance to use {{Int|Book of Stabbing|Multi Stab}}.
+
+Cannot use {{Int|Book of Stabbing|Multi Stab}} 3 times in a row and cannot use {{Int|Book of Stabbing|Big Stab}} twice in a row.
+
+== Found With ==
+
+=== Act 2 ===
+* Solo
+
+== Trivia ==
+* Book of Stabbing appears in the artwork of {{C|Safety}}.
+* While this enemy does not return in the sequel, the {{BD|Painful Stabs}} effect is reused for the Act 3 boss {{M2|Test Subject}}'s second phase.
+
+{{EnemyNav}}
+[[Category:Elites]]

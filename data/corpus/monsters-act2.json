@@ -1,0 +1,1195 @@
+[
+ {
+  "id": "SPHERIC_GUARDIAN",
+  "name": "Spheric Guardian",
+  "category": "normal",
+  "acts": [2, 3],
+  "hp": { "base": [20, 20], "asc": [20, 20], "ascLevel": 7 },
+  "prebattle": [
+   { "power": "ARTIFACT", "amount": 3 },
+   { "power": "BARRICADE", "amount": null },
+   { "power": "BLOCK", "amount": 40 }
+  ],
+  "moves": {
+   "SPHERIC_GUARDIAN_ACTIVATE": {
+    "intent": "DEFEND", "damage": null, "hits": null, "block": 25, "effects": [],
+    "asc": { "17": { "block": 35 } }
+   },
+   "SPHERIC_GUARDIAN_ATTACK_DEBUFF": {
+    "intent": "ATTACK_DEBUFF", "damage": 10, "hits": 1, "block": null,
+    "effects": [ { "power": "FRAIL", "amount": 5, "target": "player" } ],
+    "asc": { "2": { "damage": 11 } }
+   },
+   "SPHERIC_GUARDIAN_SLAM": {
+    "intent": "ATTACK", "damage": 10, "hits": 2, "block": null, "effects": [],
+    "asc": { "2": { "damage": 11 } }
+   },
+   "SPHERIC_GUARDIAN_HARDEN": {
+    "intent": "ATTACK_DEFEND", "damage": 10, "hits": 1, "block": 15, "effects": [],
+    "asc": { "2": { "damage": 11 } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always ACTIVATE (getMove is only reached on the initial combat-start roll; the roll value is consumed but ignored)",
+   "spec": "hp: fixed 20/20 at every ascension; initHp consumes NO monsterHpRng roll (curHp=maxHp=hpTable[0][0]).\ncombatStart: rollMove -> ACTIVATE (deterministic).\nturn ACTIVATE: gainBlock(asc17 ? 35 : 25); setMove(ATTACK_DEBUFF); noOpRollMove (burns one aiRng.random(99)).\nturn ATTACK_DEBUFF: attack(asc2 ? 11 : 10); queue debuffPlayer FRAIL 5; setMove(SLAM); noOpRollMove.\nturn SLAM: attack(asc2 ? 11 : 10) x2; setMove(HARDEN); noOpRollMove.\nturn HARDEN: queue selfBlock 15; attack(asc2 ? 11 : 10); setMove(SLAM); noOpRollMove.\nresulting fixed script: ACTIVATE, ATTACK_DEBUFF, then SLAM, HARDEN, SLAM, HARDEN, ... forever.\nBARRICADE means its block (including the starting 40) never expires; ARTIFACT 3 blocks first three debuffs.",
+   "historyRules": ["fixed deterministic script; one aiRng.random(99) is still burned every turn (initial rollMove, then noOpRollMove each turn)"]
+  },
+  "conflicts": [
+   {
+    "field": "moves.SPHERIC_GUARDIAN_ACTIVATE.block",
+    "values": { "lightspeed": "25 (A17: 35)", "wiki": "25 (A17: 35)", "spire-archive": "95 (move INITIAL_BLOCK_GAIN)" },
+    "chosen": "25 (A17: 35) per lightspeed+wiki",
+    "note": "spire-archive's 95 does not match any known game version; treated as bad data."
+   },
+   {
+    "field": "hp.asc",
+    "values": { "lightspeed": "[20,20]", "spire-archive": "null (no ascension HP listed)", "wiki": "BaseHP '20', no AscHP" },
+    "chosen": "[20,20] - HP is fixed at 20 at all ascensions",
+    "note": "Not a real disagreement: the game never raises Spheric Guardian's HP; asc mirrors base."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:253-259 (preBattle)",
+   "MonsterSpecific.cpp:119-124 (initHp fixed)",
+   "MonsterSpecific.cpp:1144-1168 (takeTurn)",
+   "MonsterSpecific.cpp:2765-2767 (getMove)",
+   "MonsterMoveDamage.cpp:149-151",
+   "wiki:Spheric_Guardian",
+   "wiki:Enemies.lua",
+   "spire-archive:SPHERICGUARDIAN"
+  ]
+ },
+ {
+  "id": "CHOSEN",
+  "name": "Chosen",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [95, 99], "asc": [98, 103], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "CHOSEN_POKE": {
+    "intent": "ATTACK", "damage": 5, "hits": 2, "block": null, "effects": [],
+    "asc": { "2": { "damage": 6 } }
+   },
+   "CHOSEN_ZAP": {
+    "intent": "ATTACK", "damage": 18, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 21 } }
+   },
+   "CHOSEN_DEBILITATE": {
+    "intent": "ATTACK_DEBUFF", "damage": 10, "hits": 1, "block": null,
+    "effects": [ { "power": "VULNERABLE", "amount": 2, "target": "player" } ],
+    "asc": { "2": { "damage": 12 } }
+   },
+   "CHOSEN_DRAIN": {
+    "intent": "DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "WEAK", "amount": 3, "target": "player" },
+     { "power": "STRENGTH", "amount": 3, "target": "self" }
+    ],
+    "asc": {}
+   },
+   "CHOSEN_HEX": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "HEX", "amount": 1, "target": "player" } ],
+    "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "A<17: POKE; A17+: HEX",
+   "spec": "getMove(roll):\nif asc >= 17:\n  if firstTurn (moveHistory[0]==INVALID): HEX\n  else if lastMove != DEBILITATE and lastMove != DRAIN: (roll < 50 ? DEBILITATE : DRAIN)\n  else: (roll < 40 ? ZAP : POKE)\nelse (asc < 17):\n  if firstTurn: POKE\n  else if moveHistory[1]==INVALID (exactly one move taken, i.e. this roll sets turn 2): HEX\n  else if lastMove != DEBILITATE and lastMove != DRAIN: (roll < 50 ? DEBILITATE : DRAIN)\n  else: (roll < 40 ? ZAP : POKE)\nAll five moves queue RollMove at end of turn (next move rolled in the end-of-turn action queue).\nDRAIN applies STRENGTH 3 to self immediately during the turn; WEAK 3 on player is queued.",
+   "historyRules": [
+    "A<17: turn 1 POKE, turn 2 HEX, then strict alternation: debuff turn (DEBILITATE 50% / DRAIN 50%) then attack turn (ZAP 40% / POKE 60%), repeating",
+    "A17+: turn 1 HEX, then the same strict debuff/attack alternation starting with a debuff turn"
+   ]
+  },
+  "conflicts": [],
+  "sources": [
+   "MonsterSpecific.cpp:612-639 (takeTurn)",
+   "MonsterSpecific.cpp:2205-2252 (getMove)",
+   "MonsterMoveDamage.cpp:50-52",
+   "wiki:Chosen",
+   "wiki:Enemies.lua",
+   "spire-archive:CHOSEN"
+  ]
+ },
+ {
+  "id": "SHELLED_PARASITE",
+  "name": "Shelled Parasite",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [68, 72], "asc": [70, 75], "ascLevel": 7 },
+  "prebattle": [
+   { "power": "PLATED_ARMOR", "amount": 14 },
+   { "power": "BLOCK", "amount": 14 }
+  ],
+  "moves": {
+   "SHELLED_PARASITE_FELL": {
+    "intent": "ATTACK_DEBUFF", "damage": 18, "hits": 1, "block": null,
+    "effects": [ { "power": "FRAIL", "amount": 2, "target": "player" } ],
+    "asc": { "2": { "damage": 21 } }
+   },
+   "SHELLED_PARASITE_DOUBLE_STRIKE": {
+    "intent": "ATTACK", "damage": 6, "hits": 2, "block": null, "effects": [],
+    "asc": { "2": { "damage": 7 } }
+   },
+   "SHELLED_PARASITE_SUCK": {
+    "intent": "ATTACK_BUFF", "damage": 10, "hits": 1, "block": null,
+    "effects": [ { "power": "HEAL_FOR_UNBLOCKED_DAMAGE", "amount": null, "target": "self" } ],
+    "asc": { "2": { "damage": 12 } }
+   },
+   "SHELLED_PARASITE_STUNNED": {
+    "intent": "STUN", "damage": null, "hits": null, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "A<17: 50/50 DOUBLE_STRIKE or SUCK (aiRng.randomBoolean(): true -> DOUBLE_STRIKE); A17+: always FELL. Never FELL on turn 1 below A17.",
+   "spec": "getMove(roll):\nif firstTurn:\n  if asc >= 17: FELL\n  else: aiRng.randomBoolean() ? DOUBLE_STRIKE : SUCK\nroll2 = 100 (sentinel)\nif roll < 20:\n  if lastMove != FELL: FELL\n  else: roll2 = aiRng.random(20, 99)   // reroll into 20-99 range\nif roll < 60 or roll2 < 60:\n  if not lastTwoMoves(DOUBLE_STRIKE): DOUBLE_STRIKE else SUCK\nelse if not lastTwoMoves(SUCK): SUCK\nelse: DOUBLE_STRIKE\n\nturn SUCK: queues VampireAttack with damage precomputed via calculateDamageToPlayer(asc2 ? 12 : 10); after the hit, if the parasite is alive it heals min(attackDamage, player's unblocked damage taken).\nturn STUNNED: does nothing except setMove(FELL) then IMMEDIATELY rollMove (same aiRng.random(99) call during its turn) which overwrites the move; net effect: history becomes [rolledMove, FELL], so FELL cannot be rolled directly after a stun (lastMove==FELL blocks the roll<20 branch) and lastTwoMoves checks see FELL as the previous move.\nStun trigger (Monster.cpp attackedUnblockedHelper): each instance of unblocked ATTACK damage decrements PLATED_ARMOR by 1; when PLATED_ARMOR reaches 0 this way, the current move is replaced with SHELLED_PARASITE_STUNNED (loses its next turn). Plated Armor never returns, so this happens at most once per combat.\nPLATED_ARMOR 14 also grants 14 block at end of each of its turns (generic power rule); the prebattle BLOCK 14 covers turn 1.\nFELL/DOUBLE_STRIKE/SUCK queue RollMove at end of turn; STUNNED rolls immediately.",
+   "historyRules": [
+    "FELL never twice in a row (and never rolled on the turn immediately after a stun, see spec)",
+    "DOUBLE_STRIKE never three times in a row",
+    "SUCK never three times in a row",
+    "probabilities per roll: FELL 20%, DOUBLE_STRIKE 40%, SUCK 40% (with reroll redistribution when FELL is blocked)"
+   ]
+  },
+  "conflicts": [],
+  "sources": [
+   "MonsterSpecific.cpp:242-246 (preBattle)",
+   "MonsterSpecific.cpp:1048-1069 (takeTurn)",
+   "MonsterSpecific.cpp:2653-2695 (getMove)",
+   "Monster.cpp:352-356 (plated-armor-break stun)",
+   "Actions.cpp:96-105 (VampireAttack)",
+   "wiki:Shelled_Parasite",
+   "wiki:Enemies.lua",
+   "spire-archive:SHELLED_PARASITE"
+  ]
+ },
+ {
+  "id": "BYRD",
+  "name": "Byrd",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [25, 31], "asc": [26, 33], "ascLevel": 7 },
+  "prebattle": [
+   { "power": "FLIGHT", "amount": 3, "asc": { "17": 4 } }
+  ],
+  "moves": {
+   "BYRD_PECK": {
+    "intent": "ATTACK", "damage": 1, "hits": 5, "block": null, "effects": [],
+    "asc": { "2": { "hits": 6 } }
+   },
+   "BYRD_SWOOP": {
+    "intent": "ATTACK", "damage": 12, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 14 } }
+   },
+   "BYRD_CAW": {
+    "intent": "BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "STRENGTH", "amount": 1, "target": "self" } ],
+    "asc": {}
+   },
+   "BYRD_STUNNED": {
+    "intent": "STUN", "damage": null, "hits": null, "block": null, "effects": [], "asc": {}
+   },
+   "BYRD_HEADBUTT": {
+    "intent": "ATTACK", "damage": 3, "hits": 1, "block": null, "effects": [], "asc": {}
+   },
+   "BYRD_FLY": {
+    "intent": "UNKNOWN", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "FLIGHT", "amount": 3, "target": "self" } ],
+    "asc": { "17": { "effects": [ { "power": "FLIGHT", "amount": 4, "target": "self" } ] } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "roll consumed but ignored; aiRng.randomBoolean(0.375): true -> CAW (37.5%), false -> PECK (62.5%). Never starts with SWOOP.",
+   "spec": "getMove(roll)  // only ever invoked while airborne; the grounded sequence is scripted in takeTurn\nif firstTurn: aiRng.randomBoolean(0.375) ? CAW : PECK\nif roll < 50:\n  if lastTwoMoves(PECK): aiRng.randomBoolean(0.4) ? SWOOP : CAW\n  else: PECK\nelse if roll < 70:\n  if lastMove(SWOOP): aiRng.randomBoolean(0.375) ? CAW : PECK\n  else: SWOOP\nelse:\n  if lastMove(CAW): aiRng.randomBoolean(0.2857) ? SWOOP : PECK\n  else: CAW\n\nFlight (power semantics): while FLIGHT > 0 all incoming attack damage is halved (damage *= 0.5, applied after Vulnerable, floor at the end); each unblocked instance of attack damage > 0 decrements FLIGHT by 1; FLIGHT amount resets to (asc17 ? 4 : 3) at the start of each round.\nGrounding: when FLIGHT is decremented from 1 to 0, the current move is immediately replaced with BYRD_STUNNED.\nGrounded script: turn STUNNED: noOpRollMove (burns aiRng.random(99)), setMove(HEADBUTT). turn HEADBUTT: attack 3, setMove(FLY) (no aiRng burn). turn FLY: buff FLIGHT (asc17 ? 4 : 3), queue RollMove -> back to the normal airborne pattern.\nturns PECK/SWOOP/CAW queue RollMove at end of turn.",
+   "historyRules": [
+    "PECK never three times in a row",
+    "SWOOP never twice in a row",
+    "CAW never twice in a row",
+    "airborne probabilities per roll: PECK 50%, SWOOP 20%, CAW 30%",
+    "while grounded the move sequence is fixed: STUNNED -> HEADBUTT -> FLY -> (normal pattern)"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "ai.flight-removal",
+    "values": {
+     "lightspeed": "the FLIGHT status bit is never cleared when the value hits 0 (setStatus leaves the bit set), so lightspeed keeps halving damage while grounded and resets FLIGHT to 3/4 at the start of the next round even before FLY is used; BYRD_FLY then adds +3/4 on top",
+     "game/wiki": "losing all Flight removes the power: a grounded Byrd takes full damage and has no Flight until Go Airborne re-applies 3 (A17: 4)"
+    },
+    "chosen": "game/wiki behavior for power semantics; lightspeed for all move-selection logic",
+    "note": "lightspeed simplification/bug in status bookkeeping, not in AI. Implement Flight as removed at 0."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:228-231 (preBattle)",
+   "MonsterSpecific.cpp:530-560 (takeTurn)",
+   "MonsterSpecific.cpp:2085-2144 (getMove)",
+   "Monster.cpp:28-30 (flight reset at start of round)",
+   "Monster.cpp:362-368 (flight decrement + stun)",
+   "BattleContext.cpp:2733-2735 (flight halves attack damage)",
+   "wiki:Byrd",
+   "wiki:Enemies.lua",
+   "spire-archive:BYRD"
+  ]
+ },
+ {
+  "id": "MUGGER",
+  "name": "Mugger",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [48, 52], "asc": [50, 54], "ascLevel": 7 },
+  "prebattle": [
+   { "power": "THIEVERY", "amount": 15, "asc": { "17": 20 } }
+  ],
+  "moves": {
+   "MUGGER_MUG": {
+    "intent": "ATTACK", "damage": 10, "hits": 1, "block": null,
+    "effects": [ { "power": "STEAL_GOLD", "amount": 15, "target": "player" } ],
+    "asc": {
+     "2": { "damage": 11 },
+     "17": { "effects": [ { "power": "STEAL_GOLD", "amount": 20, "target": "player" } ] }
+    }
+   },
+   "MUGGER_LUNGE": {
+    "intent": "ATTACK", "damage": 16, "hits": 1, "block": null,
+    "effects": [ { "power": "STEAL_GOLD", "amount": 15, "target": "player" } ],
+    "asc": {
+     "2": { "damage": 18 },
+     "17": { "effects": [ { "power": "STEAL_GOLD", "amount": 20, "target": "player" } ] }
+    }
+   },
+   "MUGGER_SMOKE_BOMB": {
+    "intent": "DEFEND", "damage": null, "hits": null, "block": 11, "effects": [],
+    "asc": { "17": { "block": 17 } }
+   },
+   "MUGGER_ESCAPE": {
+    "intent": "ESCAPE", "damage": null, "hits": null, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always MUG (getMove is only reached on the initial combat-start roll; roll consumed but ignored)",
+   "spec": "combatStart: rollMove -> MUG (deterministic).\nturn MUG: aiRng.random(2) burned (dialog); if getMonsterTurnNumber()==2 an additional aiRng.randomBoolean(0.6) is burned (dialog); stealGoldFromPlayer(min(playerGold, THIEVERY)) (stolen total accumulated in miscInfo); attack(asc2 ? 11 : 10).\n  next move: if getMonsterTurnNumber()==2: aiRng.randomBoolean(0.5) ? SMOKE_BOMB : LUNGE; else: MUG.\n  (net: MUG on turns 1 and 2; the branch to SMOKE_BOMB/LUNGE is decided while executing turn 2.)\nturn LUNGE: aiRng.random(2) burned (dialog); stealGold as above; attack(asc2 ? 18 : 16); next = SMOKE_BOMB.\nturn SMOKE_BOMB: gainBlock(asc17 ? 17 : 11); next = ESCAPE.\nturn ESCAPE: isEscaping = true; removed from combat; if no other monster remains alive the fight ends (player victory, stolen gold NOT returned).\nGold theft: each MUG/LUNGE steals min(playerGold, THIEVERY) BEFORE the attack resolves; if the Mugger dies before escaping, all gold it stole is returned to the player (stolen-gold check).\nNo RollMove is ever queued after turn 1 - the whole sequence is scripted via setMove; turn order of aiRng burns above is exact.",
+   "historyRules": [
+    "fixed script: MUG, MUG, then (50/50) either SMOKE_BOMB -> ESCAPE, or LUNGE -> SMOKE_BOMB -> ESCAPE",
+    "escapes with stolen gold on the ESCAPE turn; killing it first recovers the gold"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "moves.MUGGER_SMOKE_BOMB.block",
+    "values": { "lightspeed": "11 (A17: 17)", "wiki": "11 (A17: 17)", "spire-archive": "28" },
+    "chosen": "11 (A17: 17) per lightspeed+wiki",
+    "note": "spire-archive's 28 matches no known game version; treated as bad data. (Looter's smoke bomb is 6 block; Mugger's is 11/17.)"
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:233-236 (preBattle THIEVERY)",
+   "MonsterSpecific.cpp:942-988 (takeTurn)",
+   "MonsterSpecific.cpp:2509-2511 (getMove)",
+   "MonsterSpecific.cpp:3333-3340 (stealGoldFromPlayer)",
+   "MonsterGroup.cpp:460-463 (TWO_THIEVES encounter: Looter idx0, Mugger idx1)",
+   "wiki:Thieves",
+   "wiki:Enemies.lua",
+   "spire-archive:MUGGER"
+  ]
+ },
+ {
+  "id": "CENTURION",
+  "name": "Centurion",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [76, 80], "asc": [78, 83], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "CENTURION_SLASH": {
+    "intent": "ATTACK", "damage": 12, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 14 } }
+   },
+   "CENTURION_FURY": {
+    "intent": "ATTACK", "damage": 6, "hits": 3, "block": null, "effects": [],
+    "asc": { "2": { "damage": 7 } }
+   },
+   "CENTURION_DEFEND": {
+    "intent": "DEFEND", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "BLOCK", "amount": 15, "target": "allies" } ],
+    "asc": { "17": { "effects": [ { "power": "BLOCK", "amount": 20, "target": "allies" } ] } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (normal roll)",
+   "spec": "mysticAlive = (aliveCount > 1)   // in the CENTURION_AND_HEALER encounter: Centurion idx 0, Mystic idx 1\ngetMove(roll):\nif roll >= 65 and not lastTwoMoves(DEFEND) and not lastTwoMoves(FURY):\n  mysticAlive ? DEFEND : FURY\nelse if not lastTwoMoves(SLASH): SLASH\nelse: mysticAlive ? DEFEND : FURY\n\nturn DEFEND: if aliveCount > 1, the Mystic (slot 1) gains (asc17 ? 20 : 15) block; if the Mystic is already dead when the move executes, NOTHING happens in lightspeed (see conflicts); next move rolled IMMEDIATELY (rollMove during its turn).\nturn SLASH / FURY: attack; RollMove queued at end of turn.",
+   "historyRules": [
+    "SLASH never three times in a row",
+    "DEFEND never three times in a row",
+    "FURY never three times in a row",
+    "per roll: 65% SLASH-side, 35% support-side; the support move is DEFEND while the Mystic lives, FURY once it is dead"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "hp.asc",
+    "values": { "lightspeed": "[76,83]", "spire-archive": "[78,83]", "wiki": "78-83" },
+    "chosen": "[78,83] per spire-archive+wiki majority",
+    "note": "lightspeed's monsterHpRange asc-min of 76 is a transcription error; the game sets 78-83 at A7+."
+   },
+   {
+    "field": "moves.CENTURION_DEFEND.effects",
+    "values": {
+     "lightspeed": "no-op when Mystic is dead at execution time",
+     "wiki": "'If alone, instead gains 15 (A17: 20) Block' (self-block)"
+    },
+    "chosen": "lightspeed spec transcribed; edge case only reachable when the Mystic dies after DEFEND was already telegraphed",
+    "note": "Real game gives the block to the Centurion itself when alone. Unresolvable without the JAR which exact branch V2.3.4 uses; getMove never selects DEFEND while the Mystic is dead, so this only matters for a stale intent."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:562-579 (takeTurn)",
+   "MonsterSpecific.cpp:2146-2176 (getMove)",
+   "MonsterGroup.cpp:193-196 (encounter)",
+   "MonsterIds.h:162 (hp, see conflict)",
+   "wiki:Centurion_and_Mystic",
+   "wiki:Enemies.lua",
+   "spire-archive:CENTURION"
+  ]
+ },
+ {
+  "id": "MYSTIC",
+  "name": "Mystic",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [48, 56], "asc": [50, 58], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "MYSTIC_ATTACK_DEBUFF": {
+    "intent": "ATTACK_DEBUFF", "damage": 8, "hits": 1, "block": null,
+    "effects": [ { "power": "FRAIL", "amount": 2, "target": "player" } ],
+    "asc": { "2": { "damage": 9 } }
+   },
+   "MYSTIC_HEAL": {
+    "intent": "BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "HEAL", "amount": 16, "target": "self" },
+     { "power": "HEAL", "amount": 16, "target": "allies" }
+    ],
+    "asc": { "17": { "effects": [
+     { "power": "HEAL", "amount": 20, "target": "self" },
+     { "power": "HEAL", "amount": 20, "target": "allies" }
+    ] } }
+   },
+   "MYSTIC_BUFF": {
+    "intent": "BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "STRENGTH", "amount": 2, "target": "self" },
+     { "power": "STRENGTH", "amount": 2, "target": "allies" }
+    ],
+    "asc": {
+     "2": { "effects": [
+      { "power": "STRENGTH", "amount": 3, "target": "self" },
+      { "power": "STRENGTH", "amount": 3, "target": "allies" }
+     ] },
+     "17": { "effects": [
+      { "power": "STRENGTH", "amount": 4, "target": "self" },
+      { "power": "STRENGTH", "amount": 4, "target": "allies" }
+     ] }
+    }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (the heal check applies from the very first roll)",
+   "spec": "healNeed = (asc17 ? 21 : 16)   // note: heal AMOUNT is 16/20 but the A17 trigger threshold is 21\nknight = monster at slot 0 (Centurion)\ngetMove(roll):\nif (self.maxHp - self.curHp >= healNeed) or (knight.isAlive() and knight.maxHp - knight.curHp >= healNeed): HEAL\nelse if roll >= 40 and (asc17 ? not lastMove(ATTACK_DEBUFF) : not lastTwoMoves(ATTACK_DEBUFF)): ATTACK_DEBUFF\nelse if not lastTwoMoves(BUFF): BUFF\nelse: ATTACK_DEBUFF\n\nturn HEAL: if monstersAlive > 1, heal knight (slot 0) for (asc17 ? 20 : 16); heal self same amount (capped at maxHp); next move rolled IMMEDIATELY.\nturn BUFF: strength (2 / 3@A2 / 4@A17) to knight (slot 0, if monstersAlive > 1) and self; next move rolled IMMEDIATELY.\nturn ATTACK_DEBUFF: attack (asc2 ? 9 : 8); queue FRAIL 2; RollMove queued at end of turn.",
+   "historyRules": [
+    "HEAL has priority over everything whenever any of the pair is missing >= 16 HP (A17: >= 21); no history restriction on HEAL in lightspeed (see conflicts)",
+    "ATTACK_DEBUFF never three times in a row (A17: never twice in a row)",
+    "BUFF never three times in a row",
+    "per roll when not healing: ATTACK_DEBUFF 60%, BUFF 40%"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "ai.heal-repeat-limit",
+    "values": { "lightspeed": "no limit on consecutive HEALs", "wiki": "'will use Heal, up to twice in a row'" },
+    "chosen": "lightspeed (no lastTwoMoves(HEAL) constraint)",
+    "note": "Wiki prose implies a lastTwoMoves gate on Heal; lightspeed (seed-validated) has none. Unresolvable without the JAR; lightspeed kept."
+   },
+   {
+    "field": "ai.heal-threshold-ascension",
+    "values": { "lightspeed": "missing >= 16, A17+: missing >= 21", "wiki": "missing >= 16, changes to 21 on A19" },
+    "chosen": "lightspeed (threshold changes at A17, together with the heal amount 16 -> 20)",
+    "note": "wiki prose says the 21 threshold starts at A19; lightspeed uses asc>=17. lightspeed kept (AI logic is its domain)."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:581-609 (takeTurn)",
+   "MonsterSpecific.cpp:2178-2203 (getMove)",
+   "MonsterGroup.cpp:193-196 (encounter)",
+   "wiki:Centurion_and_Mystic",
+   "wiki:Enemies.lua",
+   "spire-archive:HEALER"
+  ]
+ },
+ {
+  "id": "SNAKE_PLANT",
+  "name": "Snake Plant",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [75, 79], "asc": [78, 82], "ascLevel": 7 },
+  "prebattle": [
+   { "power": "MALLEABLE", "amount": 3 }
+  ],
+  "moves": {
+   "SNAKE_PLANT_CHOMP": {
+    "intent": "ATTACK", "damage": 7, "hits": 3, "block": null, "effects": [],
+    "asc": { "2": { "damage": 8 } }
+   },
+   "SNAKE_PLANT_ENFEEBLING_SPORES": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "FRAIL", "amount": 2, "target": "player" },
+     { "power": "WEAK", "amount": 2, "target": "player" }
+    ],
+    "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (normal roll; effectively CHOMP 65% / SPORES 35% on turn 1)",
+   "spec": "getMove(roll):\nif asc >= 17:\n  if roll < 65: lastTwoMoves(CHOMP) ? ENFEEBLING_SPORES : CHOMP\n  else: (not lastTwoMoves(ENFEEBLING_SPORES)) ? ENFEEBLING_SPORES : CHOMP\nelse:\n  if roll < 65: lastTwoMoves(CHOMP) ? ENFEEBLING_SPORES : CHOMP\n  else: lastMove(ENFEEBLING_SPORES) ? CHOMP : ENFEEBLING_SPORES\nBoth moves queue RollMove at end of turn.\nMALLEABLE 3: gains block equal to current Malleable each time it takes unblocked attack damage, and Malleable grows +1 per hit; resets to 3 at end of its turn (generic power rules).",
+   "historyRules": [
+    "CHOMP never three times in a row",
+    "A<17: ENFEEBLING_SPORES never twice in a row",
+    "A17+: ENFEEBLING_SPORES never three times in a row (it CAN repeat once)",
+    "per roll: CHOMP 65%, ENFEEBLING_SPORES 35%"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "ai.a17-pattern",
+    "values": {
+     "lightspeed": "A17 change = spores gate loosens from 'never 2 in a row' to 'never 3 in a row'",
+     "wiki": "prose claims A17 switches to a fixed CHOMP, CHOMP, SPORES cycle after the first Spores"
+    },
+    "chosen": "lightspeed",
+    "note": "Wiki page is flagged under-construction and even contains an inline editor doubt comment; lightspeed's threshold transcription kept."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:248-251 (preBattle)",
+   "MonsterSpecific.cpp:1107-1118 (takeTurn)",
+   "MonsterSpecific.cpp:2713-2743 (getMove)",
+   "wiki:Snake_Plant",
+   "wiki:Enemies.lua",
+   "spire-archive:SNAKEPLANT"
+  ]
+ },
+ {
+  "id": "SNECKO",
+  "name": "Snecko",
+  "category": "normal",
+  "acts": [2],
+  "hp": { "base": [114, 120], "asc": [120, 125], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "SNECKO_PERPLEXING_GLARE": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "CONFUSED", "amount": null, "target": "player" } ],
+    "asc": {}
+   },
+   "SNECKO_BITE": {
+    "intent": "ATTACK", "damage": 15, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 18 } }
+   },
+   "SNECKO_TAIL_WHIP": {
+    "intent": "ATTACK_DEBUFF", "damage": 8, "hits": 1, "block": null,
+    "effects": [ { "power": "VULNERABLE", "amount": 2, "target": "player" } ],
+    "asc": {
+     "2": { "damage": 10 },
+     "17": { "effects": [
+      { "power": "VULNERABLE", "amount": 2, "target": "player" },
+      { "power": "WEAK", "amount": 2, "target": "player" }
+     ] }
+    }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always PERPLEXING_GLARE (applies Confused; the only source of Confused in the game)",
+   "spec": "getMove(roll):\nif firstTurn: PERPLEXING_GLARE\nelse if roll < 40 or lastTwoMoves(BITE): TAIL_WHIP\nelse: BITE\n\nturn PERPLEXING_GLARE: queue DebuffPlayer CONFUSED (Confused: the cost of each card is randomized 0-3 when drawn, for the rest of combat); RollMove queued.\nturn TAIL_WHIP: attack (asc2 ? 10 : 8); queue VULNERABLE 2; if asc >= 17 also queue WEAK 2; RollMove queued.\nturn BITE: attack (asc2 ? 18 : 15); RollMove queued.\nConfused is applied ONLY via this first-turn move - Snecko has no prebattle power.",
+   "historyRules": [
+    "turn 1 always PERPLEXING_GLARE; GLARE is never used again (no branch can re-select it)",
+    "BITE never three times in a row",
+    "per roll after turn 1: BITE 60%, TAIL_WHIP 40%"
+   ]
+  },
+  "conflicts": [],
+  "sources": [
+   "MonsterSpecific.cpp:1121-1140 (takeTurn)",
+   "MonsterSpecific.cpp:2749-2763 (getMove)",
+   "wiki:Snecko",
+   "wiki:Enemies.lua",
+   "spire-archive:SNECKO"
+  ]
+ },
+ {
+  "id": "BOOK_OF_STABBING",
+  "name": "Book of Stabbing",
+  "category": "elite",
+  "acts": [2],
+  "hp": { "base": [160, 164], "asc": [168, 172], "ascLevel": 8 },
+  "prebattle": [
+   { "power": "PAINFUL_STABS", "amount": null }
+  ],
+  "moves": {
+   "BOOK_OF_STABBING_MULTI_STAB": {
+    "intent": "ATTACK", "damage": 6, "hits": null, "block": null, "effects": [],
+    "asc": { "3": { "damage": 7 } }
+   },
+   "BOOK_OF_STABBING_SINGLE_STAB": {
+    "intent": "ATTACK", "damage": 21, "hits": 1, "block": null, "effects": [],
+    "asc": { "3": { "damage": 24 } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (normal roll; turn 1 is MULTI_STAB 85% / SINGLE_STAB 15%)",
+   "spec": "state: stabCount (miscInfo), initialized to 1 in preBattle. MULTI_STAB hits = current stabCount (evaluated when the move executes).\ngetMove(roll):\nif roll < 15:\n  if lastMove(SINGLE_STAB): ++stabCount; MULTI_STAB\n  else: SINGLE_STAB   [A18+: also ++stabCount - see conflicts]\nelse if lastTwoMoves(MULTI_STAB): SINGLE_STAB   [A18+: also ++stabCount - see conflicts]\nelse: ++stabCount; MULTI_STAB\n\nNet effect below A18: stabCount starts at 1 and is incremented at SELECTION time each time MULTI_STAB is rolled, so the Nth Multi Stab hits N+1 times (first 2 hits, then 3, 4, ...; equivalently: hits = number of previous Multi Stabs + 2, matching the in-game intent text).\nAt A18: stabCount also increments whenever SINGLE_STAB is selected, so every roll increments it and a Multi Stab executing on turn T hits T+1 times.\nPAINFUL_STABS: whenever the player takes unblocked attack damage from it, a Wound is added to the discard pile (one per damaging hit).\nBoth moves queue RollMove at end of turn.",
+   "historyRules": [
+    "MULTI_STAB never three times in a row",
+    "SINGLE_STAB never twice in a row",
+    "per roll: SINGLE_STAB 15%, MULTI_STAB 85%"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "ai.a18-stab-count",
+    "values": {
+     "lightspeed": "the two 'if (asc18) ++stabCount' statements are placed AFTER return statements (dead code) - as compiled, A18 behaves like pre-A18",
+     "wiki": "A18+: N = current turn + 1 (stab count grows every turn, including Single Stab turns)"
+    },
+    "chosen": "A18 rule encoded (stabCount increments on SINGLE_STAB selection too at A18), matching wiki and the obvious intent of lightspeed's dead code",
+    "note": "lightspeed transcription bug: unreachable increments. The game increments stabCount on single stabs at A18."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:177-180 (preBattle: PainfulStabs + stabCount=1)",
+   "MonsterSpecific.cpp:455-465 (takeTurn)",
+   "MonsterSpecific.cpp:2254-2278 (getMove, incl. A18 dead code)",
+   "MonsterMoveDamage.cpp:35-36",
+   "wiki:Book_of_Stabbing",
+   "wiki:Enemies.lua",
+   "spire-archive:BOOKOFSTABBING"
+  ]
+ },
+ {
+  "id": "GREMLIN_LEADER",
+  "name": "Gremlin Leader",
+  "category": "elite",
+  "acts": [2],
+  "hp": { "base": [140, 148], "asc": [145, 155], "ascLevel": 8 },
+  "prebattle": [
+   { "power": "MINION_LEADER", "amount": null }
+  ],
+  "moves": {
+   "GREMLIN_LEADER_RALLY": {
+    "intent": "UNKNOWN", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "SUMMON_GREMLINS", "amount": 2, "target": "allies" } ],
+    "asc": {}
+   },
+   "GREMLIN_LEADER_ENCOURAGE": {
+    "intent": "DEFEND_BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "STRENGTH", "amount": 3, "target": "self" },
+     { "power": "STRENGTH", "amount": 3, "target": "allies" },
+     { "power": "BLOCK", "amount": 6, "target": "allies" }
+    ],
+    "asc": {
+     "3": { "effects": [
+      { "power": "STRENGTH", "amount": 4, "target": "self" },
+      { "power": "STRENGTH", "amount": 4, "target": "allies" },
+      { "power": "BLOCK", "amount": 6, "target": "allies" }
+     ] },
+     "18": { "effects": [
+      { "power": "STRENGTH", "amount": 5, "target": "self" },
+      { "power": "STRENGTH", "amount": 5, "target": "allies" },
+      { "power": "BLOCK", "amount": 10, "target": "allies" }
+     ] }
+    }
+   },
+   "GREMLIN_LEADER_STAB": {
+    "intent": "ATTACK", "damage": 6, "hits": 3, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (normal roll; starts with 2 gremlins alive, so turn 1 uses the '2+ gremlins' table: ENCOURAGE 66% / STAB 34%)",
+   "spec": "Encounter layout: Gremlin Leader always occupies slot 3 (idx 3); the two starting gremlins occupy slots 1 and 2 (both MINION; picked with getGremlin(miscRng)); slot 0 starts EMPTY. Up to 3 minions can be alive at once.\naliveGremlins = count of monsters in slots 0..2 with curHp > 0.\ngetMove(roll):\nif aliveGremlins == 0:\n  if roll < 75: lastMove(RALLY) ? STAB : RALLY\n  else: lastMove(STAB) ? RALLY : STAB\nelse if aliveGremlins == 1:\n  if roll < 50:\n    if lastMove(RALLY): roll2 = aiRng.random(50, 99); roll2 < 80 ? ENCOURAGE : STAB\n    else: RALLY\n  else if roll < 80: lastMove(ENCOURAGE) ? STAB : ENCOURAGE\n  else:\n    if lastMove(STAB): roll2 = aiRng.random(0, 80); roll2 < 50 ? RALLY : ENCOURAGE\n    else: STAB\nelse (aliveGremlins >= 2):\n  if roll < 66: lastMove(ENCOURAGE) ? STAB : ENCOURAGE\n  else: lastMove(STAB) ? ENCOURAGE : STAB\n\nturn RALLY: queue SummonGremlins action: find exactly 2 open slots searching IN ORDER slot 1, slot 2, then slot 0 (slot 0 only if fewer than 2 found); each new gremlin: id = getGremlin(aiRng) - uniform pick from the 8-entry pool [MAD_GREMLIN x2, SNEAKY_GREMLIN x2, FAT_GREMLIN x2, SHIELD_GREMLIN, GREMLIN_WIZARD] (aiRng.random(7), independent per summon, duplicates possible); fresh HP roll from monsterHpRng; MINION buff; +1 STR if player has Philosopher's Stone; each new gremlin immediately rolls its own first move (aiRng). Leader's RollMove queued after.\nturn ENCOURAGE: aiRng.random(0, 2) burned (in-game quote); every living minion in slots 0..2 gains STR and block per the move table; self gains STR only (no block); RollMove queued.\nturn STAB: attack 6 x3; RollMove queued.\nNote initial-summon RNG: the two starting gremlins use miscRng, mid-fight Rally summons use aiRng.",
+   "historyRules": [
+    "RALLY never twice in a row",
+    "STAB never twice in a row",
+    "ENCOURAGE never twice in a row",
+    "move table depends on living gremlin count: 0 gremlins: RALLY 75%/STAB 25%; 1 gremlin: RALLY 50%/ENCOURAGE 30%/STAB 20% (with reroll redistribution); 2-3 gremlins: ENCOURAGE 66%/STAB 34%"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "moves.GREMLIN_LEADER_ENCOURAGE.effects",
+    "values": {
+     "lightspeed": "minion block = (asc>=3 ? 10 : 6); STR 3/4/5 at base/A3/A18",
+     "wiki": "minion block = 6, raised to 10 at A18; STR 3/4/5 at base/A3/A18",
+     "spire-archive": "ENCOURAGE block 6 (base only)"
+    },
+    "chosen": "block 6 base, 10 from A18 (wiki tiered AscText); STR per all sources",
+    "note": "lightspeed's 'asc3 ? 10 : 6' looks like a slipped threshold (A3 instead of A18). Verify against JAR if possible."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:168-170 (preBattle MINION_LEADER)",
+   "MonsterSpecific.cpp:703-740 (takeTurn)",
+   "MonsterSpecific.cpp:2330-2400 (getMove)",
+   "MonsterSpecific.cpp:3562-3571 (getAliveGremlinCount)",
+   "Actions.cpp:459-498 (SummonGremlins slot order 1,2,0)",
+   "MonsterGroup.cpp:248-259 (encounter layout: leader idx3, gremlins idx1+2)",
+   "MonsterGroup.cpp:541-553 (getGremlin pool)",
+   "wiki:Gremlin_Leader",
+   "wiki:Enemies.lua",
+   "spire-archive:GREMLINLEADER"
+  ]
+ },
+ {
+  "id": "TASKMASTER",
+  "name": "Taskmaster",
+  "category": "elite",
+  "acts": [2],
+  "hp": { "base": [54, 60], "asc": [57, 64], "ascLevel": 8 },
+  "prebattle": [],
+  "moves": {
+   "TASKMASTER_SCOURING_WHIP": {
+    "intent": "ATTACK_DEBUFF", "damage": 7, "hits": 1, "block": null,
+    "effects": [ { "power": "ADD_WOUND_TO_DISCARD", "amount": 1, "target": "player" } ],
+    "asc": {
+     "3": { "effects": [ { "power": "ADD_WOUND_TO_DISCARD", "amount": 2, "target": "player" } ] },
+     "18": { "effects": [
+      { "power": "ADD_WOUND_TO_DISCARD", "amount": 3, "target": "player" },
+      { "power": "STRENGTH", "amount": 1, "target": "self" }
+     ] }
+    }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always SCOURING_WHIP (only move)",
+   "spec": "hp quirk: initHp burns one extra monsterHpRng.random(54,60) roll before the real HP roll (game parity; 2 hpRng calls total).\ngetMove: always SCOURING_WHIP (roll consumed but ignored).\nturn SCOURING_WHIP: attack 7 (never asc-scaled);\n  if asc >= 18: queue BuffEnemy STRENGTH +1 on self, then queue 3 Wounds into the discard pile;\n  else if asc >= 3: queue 2 Wounds into discard;\n  else: queue 1 Wound into discard;\n  then noOpRollMove (burns one aiRng.random(99)).\nAppears in the SLAVERS elite encounter as the middle monster (Blue Slaver idx 0, Taskmaster idx 1, Red Slaver idx 2) and in The Colosseum event (Taskmaster idx 0, Gremlin Nob idx 1).",
+   "historyRules": ["uses SCOURING_WHIP every turn; no variation"]
+  },
+  "conflicts": [
+   {
+    "field": "moves.TASKMASTER_SCOURING_WHIP.effects",
+    "values": {
+     "lightspeed": "wounds: 1 base, 2 at asc>=3, 3 (+1 self STR) at asc>=18",
+     "wiki": "Enemies.lua Text says '{{Asc|2|2}}' but its own AscText says '{{Asc|3|2}}' (internally inconsistent A2 vs A3 tier)"
+    },
+    "chosen": "asc >= 3 for the 2-Wound tier (lightspeed; elite damage-tier ascension)",
+    "note": "wiki data-module Text/AscText disagree with each other; lightspeed's A3 kept."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:114-117 (initHp double roll)",
+   "MonsterSpecific.cpp:1210-1225 (takeTurn)",
+   "MonsterSpecific.cpp:2837-2840 (getMove)",
+   "MonsterGroup.cpp:366-370 (SLAVERS encounter order)",
+   "MonsterGroup.cpp:203-206 (Colosseum event)",
+   "wiki:Taskmaster",
+   "wiki:Enemies.lua",
+   "spire-archive:SLAVERBOSS"
+  ]
+ },
+ {
+  "id": "BRONZE_AUTOMATON",
+  "name": "Bronze Automaton",
+  "category": "boss",
+  "acts": [2],
+  "hp": { "base": [300, 300], "asc": [320, 320], "ascLevel": 9 },
+  "prebattle": [
+   { "power": "MINION_LEADER", "amount": null },
+   { "power": "ARTIFACT", "amount": 3 }
+  ],
+  "moves": {
+   "BRONZE_AUTOMATON_SPAWN_ORBS": {
+    "intent": "UNKNOWN", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "SUMMON_BRONZE_ORBS", "amount": 2, "target": "allies" } ],
+    "asc": {}
+   },
+   "BRONZE_AUTOMATON_FLAIL": {
+    "intent": "ATTACK", "damage": 7, "hits": 2, "block": null, "effects": [],
+    "asc": { "4": { "damage": 8 } }
+   },
+   "BRONZE_AUTOMATON_BOOST": {
+    "intent": "DEFEND_BUFF", "damage": null, "hits": null, "block": 9,
+    "effects": [ { "power": "STRENGTH", "amount": 3, "target": "self" } ],
+    "asc": {
+     "4": { "effects": [ { "power": "STRENGTH", "amount": 4, "target": "self" } ] },
+     "9": { "block": 12 }
+    }
+   },
+   "BRONZE_AUTOMATON_HYPER_BEAM": {
+    "intent": "ATTACK", "damage": 45, "hits": 1, "block": null, "effects": [],
+    "asc": { "4": { "damage": 50 } }
+   },
+   "BRONZE_AUTOMATON_STUNNED": {
+    "intent": "STUN", "damage": null, "hits": null, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always SPAWN_ORBS (getMove only reached on the initial roll; roll ignored)",
+   "spec": "Encounter layout: Automaton occupies slot 1; Bronze Orbs are spawned into slots 0 and 2.\nstate: lastBoostWasFlail (miscInfo, starts false/0) drives the Flail/HYPER BEAM alternation after Boosts.\ncombatStart: rollMove -> SPAWN_ORBS.\nturn SPAWN_ORBS: spawnBronzeOrbs: construct BRONZE_ORB at slot 0 and slot 2 (each consumes monsterHpRng: one burned roll of random(52,58) then the real HP roll); each gets MINION (+1 STR with Philosopher's Stone); each orb then rolls its own first move via aiRng (orb1 slot 0 first, then orb2 slot 2); monsterTurnIdx incremented (spawned orbs do not act this turn). setMove(FLAIL); noOpRollMove.\nturn FLAIL: attack (asc4 ? 8 : 7) x2; setMove(BOOST); noOpRollMove.\nturn BOOST: gain STR (asc4 ? 4 : 3); gain block (asc9 ? 12 : 9); if lastBoostWasFlail: setMove(HYPER_BEAM), lastBoostWasFlail=false; else setMove(FLAIL), lastBoostWasFlail=true; noOpRollMove.\nturn HYPER_BEAM: attack (asc4 ? 50 : 45); setMove(asc19 ? BOOST : STUNNED); noOpRollMove.\nturn STUNNED: do nothing; setMove(FLAIL); noOpRollMove.\nresulting cycle below A19: SPAWN_ORBS, then repeat [FLAIL, BOOST, FLAIL, BOOST, HYPER_BEAM, STUNNED].\nat A19: SPAWN_ORBS, FLAIL, BOOST, FLAIL, BOOST, HYPER_BEAM, then repeat [BOOST, FLAIL, BOOST, HYPER_BEAM] (Boost replaces the Stunned turn, shortening the loop).",
+   "historyRules": [
+    "fully deterministic script (one aiRng.random(99) burned per turn)",
+    "HYPER BEAM lands every 6th turn below A19; from A19 the post-first-beam loop is 4 turns (BOOST, FLAIL, BOOST, HYPER_BEAM)"
+   ]
+  },
+  "conflicts": [],
+  "sources": [
+   "MonsterSpecific.cpp:217-221 (preBattle)",
+   "MonsterSpecific.cpp:468-511 (takeTurn)",
+   "MonsterSpecific.cpp:2060-2063 (getMove)",
+   "MonsterSpecific.cpp:3393-3414 (spawnBronzeOrbs)",
+   "MonsterGroup.cpp:173-177 (encounter: automaton at slot 1)",
+   "wiki:Bronze_Automaton",
+   "wiki:Enemies.lua",
+   "spire-archive:BRONZEAUTOMATON"
+  ]
+ },
+ {
+  "id": "BRONZE_ORB",
+  "name": "Bronze Orb",
+  "category": "minion",
+  "acts": [2],
+  "hp": { "base": [52, 58], "asc": [54, 60], "ascLevel": 9 },
+  "prebattle": [
+   { "power": "MINION", "amount": null }
+  ],
+  "moves": {
+   "BRONZE_ORB_BEAM": {
+    "intent": "ATTACK", "damage": 8, "hits": 1, "block": null, "effects": [], "asc": {}
+   },
+   "BRONZE_ORB_SUPPORT_BEAM": {
+    "intent": "DEFEND", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "BLOCK", "amount": 12, "target": "allies" } ],
+    "asc": {}
+   },
+   "BRONZE_ORB_STASIS": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "STASIS_STEAL_CARD", "amount": 1, "target": "player" } ],
+    "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule; with fresh history the first roll is STASIS 75% (roll >= 25) / BEAM 25%",
+   "spec": "Spawned by Bronze Automaton's SPAWN_ORBS into slots 0 and 2 (MINION; dies automatically if the Automaton dies since it is a MINION_LEADER fight -> victory). hp quirk: initHp burns one extra monsterHpRng.random(52,58) roll before the real roll.\nstate: usedStasis (miscInfo, starts 0; set to 1 after the STASIS turn executes).\ngetMove(roll):\nif not usedStasis and roll >= 25: STASIS\nelse if roll >= 70 and not lastTwoMoves(SUPPORT_BEAM): SUPPORT_BEAM\nelse if not lastTwoMoves(BEAM): BEAM\nelse: SUPPORT_BEAM\n\nturn STASIS: stasisAction (see below); usedStasis = 1; next move rolled IMMEDIATELY (rollMove during its turn).\nturn SUPPORT_BEAM: Automaton (slot 1) gains 12 block; next move rolled IMMEDIATELY.\nturn BEAM: attack 8; RollMove queued at end of turn.\n\nstasisAction (card steal):\n1. if drawPile and discardPile are both empty: do nothing (no STASIS power gained; the move still counts as used).\n2. pile = drawPile if non-empty, else discardPile.\n3. rarity priority: RARE if any present, else UNCOMMON if any, else COMMON if any; if the pile has no R/U/C cards at all (only BASIC/SPECIAL/CURSE/STATUS), pick uniformly over the whole pile with cardRandomRng.random(size-1).\n4. otherwise: collect all cards of the target rarity, stable-sort that list by the fixed card-id sort order (cardSortedIdx), then pick uniformly among them with cardRandomRng.random(count-1).\n5. remove the card from the pile and from combat (deck-size triggers fire); store it on the orb; orb gains the STASIS power.\nOn the orb's death, the stolen card is returned TO THE PLAYER'S HAND (add-to-combat triggers fire; standard hand-overflow to discard applies). Card is lost if the orb is never killed.",
+   "historyRules": [
+    "STASIS at most once per orb; until used it has a 75% chance per roll",
+    "SUPPORT_BEAM never three times in a row",
+    "BEAM never three times in a row",
+    "after stasis is used: BEAM 70%, SUPPORT_BEAM 30% per roll"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "ai.post-stasis-probabilities",
+    "values": {
+     "lightspeed": "roll >= 70 -> SUPPORT_BEAM (30%), otherwise BEAM (70%)",
+     "wiki": "prose claims 70% Support Beam / 30% Beam"
+    },
+    "chosen": "lightspeed (BEAM 70% / SUPPORT_BEAM 30%)",
+    "note": "wiki prose appears to have the two probabilities swapped; lightspeed thresholds kept (AI logic domain)."
+   },
+   {
+    "field": "category",
+    "values": { "spire-archive": "type 'Elite', name 'Orb'", "wiki": "Minion" },
+    "chosen": "minion",
+    "note": "spire-archive mislabels the type; it is a boss minion."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:109-112 (initHp double roll, asc>=9 tier)",
+   "MonsterSpecific.cpp:513-527 (takeTurn)",
+   "MonsterSpecific.cpp:2065-2083 (getMove)",
+   "MonsterSpecific.cpp:3417-3499 (stasisHelper/stasisAction)",
+   "MonsterSpecific.cpp:3502-3515 (returnStasisCard)",
+   "Monster.cpp:308-310 (die() returns stasis card)",
+   "wiki:Bronze_Automaton",
+   "wiki:Enemies.lua",
+   "spire-archive:BRONZEORB"
+  ]
+ },
+ {
+  "id": "THE_COLLECTOR",
+  "name": "The Collector",
+  "category": "boss",
+  "acts": [2],
+  "hp": { "base": [282, 282], "asc": [300, 300], "ascLevel": 9 },
+  "prebattle": [
+   { "power": "MINION_LEADER", "amount": null }
+  ],
+  "moves": {
+   "THE_COLLECTOR_SPAWN": {
+    "intent": "UNKNOWN", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "SUMMON_TORCH_HEADS", "amount": 2, "target": "allies" } ],
+    "asc": {}
+   },
+   "THE_COLLECTOR_FIREBALL": {
+    "intent": "ATTACK", "damage": 18, "hits": 1, "block": null, "effects": [],
+    "asc": { "4": { "damage": 21 } }
+   },
+   "THE_COLLECTOR_BUFF": {
+    "intent": "DEFEND_BUFF", "damage": null, "hits": null, "block": 15,
+    "effects": [
+     { "power": "STRENGTH", "amount": 3, "target": "self" },
+     { "power": "STRENGTH", "amount": 3, "target": "allies" }
+    ],
+    "asc": {
+     "4": { "effects": [
+      { "power": "STRENGTH", "amount": 4, "target": "self" },
+      { "power": "STRENGTH", "amount": 4, "target": "allies" }
+     ] },
+     "9": { "block": 18 },
+     "19": { "block": 23, "effects": [
+      { "power": "STRENGTH", "amount": 5, "target": "self" },
+      { "power": "STRENGTH", "amount": 5, "target": "allies" }
+     ] }
+    }
+   },
+   "THE_COLLECTOR_MEGA_DEBUFF": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "WEAK", "amount": 3, "target": "player" },
+     { "power": "VULNERABLE", "amount": 3, "target": "player" },
+     { "power": "FRAIL", "amount": 3, "target": "player" }
+    ],
+    "asc": { "19": { "effects": [
+     { "power": "WEAK", "amount": 5, "target": "player" },
+     { "power": "VULNERABLE", "amount": 5, "target": "player" },
+     { "power": "FRAIL", "amount": 5, "target": "player" }
+    ] } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always SPAWN (summons the initial 2 Torch Heads)",
+   "spec": "Encounter layout: Collector occupies slot 2; Torch Heads spawn into slots 0 and 1 (they act BEFORE her in turn order, so freshly spawned heads first act the round after spawning).\ngetMove(roll):\nif firstTurn: SPAWN\nif getMonsterTurnNumber() == 3 (i.e. this roll selects the move for turn 4): MEGA_DEBUFF   // unconditional, exactly once\ncanUseSpawn = (monstersAlive < 3) and not lastMove(SPAWN)\nif roll <= 25 and canUseSpawn: SPAWN\nelse if roll <= 70 and not lastTwoMoves(FIREBALL): FIREBALL\nelse if lastMove(BUFF): FIREBALL\nelse: BUFF\n\nturn SPAWN: queue SpawnTorchHeads: spawnCount = 3 - monstersAlive (2 on the first use, 1 if one Torch Head still lives - never chosen with both alive); spawn slot order: first = (slot 1 empty/dead ? 1 : 0), second = 0; each Torch Head: constructed with TWO monsterHpRng rolls (construct rolls HP, then initHp is called again - game-parity bug - the second roll wins), move preset to TORCH_HEAD_TACKLE, MINION buff (+1 STR with Philosopher's Stone); one aiRng.random(99) burned per spawned head. Collector's RollMove queued after.\nturn FIREBALL: attack (asc4 ? 21 : 18); RollMove queued.\nturn BUFF: every living Torch Head (slots 0-1) gains STR (3 / 4@A4 / 5@A19); self gains same STR and block (15 / 18@A9 / 23@A19); RollMove queued.\nturn MEGA_DEBUFF: queue WEAK, VULNERABLE, FRAIL (3 each; 5 each at A19) on the player; RollMove queued.",
+   "historyRules": [
+    "turn 1 always SPAWN; turn 4 always MEGA_DEBUFF (only use)",
+    "SPAWN never twice in a row and only while fewer than 2 Torch Heads are alive (monstersAlive < 3)",
+    "FIREBALL never three times in a row",
+    "BUFF never twice in a row",
+    "per roll (0-1 heads alive): SPAWN 26%, FIREBALL 45%, BUFF 29%; (2 heads alive): FIREBALL 71%, BUFF 29% (thresholds are <=25 / <=70 inclusive)"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "moves.THE_COLLECTOR_BUFF.block",
+    "values": {
+     "lightspeed": "15 / 18 from asc>=4 / 23 from asc>=19 (block and STR share the (4,19) tri-index)",
+     "wiki": "15 / 18 from A9 / 23 from A19 (STR changes at A4/A19)",
+     "spire-archive": "35 (base)"
+    },
+    "chosen": "15 base, 18 from A9, 23 from A19 (wiki tiered AscText); STR 3/4@A4/5@A19 (all sources)",
+    "note": "spire-archive's 35 is bad data. lightspeed groups the 18-block bump at A4; wiki puts it at A9 (matching the game's A9 HP branch). Verify against JAR if possible; only affects A4-A8."
+   },
+   {
+    "field": "moves.THE_COLLECTOR_MEGA_DEBUFF.effects",
+    "values": { "lightspeed": "3/3/3 at all ascensions", "wiki": "3 each, 5 each at A19" },
+    "chosen": "3 each, 5 each from A19 (wiki tiered AscText)",
+    "note": "lightspeed hardcodes 3; wiki documents the A19 bump to 5. Verify against JAR if possible."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:272-274 (preBattle MINION_LEADER)",
+   "MonsterSpecific.cpp:1286-1320 (takeTurn)",
+   "MonsterSpecific.cpp:2898-2937 (getMove)",
+   "Actions.cpp:500-528 (SpawnTorchHeads)",
+   "MonsterGroup.cpp:198-201 (encounter: collector at slot 2)",
+   "wiki:The_Collector",
+   "wiki:Enemies.lua",
+   "spire-archive:THECOLLECTOR"
+  ]
+ },
+ {
+  "id": "TORCH_HEAD",
+  "name": "Torch Head",
+  "category": "minion",
+  "acts": [2],
+  "hp": { "base": [38, 40], "asc": [40, 45], "ascLevel": 9 },
+  "prebattle": [
+   { "power": "MINION", "amount": null }
+  ],
+  "moves": {
+   "TORCH_HEAD_TACKLE": {
+    "intent": "ATTACK", "damage": 7, "hits": 1, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "move preset to TACKLE by The Collector's spawn action (getMove is never invoked for Torch Heads)",
+   "spec": "Spawned only by The Collector (slots 0 and 1, max 2 alive). Dies automatically when The Collector dies (MINION_LEADER fight ends).\nhp quirk: constructed with TWO monsterHpRng rolls (construct + a second explicit initHp call, game-parity bug; the second roll is the one kept).\nturn TACKLE: attack 7. No RollMove is ever queued and setMove is never called - the move stays TACKLE for the rest of combat (its takeTurn burns no aiRng).\nGains STR from The Collector's BUFF (3 / 4@A4 / 5@A19).",
+   "historyRules": ["uses TACKLE every turn; no variation, no aiRng usage"]
+  },
+  "conflicts": [],
+  "sources": [
+   "MonsterSpecific.cpp:1364-1368 (takeTurn)",
+   "MonsterSpecific.cpp:3314 (getMove: no-op, set at spawn)",
+   "Actions.cpp:500-528 (SpawnTorchHeads: preset move, double HP roll)",
+   "MonsterSpecific.cpp:86-88 (initHp asc>=9 tier)",
+   "wiki:The_Collector",
+   "wiki:Enemies.lua",
+   "spire-archive:TORCHHEAD"
+  ]
+ },
+ {
+  "id": "THE_CHAMP",
+  "name": "The Champ",
+  "category": "boss",
+  "acts": [2],
+  "hp": { "base": [420, 420], "asc": [440, 440], "ascLevel": 9 },
+  "prebattle": [],
+  "moves": {
+   "THE_CHAMP_HEAVY_SLASH": {
+    "intent": "ATTACK", "damage": 16, "hits": 1, "block": null, "effects": [],
+    "asc": { "4": { "damage": 18 } }
+   },
+   "THE_CHAMP_FACE_SLAP": {
+    "intent": "ATTACK_DEBUFF", "damage": 12, "hits": 1, "block": null,
+    "effects": [
+     { "power": "FRAIL", "amount": 2, "target": "player" },
+     { "power": "VULNERABLE", "amount": 2, "target": "player" }
+    ],
+    "asc": { "4": { "damage": 14 } }
+   },
+   "THE_CHAMP_DEFENSIVE_STANCE": {
+    "intent": "DEFEND_BUFF", "damage": null, "hits": null, "block": 15,
+    "effects": [ { "power": "METALLICIZE", "amount": 5, "target": "self" } ],
+    "asc": {
+     "9": { "block": 18, "effects": [ { "power": "METALLICIZE", "amount": 6, "target": "self" } ] },
+     "19": { "block": 20, "effects": [ { "power": "METALLICIZE", "amount": 7, "target": "self" } ] }
+    }
+   },
+   "THE_CHAMP_GLOAT": {
+    "intent": "BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "STRENGTH", "amount": 2, "target": "self" } ],
+    "asc": {
+     "4": { "effects": [ { "power": "STRENGTH", "amount": 3, "target": "self" } ] },
+     "19": { "effects": [ { "power": "STRENGTH", "amount": 4, "target": "self" } ] }
+    }
+   },
+   "THE_CHAMP_TAUNT": {
+    "intent": "DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "WEAK", "amount": 2, "target": "player" },
+     { "power": "VULNERABLE", "amount": 2, "target": "player" }
+    ],
+    "asc": {}
+   },
+   "THE_CHAMP_ANGER": {
+    "intent": "BUFF", "damage": null, "hits": null, "block": null,
+    "effects": [
+     { "power": "REMOVE_DEBUFFS", "amount": null, "target": "self" },
+     { "power": "STRENGTH", "amount": 6, "target": "self" }
+    ],
+    "asc": {
+     "4": { "effects": [
+      { "power": "REMOVE_DEBUFFS", "amount": null, "target": "self" },
+      { "power": "STRENGTH", "amount": 9, "target": "self" }
+     ] },
+     "19": { "effects": [
+      { "power": "REMOVE_DEBUFFS", "amount": null, "target": "self" },
+      { "power": "STRENGTH", "amount": 12, "target": "self" }
+     ] }
+    }
+   },
+   "THE_CHAMP_EXECUTE": {
+    "intent": "ATTACK", "damage": 10, "hits": 2, "block": null, "effects": [], "asc": {}
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "no special rule (turn-1 roll goes through the normal phase-1 table)",
+   "spec": "state (miscInfo): bits 0-1 = defensiveStanceUseCount (max 2 per combat); bit 0x4 = phase-2 flag.\ngetMove(roll):\nif phase2 flag set:\n  if lastMove != EXECUTE and moveHistory[1] != EXECUTE: EXECUTE   // Execute every 3rd turn in phase 2\n  // else fall through to the shared table below\nelse (phase 1):\n  if curHp < maxHp / 2: set phase2 flag; ANGER   // exactly once, on the first roll made at < 50% HP\n  else if (getMonsterTurnNumber() + 1) % 4 == 0: TAUNT   // this roll selects the move for turns 4, 8, 12, ... (phase 1 only)\n  // else fall through\nshared table (phase 1 non-taunt turns, and phase-2 turns where EXECUTE is blocked):\n  stanceThreshold = (asc19 ? 30 : 15)\n  if roll <= stanceThreshold and lastMove != DEFENSIVE_STANCE and defensiveStanceUseCount < 2: ++useCount; DEFENSIVE_STANCE\n  else if roll <= 30 and lastMove != GLOAT and lastMove != DEFENSIVE_STANCE: GLOAT\n  else if roll <= 55 and lastMove != FACE_SLAP: FACE_SLAP\n  else if lastMove != HEAVY_SLASH: HEAVY_SLASH\n  else: FACE_SLAP\n\nturn ANGER: remove all debuffs from self (negative STR floored to 0; removes Weak/Vulnerable/Poison/Shackled/etc.); gain STR (6 / 9@A4 / 12@A19); next move rolled IMMEDIATELY.\nturn DEFENSIVE_STANCE: gain block (15 / 18@A9 / 20@A19) and METALLICIZE (5 / 6@A9 / 7@A19); next move rolled IMMEDIATELY.\nturn GLOAT: gain STR (see conflicts: 2 / 3@A4 / 4@A19); next move rolled IMMEDIATELY.\nturn TAUNT: WEAK 2 + VULNERABLE 2 on player (applied immediately, not queued); next move rolled IMMEDIATELY.\nturn EXECUTE: attack 10 x2; RollMove queued.\nturn FACE_SLAP: attack (asc4 ? 14 : 12); queue FRAIL 2, VULNERABLE 2; RollMove queued.\nturn HEAVY_SLASH: attack (asc4 ? 18 : 16); RollMove queued.",
+   "historyRules": [
+    "phase 1: TAUNT forced on turns 4, 8, 12, ... (roll made when (turnNumber+1)%4==0)",
+    "phase 2 entered on the first roll made while curHp < maxHp/2: ANGER once (removes debuffs), then EXECUTE unless it was used in either of the last two moves (net: EXECUTE every 3rd turn)",
+    "DEFENSIVE_STANCE: at most 2 uses per combat, never twice in a row; roll <= 15 (A19: <= 30)",
+    "GLOAT never after itself or after DEFENSIVE_STANCE",
+    "FACE_SLAP never twice in a row; HEAVY_SLASH never twice in a row (falls back to FACE_SLAP)",
+    "approximate per-roll odds below A19: STANCE 16%, GLOAT 15%, FACE_SLAP 25%, HEAVY_SLASH 44% (thresholds are inclusive <=)"
+   ]
+  },
+  "conflicts": [
+   {
+    "field": "moves.THE_CHAMP_GLOAT.effects",
+    "values": { "lightspeed": "STR 3 / 4@A4 / 5@A19", "wiki": "STR 2 / 3@A4 / 4@A19" },
+    "chosen": "2 / 3@A4 / 4@A19 (wiki tiered AscText; also consistent with Anger = 3x Gloat at every tier)",
+    "note": "lightspeed's {3,4,5} looks like an off-by-one transcription (possibly confused with The Collector's buff). Verify against JAR if possible."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:1227-1284 (takeTurn)",
+   "MonsterSpecific.cpp:2842-2896 (getMove)",
+   "MonsterMoveDamage.cpp:172-174",
+   "wiki:The_Champ",
+   "wiki:Enemies.lua",
+   "spire-archive:CHAMP"
+  ]
+ },
+ {
+  "id": "BEAR",
+  "name": "Bear",
+  "category": "event",
+  "acts": [2],
+  "hp": { "base": [38, 42], "asc": [40, 44], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "BEAR_BEAR_HUG": {
+    "intent": "STRONG_DEBUFF", "damage": null, "hits": null, "block": null,
+    "effects": [ { "power": "DEXTERITY", "amount": -2, "target": "player" } ],
+    "asc": { "17": { "effects": [ { "power": "DEXTERITY", "amount": -4, "target": "player" } ] } }
+   },
+   "BEAR_LUNGE": {
+    "intent": "ATTACK_DEFEND", "damage": 9, "hits": 1, "block": 9, "effects": [],
+    "asc": { "2": { "damage": 10 } }
+   },
+   "BEAR_MAUL": {
+    "intent": "ATTACK", "damage": 18, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 20 } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always BEAR_HUG (getMove only reached on the initial roll; roll ignored)",
+   "spec": "Masked Bandits event fight only (Pointy idx 0, Romeo idx 1, Bear idx 2).\ncombatStart: rollMove -> BEAR_HUG.\nturn BEAR_HUG: player DEXTERITY (asc17 ? -4 : -2), applied immediately (not queued); setMove(LUNGE). No aiRng burned.\nturn LUNGE: attack (asc2 ? 10 : 9); queue self block 9; setMove(MAUL). No aiRng burned.\nturn MAUL: attack (asc2 ? 20 : 18); setMove(LUNGE). No aiRng burned.\nresulting fixed script: BEAR_HUG, then LUNGE/MAUL alternating forever. After the initial roll, Bear consumes NO further aiRng.",
+   "historyRules": ["fixed deterministic script: BEAR_HUG, LUNGE, MAUL, LUNGE, MAUL, ..."]
+  },
+  "conflicts": [
+   {
+    "field": "hp.base",
+    "values": { "lightspeed": "[38,52]", "spire-archive": "[38,42]", "wiki": "38-42" },
+    "chosen": "[38,42] per spire-archive+wiki majority",
+    "note": "lightspeed's base max of 52 is a transcription typo for 42 (asc range [40,44] agrees across all sources)."
+   },
+   {
+    "field": "category",
+    "values": { "spire-archive": "Normal", "wiki": "Event" },
+    "chosen": "event",
+    "note": "event-only fighter (Masked Bandits)."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:405-419 (takeTurn)",
+   "MonsterSpecific.cpp:2946-2949 (getMove)",
+   "MonsterGroup.cpp:306-310 (MASKED_BANDITS_EVENT encounter order)",
+   "MonsterIds.h:156 (hp, see conflict)",
+   "wiki:Masked_Bandits",
+   "wiki:Enemies.lua",
+   "spire-archive:BANDITBEAR"
+  ]
+ },
+ {
+  "id": "ROMEO",
+  "name": "Romeo",
+  "category": "event",
+  "acts": [2],
+  "hp": { "base": [35, 39], "asc": [37, 41], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "ROMEO_MOCK": {
+    "intent": "UNKNOWN", "damage": null, "hits": null, "block": null, "effects": [], "asc": {}
+   },
+   "ROMEO_AGONIZING_SLASH": {
+    "intent": "ATTACK_DEBUFF", "damage": 10, "hits": 1, "block": null,
+    "effects": [ { "power": "WEAK", "amount": 2, "target": "player" } ],
+    "asc": {
+     "2": { "damage": 12 },
+     "17": { "effects": [ { "power": "WEAK", "amount": 3, "target": "player" } ] }
+    }
+   },
+   "ROMEO_CROSS_SLASH": {
+    "intent": "ATTACK", "damage": 15, "hits": 1, "block": null, "effects": [],
+    "asc": { "2": { "damage": 17 } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always MOCK (does nothing; getMove only reached on the initial roll)",
+   "spec": "Masked Bandits event fight only (Pointy idx 0, Romeo idx 1, Bear idx 2).\ncombatStart: rollMove -> MOCK.\nturn MOCK: no effect; setMove(AGONIZING_SLASH). No aiRng burned.\nturn AGONIZING_SLASH: attack (asc2 ? 12 : 10); queue WEAK (asc17 ? 3 : 2); setMove(CROSS_SLASH). No aiRng burned.\nturn CROSS_SLASH: attack (asc2 ? 17 : 15); setMove(AGONIZING_SLASH). No aiRng burned.\nresulting fixed script (lightspeed, all ascensions): MOCK, then AGONIZING_SLASH/CROSS_SLASH alternating forever.",
+   "historyRules": ["fixed deterministic script: MOCK, AGONIZING_SLASH, CROSS_SLASH, AGONIZING_SLASH, CROSS_SLASH, ... (see conflicts for the wiki A17 variant)"]
+  },
+  "conflicts": [
+   {
+    "field": "ai.a17-pattern",
+    "values": {
+     "lightspeed": "no A17 branch: strict AGONIZING/CROSS alternation at every ascension",
+     "wiki": "A17+: MOCK, then repeating AGONIZING_SLASH, CROSS_SLASH, CROSS_SLASH"
+    },
+    "chosen": "lightspeed script transcribed as primary; wiki A17 rule (Cross Slash used twice per cycle) is likely the live-game behavior",
+    "note": "Event-only fighter, so lightspeed's omission of the A17 branch was probably never seed-validated. Unresolvable without the JAR."
+   },
+   {
+    "field": "category",
+    "values": { "spire-archive": "Elite", "wiki": "Event" },
+    "chosen": "event",
+    "note": "event-only fighter (Masked Bandits)."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:425-438 (takeTurn)",
+   "MonsterSpecific.cpp:2951-2954 (getMove)",
+   "MonsterGroup.cpp:306-310 (encounter)",
+   "wiki:Masked_Bandits",
+   "wiki:Enemies.lua",
+   "spire-archive:BANDITLEADER"
+  ]
+ },
+ {
+  "id": "POINTY",
+  "name": "Pointy",
+  "category": "event",
+  "acts": [2],
+  "hp": { "base": [30, 30], "asc": [34, 34], "ascLevel": 7 },
+  "prebattle": [],
+  "moves": {
+   "POINTY_ATTACK": {
+    "intent": "ATTACK", "damage": 5, "hits": 2, "block": null, "effects": [],
+    "asc": { "2": { "damage": 6 } }
+   }
+  },
+  "ai": {
+   "roll": "aiRng.random(99)",
+   "firstTurn": "always POINTY_ATTACK (only move; getMove only reached on the initial roll)",
+   "spec": "Masked Bandits event fight only (Pointy idx 0, Romeo idx 1, Bear idx 2).\ncombatStart: rollMove -> POINTY_ATTACK.\nturn POINTY_ATTACK: attack (asc2 ? 6 : 5) x2. The move is never changed and no RollMove is ever queued - Pointy attacks every turn and consumes no aiRng after the initial roll.\nhp: rolled from the degenerate range [30,30] ([34,34] at A7+) - one monsterHpRng roll is still consumed.",
+   "historyRules": ["uses POINTY_ATTACK (5x2 / 6x2) every turn; no variation"]
+  },
+  "conflicts": [
+   {
+    "field": "category",
+    "values": { "spire-archive": "Normal", "wiki": "Event" },
+    "chosen": "event",
+    "note": "event-only fighter (Masked Bandits)."
+   }
+  ],
+  "sources": [
+   "MonsterSpecific.cpp:421-423 (takeTurn)",
+   "MonsterSpecific.cpp:2956-2959 (getMove)",
+   "MonsterGroup.cpp:306-310 (encounter)",
+   "wiki:Masked_Bandits",
+   "wiki:Enemies.lua",
+   "spire-archive:BANDITCHILD"
+  ]
+ }
+]

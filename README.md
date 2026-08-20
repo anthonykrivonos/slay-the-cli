@@ -1,21 +1,38 @@
-# bun-react-tailwind-shadcn-template
+# slay
 
-To install dependencies:
+A mechanically exact Slay the Spire (V2.3.4) clone as a full-terminal game.
+Pure-TypeScript deterministic engine, data-audited content (370 cards, 181
+relics, 42 potions, 65 monsters, 51 events, all 4 characters, Ascension 0–20,
+Acts 1–4 through the Corrupt Heart), rendered as a plain-ASCII + ANSI-color TUI.
 
-```bash
-bun install
+## Play
+
+```sh
+bun src/cli/main.ts
+bun src/cli/main.ts --seed SPIRE --character WATCHER --ascension 20
+bun src/cli/main.ts --no-color        # also honors NO_COLOR
 ```
 
-To start a development server:
+Needs an interactive terminal, at least 80×24. Number keys select, letters act
+(`e` end turn, `d` deck, `p` potions, `q` quit, `?` help). Runs save to
+`~/.slay/` after every action (`SLAY_DIR` overrides); `c` on the menu continues.
+If the process is hard-killed the terminal may need `reset`.
 
-```bash
-bun dev
+## Develop
+
+```sh
+bun test                          # full suite
+bun tools/corpus/check-all.ts     # corpus ground-truth audit
+bun tools/fuzz.ts --seeds 500     # long-run combat fuzzing
+bun run build                     # compile a single binary to dist/slay
 ```
 
-To run for production:
+Layout: `src/engine` (pure deterministic core — bit-exact RNG, action queue,
+damage pipeline), `src/content` (the forkable game-content bundle),
+`src/cli` (TUI: pure snapshot-tested renderer + thin terminal driver),
+`data/corpus` (audited ground-truth data; tests/tools only).
 
-```bash
-bun start
-```
-
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Mechanics, numbers, and behavior mirror the original game exactly (documented
+deviations are flagged in code). Contains no assets or text from the game
+itself; event/narrative text is paraphrased. Slay the Spire is by MegaCrit —
+buy it; this is a fan reimplementation for private use.

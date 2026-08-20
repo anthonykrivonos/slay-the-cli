@@ -1,36 +1,15 @@
 {
-  "name": "bun-react-template",
+  "name": "slay",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot src/index.ts",
-    "start": "NODE_ENV=production bun src/index.ts",
-    "build": "bun run build.ts"
+    "dev": "bun src/cli/main.ts",
+    "start": "bun src/cli/main.ts",
+    "build": "bun build --compile src/cli/main.ts --outfile dist/slay"
   },
-  "dependencies": {
-    "@iconify-json/game-icons": "^1.2.4",
-    "@iconify-json/mdi": "^1.2.3",
-    "@iconify/utils": "^3.1.4",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-slot": "^1.2.3",
-    "bun-plugin-tailwind": "^0.1.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1",
-    "react": "^19",
-    "react-dom": "^19",
-    "tailwind-merge": "^3.3.1",
-    "three": "^0.185.1",
-    "tw-animate-css": "^1.4.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/three": "^0.185.4",
-    "playwright": "^1.62.1",
-    "tailwindcss": "^4.1.11"
+    "@types/bun": "latest"
   }
 }

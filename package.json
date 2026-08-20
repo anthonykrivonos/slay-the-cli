@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun src/cli/main.ts",
+    "dev": "bun --watch src/cli/main.ts",
     "start": "bun src/cli/main.ts",
     "build": "bun build --compile src/cli/main.ts --outfile dist/slay"
   },

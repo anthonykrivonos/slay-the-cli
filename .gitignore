@@ -32,3 +32,9 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# reference clones (re-cloneable; see memory/plan)
+references/
+
+# compiled CLI binary
+dist/

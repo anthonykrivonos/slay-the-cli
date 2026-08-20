@@ -15,6 +15,8 @@ function mkView(overrides: Partial<MapView>): MapView {
   return {
     kind: "map",
     act: 1,
+    floor: 1,
+    focusPick: null,
     bossName: "Hexaghost",
     bossReachable: false,
     bossPickKey: null,
@@ -159,6 +161,26 @@ describe("viewport", () => {
   test("every rendered line fits the width", () => {
     const out = renderMap(tallView(), 100, 26, THEME_PLAIN);
     for (const l of out) expect(l.length).toBe(100);
+  });
+
+  test("body row 0 is the always-visible boss banner", () => {
+    const out = renderMap(tallView(), 80, 15, THEME_PLAIN);
+    expect(out[0]).toContain("[ BOSS: HEXAGHOST ]");
+    expect(out[0]!.trimEnd().startsWith("=")).toBe(true);
+    // even when the boss door itself is scrolled out of the viewport
+    expect(out.slice(1).some((l) => l.includes("B Hexaghost"))).toBe(false);
+  });
+
+  test("legend shows the FLOOR gauge at >=96 cols", () => {
+    const v = { ...tallView(), floor: 6, position: [3, 5] as [number, number] };
+    const out = renderMap(v, 100, 26, THEME_PLAIN);
+    expect(out.some((l) => l.includes("FLOOR 6") && l.includes("6/16"))).toBe(true);
+  });
+
+  test("the focused pick is cursor-marked on the Next line", () => {
+    const v = { ...tallView(), focusPick: 0 };
+    const out = renderMap(v, 80, 15, THEME_PLAIN);
+    expect(out[out.length - 1]).toContain("Next: >1:M");
   });
 });
 

@@ -1,5 +1,6 @@
  HP 80/80 | G 99 | F52 A4 | ASC0 | K:ERS | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                           
 -- MAP - act 4 ---------------------------------------------------------------------------------------------------------------------
+==============[ BOSS: THE HEART ]===============                                                                                    
                        B                          LEGEND                                                                            
                        |                          M monster    E elite                                                              
                        E                          $ shop       R rest                                                               
@@ -8,11 +9,10 @@
                        |                          @ you        B boss                                                               
                        @                                                                                                            
                                                   BOSS  The Heart                                                                   
+                                                  FLOOR 52  [##......] 1/5                                                          
                                                   KEYS  ERS                                                                         
                                                   DECK  10   RELICS 1                                                               
                                                   seed UISMNKE                                                                      
-                                                                                                                                    
-                                                                                                                                    
                                                                                                                                     
                                                                                                                                     
                                                                                                                                     

@@ -132,6 +132,8 @@ export interface MapNodeView {
 export interface MapView {
   kind: "map";
   act: number;
+  /** global run floor (the header shows it too; the legend gauge uses it) */
+  floor: number;
   bossName: string;
   bossReachable: boolean;
   bossPickKey: string | null;
@@ -146,6 +148,8 @@ export interface MapView {
   deckCount: number;
   relicCount: number;
   seed: string;
+  /** picks[] index under the selection cursor, or null */
+  focusPick: number | null;
 }
 
 export interface PowerChipView {
@@ -571,9 +575,11 @@ function buildMap(g: GameState, ui: UiState, bundle: ContentBundle): MapView {
     });
   }
   const keysOwned = `${g.run.keys.emerald ? "E" : "-"}${g.run.keys.ruby ? "R" : "-"}${g.run.keys.sapphire ? "S" : "-"}`;
+  const rawFocus = ui.focus && ui.focus.scope === "map" ? ui.focus.idx : null;
   return {
     kind: "map",
     act: g.run.act,
+    floor: g.run.floor,
     bossName: toAscii(bossName),
     bossReachable: bossPick !== undefined,
     bossPickKey: bossPick?.key ?? null,
@@ -587,6 +593,7 @@ function buildMap(g: GameState, ui: UiState, bundle: ContentBundle): MapView {
     deckCount: g.run.deck.length,
     relicCount: g.run.relics.length,
     seed: g.seed,
+    focusPick: rawFocus !== null && picks.length > 0 ? Math.min(rawFocus, picks.length - 1) : null,
   };
 }
 

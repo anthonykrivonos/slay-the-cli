@@ -7,7 +7,7 @@
 import type { MapView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
-import { padClip } from "./widgets";
+import { padClip, bar } from "./widgets";
 
 export const NODE_COL = (x: number): number => 5 + 6 * x;
 const BOSS_COL = NODE_COL(3);
@@ -123,7 +123,15 @@ export function buildMapLines(screen: MapView, theme: Theme): { lines: string[];
   };
 }
 
+/** In-act progress for the FLOOR gauge: current row / rows + boss door. */
+function actProgress(screen: MapView): { at: number; of: number } {
+  const of = screen.maxY + 2; // node rows + the boss door
+  const at = screen.position !== null ? screen.position[1] + 1 : 0;
+  return { at: Math.min(at, of), of };
+}
+
 function legendPanel(screen: MapView, theme: Theme): string[] {
+  const { at, of } = actProgress(screen);
   return [
     theme.bold("LEGEND"),
     theme.dim("M monster    E elite"),
@@ -133,15 +141,24 @@ function legendPanel(screen: MapView, theme: Theme): string[] {
     theme.dim("@ you        B boss"),
     "",
     `BOSS  ${theme.fg(C.bad, screen.bossName)}`,
+    `FLOOR ${screen.floor}  ${theme.fg(C.current, bar(at, of, 8))} ${theme.dim(`${at}/${of}`)}`,
     `KEYS  ${screen.keysOwned}`,
     `DECK  ${screen.deckCount}   RELICS ${screen.relicCount}`,
     theme.dim(`seed ${screen.seed}`),
   ];
 }
 
+/** `====[ BOSS: NAME ]====` across the map area — always visible. */
+function bossBanner(screen: MapView, theme: Theme): string {
+  const label = `[ BOSS: ${screen.bossName.toUpperCase()} ]`;
+  const total = Math.max(0, MAP_AREA_W - label.length);
+  const left = Math.floor(total / 2);
+  return `${"=".repeat(left)}${theme.bold(theme.fg(C.bad, label))}${"=".repeat(total - left)}`;
+}
+
 export function renderMap(screen: MapView, width: number, height: number, theme: Theme): string[] {
   const { lines: full, nodeRowLine } = buildMapLines(screen, theme);
-  const mapH = Math.max(1, height - 1); // last body line = "Next:" echo
+  const mapH = Math.max(1, height - 2); // row 0 = boss banner, last = "Next:" echo
 
   // auto-follow the frontier: center the window on the pick row (or position)
   const anchorPick = screen.picks[0];
@@ -152,7 +169,7 @@ export function renderMap(screen: MapView, width: number, height: number, theme:
   const windowLines = full.length <= mapH ? full : full.slice(start, start + mapH);
 
   const panel = width >= 96 ? legendPanel(screen, theme) : [];
-  const out: string[] = [];
+  const out: string[] = [bossBanner(screen, theme)];
   for (let i = 0; i < Math.min(mapH, Math.max(windowLines.length, panel.length)); i++) {
     const mapLine = windowLines[i] ?? "";
     if (panel.length > 0) {
@@ -161,11 +178,13 @@ export function renderMap(screen: MapView, width: number, height: number, theme:
       out.push(mapLine);
     }
   }
-  while (out.length < mapH) out.push("");
+  while (out.length < mapH + 1) out.push("");
 
-  const nextParts = screen.picks.map((p) =>
-    p.y > screen.maxY ? theme.bold(theme.fg(C.pick, `${p.key}:BOSS`)) : theme.bold(theme.fg(C.pick, `${p.key}:${p.glyph}`)),
-  );
+  const nextParts = screen.picks.map((p, k) => {
+    const cursor = screen.focusPick === k ? ">" : "";
+    const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}`;
+    return screen.focusPick === k ? theme.bold(theme.fg(C.current, label)) : theme.bold(theme.fg(C.pick, label));
+  });
   const scrollNote = full.length > mapH ? theme.dim("   [j/k] scroll") : "";
   out.push(`Next: ${nextParts.join("  ")}${scrollNote}`);
   return out.slice(0, height).map((l) => padClip(l, width));

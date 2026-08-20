@@ -1,18 +1,18 @@
  HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE            
 -- MAP - act 1 -------------------------------------------------------------------------------------
-           M                 ?     $     M        LEGEND                                            
-        /  |              /  |     |     |        M monster    E elite                              
-     E*    ?           $     ?     M     ?        $ shop       R rest                               
-     |        \     /        |  /        |        T treasure   ? unknown                            
-     R           M           R           M        E* burning elite (+key)                           
-        \        |           |  \     /           @ you        B boss                               
-           T     T           T     T                                                                
-           |  /  |        /     /                 BOSS  Slime Boss                                  
-           M     R     R     M                    KEYS  ---                                         
-        /  |     |        \  |  \                 DECK  10   RELICS 1                               
-     M     R     M           ?     E              seed UISMNKE                                      
-     |  /           \     /  |        \                                                             
-     E                 E     R           M                                                          
+==============[ BOSS: SLIME BOSS ]==============                                                    
+        /  |              /  |     |     |        LEGEND                                            
+     E*    ?           $     ?     M     ?        M monster    E elite                              
+     |        \     /        |  /        |        $ shop       R rest                               
+     R           M           R           M        T treasure   ? unknown                            
+        \        |           |  \     /           E* burning elite (+key)                           
+           T     T           T     T              @ you        B boss                               
+           |  /  |        /     /                                                                   
+           M     R     R     M                    BOSS  Slime Boss                                  
+        /  |     |        \  |  \                 FLOOR 0  [........] 0/16                          
+     M     R     M           ?     E              KEYS  ---                                         
+     |  /           \     /  |        \           DECK  10   RELICS 1                               
+     E                 E     R           M        seed UISMNKE                                      
      |              /     \     \     /                                                             
      M           ?           M     ?                                                                
      |  \     /                 \  |                                                                

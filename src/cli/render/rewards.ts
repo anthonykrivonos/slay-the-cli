@@ -9,7 +9,7 @@ import { C } from "./theme";
 import { padClip } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp, joinBlocks, rowWidth } from "./layout";
-import { cardBox, cardBoxHeight, type CardBoxData } from "./cardbox";
+import { cardBox, cardBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
 import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 
 function keyOf(items: ListItemView[], i: number): string {
@@ -68,12 +68,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
             dim: !it.enabled,
           };
           const box = cardBox(data, w, cardH, theme);
-          if (focusI === it.i) {
-            return box.map((r, k) =>
-              k === 0 || k === box.length - 1 ? theme.bold(theme.fg(C.current, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
-            );
-          }
-          return box;
+          return focusI === it.i ? tintFocus(box, theme) : box;
         });
         body.push(...joinBlocks(blocks, blocks.map(() => w), gap, 1));
       } else {

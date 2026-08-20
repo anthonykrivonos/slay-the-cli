@@ -15,6 +15,7 @@ import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, wrapPlain } from "./widgets";
 import { clamp } from "./layout";
+import type { ListItemView } from "../state/view";
 
 export interface CardBoxData {
   /** hotkey shown in the bottom border; null = no key (not selectable) */
@@ -163,4 +164,31 @@ export function buttonBox(b: ButtonBoxData, w: number, h: number, theme: Theme):
   rows.push(bottom);
   const out = rows.slice(0, h).map((r) => padClip(r, w));
   return b.enabled ? out : out.map((r) => theme.dim(r));
+}
+
+/** Map a numbered list item onto button-box data: the part before " - "
+ *  becomes the label (upper-cased when short), the rest + the sub wrap into
+ *  detail lines. Keys/enabled/notes carry over, so hotkeys stay mirrored. */
+export function itemButton(item: ListItemView, iw: number): ButtonBoxData {
+  const dash = item.label.indexOf(" - ");
+  let title = dash > 0 ? item.label.slice(0, dash) : item.label;
+  const rest = (dash > 0 ? item.label.slice(dash + 3) : "").replace(/\s+/g, " ");
+  const subs: string[] = [];
+  const titleWrap = wrapPlain(title, iw);
+  if (titleWrap.length > 1) {
+    title = titleWrap[0]!;
+    subs.push(...titleWrap.slice(1, 3));
+  } else if (title.length <= 12) {
+    title = title.toUpperCase();
+  }
+  if (rest.length > 0) subs.push(...wrapPlain(rest, iw).slice(0, 2));
+  if (item.sub !== null) subs.push(...wrapPlain(item.sub, iw).slice(0, 2));
+  return { key: item.key, label: title, subs, enabled: item.enabled, note: item.note };
+}
+
+/** Re-tint a box's top/bottom borders to mark the hover/selection focus. */
+export function tintFocus(rows: string[], theme: Theme): string[] {
+  return rows.map((r, i) =>
+    i === 0 || i === rows.length - 1 ? theme.bold(theme.fg(C.current, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
+  );
 }

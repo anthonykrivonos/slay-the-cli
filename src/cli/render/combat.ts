@@ -14,7 +14,7 @@ import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, bar, rule } from "./widgets";
 import { clamp, joinBlocks, flexFill, rowWidth } from "./layout";
-import { cardBox, cardBoxWidth, cardBoxHeight, type CardBoxData } from "./cardbox";
+import { cardBox, cardBoxWidth, cardBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
 import {
   enemyPanel,
   enemyPanelWidth,
@@ -95,13 +95,6 @@ function cardData(h: CombatView["hand"][number], typeRow: boolean): CardBoxData 
     rules: h.rules,
     dim: !h.playable,
   };
-}
-
-/** Re-tint a box's border glyphs to mark the hover focus. */
-function focusTint(rows: string[], theme: Theme): string[] {
-  return rows.map((r, i) =>
-    i === 0 || i === rows.length - 1 ? theme.bold(theme.fg(C.current, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
-  );
 }
 
 // --- one-line ladder floors ---------------------------------------------------------
@@ -268,7 +261,7 @@ export function renderCombat(
     const eW = enemyPanelWidth(width, m);
     const blocks = screen.enemies.map((e, i) => {
       const p = enemyPanel(enemyData(e), eW, theme);
-      return screen.focusEnemy === i ? focusTint(p, theme) : p;
+      return screen.focusEnemy === i ? tintFocus(p, theme) : p;
     });
     const rowW = rowWidth(m, eW, 1);
     const leftPad = Math.max(0, width - rowW - 1);
@@ -319,7 +312,7 @@ export function renderCombat(
     const renderRow = (cards: CombatView["hand"], baseIdx: number): void => {
       const blocks = cards.map((h, k) => {
         const b = cardBox(cardData(h, typeRow), w, cardH, theme);
-        return screen.focusHand === baseIdx + k ? focusTint(b, theme) : b;
+        return screen.focusHand === baseIdx + k ? tintFocus(b, theme) : b;
       });
       const gap = rowWidth(cards.length, w, 1) <= width ? 1 : 0;
       const rowW = rowWidth(cards.length, w, gap);

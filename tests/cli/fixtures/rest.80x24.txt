@@ -1,21 +1,21 @@
  HP 63/80 | G 199 | F6 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad 
 -- REST SITE -------------------------------------------------------------------
                                                                                 
-  [1] Rest - heal 17 HP  (63 -> 80)                                             
-  [2] Smith - upgrade a card                                                    
-  [3] Recall - take the Ruby Key                                                
-        Uses the rest site - one of three keys needed to reach Act 4            
-  [4] Leave                                                                     
+                                      (   (                                     
+                                     )  )  )                                    
+                                    ( ( ( (                                     
+                                     \ \|/ /                                    
+                                      \\|//                                     
+                                   ===--o--===                                  
+                                    //     \\                                   
                                                                                 
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
++-[1]-------------+ +-[2]-------------+ +-[3]-------------+ +-[4]-------------+ 
+| REST            | | SMITH           | | RECALL          | | LEAVE           | 
+| heal 17 HP (63  | | upgrade a card  | | take the Ruby   | |                 | 
+| -> 80)          | |                 | | Key             | |                 | 
+|                 | |                 | | Uses the rest   | |                 | 
+|                 | |                 | | site - one of   | |                 | 
++-----------------+ +-----------------+ +-----------------+ +-----------------+ 
                                                                                 
                                                                                 
                                                                                 

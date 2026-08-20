@@ -10,7 +10,7 @@ import { C } from "./theme";
 import { padClip, center, rule } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp, joinBlocks, rowWidth } from "./layout";
-import { cardBox, cardBoxHeight, buttonBox, buttonBoxHeight, type CardBoxData } from "./cardbox";
+import { cardBox, cardBoxHeight, buttonBox, buttonBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
 import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 import { ART_MERCHANT } from "./art";
 
@@ -105,12 +105,7 @@ export function renderShop(screen: ShopView, width: number, height: number, them
       dim: c.sold || !c.affordable,
     };
     const box = cardBox(data, w, cardH, theme);
-    if (screen.list.focusI === c.i) {
-      return box.map((r, i) =>
-        i === 0 || i === box.length - 1 ? theme.bold(theme.fg(C.current, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
-      );
-    }
-    return box;
+    return screen.list.focusI === c.i ? tintFocus(box, theme) : box;
   });
   out.push(...joinBlocks(blocks, blocks.map(() => w), gap, leftPad));
   // prices under each box
@@ -133,9 +128,7 @@ export function renderShop(screen: ShopView, width: number, height: number, them
   const removalFocused = screen.list.focusI === screen.removal.i;
   const bw = Math.min(width - 4, 44);
   const removalBox = buttonBox(removalData, bw, removalH, theme);
-  for (const r of removalBox) {
-    out.push(removalFocused ? theme.bold(theme.fg(C.current, `  ${r.replace(/\x1b\[[0-9;]*m/g, "")}`)) : `  ${r}`);
-  }
+  for (const r of removalFocused ? tintFocus(removalBox, theme) : removalBox) out.push(`  ${r}`);
 
   const leaveFocused = screen.list.focusI === screen.leave.i;
   const leave = `${leaveFocused ? "> " : "  "}[Enter] Leave the shop`;

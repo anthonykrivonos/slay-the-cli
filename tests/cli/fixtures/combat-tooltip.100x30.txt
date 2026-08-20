@@ -1,30 +1,30 @@
  HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE            
 -- COMBAT - turn 1 ---------------------------------------------------------------------------------
-[1] Red Louse        HP  13/13  [##########]       ATK 6          ~Bite  Curl Up 5                  
-[2] Green Louse      HP  13/13  [##########]       Debuffing you  ~Spit Web  Curl Up 7              
+ RELICS Bur  POTIONS [F] [E] [B]                                                             [l] log
                                                                                                     
-YOU Ironclad          HP  80/80  [##########]       E 3/3                                           
--- HAND  (draw 5 / discard 0 / exhaust 0) ----------------------------------------------------------
-[1] Defend             (1) S  Gain 5 Block.                                                         
-[2] Defend             (1) S  Gain 5 Block.                                                         
-[3] Strike             (1) A> Deal 6 damage.                                                        
-[4] Strike             (1) A> Deal 6 damage.                                                        
-[5] Strike             (1) A> Deal 6 damage.                                                        
--- LOG ---------------------------------------------------------------------------------------------
-  Drew a card                                                                                       
-  Drew a card                                                                                       
-  Drew a card                                                                                       
-  -- Turn 1 --                                                                                      
+                                      +----------------------------+ +----------------------------+ 
+                                      | /! 6 Bite              [1] | | v Spit Web             [2] | 
+                                      | Red Louse                  | | Green Louse                | 
+                                      | 13/13 [##########]         | | 13/13 [##########]         | 
+                                      | ^ Curl Up 5                | | ^ Curl Up 7                | 
+                                      +----------------------------+ +----------------------------+ 
                                                                                                     
                                                                                                     
                                                                                                     
                                                                                                     
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
+ +==( 3/3 )==================================+                                                      
+ | YOU  Ironclad                             |                                                      
+ | HP 80/80 [#############]                  |                                                      
+ +===========================================+                                                      
+-- HAND 5 ------------------------------------------------------------------------------------------
++(1)--------------+ +(1)--------------+ +(1)--------------+ +(1)--------------+ +(1)--------------+ 
+| Defend          | | Defend          | | Strike          | | Strike          | | Strike          | 
+| Skill           | | Skill           | | Attack        > | | Attack        > | | Attack        > | 
+| Gain 5 Block.   | | Gain 5 Block.   | | Deal 6 damage.  | | Deal 6 damage.  | | Deal 6 damage.  | 
+|                 | |                 | |                 | |                 | |                 | 
++-------[1]-------+ +-------[2]-------+ +-------[3]-------+ +-------[4]-------+ +-------[5]-------+ 
+ DRAW 5                                     [e] END TURN                       DISCARD 0  EXHAUST 0 
 -- INFO --------------------------------------------------------------------------------------------
  CARD  Strike (1)  Attack - basic - targets an enemy                                                
    Deal 6 damage.                                                                                   
-[1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit 
+[1-0] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck/relics/potions  [q] quit

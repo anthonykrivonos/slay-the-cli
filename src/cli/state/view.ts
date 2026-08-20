@@ -24,6 +24,7 @@ import {
   neowDrawbackText,
   legalMapPicks,
   mapGlyph,
+  stanceColor,
   restHealPreview,
   canRecall,
   rewardLabel,
@@ -146,22 +147,49 @@ export interface MapView {
   seed: string;
 }
 
-export interface EnemyLineView {
+export interface PowerChipView {
+  name: string;
+  amount: number;
+  kind: "buff" | "debuff";
+}
+
+export interface IntentView {
+  /** raw MonsterMoveDef intent category */
+  kind: string;
+  damage: number | null;
+  hits: number;
+  block: number;
+  /** e.g. "/! 11x2", "/! 9 [+5]", "[+5]", "^^", "vv", "zz", "**", "<<", "()", "??" */
+  glyph: string;
+  /** coloring bucket for renderers */
+  color: "attack" | "block" | "other";
+}
+
+export interface EnemyPanelView {
   key: string | null; // targeting number for alive enemies
   name: string;
   hp: number;
   maxHp: number;
   block: number;
-  intent: string;
+  intent: IntentView | null;
   move: string | null;
-  powers: string | null;
+  powers: PowerChipView[];
   gone: "dead" | "escaped" | null;
+}
+
+export interface OrbView {
+  id: string;
+  /** one-letter tag inside the chip: L/F/D/P; "-" when empty */
+  letter: string;
+  name: string;
+  value: number | null;
+  empty: boolean;
 }
 
 export interface CombatView {
   kind: "combat";
   turn: number;
-  enemies: EnemyLineView[];
+  enemies: EnemyPanelView[];
   you: {
     name: string;
     hp: number;
@@ -170,21 +198,31 @@ export interface CombatView {
     energy: number;
     energyMax: number;
     stance: string | null;
-    mantra: string | null;
-    powers: string | null;
-    orbs: string[] | null;
+    stanceColor: string | null;
+    mantra: number | null;
+    powers: PowerChipView[];
+    orbs: OrbView[] | null;
   };
   hand: {
     key: string | null;
     name: string;
     cost: string;
     type: string;
+    rarity: string;
+    color: string;
     targeted: boolean;
     playable: boolean;
-    rules: string;
+    /** full rules text, split into lines */
+    rules: string[];
   }[];
   piles: { draw: number; discard: number; exhaust: number };
+  relics: { name: string; abbrev: string; counter: number }[];
+  potions: ({ name: string; letter: string } | null)[];
   log: string[];
+  /** hand index holding the hover focus (render highlight), or null */
+  focusHand: number | null;
+  /** enemies[] index holding the hover focus, or null */
+  focusEnemy: number | null;
 }
 
 export interface SimpleListScreen {
@@ -223,6 +261,7 @@ export type OverlayView =
   | { kind: "list"; id: "deck" | "relics" | "pile" | "potions"; title: string; list: ListView }
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
   | { kind: "inspect"; title: string; lines: string[]; index: number; count: number }
+  | { kind: "log"; title: string; lines: string[] }
   | { kind: "confirmQuit" };
 
 export interface TargetingView {
@@ -312,28 +351,61 @@ function prettyMove(monsterId: string, moveId: string): string {
   return titleCase(stripped);
 }
 
-const INTENT_LABELS: Record<string, string> = {
-  buff: "Buffing",
-  debuff: "Debuffing you",
-  strongDebuff: "Debuffing you hard",
-  sleep: "Sleeping",
-  stun: "Stunned",
-  escape: "Escaping",
-  magic: "Casting",
-  unknown: "Unknown",
-  defend: "Defending",
-  defendBuff: "Defend + buff",
-  defendDebuff: "Defend + debuff",
+const INTENT_GLYPHS: Record<string, string> = {
+  buff: "^^",
+  debuff: "v",
+  strongDebuff: "vv",
+  sleep: "zz",
+  stun: "**",
+  escape: "<<",
+  magic: "()",
+  unknown: "??",
+  defend: "[+?]",
+  defendBuff: "[+?]^",
+  defendDebuff: "[+?]v",
+  attackBuff: "/! ?",
+  attackDebuff: "/! ?",
+  attackDefend: "/! ?",
+  attack: "/! ?",
 };
 
-function intentText(info: IntentInfo | null): string {
-  if (!info) return "?";
+/** StS-style intent mark: `/! 11x2` attack, `[+5]` defend, `^^` buff... */
+function buildIntentView(info: IntentInfo | null): IntentView | null {
+  if (!info) return null;
+  let glyph: string;
+  let color: IntentView["color"];
   if (info.damage !== null) {
-    const atk = `ATK ${info.damage}${info.hits > 1 ? `x${info.hits}` : ""}`;
-    return info.block > 0 ? `${atk} +B${info.block}` : atk;
+    glyph = `/! ${info.damage}${info.hits > 1 ? `x${info.hits}` : ""}${info.block > 0 ? ` [+${info.block}]` : ""}`;
+    color = "attack";
+  } else if (info.block > 0) {
+    glyph = `[+${info.block}]`;
+    color = "block";
+  } else {
+    glyph = INTENT_GLYPHS[info.kind] ?? "??";
+    color = "block";
+    if (info.kind !== "defend" && info.kind !== "defendBuff" && info.kind !== "defendDebuff") color = "other";
   }
-  if (info.block > 0) return `BLK ${info.block}`;
-  return INTENT_LABELS[info.kind] ?? titleCase(info.kind);
+  return { kind: info.kind, damage: info.damage, hits: info.hits, block: info.block, glyph, color };
+}
+
+const ORB_LETTERS: Record<string, string> = {
+  LIGHTNING: "L",
+  FROST: "F",
+  DARK: "D",
+  PLASMA: "P",
+};
+
+function powerChips(bundle: ContentBundle, powers: { id: string; amount: number }[]): PowerChipView[] {
+  return powers.map((p) => ({
+    name: toAscii(bundle.powers.get(p.id)?.name ?? titleCase(p.id)),
+    amount: p.amount,
+    kind: bundle.powers.get(p.id)?.kind ?? "buff",
+  }));
+}
+
+/** Alphabetic 3-letter tag for the relic strip. */
+function relicAbbrev(name: string): string {
+  return name.replace(/[^A-Za-z]/g, "").slice(0, 3);
 }
 
 /** Mirror of the engine's playability gate (web UI's isPlayable). */
@@ -463,44 +535,46 @@ function buildMap(g: GameState, ui: UiState, bundle: ContentBundle): MapView {
   };
 }
 
-function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle): CombatView {
+function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFocus: number | null): CombatView {
   const c = g.combat!;
   const intents = getIntents(g, bundle);
   let targetNo = 0;
-  const enemies: EnemyLineView[] = c.monsters.map((m, idx) => {
+  const enemies: EnemyPanelView[] = c.monsters.map((m, idx) => {
     const gone = m.isDead ? ("dead" as const) : m.isEscaped ? ("escaped" as const) : null;
     const info = intents[idx] ?? null;
-    const powers = m.powers.map((p) => `${bundle.powers.get(p.id)?.name ?? titleCase(p.id)} ${p.amount}`).join(", ");
     return {
       key: gone ? null : (keyFor(targetNo++) ?? null),
       name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
       hp: m.hp,
       maxHp: m.maxHp,
       block: m.block,
-      intent: gone ? "" : toAscii(intentText(info)),
+      intent: gone ? null : buildIntentView(info),
       move: gone || !info ? null : toAscii(prettyMove(m.id, info.moveId)),
-      powers: gone || powers.length === 0 ? null : toAscii(powers),
+      powers: gone ? [] : powerChips(bundle, m.powers),
       gone,
     };
   });
 
   const p = c.player;
   const focus = playerFocus(p.powers);
-  let orbs: string[] | null = null;
+  let orbs: OrbView[] | null = null;
   if (p.orbSlots > 0) {
     orbs = [];
     for (let i = 0; i < p.orbSlots; i++) {
       const orb = p.orbs[i];
       if (!orb) {
-        orbs.push("( - )");
+        orbs.push({ id: "", letter: "-", name: "(empty)", value: null, empty: true });
       } else {
-        const val = orbDisplayValue(bundle, orb, focus);
-        const short = orbName(bundle, orb.id).slice(0, 1).toUpperCase();
-        orbs.push(`(${short}:${val === null ? "?" : val})`);
+        orbs.push({
+          id: orb.id,
+          letter: ORB_LETTERS[orb.id] ?? orbName(bundle, orb.id).slice(0, 1).toUpperCase(),
+          name: toAscii(orbName(bundle, orb.id)),
+          value: orbDisplayValue(bundle, orb, focus),
+          empty: false,
+        });
       }
     }
   }
-  const powers = p.powers.map((pw) => `${bundle.powers.get(pw.id)?.name ?? titleCase(pw.id)} ${pw.amount}`).join(", ");
   const hand = c.player.piles.hand.map((iid, i) => {
     const card = c.cards[iid]!;
     const def = bundle.cards.get(card.defId);
@@ -509,11 +583,34 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle): CombatVi
       name: toAscii((def?.name ?? titleCase(card.defId)) + (card.upgrades > 0 ? "+" : "")),
       cost: instCostLabel(card),
       type: def?.type ?? "?",
+      rarity: def?.rarity ?? "?",
+      color: def?.color ?? "?",
       targeted: def?.target === "enemy",
       playable: isPlayable(card, p.energy),
-      rules: toAscii(firstRulesLine(card.defId, card.upgrades)),
+      rules: cardRulesText(card.defId, card.upgrades)
+        .split("\n")
+        .filter((l) => l.trim().length > 0)
+        .map(toAscii),
     };
   });
+
+  // resolve the hover focus onto a hand card or an enemy panel (the focus
+  // enumeration order is hand -> alive enemies -> relics -> potions -> ...)
+  let focusHand: number | null = null;
+  let focusEnemy: number | null = null;
+  if (screenFocus !== null) {
+    if (screenFocus < hand.length) {
+      focusHand = screenFocus;
+    } else {
+      const alivePos = screenFocus - hand.length;
+      const aliveIdx: number[] = [];
+      c.monsters.forEach((m, idx) => {
+        if (!m.isDead && !m.isEscaped) aliveIdx.push(idx);
+      });
+      if (alivePos < aliveIdx.length) focusEnemy = aliveIdx[alivePos]!;
+    }
+  }
+
   return {
     kind: "combat",
     turn: c.turn,
@@ -526,8 +623,9 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle): CombatVi
       energy: p.energy,
       energyMax: p.energyPerTurn,
       stance: p.stance !== "NEUTRAL" ? toAscii((bundle.stances.get(p.stance)?.name ?? titleCase(p.stance)).toUpperCase()) : null,
-      mantra: p.mantra > 0 ? `${p.mantra}/10` : null,
-      powers: powers.length > 0 ? toAscii(powers) : null,
+      stanceColor: p.stance !== "NEUTRAL" ? stanceColor(p.stance) : null,
+      mantra: p.mantra > 0 ? p.mantra : null,
+      powers: powerChips(bundle, p.powers),
       orbs,
     },
     hand,
@@ -536,7 +634,16 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle): CombatVi
       discard: p.piles.discard.length,
       exhaust: p.piles.exhaust.length,
     },
+    relics: g.run.relics.map((r) => {
+      const name = toAscii(relicName(bundle, r.defId));
+      return { name, abbrev: relicAbbrev(name), counter: r.counter };
+    }),
+    potions: g.run.potions.map((id) =>
+      id === null ? null : { name: toAscii(potionName(bundle, id)), letter: potionName(bundle, id).slice(0, 1).toUpperCase() },
+    ),
     log: ui.log.slice(-8).map(toAscii),
+    focusHand,
+    focusEnemy,
   };
 }
 
@@ -780,10 +887,16 @@ function pileEntries(g: GameState, pile: PileName): { iid: number; card: CardIns
   return out;
 }
 
-function buildOverlay(g: GameState, top: Overlay, focusI: number | null, bundle: ContentBundle): OverlayView {
+function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | null, bundle: ContentBundle): OverlayView {
   switch (top.kind) {
     case "confirmQuit":
       return { kind: "confirmQuit" };
+    case "log":
+      return {
+        kind: "log",
+        title: `Combat log - ${ui.log.length} entr${ui.log.length === 1 ? "y" : "ies"}`,
+        lines: ui.log.slice(-100).map(toAscii),
+      };
     case "deck": {
       const deck = g.run.deck;
       const shopRoom = g.run.room?.kind === "shop" ? g.run.room : null;
@@ -1139,6 +1252,12 @@ function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusI
   };
 }
 
+const STANCE_TIPS: Record<string, string> = {
+  CALM: "Serenity. On exiting Calm, gain 2 Energy.",
+  WRATH: "Fury. You deal double attack damage - and take double attack damage.",
+  DIVINITY: "Transcendence. You deal triple attack damage. Exits at the end of your turn.",
+};
+
 function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInfo {
   const c = g.combat;
   if (!c) return NO_FOCUS;
@@ -1146,7 +1265,9 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInf
   const alive = c.monsters.map((m, i) => ({ m, i })).filter(({ m }) => !m.isDead && !m.isEscaped);
   const relics = g.run.relics;
   const potions = g.run.potions.map((id, slot) => ({ id, slot })).filter((p) => p.id !== null);
-  const count = hand.length + alive.length + relics.length + potions.length;
+  const orbs = c.player.orbs.filter((o) => o != null);
+  const stances = c.player.stance !== "NEUTRAL" ? 1 : 0;
+  const count = hand.length + alive.length + relics.length + potions.length + orbs.length + stances;
   const raw = ui.focus && ui.focus.scope === "combat" ? ui.focus.idx : null;
   if (raw === null || count === 0) return { count, idx: null, tooltip: null };
   let k = Math.min(raw, count - 1);
@@ -1167,8 +1288,48 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInf
     return { count, idx, tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : "") };
   }
   k -= relics.length;
-  const p = potions[k]!;
-  return { count, idx, tooltip: tipPotion(bundle, p.id!, ` - slot ${p.slot + 1}`) };
+  if (k < potions.length) {
+    const p = potions[k]!;
+    return { count, idx, tooltip: tipPotion(bundle, p.id!, ` - slot ${p.slot + 1}`) };
+  }
+  k -= potions.length;
+  if (k < orbs.length) {
+    const orb = orbs[k]!;
+    const def = bundle.orbs.get(orb.id);
+    const focus = playerFocus(c.player.powers);
+    const val = orbDisplayValue(bundle, orb, focus);
+    const lines: string[] = [];
+    if (def) {
+      lines.push(
+        orb.id === "DARK"
+          ? `Passive: grows each turn. Evoke: deal ${orb.amount} damage.`
+          : `Passive ${val ?? def.passiveBase} - Evoke ${def.evokeBase}${def.usesFocus ? " (Focus applies)" : ""}.`,
+      );
+    }
+    return {
+      count,
+      idx,
+      tooltip: {
+        chip: "ORB",
+        color: TIP_COLOR.choice,
+        name: toAscii(orbName(bundle, orb.id)),
+        meta: val !== null ? `value ${val}` : "",
+        lines,
+      },
+    };
+  }
+  const st = c.player.stance;
+  return {
+    count,
+    idx,
+    tooltip: {
+      chip: "STANCE",
+      color: stanceColor(st),
+      name: toAscii((bundle.stances.get(st)?.name ?? titleCase(st)).toUpperCase()),
+      meta: "stance",
+      lines: [STANCE_TIPS[st] ?? ""],
+    },
+  };
 }
 
 function targetingFocus(g: GameState, bundle: ContentBundle, targeting: TargetingView): FocusInfo {
@@ -1338,13 +1499,14 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       if (o.kind === "confirmQuit") return "[y] quit  [n] keep playing";
       if (o.kind === "potionMenu") return "[u] use  [d] discard  [Esc] cancel";
       if (o.kind === "inspect") return "[j/k] next/prev card  [Esc] close";
+      if (o.kind === "log") return "[Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
       if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}  [Esc] close`;
       if (o.kind === "list" && o.id === "potions") return `[1-9] potion${paging}  [Esc] close`;
       return `${paging.trim().length > 0 ? paging.trim() + "  " : ""}[Esc] close`;
     }
     case "combat":
-      return "[1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit";
+      return "[1-0] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck/relics/potions  [q] quit";
     case "map":
       return "[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit";
     case "neow":
@@ -1422,7 +1584,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
       screen = buildMap(game, ui, bundle);
       break;
     case "combat":
-      screen = buildCombat(game, ui, bundle);
+      screen = buildCombat(game, ui, bundle, screenFocus);
       break;
     case "rewards":
       screen = buildRewards(game, room, ui.page, screenFocus, bundle);
@@ -1446,7 +1608,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
 
   let overlay: OverlayView | null = null;
   if (top) {
-    overlay = buildOverlay(game, top, rawFocus, bundle);
+    overlay = buildOverlay(game, top, ui, rawFocus, bundle);
   } else if (game.pending) {
     overlay = buildChoiceOverlay(game, game.pending, ui, rawFocus, bundle);
   }

@@ -229,6 +229,22 @@ export function fxDeckOverlay(): Fixture {
   return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "deck", mode: "view", page: 0 }] } };
 }
 
+/** Synthetic crowd: the Louse pair cloned to five enemies — pins the enemy
+ *  panel -> one-line ladder (panels at 120 cols, lines at 80). */
+export function fxCombatCrowd(): Fixture {
+  const f = fxCombat();
+  const g = structuredClone(f.game!);
+  const c = g.combat!;
+  const [a, b] = [c.monsters[0]!, c.monsters[1]!];
+  const clone = (src: typeof a, hp: number): typeof a => {
+    const m = structuredClone(src);
+    m.hp = Math.min(hp, m.maxHp);
+    return m;
+  };
+  c.monsters = [a, b, clone(a, 9), clone(b, 5), clone(a, 1)];
+  return { game: g, ui: f.ui };
+}
+
 /** Info panel: a hand card holds the hover focus (first Strike, idx 2). */
 export function fxCombatTooltip(): Fixture {
   const f = fxCombat();
@@ -301,6 +317,7 @@ export const FIXTURES: Record<string, () => Fixture> = {
   treasure: fxTreasure,
   event: fxEvent,
   "deck-overlay": fxDeckOverlay,
+  "combat-crowd": fxCombatCrowd,
   "combat-tooltip": fxCombatTooltip,
   "shop-tooltip": fxShopTooltip,
   "gameover-defeat": fxGameOverDefeat,

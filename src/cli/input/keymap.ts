@@ -152,6 +152,11 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         }
         return null;
       }
+      if (o.kind === "log") {
+        if (key.kind === "esc") return ui({ type: "closeOverlay" });
+        if (key.kind === "char" && key.ch === "l") return ui({ type: "closeOverlay" });
+        return null;
+      }
       if (o.kind === "inspect") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
         if (key.kind === "char" && key.ch === "i") return ui({ type: "closeOverlay" });
@@ -260,6 +265,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         return cmd({ cmd: "playCard", handIdx: d });
       }
       if (ch === "e") return cmd({ cmd: "endTurn" });
+      if (ch === "l") return ui({ type: "openOverlay", overlay: { kind: "log" } });
       if (ch === "i") return ui({ type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });
       if (ch === "w") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "draw", page: 0 } });
       if (ch === "x") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "discard", page: 0 } });

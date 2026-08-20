@@ -16,6 +16,7 @@ export type Overlay =
   | { kind: "potions" }
   | { kind: "potionMenu"; slot: number }
   | { kind: "inspect"; source: "hand" | "deck"; index: number }
+  | { kind: "log" }
   | { kind: "confirmQuit" };
 
 export type Targeting =

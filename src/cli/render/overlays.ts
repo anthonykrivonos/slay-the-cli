@@ -78,6 +78,13 @@ export function renderOverlay(overlay: OverlayView, width: number, height: numbe
       body.push(theme.dim("[j/k] next/prev  [Esc] close"));
       break;
     }
+    case "log": {
+      title = overlay.title;
+      // show the TAIL of the log (most recent events at the bottom)
+      body = overlay.lines.slice(-bodyMax).map((l) => theme.dim(l));
+      if (body.length === 0) body = [theme.dim("(nothing has happened yet)")];
+      break;
+    }
     case "choice":
       title = overlay.title;
       body = choiceBody(overlay, theme, bodyMax);

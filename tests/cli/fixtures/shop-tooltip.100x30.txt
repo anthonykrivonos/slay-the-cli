@@ -8,7 +8,7 @@
   [5] Card   Rupture (1)  70G                                                                       
   [6] Card   Madness (1)  90G                                                                       
   [7] Card   Secret Weapon (0)  174G  (need 174G)                                                   
-  [8] Relic  Potion Belt (common)  143G  (need 143G)                                                
+> [8] Relic  Potion Belt (common)  143G  (need 143G)                                                
   [9] Relic  Tiny Chest (common)  157G  (need 157G)                                                 
   [0] Relic  Hand Drill (shop)  156G  (need 156G)                                                   
 page 1/2 - [n] next [p] prev                                                                        
@@ -25,6 +25,6 @@ page 1/2 - [n] next [p] prev
                                                                                                     
                                                                                                     
 -- INFO --------------------------------------------------------------------------------------------
- Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
-                                                                                                    
+ RELIC  Potion Belt  Relic - common - 143G                                                          
+   Upon pickup, gain 2 Potion slots.                                                                
 [1-0] buy  [n/p] page  [Enter] leave  [d/r/p]  [q] quit                                             

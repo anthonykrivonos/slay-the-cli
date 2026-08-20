@@ -5,10 +5,10 @@
                                                a mechanically exact spire                                               
                                                                                                                         
   Choose your hero:                                                                                                     
- > [1] Ironclad    80 HP   Burning Blood                                                                                
-   [2] Silent      70 HP   Ring of the Snake                                                                            
-   [3] Defect      75 HP   Cracked Core                                                                                 
-   [4] Watcher     72 HP   Pure Water                                                                                   
+  * [1] Ironclad    80 HP   Burning Blood                                                                               
+    [2] Silent      70 HP   Ring of the Snake                                                                           
+    [3] Defect      75 HP   Cracked Core                                                                                
+    [4] Watcher     72 HP   Pure Water                                                                                  
                                                                                                                         
       Ascension 0 - The standard climb   [a] up / [A] down                                                              
       Seed: SPIRE   [s] edit                                                                                            
@@ -29,8 +29,8 @@
                                                                                                                         
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
 [1-4] hero  [a/A] ascension  [s] seed  [n] new run  [c] continue  [q] quit                                              

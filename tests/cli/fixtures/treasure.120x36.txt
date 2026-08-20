@@ -3,9 +3,9 @@
                                                                                                                         
   Something glints inside...                                                                                            
                                                                                                                         
-[1] Open the chest                                                                                                      
-[2] Take the Sapphire Key                                                                                               
-      Forfeits the relic inside                                                                                         
+  [1] Open the chest                                                                                                    
+  [2] Take the Sapphire Key                                                                                             
+        Forfeits the relic inside                                                                                       
                                                                                                                         
                                                                                                                         
                                                                                                                         
@@ -29,8 +29,8 @@
                                                                                                                         
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
 [1-9] choose  [d/r/p] deck/relics/potions  [q] quit                                                                     

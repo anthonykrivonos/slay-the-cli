@@ -78,7 +78,9 @@ export function renderCombat(
   out.push("");
   out.push(...youLines(screen, width, theme));
   if (targeting !== null) {
-    const targets = targeting.targets.map((t) => `[${t.key}] ${t.name}`).join("  ");
+    const targets = targeting.targets
+      .map((t, k) => `${k === targeting.focusIdx ? ">" : ""}[${t.key}] ${t.name}`)
+      .join("  ");
     out.push(theme.inverse(padClip(` ${targeting.prompt}: ${targets} `, width)));
   }
   out.push(rule(`HAND  (draw ${screen.piles.draw} / discard ${screen.piles.discard} / exhaust ${screen.piles.exhaust})`, width));

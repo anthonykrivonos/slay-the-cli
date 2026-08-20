@@ -37,6 +37,10 @@ export interface UiState {
   // run-screen UI
   overlays: Overlay[];
   targeting: Targeting | null;
+  /** read-only hover focus for the bottom info panel: which focusable the
+   *  tooltip describes. Scoped by view mode so a stale index from another
+   *  screen never leaks (buildView ignores mismatched scopes and clamps). */
+  focus: { scope: string; idx: number } | null;
   choiceSel: number[];
   /** pagination for the active screen list (shop/event/rewards...) */
   page: number;
@@ -65,6 +69,7 @@ export function initialUiState(opts: {
     menuSave: null,
     overlays: [],
     targeting: null,
+    focus: null,
     choiceSel: [],
     page: 0,
     choicePage: 0,
@@ -81,6 +86,7 @@ export function resetRunUi(ui: UiState): UiState {
     ...ui,
     overlays: [],
     targeting: null,
+    focus: null,
     choiceSel: [],
     page: 0,
     choicePage: 0,
@@ -103,11 +109,11 @@ export function pushLog(ui: UiState, lines: string[]): UiState {
 export function applyUiAction(ui: UiState, act: PureUiAction): UiState {
   switch (act.type) {
     case "openOverlay":
-      return { ...ui, overlays: [...ui.overlays, act.overlay], targeting: null };
+      return { ...ui, overlays: [...ui.overlays, act.overlay], targeting: null, focus: null };
     case "closeOverlay":
-      return { ...ui, overlays: ui.overlays.slice(0, -1) };
+      return { ...ui, overlays: ui.overlays.slice(0, -1), focus: null };
     case "closeAllOverlays":
-      return { ...ui, overlays: [] };
+      return { ...ui, overlays: [], focus: null };
     case "page": {
       // pages the top overlay's list when one is open, else the screen list
       const top = ui.overlays[ui.overlays.length - 1];
@@ -132,7 +138,17 @@ export function applyUiAction(ui: UiState, act: PureUiAction): UiState {
       return { ...ui, choiceSel: [...ui.choiceSel, act.i] };
     }
     case "setTargeting":
-      return { ...ui, targeting: act.targeting, overlays: act.targeting ? [] : ui.overlays };
+      // entering targeting auto-focuses the first candidate target
+      return {
+        ...ui,
+        targeting: act.targeting,
+        overlays: act.targeting ? [] : ui.overlays,
+        focus: act.targeting ? { scope: "targeting", idx: 0 } : null,
+      };
+    case "focusSet":
+      return { ...ui, focus: { scope: act.scope, idx: Math.max(0, act.idx) } };
+    case "focusClear":
+      return { ...ui, focus: null };
     case "inspectMove": {
       const top = ui.overlays[ui.overlays.length - 1];
       if (!top || top.kind !== "inspect") return ui;

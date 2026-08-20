@@ -4,7 +4,6 @@
 [2] Green Louse    HP  13/13  [######]       Debuffing you Curl Up 7            
                                                                                 
 YOU Ironclad          HP  80/80  [######]       E 3/3                           
- Choose a target for Strike: >[1] Red Louse  [2] Green Louse                    
 -- HAND  (draw 5 / discard 0 / exhaust 0) --------------------------------------
 [1] Defend             (1) S  Gain 5 Block.                                     
 [2] Defend             (1) S  Gain 5 Block.                                     
@@ -21,4 +20,5 @@ YOU Ironclad          HP  80/80  [######]       E 3/3
                                                                                 
                                                                                 
                                                                                 
-[1-9] choose a target  [Esc] cancel                                             
+                                                                                
+[1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relic

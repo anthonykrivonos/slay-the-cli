@@ -1,19 +1,16 @@
  HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                
 -- MAP - act 1 ---------------------------------------------------------------------------------------------------------
-                       B Slime Boss               LEGEND                                                                
-                 /     |     \  \                 M monster    E elite                                                  
-           R           R           R     R        $ shop       R rest                                                   
-           |              \        |  \  |        T treasure   ? unknown                                                
-           ?                 M     E     M        E* burning elite (+key)                                               
-        /  |                 |     |  /  |        @ you        B boss                                                   
-     M     R                 M     ?     M                                                                              
-        \  |                 |  /  |     |        BOSS  Slime Boss                                                      
-           M                 ?     $     M        KEYS  ---                                                             
-        /  |              /  |     |     |        DECK  10   RELICS 1                                                   
-     E*    ?           $     ?     M     ?        seed UISMNKE                                                          
-     |        \     /        |  /        |                                                                              
-     R           M           R           M                                                                              
-        \        |           |  \     /                                                                                 
+           |              \        |  \  |        LEGEND                                                                
+           ?                 M     E     M        M monster    E elite                                                  
+        /  |                 |     |  /  |        $ shop       R rest                                                   
+     M     R                 M     ?     M        T treasure   ? unknown                                                
+        \  |                 |  /  |     |        E* burning elite (+key)                                               
+           M                 ?     $     M        @ you        B boss                                                   
+        /  |              /  |     |     |                                                                              
+     E*    ?           $     ?     M     ?        BOSS  Slime Boss                                                      
+     |        \     /        |  /        |        KEYS  ---                                                             
+     R           M           R           M        DECK  10   RELICS 1                                                   
+        \        |           |  \     /           seed UISMNKE                                                          
            T     T           T     T                                                                                    
            |  /  |        /     /                                                                                       
            M     R     R     M                                                                                          
@@ -31,6 +28,9 @@
            ?     ?                 ?     M                                                                              
         /        |                 |  /                                                                                 
    1:M         2:M               3:M                                                                                    
+Next: 1:M  2:M  3:M   [j/k] scroll                                                                                      
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
-Next: 1:M  2:M  3:M                                                                                                     
+                                                                                                                        
 [1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit                                           

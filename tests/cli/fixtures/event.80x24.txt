@@ -4,9 +4,9 @@
   Three dangling baits offer a heal, max HP, or a cursed relic box; one must    
   be picked.                                                                    
                                                                                 
-[1] Banana: heal 1/3 of max HP                                                  
-[2] Donut: gain 5 max HP                                                        
-[3] Box: obtain a random relic and the Regret curse                             
+  [1] Banana: heal 1/3 of max HP                                                
+  [2] Donut: gain 5 max HP                                                      
+  [3] Box: obtain a random relic and the Regret curse                           
                                                                                 
                                                                                 
                                                                                 

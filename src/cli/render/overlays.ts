@@ -11,11 +11,14 @@ import { padClip, boxLines, wrapPlain } from "./widgets";
 function plainListBody(list: ListView, theme: Theme, maxLines: number): string[] {
   const out: string[] = [];
   for (const item of list.items) {
+    const focused = list.focusI !== null && item.i === list.focusI;
+    const cursor = focused ? "> " : "  ";
     const keyPart = item.key !== null && item.action !== null ? `[${item.key}] ` : item.key !== null ? `    ` : "    ";
     const notePart = item.note !== null ? `  (${item.note})` : "";
-    let line = `${keyPart}${item.label}${notePart}`;
+    let line = `${cursor}${keyPart}${item.label}${notePart}`;
     if (item.sub !== null) line += `  - ${item.sub}`;
-    out.push(item.enabled ? line : theme.dim(line));
+    if (!item.enabled) out.push(theme.dim(line));
+    else out.push(focused ? theme.bold(theme.fg(C.current, line)) : line);
   }
   if (list.pages > 1) out.push(theme.dim(`page ${list.page + 1}/${list.pages} - [n] next [p] prev`));
   return out.slice(0, maxLines);
@@ -26,9 +29,12 @@ function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, m
   out.push(theme.dim(`choose ${o.constraint}${o.canCancel ? "  (Esc cancels)" : ""}`));
   out.push("");
   for (const item of o.list.items) {
+    const focused = o.list.focusI !== null && item.i === o.list.focusI;
+    const cursor = focused ? "> " : "  ";
     const mark = o.single ? "" : o.selected.includes(item.i) ? "[x] " : "[ ] ";
-    const line = `[${item.key ?? " "}] ${mark}${item.label}`;
-    out.push(o.selected.includes(item.i) ? theme.bold(theme.fg(C.gold, line)) : line);
+    const line = `${cursor}[${item.key ?? " "}] ${mark}${item.label}`;
+    if (o.selected.includes(item.i)) out.push(theme.bold(theme.fg(C.gold, line)));
+    else out.push(focused ? theme.bold(theme.fg(C.current, line)) : line);
   }
   if (o.list.pages > 1) out.push(theme.dim(`page ${o.list.page + 1}/${o.list.pages} - [n] next [p] prev`));
   if (!o.single) {

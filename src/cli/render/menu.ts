@@ -14,13 +14,21 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   out.push(center(theme.dim("a mechanically exact spire"), width));
   out.push("");
   out.push(`  ${theme.fg(C.text, "Choose your hero:")}`);
-  for (const ch of screen.characters) {
+  screen.characters.forEach((ch, i) => {
     const accent = CHARACTER_COLORS[ch.id] ?? "#54689a";
-    const mark = ch.selected ? ">" : " ";
+    const focused = screen.focusIdx === i;
+    const cursor = focused ? ">" : " ";
+    const mark = ch.selected ? "*" : " ";
     const name = ch.name.padEnd(10);
-    const line = ` ${mark} [${ch.key}] ${name} ${String(ch.maxHp).padStart(3)} HP   ${ch.relic}`;
-    out.push(ch.selected ? theme.bold(theme.fg(accent, line)) : line);
-  }
+    const line = `${cursor} ${mark} [${ch.key}] ${name} ${String(ch.maxHp).padStart(3)} HP   ${ch.relic}`;
+    out.push(
+      focused
+        ? theme.bold(theme.fg(C.current, line))
+        : ch.selected
+          ? theme.bold(theme.fg(accent, line))
+          : line,
+    );
+  });
   out.push("");
   const ascTag = `Ascension ${screen.ascension}`;
   out.push(
@@ -32,9 +40,11 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
     out.push(`      Seed: ${theme.bold(screen.seed)}   ${theme.dim("[s] edit")}`);
   }
   out.push("");
-  out.push(`  ${theme.fg(C.good, "[n] NEW RUN")}`);
+  const newRunLine = `${screen.focusIdx === 4 ? ">" : " "} [n] NEW RUN`;
+  out.push(screen.focusIdx === 4 ? theme.bold(theme.fg(C.current, newRunLine)) : ` ${theme.fg(C.good, newRunLine.slice(1))}`);
   if (screen.continueDesc !== null) {
-    out.push(`  ${theme.fg(C.text, `[c] CONTINUE - ${screen.continueDesc}`)}`);
+    const contLine = `${screen.focusIdx === 5 ? ">" : " "} [c] CONTINUE - ${screen.continueDesc}`;
+    out.push(screen.focusIdx === 5 ? theme.bold(theme.fg(C.current, contLine)) : ` ${theme.fg(C.text, contLine.slice(1))}`);
   }
   return out.slice(0, height).map((l) => padClip(l, width));
 }

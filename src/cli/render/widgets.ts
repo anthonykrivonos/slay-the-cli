@@ -66,20 +66,28 @@ export function wrapPlain(s: string, width: number): string[] {
 }
 
 /** Render a ListView as numbered lines: `[1] label  (note)` + optional
- *  indented sub line. Subs are dropped first when space is tight. */
+ *  indented sub line, with a `>` cursor on the focused item. Subs are
+ *  dropped first when space is tight. */
 export function listLines(list: ListView, width: number, theme: Theme, maxLines: number): string[] {
   const withSubs: string[] = [];
   const noSubs: string[] = [];
   for (const item of list.items) {
+    const focused = list.focusI !== null && item.i === list.focusI;
+    const cursor = focused ? "> " : "  ";
     const keyPart = item.key !== null ? `[${item.key}] ` : "    ";
     const notePart = item.note !== null ? `  (${item.note})` : "";
-    let main = `${keyPart}${item.label}${notePart}`;
-    if (!item.enabled) main = theme.dim(main);
-    else main = `${theme.bold(theme.fg(C.text, keyPart))}${item.label}${theme.dim(notePart)}`;
+    let main: string;
+    if (!item.enabled) {
+      main = theme.dim(`${cursor}${keyPart}${item.label}${notePart}`);
+    } else if (focused) {
+      main = theme.bold(theme.fg(C.current, `${cursor}${keyPart}${item.label}`)) + theme.dim(notePart);
+    } else {
+      main = `${cursor}${theme.bold(theme.fg(C.text, keyPart))}${item.label}${theme.dim(notePart)}`;
+    }
     withSubs.push(main);
     noSubs.push(main);
     if (item.sub !== null) {
-      const sub = theme.dim(`      ${item.sub}`);
+      const sub = theme.dim(`        ${item.sub}`);
       withSubs.push(sub);
     }
   }

@@ -11,6 +11,7 @@ import type { PendingChoice } from "../../engine/core/actions";
 import { getIntents, type IntentInfo } from "../../engine/combat/intents";
 import {
   titleCase,
+  isCharacterId,
   cardName,
   relicName,
   potionName,
@@ -41,6 +42,10 @@ import {
   gameOverSubtitle,
 } from "../text/runlogic";
 import { cardRulesText } from "../text/cardtext";
+import { relicText } from "../text/relictext";
+import { potionText } from "../text/potiontext";
+import { powerText } from "../text/powertext";
+import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 import { toAscii } from "../text/ascii";
 import type { UiState, Overlay, PileName } from "./uiState";
 import { cmd, ui as uiAct, type KeyAction } from "../input/actions";
@@ -97,6 +102,8 @@ export interface ListView {
   page: number;
   pages: number;
   total: number;
+  /** absolute index (i) of the focus-cursor item, or null (no cursor) */
+  focusI: number | null;
 }
 
 export interface MenuView {
@@ -107,6 +114,8 @@ export interface MenuView {
   ascensionLabel: string;
   characters: { key: string; id: string; name: string; maxHp: number; relic: string; selected: boolean }[];
   continueDesc: string | null;
+  /** focus cursor: 0-3 heroes, 4 NEW RUN, 5 CONTINUE; null = no cursor */
+  focusIdx: number | null;
 }
 
 export interface MapNodeView {
@@ -208,6 +217,19 @@ export type OverlayView =
 export interface TargetingView {
   prompt: string;
   targets: { key: string; name: string; action: KeyAction }[];
+  /** auto-focused candidate target (always set while targeting) */
+  focusIdx: number;
+}
+
+/** Bottom info-panel content for whatever holds the hover/selection focus. */
+export interface TooltipView {
+  /** kind chip: CARD / RELIC / POTION / ENEMY / NODE / CHOICE / HERO ... */
+  chip: string;
+  /** hex accent for the chip */
+  color: string;
+  name: string;
+  meta: string;
+  lines: string[];
 }
 
 export interface View {
@@ -219,6 +241,12 @@ export interface View {
   toast: string | null;
   log: string[];
   hint: string;
+  /** info panel for the focused thing (null = default browse hint) */
+  tooltip: TooltipView | null;
+  /** how many focusables the current mode exposes (for Tab/arrow cycling) */
+  focusCount: number;
+  /** resolved focus index within the current mode's focusables */
+  focusIdx: number | null;
 }
 
 // --- small helpers --------------------------------------------------------------
@@ -238,9 +266,12 @@ interface RawItem {
 
 export const LIST_PAGE_SIZE = 10;
 
-function makeList(all: RawItem[], page: number): ListView {
+/** Slice a full item list to one page. When a focus cursor is given, the
+ *  page auto-follows it (arrow selection scrolls through page boundaries). */
+function makeList(all: RawItem[], page: number, focusI: number | null = null): ListView {
   const pages = Math.max(1, Math.ceil(all.length / LIST_PAGE_SIZE));
-  const p = Math.max(0, Math.min(page, pages - 1));
+  const fI = focusI !== null && all.length > 0 ? Math.max(0, Math.min(focusI, all.length - 1)) : null;
+  const p = fI !== null ? Math.floor(fI / LIST_PAGE_SIZE) : Math.max(0, Math.min(page, pages - 1));
   const items = all.slice(p * LIST_PAGE_SIZE, p * LIST_PAGE_SIZE + LIST_PAGE_SIZE).map((it, k) => ({
     key: keyFor(k),
     i: p * LIST_PAGE_SIZE + k,
@@ -250,7 +281,7 @@ function makeList(all: RawItem[], page: number): ListView {
     note: it.note != null ? toAscii(it.note) : null,
     action: it.action ?? null,
   }));
-  return { items, page: p, pages, total: all.length };
+  return { items, page: p, pages, total: all.length, focusI: fI };
 }
 
 /** ASCII printed cost for a live card instance. */
@@ -332,7 +363,14 @@ function buildHeader(g: GameState, bundle: ContentBundle): HeaderView {
 
 // --- per-screen view builders ------------------------------------------------------
 
-function buildMenu(ui: UiState, bundle: ContentBundle): MenuView {
+/** Menu focusables: 4 heroes, then NEW RUN, then CONTINUE (when present). */
+export function menuFocusCount(hasContinue: boolean): number {
+  return 5 + (hasContinue ? 1 : 0);
+}
+
+function buildMenu(ui: UiState, bundle: ContentBundle, focusI: number | null): MenuView {
+  const continueDesc = ui.menuSave ? toAscii(ui.menuSave.desc) : null;
+  const count = menuFocusCount(continueDesc !== null);
   return {
     kind: "menu",
     seed: ui.seed,
@@ -343,11 +381,12 @@ function buildMenu(ui: UiState, bundle: ContentBundle): MenuView {
       const s = characterSummary(bundle, id);
       return { key: String(i + 1), id, name: s.name, maxHp: s.maxHp, relic: toAscii(s.relic), selected: ui.character === id };
     }),
-    continueDesc: ui.menuSave ? toAscii(ui.menuSave.desc) : null,
+    continueDesc,
+    focusIdx: focusI !== null ? Math.min(focusI, count - 1) : null,
   };
 }
 
-function buildNeow(room: Extract<RoomState, { kind: "neow" }>, ui: UiState): SimpleListScreen {
+function buildNeow(room: Extract<RoomState, { kind: "neow" }>, page: number, focusI: number | null): SimpleListScreen {
   const items: RawItem[] = room.options.map((opt, i) => ({
     label: neowBonusText(opt.bonus),
     sub: opt.drawback !== "NONE" ? `! ${neowDrawbackText(opt.drawback)}` : null,
@@ -357,7 +396,7 @@ function buildNeow(room: Extract<RoomState, { kind: "neow" }>, ui: UiState): Sim
     kind: "neow",
     title: "NEOW'S BLESSING - choose one",
     intro: [],
-    list: makeList(items, ui.page),
+    list: makeList(items, page, focusI),
   };
 }
 
@@ -490,7 +529,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle): CombatVi
   };
 }
 
-function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }>, ui: UiState, bundle: ContentBundle): SimpleListScreen {
+function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
   const items: RawItem[] = room.entries.map((e, i) => {
     const blocked = rewardBlocked(e, g.run);
     const isCard = e.kind === "card";
@@ -512,11 +551,11 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
     kind: "rewards",
     title: `REWARDS - ${room.source}`,
     intro: [],
-    list: makeList(items, ui.page),
+    list: makeList(items, page, focusI),
   };
 }
 
-function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, ui: UiState, bundle: ContentBundle): SimpleListScreen {
+function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
   const shop = room.shop;
   const gold = g.run.gold;
   const items: RawItem[] = [];
@@ -560,11 +599,11 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, ui:
     kind: "shop",
     title: `THE MERCHANT - you have ${gold}G`,
     intro: [],
-    list: makeList(items, ui.page),
+    list: makeList(items, page, focusI),
   };
 }
 
-function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, ui: UiState, bundle: ContentBundle): SimpleListScreen {
+function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
   const items: RawItem[] = [];
   const intro: string[] = [];
   if (room.used) {
@@ -592,10 +631,10 @@ function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, ui:
     }
     items.push({ label: "Leave", action: cmd({ cmd: "proceed" }) });
   }
-  return { kind: "rest", title: "REST SITE", intro, list: makeList(items, ui.page) };
+  return { kind: "rest", title: "REST SITE", intro, list: makeList(items, page, focusI) };
 }
 
-function buildTreasure(room: Extract<RoomState, { kind: "treasure" }>, ui: UiState): SimpleListScreen {
+function buildTreasure(room: Extract<RoomState, { kind: "treasure" }>, ui: UiState, page: number, focusI: number | null): SimpleListScreen {
   const chest = room.chest;
   const intro = [chest.opened ? (ui.lastLoot ?? "Chest opened.") : "Something glints inside..."];
   const items: RawItem[] = [];
@@ -611,10 +650,10 @@ function buildTreasure(room: Extract<RoomState, { kind: "treasure" }>, ui: UiSta
   } else {
     items.push({ label: "Continue", action: cmd({ cmd: "proceed" }) });
   }
-  return { kind: "treasure", title: chestTitle(chest.size).toUpperCase(), intro: intro.map(toAscii), list: makeList(items, ui.page) };
+  return { kind: "treasure", title: chestTitle(chest.size).toUpperCase(), intro: intro.map(toAscii), list: makeList(items, page, focusI) };
 }
 
-function buildEvent(g: GameState, room: Extract<RoomState, { kind: "event" }>, ui: UiState, bundle: ContentBundle): SimpleListScreen {
+function buildEvent(g: GameState, room: Extract<RoomState, { kind: "event" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
   const title = eventTitle(bundle, room.eventId).toUpperCase();
   const view = buildEventView(g, bundle);
   if (!view) {
@@ -635,11 +674,11 @@ function buildEvent(g: GameState, room: Extract<RoomState, { kind: "event" }>, u
     kind: "event",
     title: toAscii(title),
     intro: [toAscii(view.summary)],
-    list: makeList(items, ui.page),
+    list: makeList(items, page, focusI),
   };
 }
 
-function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver" }>, ui: UiState, bundle: ContentBundle): SimpleListScreen {
+function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
   const name = bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character);
   const intro = [
     toAscii(gameOverSubtitle(room.victory, g.run.act)),
@@ -656,13 +695,13 @@ function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver"
     kind: "gameOver",
     title: gameOverTitle(room.victory, g.run.act),
     intro,
-    list: makeList(items, ui.page),
+    list: makeList(items, page, focusI),
   };
 }
 
 // --- overlays -----------------------------------------------------------------------
 
-function buildChoiceOverlay(g: GameState, pending: PendingChoice, ui: UiState, bundle: ContentBundle): OverlayView {
+function buildChoiceOverlay(g: GameState, pending: PendingChoice, ui: UiState, focusI: number | null, bundle: ContentBundle): OverlayView {
   const req = pending.request;
   const min = req.kind === "cards" ? req.min : req.kind === "option" ? 1 : 0;
   const max = req.kind === "cards" ? req.max : req.kind === "option" ? 1 : req.iids.length;
@@ -703,7 +742,7 @@ function buildChoiceOverlay(g: GameState, pending: PendingChoice, ui: UiState, b
     kind: "choice",
     title: toAscii(title),
     constraint,
-    list: makeList(raw, ui.choicePage),
+    list: makeList(raw, ui.choicePage, focusI),
     selected: [...ui.choiceSel],
     min,
     max,
@@ -717,7 +756,21 @@ function pileTitle(pile: PileName, count: number): string {
   return `${titleCase(pile)} pile - ${count} card${count === 1 ? "" : "s"}${note}`;
 }
 
-function buildOverlay(g: GameState, top: Overlay, ui: UiState, bundle: ContentBundle): OverlayView {
+/** Cards of a combat pile in DISPLAY order (draw pile sorted by name: its
+ *  real order is hidden information). Shared by the overlay list builder and
+ *  the focus tooltip so the two can never disagree on ordering. */
+function pileEntries(g: GameState, pile: PileName): { iid: number; card: CardInstance }[] {
+  const c = g.combat;
+  if (!c) return [];
+  const out: { iid: number; card: CardInstance }[] = [];
+  for (const iid of c.player.piles[pile]) {
+    const card = c.cards[iid];
+    if (card) out.push({ iid, card });
+  }
+  return out;
+}
+
+function buildOverlay(g: GameState, top: Overlay, focusI: number | null, bundle: ContentBundle): OverlayView {
   switch (top.kind) {
     case "confirmQuit":
       return { kind: "confirmQuit" };
@@ -745,7 +798,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, bundle: ContentBu
                 : uiAct({ type: "openOverlay", overlay: { kind: "inspect", source: "deck", index: deckIdx } }),
         };
       });
-      return { kind: "list", id: "deck", title, list: makeList(items, top.page) };
+      return { kind: "list", id: "deck", title, list: makeList(items, top.page, focusI) };
     }
     case "relics": {
       const items: RawItem[] = g.run.relics.map((r) => ({
@@ -753,7 +806,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, bundle: ContentBu
         action: null,
       }));
       if (items.length === 0) items.push({ label: "(none)", enabled: false, action: null });
-      return { kind: "list", id: "relics", title: `Relics - ${g.run.relics.length}`, list: makeList(items, top.page) };
+      return { kind: "list", id: "relics", title: `Relics - ${g.run.relics.length}`, list: makeList(items, top.page, focusI) };
     }
     case "pile": {
       const c = g.combat;
@@ -771,7 +824,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, bundle: ContentBu
       if (top.pile === "draw") rows = rows.sort((a, b) => a.name.localeCompare(b.name));
       const items: RawItem[] = rows.map((r) => ({ label: `${r.name} (${r.cost}) [${r.type}]`, action: null }));
       if (items.length === 0) items.push({ label: "(empty)", enabled: false, action: null });
-      return { kind: "list", id: "pile", title: pileTitle(top.pile, iids.length), list: makeList(items, top.page) };
+      return { kind: "list", id: "pile", title: pileTitle(top.pile, iids.length), list: makeList(items, top.page, focusI) };
     }
     case "potions": {
       const items: RawItem[] = g.run.potions.map((id, slot) => {
@@ -786,7 +839,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, bundle: ContentBu
         kind: "list",
         id: "potions",
         title: `Potions - ${g.run.potions.filter((p) => p !== null).length}/${g.run.potions.length}`,
-        list: makeList(items, 0),
+        list: makeList(items, 0, focusI),
       };
     }
     case "potionMenu": {
@@ -869,7 +922,385 @@ function buildTargeting(g: GameState, ui: UiState, bundle: ContentBundle): Targe
           ? cmd({ cmd: "playCard", handIdx: t.handIdx, target: idx })
           : cmd({ cmd: "usePotion", slot: t.slot, target: idx }),
     }));
-  return { prompt: toAscii(`Choose a target for ${what}`), targets };
+  const raw = ui.focus && ui.focus.scope === "targeting" ? ui.focus.idx : 0;
+  const focusIdx = targets.length > 0 ? Math.max(0, Math.min(raw, targets.length - 1)) : 0;
+  return { prompt: toAscii(`Choose a target for ${what}`), targets, focusIdx };
+}
+
+// --- focus + tooltip -------------------------------------------------------------
+//
+// The read-only hover/selection focus: Tab and the arrow keys move a pointer
+// through the current mode's focusables; the bottom info panel explains the
+// pointed-at thing; Enter activates it on menu-like screens. Enumeration
+// order here mirrors the order the builders above emit — list screens use
+// the absolute list index directly.
+
+const TIP_COLOR = {
+  card: "#c9d0e0",
+  relic: "#ffe9a0",
+  potion: "#6fce87",
+  enemy: "#e06a7a",
+  node: "#6fce87",
+  choice: "#ffd75e",
+  gold: "#ffe9a0",
+} as const;
+
+const TIP_KEYWORDS = new Set(["exhaust", "ethereal", "innate", "retain", "selfRetain"]);
+
+function tipCard(bundle: ContentBundle, defId: string, upgrades: number, costLabel: string, metaExtra = ""): TooltipView {
+  const def = bundle.cards.get(defId);
+  const lines = cardRulesText(defId, upgrades)
+    .split("\n")
+    .filter((l) => l.trim().length > 0);
+  const kws = (upgrades > 0 && def?.upgradeKeywords ? def.upgradeKeywords : (def?.keywords ?? []))
+    .filter((k) => TIP_KEYWORDS.has(k))
+    .map((k) => (k === "selfRetain" ? "Retain" : titleCase(k)));
+  const joined = lines.join(" ").toLowerCase();
+  const missing = kws.filter((k) => !joined.includes(k.toLowerCase()));
+  if (missing.length > 0) lines.push(missing.map((k) => `${k}.`).join(" "));
+  return {
+    chip: "CARD",
+    color: CARD_COLOR_ACCENTS[def?.color ?? ""] ?? TIP_COLOR.card,
+    name: toAscii(`${cardName(bundle, defId, upgrades)} (${costLabel})`),
+    meta: toAscii(
+      `${titleCase(def?.type ?? "?")} - ${def?.rarity ?? "?"}${def?.target === "enemy" ? " - targets an enemy" : ""}${metaExtra}`,
+    ),
+    lines: lines.map(toAscii),
+  };
+}
+
+function tipRelic(bundle: ContentBundle, defId: string, metaExtra = ""): TooltipView {
+  const tier = bundle.relics.get(defId)?.tier ?? "?";
+  return {
+    chip: "RELIC",
+    color: TIP_COLOR.relic,
+    name: toAscii(relicName(bundle, defId)),
+    meta: toAscii(`Relic - ${tier}${metaExtra}`),
+    lines: [relicText(defId)].filter((l) => l.length > 0),
+  };
+}
+
+function tipPotion(bundle: ContentBundle, defId: string, metaExtra = ""): TooltipView {
+  const def = bundle.potions.get(defId);
+  return {
+    chip: "POTION",
+    color: TIP_COLOR.potion,
+    name: toAscii(potionName(bundle, defId)),
+    meta: toAscii(`Potion - ${def?.rarity ?? "?"}${def?.targeted ? " - throws at a target" : ""}${metaExtra}`),
+    lines: [potionText(defId)].filter((l) => l.length > 0),
+  };
+}
+
+const INTENT_SENTENCES: Record<string, string> = {
+  buff: "intends to buff itself",
+  debuff: "intends to debuff you",
+  strongDebuff: "intends to debuff you hard",
+  sleep: "is sleeping",
+  stun: "is stunned",
+  escape: "intends to flee",
+  magic: "is casting something",
+  unknown: "intent unknown",
+  defend: "intends to defend",
+  defendBuff: "intends to defend and buff",
+  defendDebuff: "intends to defend and debuff you",
+};
+
+function intentSentence(monsterId: string, info: IntentInfo | null): string {
+  if (!info) return "Intent unknown.";
+  const move = prettyMove(monsterId, info.moveId);
+  if (info.damage !== null) {
+    const dmg = `${info.damage}${info.hits > 1 ? ` x ${info.hits}` : ""}`;
+    return `${move}: intends to attack for ${dmg}${info.block > 0 ? ` and gain ${info.block} Block` : ""}.`;
+  }
+  if (info.block > 0) return `${move}: intends to gain ${info.block} Block.`;
+  return `${move}: ${INTENT_SENTENCES[info.kind] ?? titleCase(info.kind)}.`;
+}
+
+function tipEnemy(
+  bundle: ContentBundle,
+  m: { id: string; hp: number; maxHp: number; block: number; powers: { id: string; amount: number }[] },
+  info: IntentInfo | null,
+): TooltipView {
+  const lines = [intentSentence(m.id, info)];
+  for (const p of m.powers) {
+    const name = bundle.powers.get(p.id)?.name ?? titleCase(p.id);
+    const desc = powerText(p.id, p.amount);
+    lines.push(desc.length > 0 ? `${name} ${p.amount}: ${desc}` : `${name} ${p.amount}`);
+  }
+  return {
+    chip: "ENEMY",
+    color: TIP_COLOR.enemy,
+    name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
+    meta: toAscii(`HP ${m.hp}/${m.maxHp}${m.block > 0 ? ` - Block ${m.block}` : ""}`),
+    lines: lines.map(toAscii),
+  };
+}
+
+const NODE_INFO: Record<string, [string, string]> = {
+  monster: ["Monster", "A standard combat. Victory pays gold and offers a card."],
+  elite: ["Elite", "A dangerous fight. Drops a relic on top of the usual spoils."],
+  shop: ["Merchant", "Buy cards, relics and potions - or pay to remove a card."],
+  rest: ["Rest Site", "Rest to heal 30% of max HP, or smith to upgrade a card."],
+  treasure: ["Treasure", "A chest holding a free relic."],
+  unknown: ["Unknown", "Could be an event, a fight, a shop, or treasure."],
+  event: ["Unknown", "Could be an event, a fight, a shop, or treasure."],
+  boss: ["Boss", "The act boss. Beat it to climb higher."],
+};
+
+function tipNode(kind: string, burning: boolean, key: string): TooltipView {
+  const [name, desc] = NODE_INFO[kind] ?? [titleCase(kind), ""];
+  return {
+    chip: "NODE",
+    color: TIP_COLOR.node,
+    name,
+    meta: `travel with [${key}]`,
+    lines: [burning ? `${desc} This one burns - it also drops the Emerald Key.` : desc],
+  };
+}
+
+function tipChoiceItem(list: ListView, idx: number): TooltipView | null {
+  const item = list.items.find((it) => it.i === idx);
+  if (!item) return null;
+  return {
+    chip: "CHOICE",
+    color: TIP_COLOR.choice,
+    name: item.label,
+    meta: item.note !== null ? `(${item.note})` : "",
+    lines: item.sub !== null ? [item.sub] : [],
+  };
+}
+
+interface FocusInfo {
+  count: number;
+  idx: number | null;
+  tooltip: TooltipView | null;
+}
+
+const NO_FOCUS: FocusInfo = { count: 0, idx: null, tooltip: null };
+
+function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusInfo {
+  const count = menuFocusCount(screen.continueDesc !== null);
+  const idx = screen.focusIdx;
+  if (idx === null) return { count, idx: null, tooltip: null };
+  if (idx < 4) {
+    const ch = screen.characters[idx]!;
+    const def = isCharacterId(ch.id) ? bundle.characters.get(ch.id) : undefined;
+    const relicId = def?.startingRelic;
+    const lines = [`Starts with ${ch.relic}.`];
+    if (relicId !== undefined) {
+      const t = relicText(relicId);
+      if (t.length > 0) lines.push(t);
+    }
+    return {
+      count,
+      idx,
+      tooltip: {
+        chip: "HERO",
+        color: CHARACTER_COLORS[ch.id] ?? "#54689a",
+        name: ch.name,
+        meta: `${ch.maxHp} max HP`,
+        lines,
+      },
+    };
+  }
+  if (idx === 4) {
+    return {
+      count,
+      idx,
+      tooltip: {
+        chip: "CHOICE",
+        color: TIP_COLOR.choice,
+        name: "NEW RUN",
+        meta: "",
+        lines: ["Begin a fresh climb with the selected hero, ascension and seed."],
+      },
+    };
+  }
+  return {
+    count,
+    idx,
+    tooltip: {
+      chip: "CHOICE",
+      color: TIP_COLOR.choice,
+      name: "CONTINUE",
+      meta: "",
+      lines: [screen.continueDesc ?? ""],
+    },
+  };
+}
+
+function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInfo {
+  const c = g.combat;
+  if (!c) return NO_FOCUS;
+  const hand = c.player.piles.hand;
+  const alive = c.monsters.map((m, i) => ({ m, i })).filter(({ m }) => !m.isDead && !m.isEscaped);
+  const relics = g.run.relics;
+  const potions = g.run.potions.map((id, slot) => ({ id, slot })).filter((p) => p.id !== null);
+  const count = hand.length + alive.length + relics.length + potions.length;
+  const raw = ui.focus && ui.focus.scope === "combat" ? ui.focus.idx : null;
+  if (raw === null || count === 0) return { count, idx: null, tooltip: null };
+  let k = Math.min(raw, count - 1);
+  const idx = k;
+  if (k < hand.length) {
+    const card = c.cards[hand[k]!]!;
+    return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)) };
+  }
+  k -= hand.length;
+  if (k < alive.length) {
+    const { m, i } = alive[k]!;
+    const info = getIntents(g, bundle)[i] ?? null;
+    return { count, idx, tooltip: tipEnemy(bundle, m, info) };
+  }
+  k -= alive.length;
+  if (k < relics.length) {
+    const r = relics[k]!;
+    return { count, idx, tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : "") };
+  }
+  k -= relics.length;
+  const p = potions[k]!;
+  return { count, idx, tooltip: tipPotion(bundle, p.id!, ` - slot ${p.slot + 1}`) };
+}
+
+function targetingFocus(g: GameState, bundle: ContentBundle, targeting: TargetingView): FocusInfo {
+  const alive = g.combat
+    ? g.combat.monsters.map((m, i) => ({ m, i })).filter(({ m }) => !m.isDead && !m.isEscaped)
+    : [];
+  const count = targeting.targets.length;
+  if (count === 0) return NO_FOCUS;
+  const idx = targeting.focusIdx;
+  const t = alive[idx];
+  if (!t) return { count, idx, tooltip: null };
+  const info = g.combat ? (getIntents(g, bundle)[t.i] ?? null) : null;
+  return { count, idx, tooltip: tipEnemy(bundle, t.m, info) };
+}
+
+function mapFocus(g: GameState, ui: UiState, screen: MapView): FocusInfo {
+  const picks = screen.picks;
+  const count = picks.length;
+  const raw = ui.focus && ui.focus.scope === "map" ? ui.focus.idx : null;
+  if (raw === null || count === 0) return { count, idx: null, tooltip: null };
+  const idx = Math.min(raw, count - 1);
+  const p = picks[idx]!;
+  const node = p.y > screen.maxY ? null : g.run.map?.rows[p.y]?.[p.x];
+  const kind = node ? node.kind : "boss";
+  return { count, idx, tooltip: tipNode(kind, node?.burningElite ?? false, p.key) };
+}
+
+function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView, bundle: ContentBundle): FocusInfo {
+  if (overlay.kind !== "choice") return NO_FOCUS;
+  const count = overlay.list.total;
+  const idx = overlay.list.focusI;
+  if (idx === null) return { count, idx: null, tooltip: null };
+  const req = pending.request;
+  if (req.kind === "option") {
+    return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+  }
+  const iid = req.iids[idx];
+  if (iid === undefined) return { count, idx, tooltip: null };
+  if (!g.combat) {
+    const mc = g.run.deck[iid];
+    if (!mc) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+    const def = bundle.cards.get(mc.defId);
+    return {
+      count,
+      idx,
+      tooltip: tipCard(bundle, mc.defId, mc.upgrades, def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"),
+    };
+  }
+  const card = g.combat.cards[iid];
+  if (!card) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+  return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)) };
+}
+
+function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: ContentBundle): FocusInfo {
+  if (overlay.kind !== "list") return NO_FOCUS;
+  const count = overlay.list.total;
+  const idx = overlay.list.focusI;
+  if (idx === null) return { count, idx: null, tooltip: null };
+  switch (top.kind) {
+    case "deck": {
+      const mc = g.run.deck[idx];
+      if (!mc) return { count, idx, tooltip: null };
+      const def = bundle.cards.get(mc.defId);
+      return {
+        count,
+        idx,
+        tooltip: tipCard(bundle, mc.defId, mc.upgrades, def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"),
+      };
+    }
+    case "relics": {
+      const r = g.run.relics[idx];
+      if (!r) return { count, idx, tooltip: null };
+      return { count, idx, tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : "") };
+    }
+    case "pile": {
+      const entries = pileEntries(g, top.pile);
+      const e = entries[idx];
+      if (!e) return { count, idx, tooltip: null };
+      return { count, idx, tooltip: tipCard(bundle, e.card.defId, e.card.upgrades, instCostLabel(e.card)) };
+    }
+    case "potions": {
+      const id = g.run.potions[idx];
+      if (id == null) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+      return { count, idx, tooltip: tipPotion(bundle, id) };
+    }
+    default:
+      return NO_FOCUS;
+  }
+}
+
+function listScreenFocus(
+  g: GameState,
+  room: RoomState,
+  screen: SimpleListScreen,
+  bundle: ContentBundle,
+): FocusInfo {
+  const count = screen.list.total;
+  const idx = screen.list.focusI;
+  if (idx === null) return { count, idx: null, tooltip: null };
+  // richer than the inline squeeze for the typed rooms
+  if (room.kind === "shop") {
+    const shop = room.shop;
+    let k = idx;
+    if (k < shop.cards.length) {
+      const slot = shop.cards[k]!;
+      const def = bundle.cards.get(slot.id);
+      return {
+        count,
+        idx,
+        tooltip: tipCard(bundle, slot.id, 0, def ? masterCostLabel(def.cost) : "?", ` - ${slot.price}G`),
+      };
+    }
+    k -= shop.cards.length;
+    if (k < shop.relics.length) {
+      const slot = shop.relics[k]!;
+      return { count, idx, tooltip: tipRelic(bundle, slot.id, ` - ${slot.price}G`) };
+    }
+    k -= shop.relics.length;
+    if (k < shop.potions.length) {
+      const slot = shop.potions[k]!;
+      return { count, idx, tooltip: tipPotion(bundle, slot.id, ` - ${slot.price}G`) };
+    }
+    return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
+  }
+  if (room.kind === "rewards") {
+    const e = room.entries[idx];
+    if (e) {
+      if (e.kind === "card") {
+        const def = bundle.cards.get(e.id);
+        const up = e.upgraded ? 1 : 0;
+        return {
+          count,
+          idx,
+          tooltip: tipCard(bundle, e.id, up, def ? masterCostLabel(masterCardCost(def, up)) : "?"),
+        };
+      }
+      if (e.kind === "relic" || e.kind === "bossRelic") return { count, idx, tooltip: tipRelic(bundle, e.id) };
+      if (e.kind === "potion") return { count, idx, tooltip: tipPotion(bundle, e.id) };
+    }
+    return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
+  }
+  return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
 }
 
 // --- hints ------------------------------------------------------------------------------
@@ -933,8 +1364,10 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
   // menu (no game or explicitly on the menu screen)
   const room = game?.run.room ?? null;
   if (ui.screen === "menu" || !game || !room) {
-    const screen = buildMenu(ui, bundle);
     const mode: ViewMode = ui.seedEdit ? "textInput" : "menu";
+    const menuRaw = mode === "menu" && ui.focus && ui.focus.scope === "menu" ? ui.focus.idx : null;
+    const screen = buildMenu(ui, bundle, menuRaw);
+    const focus = mode === "menu" ? menuFocus(ui, bundle, screen) : NO_FOCUS;
     return {
       mode,
       header: null,
@@ -944,14 +1377,36 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
       toast: ui.toast != null ? toAscii(ui.toast) : null,
       log: [],
       hint: hintFor(mode, { screen, overlay: null }),
+      tooltip: focus.tooltip,
+      focusCount: focus.count,
+      focusIdx: focus.idx,
     };
   }
+
+  // input precedence: overlay-top > pending choice > targeting > room kind
+  // (mode is resolved FIRST so the focus cursor can flow into the builders —
+  // the page auto-follows the cursor)
+  const top = ui.overlays[ui.overlays.length - 1];
+  let targeting: TargetingView | null = null;
+  let mode: ViewMode;
+  if (top) {
+    mode = "overlay";
+  } else if (game.pending) {
+    mode = "choice";
+  } else if (ui.targeting) {
+    targeting = buildTargeting(game, ui, bundle);
+    mode = targeting ? "targeting" : (room.kind as ViewMode);
+  } else {
+    mode = room.kind as ViewMode;
+  }
+  const rawFocus = ui.focus && ui.focus.scope === mode ? ui.focus.idx : null;
+  const screenFocus = mode === room.kind ? rawFocus : null;
 
   const header = buildHeader(game, bundle);
   let screen: ScreenView;
   switch (room.kind) {
     case "neow":
-      screen = buildNeow(room, ui);
+      screen = buildNeow(room, ui.page, screenFocus);
       break;
     case "map":
       screen = buildMap(game, ui, bundle);
@@ -960,41 +1415,48 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
       screen = buildCombat(game, ui, bundle);
       break;
     case "rewards":
-      screen = buildRewards(game, room, ui, bundle);
+      screen = buildRewards(game, room, ui.page, screenFocus, bundle);
       break;
     case "shop":
-      screen = buildShop(game, room, ui, bundle);
+      screen = buildShop(game, room, ui.page, screenFocus, bundle);
       break;
     case "rest":
-      screen = buildRest(game, room, ui, bundle);
+      screen = buildRest(game, room, ui.page, screenFocus, bundle);
       break;
     case "treasure":
-      screen = buildTreasure(room, ui);
+      screen = buildTreasure(room, ui, ui.page, screenFocus);
       break;
     case "event":
-      screen = buildEvent(game, room, ui, bundle);
+      screen = buildEvent(game, room, ui.page, screenFocus, bundle);
       break;
     case "gameOver":
-      screen = buildGameOver(game, room, ui, bundle);
+      screen = buildGameOver(game, room, ui.page, screenFocus, bundle);
       break;
   }
 
-  // input precedence: overlay-top > pending choice > targeting > room kind
-  const top = ui.overlays[ui.overlays.length - 1];
   let overlay: OverlayView | null = null;
-  let targeting: TargetingView | null = null;
-  let mode: ViewMode;
   if (top) {
-    overlay = buildOverlay(game, top, ui, bundle);
-    mode = "overlay";
+    overlay = buildOverlay(game, top, rawFocus, bundle);
   } else if (game.pending) {
-    overlay = buildChoiceOverlay(game, game.pending, ui, bundle);
-    mode = "choice";
-  } else if (ui.targeting) {
-    targeting = buildTargeting(game, ui, bundle);
-    mode = targeting ? "targeting" : (room.kind as ViewMode);
+    overlay = buildChoiceOverlay(game, game.pending, ui, rawFocus, bundle);
+  }
+
+  // focus + tooltip for the active mode
+  let focus: FocusInfo;
+  if (mode === "overlay" && top && overlay) {
+    focus = overlayFocus(game, top, overlay, bundle);
+  } else if (mode === "choice" && game.pending && overlay) {
+    focus = choiceFocus(game, game.pending, overlay, bundle);
+  } else if (mode === "targeting" && targeting) {
+    focus = targetingFocus(game, bundle, targeting);
+  } else if (mode === "combat") {
+    focus = combatFocus(game, ui, bundle);
+  } else if (mode === "map" && screen.kind === "map") {
+    focus = mapFocus(game, ui, screen);
+  } else if (screen.kind !== "map" && screen.kind !== "combat" && mode === room.kind) {
+    focus = listScreenFocus(game, room, screen, bundle);
   } else {
-    mode = room.kind as ViewMode;
+    focus = NO_FOCUS;
   }
 
   return {
@@ -1006,5 +1468,8 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     toast: ui.toast != null ? toAscii(ui.toast) : null,
     log: ui.log.slice(-8).map(toAscii),
     hint: hintFor(mode, { screen, overlay }),
+    tooltip: focus.tooltip,
+    focusCount: focus.count,
+    focusIdx: focus.idx,
   };
 }

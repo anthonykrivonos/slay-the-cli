@@ -1,6 +1,7 @@
 // Corpus wiki-markup resolver shared by cardtext/relictext/potiontext/
 // powertext. Turns the corpus "text" markup into plain display text:
 //   <br>              line break
+//   [[Page|Display]]  wiki link -> last segment (relic texts)
 //   [base|upgraded]   picked by upgrade level
 //   {{C|Id|Display}}  keyword/card link -> last segment
 //   $Keyword          keyword highlight -> plain word
@@ -8,6 +9,11 @@
 
 export function resolveMarkup(text: string, upgraded: boolean): string {
   let s = text.replace(/<br\s*\/?>/gi, "\n");
+  // [[A|B]] -> last segment; [[A]] -> A (must run before the upgrade picker)
+  s = s.replace(/\[\[([^[\]]*)\]\]/g, (_m, inner: string) => {
+    const parts = inner.split("|");
+    return parts[parts.length - 1] ?? inner;
+  });
   // [base|upgraded] — no nesting of square brackets inside either side
   s = s.replace(/\[([^[\]|]*)\|([^[\]]*)\]/g, (_m, base: string, up: string) =>
     upgraded ? up : base,

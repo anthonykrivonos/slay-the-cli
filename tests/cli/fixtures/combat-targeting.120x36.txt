@@ -4,7 +4,7 @@
 [2] Green Louse      HP  13/13  [##########]       Debuffing you  ~Spit Web  Curl Up 7                                  
                                                                                                                         
 YOU Ironclad          HP  80/80  [##########]       E 3/3                                                               
- Choose a target for Strike: [1] Red Louse  [2] Green Louse                                                             
+ Choose a target for Strike: >[1] Red Louse  [2] Green Louse                                                            
 -- HAND  (draw 5 / discard 0 / exhaust 0) ------------------------------------------------------------------------------
 [1] Defend             (1) S  Gain 5 Block.                                                                             
 [2] Defend             (1) S  Gain 5 Block.                                                                             
@@ -29,8 +29,8 @@ YOU Ironclad          HP  80/80  [##########]       E 3/3
                                                                                                                         
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ ENEMY  Red Louse  HP 13/13                                                                                             
+   Bite: intends to attack for 6.                                                                                       
+   Curl Up 5: Gains 5 Block upon first receiving attack damage.                                                         
 [1-9] choose a target  [Esc] cancel                                                                                     

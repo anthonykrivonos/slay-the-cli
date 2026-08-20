@@ -105,7 +105,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
         ui = { ...ui, lastLoot: null };
       }
       if (prev.run.room?.kind !== next.run.room?.kind) {
-        ui = { ...ui, page: 0, mapScroll: 0 };
+        ui = { ...ui, page: 0, mapScroll: 0, focus: null };
       }
       if (next.run.room?.kind === "gameOver") {
         saves.deleteSave();

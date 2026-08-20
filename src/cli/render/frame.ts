@@ -7,6 +7,8 @@ import type { View } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, center, rule } from "./widgets";
+import { tipHeight } from "./layout";
+import { renderTooltip } from "./tooltip";
 import { renderMenu } from "./menu";
 import { renderMap } from "./map";
 import { renderCombat } from "./combat";
@@ -107,9 +109,14 @@ export function renderFrame(view: View, size: FrameSize, theme: Theme): string[]
   lines.push(headerLine(view, cols, theme));
   lines.push(theme.dim(rule(screenLabel(view), cols)));
 
+  // the info panel is shared chrome at the bottom of the body: screens are
+  // rendered into the remaining rows so their ladders absorb it automatically
   const bodyH = rows - 3;
-  const body = renderBody(view, cols, bodyH, theme);
-  for (let i = 0; i < bodyH; i++) lines.push(body[i] ?? "");
+  const tip = tipHeight(bodyH);
+  const screenH = bodyH - tip;
+  const body = renderBody(view, cols, screenH, theme);
+  for (let i = 0; i < screenH; i++) lines.push(body[i] ?? "");
+  if (tip > 0) lines.push(...renderTooltip(view.tooltip, cols, tip, theme));
 
   const bottom =
     view.toast !== null ? theme.inverse(padClip(` ${view.toast}`, cols)) : theme.dim(padClip(view.hint, cols));

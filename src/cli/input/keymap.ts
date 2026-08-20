@@ -34,6 +34,34 @@ function pageKeys(ch: string, pages: number, forChoice: boolean): KeyAction | nu
   return null;
 }
 
+/** Move the hover/selection focus by delta (wrapping). Null when the mode
+ *  exposes nothing to focus. */
+function focusStep(view: View, delta: 1 | -1): KeyAction | null {
+  if (view.focusCount <= 0) return null;
+  const cur = view.focusIdx;
+  const next =
+    cur === null
+      ? delta === 1
+        ? 0
+        : view.focusCount - 1
+      : (cur + delta + view.focusCount) % view.focusCount;
+  return ui({ type: "focusSet", scope: view.mode, idx: next });
+}
+
+/** Tab cycles; arrows step (Up/Left back, Down/Right forward). */
+function focusKeys(key: Key, view: View): KeyAction | null {
+  if (key.kind === "tab") return focusStep(view, 1);
+  if (key.kind === "down" || key.kind === "right") return focusStep(view, 1);
+  if (key.kind === "up" || key.kind === "left") return focusStep(view, -1);
+  return null;
+}
+
+/** The list item the focus cursor points at (list screens + list overlays). */
+function focusedItem(items: ListItemView[], view: View): ListItemView | null {
+  if (view.focusIdx === null) return null;
+  return items.find((it) => it.i === view.focusIdx) ?? null;
+}
+
 /** Keys available on every non-overlay run screen. */
 function globalRunKeys(ch: string): KeyAction | null {
   switch (ch) {
@@ -63,7 +91,21 @@ export function mapKey(key: Key, view: View): KeyAction | null {
     }
 
     case "menu": {
-      if (key.kind === "enter") return ui({ type: "newRun" });
+      if (key.kind === "enter") {
+        // Enter activates the focus cursor (heroes / NEW RUN / CONTINUE);
+        // without a cursor it keeps its historical meaning: start a run
+        const f = view.focusIdx;
+        const m = view.screen;
+        if (f !== null && m.kind === "menu") {
+          if (f < 4) return ui({ type: "menuChar", id: m.characters[f]!.id });
+          if (f === 4) return ui({ type: "newRun" });
+          return m.continueDesc !== null ? ui({ type: "continueRun" }) : null;
+        }
+        return ui({ type: "newRun" });
+      }
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
+      if (key.kind === "esc") return view.focusIdx !== null ? ui({ type: "focusClear" }) : null;
       if (key.kind !== "char") return null;
       const ch = key.ch;
       const d = digitIndex(ch);
@@ -122,6 +164,9 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         return null;
       }
       // paged lists: deck / relics / pile / potions
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
+      if (key.kind === "enter") return selectItem(focusedItem(o.list.items, view));
       if (key.kind === "esc") return ui({ type: "closeOverlay" });
       if (key.kind !== "char") return null;
       const paging = pageKeys(key.ch, o.list.pages, false);
@@ -135,15 +180,23 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       const o = view.overlay;
       if (o?.kind !== "choice") return null;
       if (key.kind === "esc") {
-        // Esc only cancels when the engine allows it (canCancel)
-        return o.canCancel ? cmd({ cmd: "choose", indices: [] }) : null;
+        // Esc only cancels when the engine allows it (canCancel);
+        // otherwise it clears the focus cursor
+        if (o.canCancel) return cmd({ cmd: "choose", indices: [] });
+        return view.focusIdx !== null ? ui({ type: "focusClear" }) : null;
       }
       if (key.kind === "enter") {
-        if (o.single) return null; // singles commit via digits
+        if (o.single) {
+          // singles commit via digits or the focus cursor
+          const item = focusedItem(o.list.items, view);
+          return item !== null ? cmd({ cmd: "choose", indices: [item.i] }) : null;
+        }
         if (o.selected.length < o.min) return ui({ type: "toast", text: `Select at least ${o.min}` });
         if (o.selected.length > o.max) return ui({ type: "toast", text: `Select at most ${o.max}` });
         return cmd({ cmd: "choose", indices: [...o.selected] });
       }
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
       if (key.kind !== "char") return null;
       if (key.ch === "q") return ui({ type: "openOverlay", overlay: { kind: "confirmQuit" } });
       const paging = pageKeys(key.ch, o.list.pages, true);
@@ -160,6 +213,13 @@ export function mapKey(key: Key, view: View): KeyAction | null {
 
     case "targeting": {
       if (key.kind === "esc") return ui({ type: "setTargeting", targeting: null });
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
+      if (key.kind === "enter") {
+        // Enter fires at the auto-focused candidate target
+        const t = view.targeting?.targets[view.targeting.focusIdx];
+        return t ? t.action : null;
+      }
       if (key.kind !== "char") return null;
       if (key.ch === "q") return ui({ type: "openOverlay", overlay: { kind: "confirmQuit" } });
       const d = digitIndex(key.ch);
@@ -173,7 +233,12 @@ export function mapKey(key: Key, view: View): KeyAction | null {
     case "combat": {
       const s = view.screen;
       if (s.kind !== "combat") return null;
-      if (key.kind === "esc") return ui({ type: "backToMenu" }); // run is saved per-advance
+      if (key.kind === "esc") {
+        if (view.focusIdx !== null) return ui({ type: "focusClear" });
+        return ui({ type: "backToMenu" }); // run is saved per-advance
+      }
+      const focus = focusKeys(key, view); // read-only hover: digits still play
+      if (focus) return focus;
       if (key.kind !== "char") return null;
       const ch = key.ch;
       const d = digitIndex(ch);
@@ -203,9 +268,22 @@ export function mapKey(key: Key, view: View): KeyAction | null {
     }
 
     case "map": {
-      if (key.kind === "esc") return ui({ type: "backToMenu" });
       const s = view.screen;
       if (s.kind !== "map") return null;
+      if (key.kind === "esc") {
+        if (view.focusIdx !== null) return ui({ type: "focusClear" });
+        return ui({ type: "backToMenu" });
+      }
+      if (key.kind === "enter" && view.focusIdx !== null) {
+        const pick = s.picks[view.focusIdx];
+        return pick ? cmd({ cmd: "mapPick", x: pick.x, y: pick.y }) : null;
+      }
+      // Tab always cycles the pick cursor; arrows steer it once active,
+      // otherwise they keep scrolling the viewport (j/k always scroll)
+      if (key.kind === "tab" || view.focusIdx !== null) {
+        const focus = focusKeys(key, view);
+        if (focus) return focus;
+      }
       if (key.kind === "down") return ui({ type: "mapScroll", delta: 1 });
       if (key.kind === "up") return ui({ type: "mapScroll", delta: -1 });
       if (key.kind !== "char") return null;
@@ -227,14 +305,23 @@ export function mapKey(key: Key, view: View): KeyAction | null {
     case "treasure":
     case "event":
     case "gameOver": {
-      if (key.kind === "esc") return ui({ type: "backToMenu" });
       const s = view.screen;
       if (s.kind === "menu" || s.kind === "map" || s.kind === "combat") return null;
+      if (key.kind === "esc") {
+        if (view.focusIdx !== null) return ui({ type: "focusClear" });
+        return ui({ type: "backToMenu" });
+      }
       if (key.kind === "enter") {
+        // Enter activates the focus cursor; without one it keeps its
+        // historical per-screen meaning
+        const item = focusedItem(s.list.items, view);
+        if (item !== null) return selectItem(item);
         if (view.mode === "rewards") return cmd({ cmd: "skipRewards" });
         if (view.mode === "shop") return cmd({ cmd: "proceed" });
         return null;
       }
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
       if (key.kind !== "char") return null;
       const ch = key.ch;
       const paging = pageKeys(ch, s.list.pages, false);

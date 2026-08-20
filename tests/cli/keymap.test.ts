@@ -251,6 +251,152 @@ describe("overlay mode", () => {
   });
 });
 
+describe("focus / selection cursor", () => {
+  const TAB: Key = { kind: "tab" };
+  const DOWN: Key = { kind: "down" };
+  const UP: Key = { kind: "up" };
+
+  function withFocus(f: Fixture, scope: string, idx: number): Fixture {
+    return { ...f, ui: { ...f.ui, focus: { scope, idx } } };
+  }
+
+  test("Tab starts the cursor at 0 and cycles with wrap", () => {
+    const f = fxRest();
+    const v = viewOf(f);
+    expect(v.focusIdx).toBeNull();
+    expect(v.focusCount).toBeGreaterThan(0);
+    expect(mapKey(TAB, v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: 0 } });
+    const last = viewOf(withFocus(f, "rest", v.focusCount - 1));
+    expect(mapKey(TAB, last)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: 0 } });
+  });
+
+  test("arrows step the cursor; up from 0 wraps to the end", () => {
+    const f = fxRest();
+    const v = viewOf(withFocus(f, "rest", 0));
+    expect(mapKey(DOWN, v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: 1 } });
+    expect(mapKey(UP, v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: v.focusCount - 1 } });
+  });
+
+  test("Enter activates the focused list item; Esc clears the cursor first", () => {
+    const f = fxRest();
+    const v = viewOf(withFocus(f, "rest", 0));
+    expect(v.focusIdx).toBe(0);
+    const a = mapKey(ENTER, v);
+    expect(a).toEqual({ kind: "cmd", cmd: { cmd: "restOption", kind: "rest" } });
+    expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "focusClear" } });
+    const cleared = viewOf(f);
+    expect(mapKey(ESC, cleared)).toEqual({ kind: "ui", act: { type: "backToMenu" } });
+  });
+
+  test("Enter on a focused disabled item toasts its note", () => {
+    const f = fxRewards();
+    const g = structuredClone(f.game!);
+    if (g.run.room?.kind === "rewards") g.run.room.entries[0]!.taken = true;
+    const v = buildView(g, { ...f.ui, focus: { scope: "rewards", idx: 0 } }, bundle);
+    expect(mapKey(ENTER, v)).toEqual({ kind: "ui", act: { type: "toast", text: "taken" } });
+  });
+
+  test("menu: arrows select heroes, Enter picks the focused one", () => {
+    const f = fxMenu();
+    const v0 = viewOf(f);
+    expect(mapKey(DOWN, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "menu", idx: 0 } });
+    const v2 = viewOf(withFocus(f, "menu", 1));
+    expect(mapKey(ENTER, v2)).toEqual({ kind: "ui", act: { type: "menuChar", id: "SILENT" } });
+    const vNew = viewOf(withFocus(f, "menu", 4));
+    expect(mapKey(ENTER, vNew)).toEqual({ kind: "ui", act: { type: "newRun" } });
+    const vCont = viewOf(withFocus(f, "menu", 5));
+    expect(mapKey(ENTER, vCont)).toEqual({ kind: "ui", act: { type: "continueRun" } });
+    // no cursor: Enter keeps meaning "new run"
+    expect(mapKey(ENTER, v0)).toEqual({ kind: "ui", act: { type: "newRun" } });
+  });
+
+  test("combat: hover is read-only (Enter does not play) and shows a card tooltip", () => {
+    const f = fxCombat();
+    const v = viewOf(withFocus(f, "combat", 2));
+    expect(v.tooltip?.chip).toBe("CARD");
+    expect(v.tooltip?.name).toContain("Strike");
+    expect(v.tooltip?.lines.join(" ")).toContain("Deal 6 damage.");
+    expect(mapKey(ENTER, v)).toBeNull();
+    // Tab past the hand lands on an enemy tooltip
+    const hand = v.screen.kind === "combat" ? v.screen.hand.length : 0;
+    const vEnemy = viewOf(withFocus(f, "combat", hand));
+    expect(vEnemy.tooltip?.chip).toBe("ENEMY");
+    expect(vEnemy.tooltip?.lines.length).toBeGreaterThan(0);
+  });
+
+  test("targeting auto-focuses target 0; arrows retarget; Enter fires", () => {
+    const f = fxCombatTargeting();
+    const v = viewOf(f);
+    expect(v.mode).toBe("targeting");
+    expect(v.focusIdx).toBe(0);
+    expect(v.tooltip?.chip).toBe("ENEMY");
+    expect(mapKey(ENTER, v)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 2, target: 0 } });
+    expect(mapKey(DOWN, v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "targeting", idx: 1 } });
+    const v2 = viewOf(withFocus(f, "targeting", 1));
+    expect(mapKey(ENTER, v2)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 2, target: 1 } });
+  });
+
+  test("map: Tab cycles picks, Enter travels, unfocused arrows still scroll", () => {
+    const f = fxMapAct1();
+    const v0 = viewOf(f);
+    expect(mapKey(DOWN, v0)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: 1 } });
+    expect(mapKey(TAB, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 0 } });
+    const v1 = viewOf(withFocus(f, "map", 0));
+    expect(v1.tooltip?.chip).toBe("NODE");
+    const a = mapKey(ENTER, v1);
+    expect(a?.kind).toBe("cmd");
+    if (a?.kind === "cmd") expect(a.cmd.cmd).toBe("mapPick");
+    expect(mapKey(DOWN, v1)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 1 } });
+  });
+
+  test("shop cursor auto-pages: focusing item 12 shows page 2", () => {
+    const f = fxShop();
+    const v = viewOf(withFocus(f, "shop", 12));
+    if (v.screen.kind === "menu" || v.screen.kind === "map" || v.screen.kind === "combat") throw new Error("bad screen");
+    expect(v.screen.list.page).toBe(1);
+    expect(v.screen.list.focusI).toBe(12);
+    expect(v.focusIdx).toBe(12);
+  });
+
+  test("shop: focused relic shows corpus text in the tooltip", () => {
+    const f = fxShop();
+    const v = viewOf(withFocus(f, "shop", 7));
+    expect(v.tooltip?.chip).toBe("RELIC");
+    expect((v.tooltip?.lines.length ?? 0)).toBeGreaterThan(0);
+  });
+
+  test("single pending choice: Enter commits the focused card", () => {
+    const f = fxChoice();
+    const v = viewOf(withFocus(f, "choice", 3));
+    expect(v.mode).toBe("choice");
+    expect(v.tooltip?.chip).toBe("CARD");
+    expect(mapKey(ENTER, v)).toEqual({ kind: "cmd", cmd: { cmd: "choose", indices: [3] } });
+  });
+
+  test("deck overlay: arrows browse, tooltip shows the full card", () => {
+    const f = fxMapAct1();
+    const ui1 = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "deck", mode: "view", page: 0 } });
+    const v0 = buildView(f.game, ui1, bundle);
+    expect(mapKey(TAB, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "overlay", idx: 0 } });
+    const v1 = buildView(f.game, { ...ui1, focus: { scope: "overlay", idx: 0 } }, bundle);
+    expect(v1.tooltip?.chip).toBe("CARD");
+    expect(v1.tooltip?.lines.length).toBeGreaterThan(0);
+  });
+
+  test("stale focus from another screen is ignored", () => {
+    const f = fxRest();
+    const v = viewOf(withFocus(f, "combat", 3));
+    expect(v.focusIdx).toBeNull();
+    expect(v.tooltip).toBeNull();
+  });
+
+  test("out-of-range focus clamps to the last focusable", () => {
+    const f = fxRest();
+    const v = viewOf(withFocus(f, "rest", 99));
+    expect(v.focusIdx).toBe(v.focusCount - 1);
+  });
+});
+
 describe("uiState reducer details", () => {
   test("seed editing filters characters and uppercases", () => {
     let ui = initialUiState({ seed: "SPIRE" });

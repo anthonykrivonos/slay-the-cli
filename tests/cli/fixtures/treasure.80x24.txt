@@ -3,9 +3,9 @@
                                                                                 
   Something glints inside...                                                    
                                                                                 
-[1] Open the chest                                                              
-[2] Take the Sapphire Key                                                       
-      Forfeits the relic inside                                                 
+  [1] Open the chest                                                            
+  [2] Take the Sapphire Key                                                     
+        Forfeits the relic inside                                               
                                                                                 
                                                                                 
                                                                                 

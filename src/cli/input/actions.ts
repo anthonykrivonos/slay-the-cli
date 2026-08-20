@@ -16,6 +16,8 @@ export type PureUiAction =
   | { type: "toggleChoice"; i: number; max: number }
   | { type: "setTargeting"; targeting: Targeting | null }
   | { type: "inspectMove"; delta: 1 | -1; count: number }
+  | { type: "focusSet"; scope: string; idx: number }
+  | { type: "focusClear" }
   | { type: "menuChar"; id: string }
   | { type: "menuAsc"; delta: 1 | -1 }
   | { type: "seedEditStart" }

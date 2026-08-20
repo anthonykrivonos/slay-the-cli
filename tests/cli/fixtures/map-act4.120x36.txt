@@ -28,9 +28,9 @@
                                                                                                                         
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
 Next: 1:$                                                                                                               
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
+                                                                                                                        
+                                                                                                                        
 [1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit                                           

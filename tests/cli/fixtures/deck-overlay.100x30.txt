@@ -3,16 +3,16 @@
             +--------------------------------------------------------------------------+            
             | Deck - 10 cards                                                          |            
             |--------------------------------------------------------------------------|            
-            | [1] Strike (1) [attack]                                                  |            
-            | [2] Strike (1) [attack]                                                  |            
-            | [3] Strike (1) [attack]                                                  |            
-            | [4] Strike (1) [attack]                                                  |            
-            | [5] Strike (1) [attack]                                                  |            
-            | [6] Defend (1) [skill]                                                   |            
-            | [7] Defend (1) [skill]                                                   |            
-            | [8] Defend (1) [skill]                                                   |            
-            | [9] Defend (1) [skill]                                                   |            
-            | [0] Bash (2) [attack]                                                    |            
+            |   [1] Strike (1) [attack]                                                |            
+            |   [2] Strike (1) [attack]                                                |            
+            |   [3] Strike (1) [attack]                                                |            
+            |   [4] Strike (1) [attack]                                                |            
+            |   [5] Strike (1) [attack]                                                |            
+            |   [6] Defend (1) [skill]                                                 |            
+            |   [7] Defend (1) [skill]                                                 |            
+            |   [8] Defend (1) [skill]                                                 |            
+            |   [9] Defend (1) [skill]                                                 |            
+            |   [0] Bash (2) [attack]                                                  |            
             +--------------------------------------------------------------------------+            
                                                                                                     
                                                                                                     
@@ -24,7 +24,7 @@
                                                                                                     
                                                                                                     
                                                                                                     
-                                                                                                    
-                                                                                                    
+-- INFO --------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
                                                                                                     
 [1-0] select  [Esc] close                                                                           

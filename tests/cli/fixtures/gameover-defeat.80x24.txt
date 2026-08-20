@@ -9,8 +9,8 @@
   Floor 1 - Act 1                                                               
   seed UISMNKE                                                                  
                                                                                 
-[1] New run - same hero, next seed                                              
-[2] Back to the menu                                                            
+  [1] New run - same hero, next seed                                            
+  [2] Back to the menu                                                          
                                                                                 
                                                                                 
                                                                                 

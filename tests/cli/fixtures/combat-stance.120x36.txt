@@ -29,8 +29,8 @@ YOU Watcher           HP  72/72  [##########]  B8   E 1/3 [CALM]
                                                                                                                         
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
 [1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit                     

@@ -229,6 +229,18 @@ export function fxDeckOverlay(): Fixture {
   return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "deck", mode: "view", page: 0 }] } };
 }
 
+/** Info panel: a hand card holds the hover focus (first Strike, idx 2). */
+export function fxCombatTooltip(): Fixture {
+  const f = fxCombat();
+  return { game: f.game, ui: { ...f.ui, focus: { scope: "combat", idx: 2 } } };
+}
+
+/** Info panel: the first shop relic holds the selection cursor (item 7). */
+export function fxShopTooltip(): Fixture {
+  const f = fxShop();
+  return { game: f.game, ui: { ...f.ui, focus: { scope: "shop", idx: 7 } } };
+}
+
 /** Synthetic: a lost run (organic defeat needs a scripted throw-away fight). */
 export function fxGameOverDefeat(): Fixture {
   const f = fxCombat();
@@ -289,6 +301,8 @@ export const FIXTURES: Record<string, () => Fixture> = {
   treasure: fxTreasure,
   event: fxEvent,
   "deck-overlay": fxDeckOverlay,
+  "combat-tooltip": fxCombatTooltip,
+  "shop-tooltip": fxShopTooltip,
   "gameover-defeat": fxGameOverDefeat,
   "gameover-victory": fxGameOverVictory,
 };

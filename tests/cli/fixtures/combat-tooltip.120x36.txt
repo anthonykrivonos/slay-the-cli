@@ -30,7 +30,7 @@ YOU Ironclad          HP  80/80  [##########]       E 3/3
                                                                                                                         
                                                                                                                         
 -- INFO ----------------------------------------------------------------------------------------------------------------
- Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
-                                                                                                                        
+ CARD  Strike (1)  Attack - basic - targets an enemy                                                                    
+   Deal 6 damage.                                                                                                       
                                                                                                                         
 [1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit                     

@@ -72,6 +72,16 @@ export const CHARACTER_COLORS: Record<string, string> = {
   WATCHER: "#b98ad6",
 };
 
+/** Accent color per card color (name highlights on card boxes). */
+export const CARD_COLOR_ACCENTS: Record<string, string> = {
+  red: "#c25454",
+  green: "#6fce87",
+  blue: "#5f9ad0",
+  purple: "#b98ad6",
+  colorless: "#f0e8d2",
+  curse: "#9a7ab8",
+};
+
 export interface CharacterSummary {
   id: UICharacterId;
   name: string;

@@ -16,6 +16,8 @@ describe("resolveMarkup", () => {
     expect(resolveMarkup("Enter $Calm.", false)).toBe("Enter Calm.");
     expect(resolveMarkup("Gain @GE.", false)).toBe("Gain [E].");
     expect(resolveMarkup("a<br>b", false)).toBe("a\nb");
+    expect(resolveMarkup("gain 2 [[Potions|Potion]] slots", false)).toBe("gain 2 Potion slots");
+    expect(resolveMarkup("Gain [[Gold]].", true)).toBe("Gain Gold.");
   });
 });
 

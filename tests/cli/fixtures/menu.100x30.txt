@@ -1,23 +1,23 @@
                                                                                                     
 -- MENU --------------------------------------------------------------------------------------------
-                                                                                                    
-                                              S L A Y                                               
+                                       #### #      ###  #   #                                       
+                                      #     #     #   #  # #                                        
+                                       ###  #     #####   #                                         
+                                          # #     #   #   #                                         
+                                      ####  ##### #   #   #                                         
                                      a mechanically exact spire                                     
                                                                                                     
-  Choose your hero:                                                                                 
-  * [1] Ironclad    80 HP   Burning Blood                                                           
-    [2] Silent      70 HP   Ring of the Snake                                                       
-    [3] Defect      75 HP   Cracked Core                                                            
-    [4] Watcher     72 HP   Pure Water                                                              
++=[1]==================+ +-[2]------------------+ +-[3]------------------+ +-[4]------------------+ 
+| Ironclad             | | Silent               | | Defect               | | Watcher              | 
+| 80 HP                | | 70 HP                | | 75 HP                | | 72 HP                | 
+| Burning Blood        | | Ring of the Snake    | | Cracked Core         | | Pure Water           | 
++======================+ +----------------------+ +----------------------+ +----------------------+ 
                                                                                                     
-      Ascension 0 - The standard climb   [a] up / [A] down                                          
-      Seed: SPIRE   [s] edit                                                                        
+ Ascension 0 - The standard climb   [a] up / [A] down                                               
+ Seed: SPIRE   [s] edit                                                                             
                                                                                                     
   [n] NEW RUN                                                                                       
   [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                                                      
-                                                                                                    
-                                                                                                    
-                                                                                                    
                                                                                                     
                                                                                                     
                                                                                                     

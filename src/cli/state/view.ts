@@ -188,14 +188,25 @@ export interface CombatView {
 }
 
 export interface SimpleListScreen {
-  kind: "neow" | "rewards" | "shop" | "rest" | "treasure" | "event" | "gameOver";
+  kind: "neow" | "rewards" | "shop" | "rest" | "treasure" | "event";
   title: string;
-  /** body lines above the list (event summary, chest text, game-over stats...) */
+  /** body lines above the list (event summary, chest text...) */
   intro: string[];
   list: ListView;
 }
 
-export type ScreenView = MenuView | MapView | CombatView | SimpleListScreen;
+export interface GameOverView {
+  kind: "gameOver";
+  /** VICTORY / DEFEAT / THE HEART FALLS */
+  title: string;
+  victory: boolean;
+  subtitle: string;
+  /** hero + ascension / floor + act / seed */
+  stats: string[];
+  list: ListView;
+}
+
+export type ScreenView = MenuView | MapView | CombatView | SimpleListScreen | GameOverView;
 
 export type OverlayView =
   | {
@@ -678,15 +689,8 @@ function buildEvent(g: GameState, room: Extract<RoomState, { kind: "event" }>, p
   };
 }
 
-function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
+function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver" }>, page: number, focusI: number | null, bundle: ContentBundle): GameOverView {
   const name = bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character);
-  const intro = [
-    toAscii(gameOverSubtitle(room.victory, g.run.act)),
-    "",
-    toAscii(`${name} - Ascension ${g.run.ascension}`),
-    toAscii(`Floor ${g.run.floor} - Act ${g.run.act}`),
-    toAscii(`seed ${g.seed}`),
-  ];
   const items: RawItem[] = [
     { label: "New run - same hero, next seed", action: uiAct({ type: "rerun" }) },
     { label: "Back to the menu", action: uiAct({ type: "backToMenu" }) },
@@ -694,7 +698,13 @@ function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver"
   return {
     kind: "gameOver",
     title: gameOverTitle(room.victory, g.run.act),
-    intro,
+    victory: room.victory,
+    subtitle: toAscii(gameOverSubtitle(room.victory, g.run.act)),
+    stats: [
+      toAscii(`${name} - Ascension ${g.run.ascension}`),
+      toAscii(`Floor ${g.run.floor} - Act ${g.run.act}`),
+      toAscii(`seed ${g.seed}`),
+    ],
     list: makeList(items, page, focusI),
   };
 }
@@ -1252,7 +1262,7 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
 function listScreenFocus(
   g: GameState,
   room: RoomState,
-  screen: SimpleListScreen,
+  screen: SimpleListScreen | GameOverView,
   bundle: ContentBundle,
 ): FocusInfo {
   const count = screen.list.total;

@@ -121,7 +121,7 @@ describe("headless autoplay", () => {
     expect(small).toContain("Terminal too small");
     term.resize(100, 30);
     const big = stripAnsi(term.output[term.output.length - 1]!);
-    expect(big).toContain("S L A Y");
+    expect(big).toContain("NEW RUN");
     term.feed("q"); // menu 'q' quits directly
     await done;
     rmSync(dir, { recursive: true, force: true });

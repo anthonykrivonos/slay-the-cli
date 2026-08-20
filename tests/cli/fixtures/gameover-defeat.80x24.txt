@@ -1,22 +1,22 @@
  HP 0/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | 
 -- DEFEAT ----------------------------------------------------------------------
                                                                                 
-                                ===  DEFEAT  ===                                
+                      ####  ##### ##### #####  ###  #####                       
+                      #   # #     #     #     #   #   #                         
+                      #   # ####  ####  ####  #####   #                         
+                      #   # #     #     #     #   #   #                         
+                      ####  ##### #     ##### #   #   #                         
                                                                                 
-  Slain in the Spire.                                                           
+                              Slain in the Spire.                               
                                                                                 
-  Ironclad - Ascension 0                                                        
-  Floor 1 - Act 1                                                               
-  seed UISMNKE                                                                  
+                           +------------------------+                           
+                           | Ironclad - Ascension 0 |                           
+                           | Floor 1 - Act 1        |                           
+                           | seed UISMNKE           |                           
+                           +------------------------+                           
                                                                                 
-  [1] New run - same hero, next seed                                            
-  [2] Back to the menu                                                          
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
+                             [1] New run - same hero, next seed                 
+                             [2] Back to the menu                               
                                                                                 
                                                                                 
                                                                                 

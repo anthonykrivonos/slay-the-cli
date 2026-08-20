@@ -1,0 +1,24 @@
+ HP 80/80 | G 99 | F52 A4 | ASC0 | K:ERS | POT 3/3 | DECK 10 | REL 1 | Ironclad 
+-- MAP - act 4 -----------------------------------------------------------------
+                       B                                                        
+                       |                                                        
+                       E                                                        
+                       |                                                        
+                     1:$                                                        
+                       |                                                        
+                       @                                                        
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+Next: 1:$                                                                       
+[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit   

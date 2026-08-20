@@ -1,0 +1,30 @@
+ HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE            
+-- COMBAT - turn 1 ---------------------------------------------------------------------------------
+[1] Red Louse        HP  13/13  [##########]       ATK 6          ~Bite  Curl Up 5                  
+[2] Green Louse      HP  13/13  [##########]       Debuffing you  ~Spit Web  Curl Up 7              
+                                                                                                    
+YOU Ironclad          HP  80/80  [##########]       E 3/3                                           
+-- HAND  (draw 5 / discard 0 / exhaust 0) ----------------------------------------------------------
+[1] Defend             (1) S  Gain 5 Block.                                                         
+[2] Defend             (1) S  Gain 5 Block.                                                         
+[3] Strike             (1) A> Deal 6 damage.                                                        
+[4] Strike             (1) A> Deal 6 damage.                                                        
+[5] Strike             (1) A> Deal 6 damage.                                                        
+-- LOG ---------------------------------------------------------------------------------------------
+  Drew a card                                                                                       
+  Drew a card                                                                                       
+  Drew a card                                                                                       
+  -- Turn 1 --                                                                                      
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+[1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit 

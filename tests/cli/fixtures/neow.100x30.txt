@@ -1,0 +1,30 @@
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 0/3 | DECK 10 | REL 1 | Ironclad | UISMNKE            
+-- NEOW'S BLESSING - choose one --------------------------------------------------------------------
+                                                                                                    
+[1] Obtain a random rare card                                                                       
+[2] Obtain three random potions                                                                     
+[3] Gain 20% max HP                                                                                 
+      ! Take damage (30% of your current HP)                                                        
+[4] Swap your starting relic for a random boss relic                                                
+      ! Lose your starting relic                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+[1-4] choose a blessing  [d] deck  [r] relics  [q] quit                                             

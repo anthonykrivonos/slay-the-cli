@@ -1,21 +1,21 @@
  HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                
--- REWARDS - monster ---------------------------------------------------------------------------------------------------
-                                                                                                                        
-  [1] 15 Gold                                                                                                           
-  [2] Card - Reckless Charge                                                                                            
-        Deal 7 damage.                                                                                                  
-  [3] Card - Shrug It Off                                                                                               
-        Gain 8 Block.                                                                                                   
-  [4] Card - Heavy Blade                                                                                                
-        Deal 14 damage.                                                                                                 
-  [5] Continue                                                                                                          
+-- SPOILS OF BATTLE - monster ------------------------------------------------------------------------------------------
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
+                        +----------------------------------------------------------------------+                        
+                        | SPOILS OF BATTLE - monster                                           |                        
+                        |----------------------------------------------------------------------|                        
+                        |   [1] ($) 15 Gold                                                    |                        
+                        | Choose one card:                                                     |                        
+                        |  +(0)-----------------++(1)-----------------++(2)-----------------+  |                        
+                        |  | Reckless Charge    || Shrug It Off       || Heavy Blade        |  |                        
+                        |  | Deal 7 damage.     || Gain 8 Block.      || Deal 14 damage.    |  |                        
+                        |  | Shuffle a Dazed    || Draw 1 card.       || Strength affects   |  |                        
+                        |  | into your draw     ||                    || this card 3 times. |  |                        
+                        |  +--------[2]---------++--------[3]---------++--------[4]---------+  |                        
+                        |                                                                      |                        
+                        |   [5] Continue                                                       |                        
+                        +----------------------------------------------------------------------+                        
                                                                                                                         
                                                                                                                         
                                                                                                                         

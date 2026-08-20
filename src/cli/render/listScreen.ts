@@ -1,12 +1,12 @@
 // Shared renderer for every numbered-list screen (Neow, event, shop, rest,
 // treasure, rewards, game over): intro paragraph(s) then a paged listLines.
 
-import type { SimpleListScreen } from "../state/view";
+import type { ListView } from "../state/view";
 import type { Theme } from "./theme";
 import { listLines, wrapPlain, padClip, center } from "./widgets";
 
 export function renderListScreen(
-  screen: SimpleListScreen,
+  screen: { title: string; intro: string[]; list: ListView },
   width: number,
   height: number,
   theme: Theme,

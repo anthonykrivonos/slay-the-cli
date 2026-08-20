@@ -29,6 +29,7 @@ import {
   canRecall,
   rewardLabel,
   rewardBlocked,
+  rewardRows,
   chestTitle,
   describeChoiceReason,
   characterSummary,
@@ -226,10 +227,64 @@ export interface CombatView {
 }
 
 export interface SimpleListScreen {
-  kind: "neow" | "rewards" | "shop" | "rest" | "treasure" | "event";
+  kind: "neow" | "rest" | "treasure" | "event";
   title: string;
   /** body lines above the list (event summary, chest text...) */
   intro: string[];
+  list: ListView;
+}
+
+export interface ShopCardView {
+  /** absolute list index (hotkeys mirror list.items) */
+  i: number;
+  name: string;
+  cost: string;
+  color: string;
+  rules: string[];
+  price: number;
+  sold: boolean;
+  affordable: boolean;
+}
+
+export interface ShopRowView {
+  i: number;
+  name: string;
+  /** relic tier or potion rarity */
+  tier: string;
+  price: number;
+  sold: boolean;
+  affordable: boolean;
+  /** corpus effect text */
+  text: string;
+}
+
+export interface ShopView {
+  kind: "shop";
+  title: string;
+  gold: number;
+  cards: ShopCardView[];
+  relics: ShopRowView[];
+  potions: ShopRowView[];
+  removal: { i: number; price: number; used: boolean; affordable: boolean };
+  leave: { i: number };
+  list: ListView;
+}
+
+export type RewardRowView =
+  | { type: "single"; i: number; icon: string; label: string; enabled: boolean; note: string | null }
+  | {
+      type: "group";
+      kind: "card" | "bossRelic";
+      title: string;
+      items: { i: number; name: string; cost: string; color: string; rules: string[]; enabled: boolean; note: string | null }[];
+    };
+
+export interface RewardsView {
+  kind: "rewards";
+  title: string;
+  rows: RewardRowView[];
+  /** absolute list index of the Continue action */
+  continueI: number;
   list: ListView;
 }
 
@@ -244,7 +299,7 @@ export interface GameOverView {
   list: ListView;
 }
 
-export type ScreenView = MenuView | MapView | CombatView | SimpleListScreen | GameOverView;
+export type ScreenView = MenuView | MapView | CombatView | SimpleListScreen | ShopView | RewardsView | GameOverView;
 
 export type OverlayView =
   | {
@@ -647,7 +702,14 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
   };
 }
 
-function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
+const REWARD_ICONS: Record<string, string> = {
+  gold: "($)",
+  potion: "(!)",
+  relic: "(*)",
+  emeraldKey: "(K)",
+};
+
+function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }>, page: number, focusI: number | null, bundle: ContentBundle): RewardsView {
   const items: RawItem[] = room.entries.map((e, i) => {
     const blocked = rewardBlocked(e, g.run);
     const isCard = e.kind === "card";
@@ -665,18 +727,65 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
     label: room.source === "boss" ? "Continue - enter the next act" : "Continue",
     action: cmd({ cmd: "skipRewards" }),
   });
+
+  const rows: RewardRowView[] = rewardRows(room.entries).map((row) => {
+    if (row.type === "single") {
+      const e = row.entry;
+      const blocked = rewardBlocked(e, g.run);
+      return {
+        type: "single" as const,
+        i: row.idx,
+        icon: REWARD_ICONS[e.kind] ?? "( )",
+        label: toAscii(rewardLabel(e, bundle)),
+        enabled: blocked === null,
+        note: e.taken ? "taken" : blocked !== null ? toAscii(blocked) : null,
+      };
+    }
+    return {
+      type: "group" as const,
+      kind: row.kind,
+      title: row.kind === "card" ? "Choose one card:" : "Choose one boss relic:",
+      items: row.items.map(({ idx, entry }) => {
+        const blocked = rewardBlocked(entry, g.run);
+        const up = entry.kind === "card" && entry.upgraded ? 1 : 0;
+        const def = entry.kind === "card" ? bundle.cards.get(entry.id) : undefined;
+        return {
+          i: idx,
+          name: toAscii(rewardLabel(entry, bundle)),
+          cost: entry.kind === "card" && def ? masterCostLabel(masterCardCost(def, up)) : "",
+          color: entry.kind === "card" ? (def?.color ?? "?") : "relic",
+          rules:
+            entry.kind === "card"
+              ? cardRulesText(entry.id, up)
+                  .split("\n")
+                  .filter((l) => l.trim().length > 0)
+                  .map(toAscii)
+              : entry.kind === "bossRelic"
+                ? [relicText(entry.id)].filter((l) => l.length > 0)
+                : [],
+          enabled: blocked === null,
+          note: entry.taken ? "taken" : blocked !== null ? toAscii(blocked) : null,
+        };
+      }),
+    };
+  });
+
   return {
     kind: "rewards",
-    title: `REWARDS - ${room.source}`,
-    intro: [],
+    title: `SPOILS OF BATTLE - ${room.source}`,
+    rows,
+    continueI: room.entries.length,
     list: makeList(items, page, focusI),
   };
 }
 
-function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, page: number, focusI: number | null, bundle: ContentBundle): SimpleListScreen {
+function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, page: number, focusI: number | null, bundle: ContentBundle): ShopView {
   const shop = room.shop;
   const gold = g.run.gold;
   const items: RawItem[] = [];
+  const cards: ShopCardView[] = [];
+  const relics: ShopRowView[] = [];
+  const potions: ShopRowView[] = [];
   shop.cards.forEach((slot, idx) => {
     const def = bundle.cards.get(slot.id);
     items.push({
@@ -686,6 +795,19 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
       note: slot.sold ? "sold" : gold < slot.price ? `need ${slot.price}G` : null,
       action: cmd({ cmd: "shopBuy", kind: "card", idx }),
     });
+    cards.push({
+      i: items.length - 1,
+      name: toAscii(def?.name ?? titleCase(slot.id)),
+      cost: def ? masterCostLabel(def.cost) : "?",
+      color: def?.color ?? "?",
+      rules: cardRulesText(slot.id, 0)
+        .split("\n")
+        .filter((l) => l.trim().length > 0)
+        .map(toAscii),
+      price: slot.price,
+      sold: slot.sold,
+      affordable: gold >= slot.price,
+    });
   });
   shop.relics.forEach((slot, idx) => {
     items.push({
@@ -694,6 +816,15 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
       note: slot.sold ? "sold" : gold < slot.price ? `need ${slot.price}G` : null,
       action: cmd({ cmd: "shopBuy", kind: "relic", idx }),
     });
+    relics.push({
+      i: items.length - 1,
+      name: toAscii(relicName(bundle, slot.id)),
+      tier: slot.tier,
+      price: slot.price,
+      sold: slot.sold,
+      affordable: gold >= slot.price,
+      text: relicText(slot.id),
+    });
   });
   shop.potions.forEach((slot, idx) => {
     items.push({
@@ -701,6 +832,15 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
       enabled: !slot.sold,
       note: slot.sold ? "sold" : gold < slot.price ? `need ${slot.price}G` : null,
       action: cmd({ cmd: "shopBuy", kind: "potion", idx }),
+    });
+    potions.push({
+      i: items.length - 1,
+      name: toAscii(potionName(bundle, slot.id)),
+      tier: bundle.potions.get(slot.id)?.rarity ?? "?",
+      price: slot.price,
+      sold: slot.sold,
+      affordable: gold >= slot.price,
+      text: potionText(slot.id),
     });
   });
   items.push({
@@ -712,11 +852,22 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
         ? uiAct({ type: "openOverlay", overlay: { kind: "deck", mode: "remove", page: 0 } })
         : uiAct({ type: "toast", text: "Not enough gold for a removal" }),
   });
+  const removal = {
+    i: items.length - 1,
+    price: shop.removalCost,
+    used: shop.removalUsed,
+    affordable: gold >= shop.removalCost,
+  };
   items.push({ label: "Leave the shop", action: cmd({ cmd: "proceed" }) });
   return {
     kind: "shop",
     title: `THE MERCHANT - you have ${gold}G`,
-    intro: [],
+    gold,
+    cards,
+    relics,
+    potions,
+    removal,
+    leave: { i: items.length - 1 },
     list: makeList(items, page, focusI),
   };
 }
@@ -1423,7 +1574,7 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
 function listScreenFocus(
   g: GameState,
   room: RoomState,
-  screen: SimpleListScreen | GameOverView,
+  screen: { list: ListView },
   bundle: ContentBundle,
 ): FocusInfo {
   const count = screen.list.total;
@@ -1514,7 +1665,7 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
     case "rewards":
       return "[1-9] take  [Enter] continue  [d/r/p] deck/relics/potions  [q] quit";
     case "shop": {
-      const s = view.screen as SimpleListScreen;
+      const s = view.screen as ShopView;
       const paging = s.list.pages > 1 ? "  [n/p] page" : "";
       return `[1-0] buy${paging}  [Enter] leave  [d/r/p]  [q] quit`;
     }

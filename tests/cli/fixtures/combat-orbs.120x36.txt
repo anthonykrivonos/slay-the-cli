@@ -1,0 +1,36 @@
+ HP 75/75 | G 99 | F1 A1 | ASC0 | K:--- | POT 0/3 | DECK 10 | REL 2 | Defect | DFX0                                     
+-- COMBAT - turn 1 -----------------------------------------------------------------------------------------------------
+[1] Cultist          HP  52/52  [##########]       Buffing        ~Incantation                                          
+                                                                                                                        
+YOU Defect            HP  75/75  [##########]       E 2/3                                                               
+    ORBS (L:3) (L:3) ( - )                                                                                              
+    Channel Tally 1                                                                                                     
+-- HAND  (draw 5 / discard 1 / exhaust 0) ------------------------------------------------------------------------------
+[1] Dualcast           (1) S  Evoke your next Orb twice.                                                                
+[2] Defend             (1) S  Gain 5 Block.                                                                             
+[3] Defend             (1) S  Gain 5 Block.                                                                             
+[4] Strike             (1) A> Deal 6 damage.                                                                            
+-- LOG -----------------------------------------------------------------------------------------------------------------
+  Drew a card                                                                                                           
+  -- Turn 1 --                                                                                                          
+  Channel Tally 1 on you                                                                                                
+  Channeled Lightning                                                                                                   
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+[1-0] play  [e] end turn  [i] inspect  [w/x/z] draw/disc/exh  [d/r/p] deck/relics/potions  [q] quit                     

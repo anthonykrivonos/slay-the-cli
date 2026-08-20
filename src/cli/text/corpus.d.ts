@@ -12,3 +12,36 @@ declare module "*/corpus/cards.json" {
   const cards: CorpusCardEntry[];
   export default cards;
 }
+
+declare module "*/corpus/relics.json" {
+  export interface CorpusRelicEntry {
+    id: string;
+    name: string;
+    tier?: string;
+    text?: string | null;
+  }
+  const relics: CorpusRelicEntry[];
+  export default relics;
+}
+
+declare module "*/corpus/potions.json" {
+  export interface CorpusPotionEntry {
+    id: string;
+    name: string;
+    rarity?: string;
+    text?: string | null;
+  }
+  const potions: CorpusPotionEntry[];
+  export default potions;
+}
+
+declare module "*/corpus/powers.json" {
+  export interface CorpusPowerEntry {
+    id: string;
+    name: string;
+    kind?: string;
+    text?: string | null;
+  }
+  const powers: CorpusPowerEntry[];
+  export default powers;
+}

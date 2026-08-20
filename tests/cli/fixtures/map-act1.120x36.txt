@@ -1,0 +1,36 @@
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                
+-- MAP - act 1 ---------------------------------------------------------------------------------------------------------
+                       B Slime Boss               LEGEND                                                                
+                 /     |     \  \                 M monster    E elite                                                  
+           R           R           R     R        $ shop       R rest                                                   
+           |              \        |  \  |        T treasure   ? unknown                                                
+           ?                 M     E     M        E* burning elite (+key)                                               
+        /  |                 |     |  /  |        @ you        B boss                                                   
+     M     R                 M     ?     M                                                                              
+        \  |                 |  /  |     |        BOSS  Slime Boss                                                      
+           M                 ?     $     M        KEYS  ---                                                             
+        /  |              /  |     |     |        DECK  10   RELICS 1                                                   
+     E*    ?           $     ?     M     ?        seed UISMNKE                                                          
+     |        \     /        |  /        |                                                                              
+     R           M           R           M                                                                              
+        \        |           |  \     /                                                                                 
+           T     T           T     T                                                                                    
+           |  /  |        /     /                                                                                       
+           M     R     R     M                                                                                          
+        /  |     |        \  |  \                                                                                       
+     M     R     M           ?     E                                                                                    
+     |  /           \     /  |        \                                                                                 
+     E                 E     R           M                                                                              
+     |              /     \     \     /                                                                                 
+     M           ?           M     ?                                                                                    
+     |  \     /                 \  |                                                                                    
+     M     ?                       M                                                                                    
+        \  |  \                    |  \                                                                                 
+           M     $                 M     M                                                                              
+           |  \  |                 |     |                                                                              
+           ?     ?                 ?     M                                                                              
+        /        |                 |  /                                                                                 
+   1:M         2:M               3:M                                                                                    
+                                                                                                                        
+Next: 1:M  2:M  3:M                                                                                                     
+[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit                                           

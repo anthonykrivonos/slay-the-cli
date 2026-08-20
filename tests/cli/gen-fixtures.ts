@@ -13,6 +13,8 @@ export const FIXTURE_DIR = join(import.meta.dir, "fixtures");
 export const SNAPSHOT_SIZES = [
   { cols: 100, rows: 30 },
   { cols: 80, rows: 24 },
+  { cols: 120, rows: 36 },
+  { cols: 132, rows: 45 },
 ] as const;
 
 export function renderFixture(name: string, cols: number, rows: number): string {

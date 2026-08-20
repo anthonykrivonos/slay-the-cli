@@ -67,6 +67,7 @@ const INVARIANT_SIZES = [
   { cols: 80, rows: 24 },
   { cols: 79, rows: 24 },
   { cols: 40, rows: 10 },
+  { cols: 120, rows: 36 },
   { cols: 132, rows: 45 },
 ] as const;
 

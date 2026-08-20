@@ -1,0 +1,45 @@
+ HP 80/80 | G 99 | F52 A4 | ASC0 | K:ERS | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                           
+-- MAP - act 4 ---------------------------------------------------------------------------------------------------------------------
+                       B                          LEGEND                                                                            
+                       |                          M monster    E elite                                                              
+                       E                          $ shop       R rest                                                               
+                       |                          T treasure   ? unknown                                                            
+                     1:$                          E* burning elite (+key)                                                           
+                       |                          @ you        B boss                                                               
+                       @                                                                                                            
+                                                  BOSS  The Heart                                                                   
+                                                  KEYS  ERS                                                                         
+                                                  DECK  10   RELICS 1                                                               
+                                                  seed UISMNKE                                                                      
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+Next: 1:$                                                                                                                           
+[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit                                                       

@@ -1,0 +1,45 @@
+ HP 51/80 | G 64 | F9 A1 | ASC0 | K:--- | POT 0/3 | DECK 9 | REL 3 | Ironclad | FXTREASURE8                                         
+-- SMALL CHEST ---------------------------------------------------------------------------------------------------------------------
+                                                                                                                                    
+  Something glints inside...                                                                                                        
+                                                                                                                                    
+[1] Open the chest                                                                                                                  
+[2] Take the Sapphire Key                                                                                                           
+      Forfeits the relic inside                                                                                                     
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+[1-9] choose  [d/r/p] deck/relics/potions  [q] quit                                                                                 

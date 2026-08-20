@@ -48,9 +48,10 @@ function focusStep(view: View, delta: 1 | -1): KeyAction | null {
   return ui({ type: "focusSet", scope: view.mode, idx: next });
 }
 
-/** Tab cycles; arrows step (Up/Left back, Down/Right forward). */
+/** Tab cycles (Shift-Tab back); arrows step (Up/Left back, Down/Right fwd). */
 function focusKeys(key: Key, view: View): KeyAction | null {
   if (key.kind === "tab") return focusStep(view, 1);
+  if (key.kind === "shiftTab") return focusStep(view, -1);
   if (key.kind === "down" || key.kind === "right") return focusStep(view, 1);
   if (key.kind === "up" || key.kind === "left") return focusStep(view, -1);
   return null;
@@ -92,13 +93,14 @@ export function mapKey(key: Key, view: View): KeyAction | null {
 
     case "menu": {
       if (key.kind === "enter") {
-        // Enter activates the focus cursor (heroes / NEW RUN / CONTINUE);
-        // without a cursor it keeps its historical meaning: start a run
+        // Enter activates the focus cursor: the pointed-at hero is already
+        // selected (cursor = selection on the menu), so hero rows and NEW
+        // RUN both confirm into a run; CONTINUE resumes. Without a cursor
+        // Enter keeps its historical meaning: start a run.
         const f = view.focusIdx;
         const m = view.screen;
         if (f !== null && m.kind === "menu") {
-          if (f < 4) return ui({ type: "menuChar", id: m.characters[f]!.id });
-          if (f === 4) return ui({ type: "newRun" });
+          if (f <= 4) return ui({ type: "newRun" });
           return m.continueDesc !== null ? ui({ type: "continueRun" }) : null;
         }
         return ui({ type: "newRun" });
@@ -110,8 +112,8 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       const ch = key.ch;
       const d = digitIndex(ch);
       if (d !== null && d < 4) {
-        const m = view.screen;
-        if (m.kind === "menu") return ui({ type: "menuChar", id: m.characters[d]!.id });
+        // digits drive the same unified cursor+selection as the arrows
+        return ui({ type: "focusSet", scope: "menu", idx: d });
       }
       if (ch === "a") return ui({ type: "menuAsc", delta: 1 });
       if (ch === "A") return ui({ type: "menuAsc", delta: -1 });

@@ -95,7 +95,7 @@ describe("headless autoplay", () => {
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
-    const pool = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "e", "i", "w", "x", "z", "d", "r", "p", "j", "k", "n", "c", "u", "m", "\r", "\x1b", "\x1b[A", "\x1b[B"];
+    const pool = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "e", "i", "l", "w", "x", "z", "d", "r", "p", "j", "k", "n", "c", "u", "m", "\r", "\x1b", "\x1b[A", "\x1b[B", "\t", "\x1b[Z"];
     const script: string[] = ["n"];
     for (let i = 0; i < 400; i++) script.push(pool[Math.floor(rand() * pool.length)]!);
     script.push("\x03");

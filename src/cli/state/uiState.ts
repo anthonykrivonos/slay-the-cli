@@ -3,7 +3,7 @@
 // both into the render-ready View.
 
 import type { UICharacterId } from "../text/runlogic";
-import { clampAscension, MAX_ASCENSION, isCharacterId } from "../text/runlogic";
+import { clampAscension, MAX_ASCENSION, isCharacterId, CHARACTER_IDS } from "../text/runlogic";
 import type { PureUiAction } from "../input/actions";
 
 export type PileName = "draw" | "discard" | "exhaust";
@@ -146,8 +146,15 @@ export function applyUiAction(ui: UiState, act: PureUiAction): UiState {
         overlays: act.targeting ? [] : ui.overlays,
         focus: act.targeting ? { scope: "targeting", idx: 0 } : null,
       };
-    case "focusSet":
-      return { ...ui, focus: { scope: act.scope, idx: Math.max(0, act.idx) } };
+    case "focusSet": {
+      const next = { ...ui, focus: { scope: act.scope, idx: Math.max(0, act.idx) } };
+      // on the menu, the cursor IS the character selection: pointing at a
+      // hero row selects that hero (one unified highlight)
+      if (act.scope === "menu" && act.idx < CHARACTER_IDS.length) {
+        next.character = CHARACTER_IDS[act.idx]!;
+      }
+      return next;
+    }
     case "focusClear":
       return { ...ui, focus: null };
     case "inspectMove": {

@@ -11,17 +11,19 @@ export type Key =
   | { kind: "esc" }
   | { kind: "backspace" }
   | { kind: "tab" }
+  | { kind: "shiftTab" }
   | { kind: "up" }
   | { kind: "down" }
   | { kind: "left" }
   | { kind: "right" }
   | { kind: "ctrlC" };
 
-const ARROWS: Record<string, Key> = {
+const CSI_KEYS: Record<string, Key> = {
   A: { kind: "up" },
   B: { kind: "down" },
   C: { kind: "right" },
   D: { kind: "left" },
+  Z: { kind: "shiftTab" }, // CSI Z = back-tab
 };
 
 export function parseKeys(bytes: Uint8Array): Key[] {
@@ -50,7 +52,7 @@ export function parseKeys(bytes: Uint8Array): Key[] {
         while (j < bytes.length && bytes[j]! >= 0x30 && bytes[j]! <= 0x3f) j += 1;
         const fin = bytes[j];
         if (fin !== undefined) {
-          const arrow = ARROWS[String.fromCharCode(fin)];
+          const arrow = CSI_KEYS[String.fromCharCode(fin)];
           if (arrow) out.push(arrow);
           // unknown sequences (F-keys, home/end...) are swallowed
           i = j + 1;

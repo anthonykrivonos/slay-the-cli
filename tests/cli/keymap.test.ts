@@ -33,10 +33,19 @@ function viewOf(f: Fixture) {
 
 describe("menu mode", () => {
   const v = viewOf(fxMenu());
-  test("digits select characters", () => {
-    expect(mapKey(ch("2"), v)).toEqual({ kind: "ui", act: { type: "menuChar", id: "SILENT" } });
-    expect(mapKey(ch("4"), v)).toEqual({ kind: "ui", act: { type: "menuChar", id: "WATCHER" } });
+  test("digits drive the unified cursor+selection", () => {
+    expect(mapKey(ch("2"), v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "menu", idx: 1 } });
+    expect(mapKey(ch("4"), v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "menu", idx: 3 } });
     expect(mapKey(ch("5"), v)).toBeNull();
+  });
+  test("focusSet on a hero row selects that character (cursor = highlight)", () => {
+    let ui = initialUiState({ seed: "SPIRE" });
+    ui = applyUiAction(ui, { type: "focusSet", scope: "menu", idx: 2 });
+    expect(ui.character).toBe("DEFECT");
+    expect(ui.focus).toEqual({ scope: "menu", idx: 2 });
+    // non-hero rows leave the selection alone
+    ui = applyUiAction(ui, { type: "focusSet", scope: "menu", idx: 4 });
+    expect(ui.character).toBe("DEFECT");
   });
   test("a/A step ascension", () => {
     expect(mapKey(ch("a"), v)).toEqual({ kind: "ui", act: { type: "menuAsc", delta: 1 } });
@@ -277,6 +286,18 @@ describe("focus / selection cursor", () => {
     expect(mapKey(UP, v)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: v.focusCount - 1 } });
   });
 
+  test("Shift-Tab cycles backwards (starts at the end when unfocused)", () => {
+    const f = fxRest();
+    const SHIFT_TAB: Key = { kind: "shiftTab" };
+    const v0 = viewOf(f);
+    expect(mapKey(SHIFT_TAB, v0)).toEqual({
+      kind: "ui",
+      act: { type: "focusSet", scope: "rest", idx: v0.focusCount - 1 },
+    });
+    const v1 = viewOf(withFocus(f, "rest", 1));
+    expect(mapKey(SHIFT_TAB, v1)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "rest", idx: 0 } });
+  });
+
   test("Enter activates the focused list item; Esc clears the cursor first", () => {
     const f = fxRest();
     const v = viewOf(withFocus(f, "rest", 0));
@@ -296,12 +317,13 @@ describe("focus / selection cursor", () => {
     expect(mapKey(ENTER, v)).toEqual({ kind: "ui", act: { type: "toast", text: "taken" } });
   });
 
-  test("menu: arrows select heroes, Enter picks the focused one", () => {
+  test("menu: arrows move the cursor, Enter confirms into a run", () => {
     const f = fxMenu();
     const v0 = viewOf(f);
     expect(mapKey(DOWN, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "menu", idx: 0 } });
+    // the cursor already selected the hero, so Enter on a hero row confirms
     const v2 = viewOf(withFocus(f, "menu", 1));
-    expect(mapKey(ENTER, v2)).toEqual({ kind: "ui", act: { type: "menuChar", id: "SILENT" } });
+    expect(mapKey(ENTER, v2)).toEqual({ kind: "ui", act: { type: "newRun" } });
     const vNew = viewOf(withFocus(f, "menu", 4));
     expect(mapKey(ENTER, vNew)).toEqual({ kind: "ui", act: { type: "newRun" } });
     const vCont = viewOf(withFocus(f, "menu", 5));

@@ -6,7 +6,7 @@
 import type { MenuView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
-import { padClip, center } from "./widgets";
+import { padClip, center, wrapPlain } from "./widgets";
 import { CHARACTER_COLORS } from "../text/runlogic";
 import { bigWord, bigWordWidth, BIG_ROWS } from "./bigfont";
 import { clamp, joinBlocks, rowWidth } from "./layout";
@@ -14,9 +14,13 @@ import { ART_SPIRE } from "./art";
 
 const CAPTION = "a mechanically exact spire";
 
+/** The cursor and the character highlight are ONE: pointing at a hero selects
+ *  it, so the selected hero carries both the '=' border + accent highlight
+ *  and (while the cursor sits on it) the '>' mark. */
 function heroBox(
   ch: MenuView["characters"][number],
   w: number,
+  h: number,
   focused: boolean,
   theme: Theme,
 ): string[] {
@@ -26,9 +30,11 @@ function heroBox(
   const top = `+${edge}${keySeg}${edge.repeat(Math.max(0, w - 3 - keySeg.length))}+`;
   const bottom = `+${edge.repeat(w - 2)}+`;
   const line = (s: string): string => `| ${padClip(s, iw)} |`;
-  const rows = [top, line(ch.name), line(`${ch.maxHp} HP`), line(ch.relic), bottom];
+  const relicLines = wrapPlain(ch.relic, iw).slice(0, 2);
+  const rows = [top, line(`${focused ? "> " : ""}${ch.name}`), line(`${ch.maxHp} HP`)];
+  for (let i = 0; i < h - 4; i++) rows.push(line(relicLines[i] ?? ""));
+  rows.push(bottom);
   const accent = CHARACTER_COLORS[ch.id] ?? "#54689a";
-  if (focused) return rows.map((r) => theme.bold(theme.fg(C.current, r)));
   if (ch.selected) return rows.map((r) => theme.bold(theme.fg(accent, r)));
   return rows.map((r) => theme.dim(r));
 }
@@ -37,9 +43,15 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   const letters = bigWord("SLAY");
   const boxW = clamp(Math.floor((width - 2) / 4), 19, 26);
   const boxRowW = rowWidth(4, boxW, 1);
+  // box height: relic names may wrap onto a second line on narrow boxes
+  const relicRows = Math.max(
+    1,
+    ...screen.characters.map((ch) => Math.min(2, wrapPlain(ch.relic, boxW - 4).length)),
+  );
+  const boxH = 4 + relicRows;
 
-  // vertical budget: letters(5)+caption+blank+boxes(5)+blank+asc+seed+blank+actions(2)
-  const needBig = BIG_ROWS + 1 + 1 + 5 + 1 + 2 + 1 + 2;
+  // vertical budget: letters(5)+caption+blank+boxes+blank+asc+seed+blank+actions(2)
+  const needBig = BIG_ROWS + 1 + 1 + boxH + 1 + 2 + 1 + 2;
   const useBig = letters !== null && bigWordWidth("SLAY") <= width - 4 && height >= needBig;
   const useBoxes = boxRowW <= width && height >= (useBig ? needBig : needBig - BIG_ROWS);
 
@@ -61,7 +73,7 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   out.push("");
 
   // hero boxes
-  const blocks = screen.characters.map((ch, i) => heroBox(ch, boxW, screen.focusIdx === i, theme));
+  const blocks = screen.characters.map((ch, i) => heroBox(ch, boxW, boxH, screen.focusIdx === i, theme));
   const leftPad = Math.max(0, Math.floor((width - boxRowW) / 2));
   out.push(...joinBlocks(blocks, blocks.map(() => boxW), 1, leftPad));
   out.push("");
@@ -106,11 +118,11 @@ function renderMenuFallback(screen: MenuView, width: number, height: number, the
   out.push("");
   screen.characters.forEach((ch, i) => {
     const accent = CHARACTER_COLORS[ch.id] ?? "#54689a";
-    const focused = screen.focusIdx === i;
-    const cursor = focused ? ">" : " ";
+    // cursor and character highlight are one: '>' rides the selected row
+    const cursor = screen.focusIdx === i ? ">" : " ";
     const mark = ch.selected ? "*" : " ";
     const line = `${cursor} ${mark} [${ch.key}] ${ch.name.padEnd(10)} ${String(ch.maxHp).padStart(3)} HP   ${ch.relic}`;
-    out.push(focused ? theme.bold(theme.fg(C.current, line)) : ch.selected ? theme.bold(theme.fg(accent, line)) : line);
+    out.push(ch.selected ? theme.bold(theme.fg(accent, line)) : line);
   });
   out.push("");
   const ascTag = `Ascension ${screen.ascension}`;

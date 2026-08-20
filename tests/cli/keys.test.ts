@@ -49,6 +49,10 @@ describe("parseKeys", () => {
     expect(parse("\x1bOD")).toEqual([{ kind: "left" }]);
   });
 
+  test("CSI Z is shift-tab (back-tab)", () => {
+    expect(parse("\x1b[Z")).toEqual([{ kind: "shiftTab" }]);
+  });
+
   test("lone ESC is the Escape key", () => {
     expect(parse("\x1b")).toEqual([{ kind: "esc" }]);
     expect(parse("\x1bq")).toEqual([{ kind: "esc" }, { kind: "char", ch: "q" }]);

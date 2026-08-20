@@ -319,7 +319,18 @@ export type OverlayView =
     }
   | { kind: "list"; id: "deck" | "relics" | "pile" | "potions"; title: string; list: ListView }
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
-  | { kind: "inspect"; title: string; lines: string[]; index: number; count: number }
+  | {
+      kind: "inspect";
+      name: string;
+      cost: string;
+      color: string;
+      type: string;
+      rarity: string;
+      targeted: boolean;
+      rules: string[];
+      index: number;
+      count: number;
+    }
   | { kind: "log"; title: string; lines: string[] }
   | { kind: "confirmQuit" };
 
@@ -1084,6 +1095,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
     case "relics": {
       const items: RawItem[] = g.run.relics.map((r) => ({
         label: relicName(bundle, r.defId) + (r.counter > 0 ? `  (${r.counter})` : ""),
+        sub: relicText(r.defId) || null,
         action: null,
       }));
       if (items.length === 0) items.push({ label: "(none)", enabled: false, action: null });
@@ -1112,6 +1124,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         const def = id ? bundle.potions.get(id) : undefined;
         return {
           label: id ? potionName(bundle, id) + (def?.targeted ? "  (throws at a target)" : "") : "(empty slot)",
+          sub: id ? potionText(id) || null : null,
           enabled: id !== null,
           action: id !== null ? uiAct({ type: "openOverlay", overlay: { kind: "potionMenu", slot } }) : null,
         };
@@ -1134,42 +1147,57 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       };
     }
     case "inspect": {
+      const empty = (what: string): OverlayView => ({
+        kind: "inspect",
+        name: `(empty ${what})`,
+        cost: "-",
+        color: "?",
+        type: "?",
+        rarity: "?",
+        targeted: false,
+        rules: [],
+        index: 0,
+        count: 0,
+      });
+      let defId: string;
+      let upgrades: number;
+      let costLabel: string;
+      let index: number;
+      let count: number;
       if (top.source === "hand" && g.combat) {
         const handIids = g.combat.player.piles.hand;
-        const count = handIids.length;
-        const index = Math.max(0, Math.min(count - 1, top.index));
+        count = handIids.length;
+        index = Math.max(0, Math.min(count - 1, top.index));
         const iid = handIids[index];
         const card = iid !== undefined ? g.combat.cards[iid] : undefined;
-        if (!card) return { kind: "inspect", title: "(empty hand)", lines: [], index: 0, count: 0 };
-        const def = bundle.cards.get(card.defId);
-        const lines = [
-          `${def?.type ?? "?"} - ${def?.rarity ?? "?"}${def?.target === "enemy" ? " - targets an enemy" : ""}`,
-          "",
-          ...cardRulesText(card.defId, card.upgrades).split("\n"),
-        ];
-        return {
-          kind: "inspect",
-          title: `${cardName(bundle, card.defId, card.upgrades)} (${instCostLabel(card)})`,
-          lines: lines.map(toAscii),
-          index,
-          count,
-        };
+        if (!card) return empty("hand");
+        defId = card.defId;
+        upgrades = card.upgrades;
+        costLabel = instCostLabel(card);
+      } else {
+        const deck = g.run.deck;
+        count = deck.length;
+        index = Math.max(0, Math.min(count - 1, top.index));
+        const mc = deck[index];
+        if (!mc) return empty("deck");
+        defId = mc.defId;
+        upgrades = mc.upgrades;
+        const def = bundle.cards.get(mc.defId);
+        costLabel = def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?";
       }
-      const deck = g.run.deck;
-      const count = deck.length;
-      const index = Math.max(0, Math.min(count - 1, top.index));
-      const mc = deck[index];
-      if (!mc) return { kind: "inspect", title: "(empty deck)", lines: [], index: 0, count: 0 };
-      const def = bundle.cards.get(mc.defId);
-      const lines = [
-        `${def?.type ?? "?"} - ${def?.rarity ?? "?"}`,
-        "",
-        ...cardRulesText(mc.defId, mc.upgrades).split("\n"),
-      ];
+      const def = bundle.cards.get(defId);
       return {
         kind: "inspect",
-        title: `${cardName(bundle, mc.defId, mc.upgrades)} (${def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"})`,
-        lines: lines.map(toAscii),
+        name: toAscii(cardName(bundle, defId, upgrades)),
+        cost: costLabel,
+        color: def?.color ?? "?",
+        type: titleCase(def?.type ?? "?"),
+        rarity: def?.rarity ?? "?",
+        targeted: def?.target === "enemy",
+        rules: cardRulesText(defId, upgrades)
+          .split("\n")
+          .filter((l) => l.trim().length > 0)
+          .map(toAscii),
         index,
         count,
       };

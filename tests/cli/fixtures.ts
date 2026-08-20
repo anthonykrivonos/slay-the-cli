@@ -251,6 +251,12 @@ export function fxCombatTooltip(): Fixture {
   return { game: f.game, ui: { ...f.ui, focus: { scope: "combat", idx: 2 } } };
 }
 
+/** Inspect overlay: the first Strike (hand idx 2) as a big card box. */
+export function fxInspectOverlay(): Fixture {
+  const f = fxCombat();
+  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "inspect", source: "hand", index: 2 }] } };
+}
+
 /** Info panel: the first shop relic holds the selection cursor (item 7). */
 export function fxShopTooltip(): Fixture {
   const f = fxShop();
@@ -317,6 +323,7 @@ export const FIXTURES: Record<string, () => Fixture> = {
   treasure: fxTreasure,
   event: fxEvent,
   "deck-overlay": fxDeckOverlay,
+  "inspect-overlay": fxInspectOverlay,
   "combat-crowd": fxCombatCrowd,
   "combat-tooltip": fxCombatTooltip,
   "shop-tooltip": fxShopTooltip,

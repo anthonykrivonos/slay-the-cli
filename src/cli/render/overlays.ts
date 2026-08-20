@@ -6,7 +6,9 @@
 import type { OverlayView, ListView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
-import { padClip, boxLines, wrapPlain } from "./widgets";
+import { padClip, center, boxLines, wrapPlain } from "./widgets";
+import { cardBox, type CardBoxData } from "./cardbox";
+import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 
 function plainListBody(list: ListView, theme: Theme, maxLines: number): string[] {
   const out: string[] = [];
@@ -68,15 +70,33 @@ export function renderOverlay(overlay: OverlayView, width: number, height: numbe
       ];
       break;
     case "inspect": {
-      title = `${overlay.title}   ${overlay.count > 1 ? `(${overlay.index + 1}/${overlay.count})` : ""}`;
-      body = [];
-      for (const line of overlay.lines) {
-        if (line.length === 0) body.push("");
-        else body.push(...wrapPlain(line, boxW - 4));
-      }
-      body.push("");
-      body.push(theme.dim("[j/k] next/prev  [Esc] close"));
-      break;
+      // a big card box, centered, with the pager underneath
+      const w = Math.min(38, width - 4);
+      const rules = overlay.rules.flatMap((l) => wrapPlain(l, w - 4));
+      // keep the type row (h >= 6): borders + name + type + rules
+      const h = Math.max(6, Math.min(4 + Math.max(1, rules.length), height - 3));
+      const data: CardBoxData = {
+        key: null,
+        cost: overlay.cost,
+        name: overlay.name,
+        color: CARD_COLOR_ACCENTS[overlay.color] ?? null,
+        type: `${overlay.type} - ${overlay.rarity}`,
+        targeted: overlay.targeted,
+        rules: overlay.rules,
+        dim: false,
+      };
+      const box = cardBox(data, w, h, theme);
+      const pad = " ".repeat(Math.max(0, Math.floor((width - w) / 2)));
+      const out: string[] = [""];
+      for (const r of box) out.push(pad + r);
+      out.push("");
+      out.push(
+        center(
+          theme.dim(`${overlay.count > 1 ? `card ${overlay.index + 1}/${overlay.count} - ` : ""}[j/k] next/prev  [Esc] close`),
+          width,
+        ),
+      );
+      return out.slice(0, height).map((l) => padClip(l, width));
     }
     case "log": {
       title = overlay.title;

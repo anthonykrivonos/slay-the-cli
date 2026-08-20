@@ -13,9 +13,14 @@ bun src/cli/main.ts --seed SPIRE --character WATCHER --ascension 20
 bun src/cli/main.ts --no-color        # also honors NO_COLOR
 ```
 
-Needs an interactive terminal, at least 80×24. Number keys select, letters act
-(`e` end turn, `d` deck, `p` potions, `q` quit, `?` help). Runs save to
-`~/.slay/` after every action (`SLAY_DIR` overrides); `c` on the menu continues.
+Needs an interactive terminal, at least 80×24 — the layout is fluid and uses
+everything you give it (panels, card boxes, scene art and a bottom INFO panel
+appear as the window grows; at 80×24 screens compact to dense one-liners).
+Number keys select, letters act (`e` end turn, `l` combat log, `d` deck,
+`p` potions, `q` quit). `Tab`/arrows move a read-only hover cursor whose
+target is explained in the INFO panel — on menus and lists it doubles as a
+selection cursor (`Enter` activates, `Esc` clears). Runs save to `~/.slay/`
+after every action (`SLAY_DIR` overrides); `c` on the menu continues.
 If the process is hard-killed the terminal may need `reset`.
 
 ## Develop

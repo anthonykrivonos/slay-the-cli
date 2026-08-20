@@ -118,3 +118,11 @@ Mechanically exact Slay the Spire clone. Terminal game: `bun src/cli/main.ts`.
 - `src/cli` — TUI. `render/ input/ state/ text/` are pure (no process/Bun./node: — enforced); only `term/ io/ app.ts main.ts` touch the OS. Frames are snapshot-tested; keep output ASCII-only.
 - Exactness rule: game numbers/behavior come from the corpus, never from memory. Deviations get a flagging comment (`ENGINE-GAP`, `VERIFY-JAR`, etc.).
 - Full suite: `bun test`. Corpus audit: `bun tools/corpus/check-all.ts`.
+
+## TUI snapshots
+
+The files under `tests/cli/fixtures/*.txt` ARE the expected UI. Never edit
+them by hand: change the renderer, run `bun tests/cli/gen-fixtures.ts`, and
+review the diff like a screenshot before committing. Frames are pure ASCII
+(<0x80), exactly rows x cols at every size; layout math lives in
+`src/cli/render/layout.ts` and must stay total (clamped) at all sizes.

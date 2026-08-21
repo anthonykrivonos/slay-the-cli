@@ -136,6 +136,11 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
     block.push(`${ctrlPad}${newRunStyled}`);
   }
 
+  if (screen.updateNotice !== null) {
+    block.push("");
+    block.push(`${ctrlPad}${theme.fg(C.current, screen.updateNotice)}`);
+  }
+
   // --- title ---
   const head: string[] = [];
   const useBig = letters !== null && bigWordWidth(TITLE) <= width - 4;
@@ -208,6 +213,9 @@ function renderMenuFallback(screen: MenuView, width: number, height: number, the
   if (screen.continueDesc !== null) {
     const cont = `${screen.focusIdx === 5 ? ">" : " "} [c] CONTINUE - ${screen.continueDesc}`;
     out.push(screen.focusIdx === 5 ? ` ${theme.bold(theme.fg(accentFb, cont))}` : `  ${theme.fg(C.text, cont.slice(2))}`);
+  }
+  if (screen.updateNotice !== null) {
+    out.push(`  ${theme.fg(C.current, screen.updateNotice)}`);
   }
   return out.slice(0, height).map((l) => padClip(l, width));
 }

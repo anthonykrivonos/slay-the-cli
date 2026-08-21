@@ -27,6 +27,7 @@ interface Shot {
 
 const SHOTS: Shot[] = [
   { fixture: "menu", file: "menu", title: "slay", cols: 120, rows: 36 },
+  { fixture: "menu-update", file: "menu-update", title: "slay - update found", cols: 120, rows: 36 },
   { fixture: "combat", file: "combat", title: "slay - combat", cols: 120, rows: 36 },
   { fixture: "combat-crowd", file: "crowd", title: "slay - 132x45", cols: 132, rows: 45 },
   { fixture: "map-act1", file: "map", title: "slay - the map", cols: 120, rows: 36 },

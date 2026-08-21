@@ -120,6 +120,7 @@ Mechanically exact Slay the Spire clone, adapted to the terminal: `bun src/cli/m
 - Copy rule: no em dashes or other typographic punctuation in copy or comments; UI copy stays in the game's own terse voice.
 - Portraits (`src/cli/render/{heroPortraits,monsterPortraits}.ts`) are GENERATED: edit `tools/gen-hero-portraits.ts` / `tools/gen-monster-portraits.ts` and rerun them against a local image directory, never the generated files. Source images are deliberately not committed.
 - README screenshots (`docs/shots/*.svg`) are GENERATED from the real snapshot fixtures: edit `tools/gen-readme-shots.ts` and rerun it, never the SVGs. They are real `renderFrame` output in truecolor, so they cannot drift from the UI.
+- Update checks (`src/cli/io/update.ts`): startup reads ONLY local git refs (no network, ~15ms); the `git fetch` that refreshes them is detached/unref'd, so the notice is one launch stale by design. Never make the startup path await the network or print while the TUI owns the screen. Off via `--no-update-check` / `SLAY_NO_UPDATE_CHECK=1`; silent when repo-less.
 - Full suite: `bun test`. Corpus audit: `bun tools/corpus/check-all.ts`.
 
 ## TUI snapshots

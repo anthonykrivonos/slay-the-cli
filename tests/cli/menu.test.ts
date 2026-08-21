@@ -158,3 +158,40 @@ describe("menu ladder", () => {
     }
   });
 });
+
+describe("update notice", () => {
+  const withUpdate = (behind: number | null): UiState => ({
+    ...menuUi(null),
+    update: behind === null ? null : { behind },
+  });
+  const menuOf = (behind: number | null) => {
+    const v = buildView(null, withUpdate(behind), bundle);
+    if (v.screen.kind !== "menu") throw new Error("expected the menu screen");
+    return v.screen;
+  };
+
+  test("stays silent when current, repo-less, or opted out", () => {
+    expect(menuOf(null).updateNotice).toBeNull();
+    expect(menuOf(0).updateNotice).toBeNull();
+  });
+
+  test("counts commits, and gets the singular right", () => {
+    expect(menuOf(1).updateNotice).toBe("The Spire has shifted: 1 commit ahead. Run: slay --update");
+    expect(menuOf(4).updateNotice).toBe("The Spire has shifted: 4 commits ahead. Run: slay --update");
+  });
+
+  test("a behind count never breaks the frame at any size", () => {
+    for (const [w, h] of [[80, 24], [100, 30], [120, 36], [132, 45]] as const) {
+      const rows = frame(withUpdate(7), w, h);
+      expect(rows.length).toBe(h);
+      for (const r of rows) expect(stripAnsi(r).length).toBe(w);
+      expect(stripAnsi(rows.join("\n"))).toContain("7 commits ahead");
+    }
+  });
+
+  test("the notice is drawn, and in the update color", () => {
+    const joined = frame(withUpdate(2), 120, 36).join("\n");
+    expect(joined).toContain(`38;5;${hexToAnsi256("#ffd75e")}`);
+    expect(stripAnsi(joined)).toContain("slay --update");
+  });
+});

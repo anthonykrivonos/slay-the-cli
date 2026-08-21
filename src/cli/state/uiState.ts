@@ -37,6 +37,9 @@ export interface UiState {
   seedEdit: { value: string } | null;
   /** menu "continue" line, refreshed by the app from the save file */
   menuSave: { desc: string } | null;
+  /** how far behind origin/main the checkout is, from the startup update check
+   *  (io/update.ts). null when repo-less, offline, or opted out. */
+  update: { behind: number } | null;
   // run-screen UI
   overlays: Overlay[];
   targeting: Targeting | null;
@@ -62,6 +65,7 @@ export function initialUiState(opts: {
   seed?: string;
   character?: UICharacterId;
   ascension?: number;
+  update?: { behind: number } | null;
 } = {}): UiState {
   return {
     screen: "menu",
@@ -70,6 +74,7 @@ export function initialUiState(opts: {
     ascension: clampAscension(opts.ascension ?? 0),
     seedEdit: null,
     menuSave: null,
+    update: opts.update ?? null,
     overlays: [],
     targeting: null,
     focus: null,

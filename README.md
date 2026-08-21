@@ -92,6 +92,7 @@ That is enough to play forever. Everything below is convenience.
 ```sh
 bun src/cli/main.ts --seed SPIRE --character WATCHER --ascension 20
 bun src/cli/main.ts --no-color        # also honors NO_COLOR
+bun src/cli/main.ts --update         # pull + rebuild, then exit
 bun src/cli/main.ts --help
 
 npm start -- --seed SPIRE --character WATCHER   # same flags, past the --
@@ -140,18 +141,11 @@ Then append this to `~/.bashrc` (bash) or `~/.zshrc` (zsh):
 # ---- Slay the CLI --------------------------------------------------------
 export SLAY_HOME="$HOME/.slay-the-cli"
 export PATH="$SLAY_HOME/app/dist:$PATH"
-
-# Pull the newest floor and rebuild. The Spire shifts between climbs.
-slay-ascend() {
-  git -C "$SLAY_HOME/app" pull --ff-only origin main &&
-  bun install --cwd "$SLAY_HOME/app" &&
-  bun run --cwd "$SLAY_HOME/app" build &&
-  printf 'The Spire has shifted: %s\n' "$(git -C "$SLAY_HOME/app" log -1 --pretty='%h %s')"
-}
 # -------------------------------------------------------------------------
 ```
 
-Open a new shell (or `source ~/.zshrc`) and run `slay`.
+Open a new shell (or `source ~/.zshrc`) and run `slay`. That is the whole
+install: updating is built in, so there is no shell function to paste.
 
 Prefer a symlink to a `PATH` edit? `ln -sf "$HOME/.slay-the-cli/app/dist/slay" /usr/local/bin/slay` does the same job.
 
@@ -172,14 +166,6 @@ Then append this to your profile (`notepad $PROFILE`, creating it if missing):
 # ---- Slay the CLI --------------------------------------------------------
 $env:SLAY_HOME = "$HOME\.slay-the-cli"
 $env:Path = "$env:SLAY_HOME\app\dist;$env:Path"
-
-function Update-Slay {
-  git -C $env:SLAY_HOME\app pull --ff-only origin main
-  bun install --cwd $env:SLAY_HOME\app
-  bun run --cwd $env:SLAY_HOME\app build
-  "The Spire has shifted: " + (git -C $env:SLAY_HOME\app log -1 --pretty='%h %s')
-}
-Set-Alias slay-ascend Update-Slay
 # -------------------------------------------------------------------------
 ```
 
@@ -188,37 +174,34 @@ Restart the terminal and run `slay`. The binary lands at `app\dist\slay.exe`;
 
 ## Keeping up with the Spire
 
-`slay-ascend` (above) is the whole update story: fast-forward the clone,
-reinstall, recompile, and print the commit you landed on. It only ever touches
-`~/.slay-the-cli/app`, so a run in progress is never at risk.
+Updating is part of the app, not something you wire up. Every launch checks
+whether the checkout is behind `origin/main`, and when it is, the menu says so:
 
-The clever part is knowing when to bother. Checking a remote at launch means
-waiting on the network before you can play, and anything that prints while the
-game owns the screen scribbles over it. So do neither: check in the background,
-and report what the *previous* launch found. The nudge is one launch stale and
-costs exactly zero milliseconds.
+![The menu with a gold notice reading "The Spire has shifted: 3 commits ahead. Run: slay --update"](docs/shots/menu-update.svg)
 
-```bash
-# Optional. Add after the block above.
-slay() {
-  local stamp="$SLAY_HOME/.ascend-nudge"
-  [ -s "$stamp" ] && printf '\033[38;5;220m%s\033[0m\n' "$(cat "$stamp")"
-  (
-    mkdir -p "$SLAY_HOME"
-    git -C "$SLAY_HOME/app" fetch --quiet origin main
-    behind=$(git -C "$SLAY_HOME/app" rev-list --count HEAD..origin/main)
-    if [ "${behind:-0}" -gt 0 ]; then
-      printf 'A new path has opened: %s commits ahead. Run slay-ascend.' "$behind" > "$stamp"
-    else
-      : > "$stamp"
-    fi
-  ) >/dev/null 2>&1 &
-  command slay "$@"
-}
-```
+`slay --update` fast-forwards the clone, reinstalls, recompiles the binary, and
+prints the commit you landed on. It touches only `~/.slay-the-cli/app`, so a run
+in progress is never at risk, and running it when you are already current costs
+a fetch and nothing else.
 
-`command slay` runs the real binary rather than recursing into the function.
-The stamp file clears itself once you are current.
+**How the check stays free.** Asking a remote at launch would mean waiting on
+the network before you can play, and anything that prints while the game owns
+the screen scribbles over the frame. So it does neither. The check at startup
+reads only the `origin/main` ref git already has on disk, which takes about
+15 ms and never touches the network. The `git fetch` that refreshes that ref is
+detached and unref'd, so it cannot delay startup, delay exit, or write to the
+terminal. Its result is simply there for the next launch to read.
+
+The notice is therefore one launch stale by design. That is the entire trick:
+git's own ref store is the cache between the two halves.
+
+**Turning it off.** `--no-update-check` skips it for one run;
+`SLAY_NO_UPDATE_CHECK=1` disables it permanently, network and all. The check
+also silently does nothing when there is no git checkout (a copied binary), no
+`git` on `PATH`, or no network. It never blocks, and it never errors.
+
+Checking is automatic but applying is not, deliberately. Recompiling a binary
+out from under a running process is not something to do without being asked.
 
 ## Controls
 

@@ -5,14 +5,24 @@
 //   --character SILENT IRONCLAD | SILENT | DEFECT | WATCHER
 //   --ascension 20     0..20
 //   --no-color         plain output (NO_COLOR env works too)
+//   --update           pull + rebuild, then exit (never enters the TUI)
+//   --no-update-check  skip the startup update check for this run
 
 import { realTerminal } from "./term/terminal";
 import { runApp, type AppOptions } from "./app";
 import { makeSaveIo } from "./io/saves";
+import { applyUpdate, checkForUpdates } from "./io/update";
 import { clampAscension, isCharacterId } from "./text/runlogic";
 
-function parseArgv(argv: string[]): AppOptions | { error: string } {
-  const opts: AppOptions = {};
+interface CliOptions extends AppOptions {
+  /** --update: apply the update and exit, without starting the game */
+  doUpdate?: boolean;
+  /** --no-update-check: no check this run (SLAY_NO_UPDATE_CHECK does it always) */
+  noUpdateCheck?: boolean;
+}
+
+function parseArgv(argv: string[]): CliOptions | { error: string } {
+  const opts: CliOptions = {};
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]!;
     const eq = arg.indexOf("=");
@@ -48,6 +58,12 @@ function parseArgv(argv: string[]): AppOptions | { error: string } {
       case "--no-color":
         opts.noColor = true;
         break;
+      case "--update":
+        opts.doUpdate = true;
+        break;
+      case "--no-update-check":
+        opts.noUpdateCheck = true;
+        break;
       case "--help":
       case "-h":
         return { error: "__help__" };
@@ -72,9 +88,14 @@ function invokedAs(): string {
 const USAGE = `Slay the CLI - the whole Spire, played in a terminal
 
 usage: ${invokedAs()} [--seed FOO] [--character IRONCLAD] [--ascension 0] [--no-color]
+       ${invokedAs()} --update
 
 Saves live in ~/.slay-the-cli (override with SLAY_DIR). The run is saved
-after every action; Ctrl+C or q quits safely and "continue" resumes.`;
+after every action; Ctrl+C or q quits safely and "continue" resumes.
+
+Every launch checks for a newer version in the background and says so on the
+menu; --update applies one. --no-update-check skips it for this run, and
+SLAY_NO_UPDATE_CHECK=1 turns it off for good.`;
 
 const parsed = parseArgv(process.argv.slice(2));
 if ("error" in parsed) {
@@ -84,6 +105,12 @@ if ("error" in parsed) {
   }
   console.error(`slay: ${parsed.error}\n\n${USAGE}`);
   process.exit(2);
+}
+
+// --update prints git's own output, so it runs before the TTY guard and never
+// touches the alternate screen
+if (parsed.doUpdate === true) {
+  process.exit(applyUpdate());
 }
 
 const term = realTerminal();
@@ -120,5 +147,9 @@ process.on("uncaughtException", (e) => {
   process.exit(1);
 });
 
-await runApp({ term, saves: makeSaveIo(), options: parsed });
+// Reads local refs only (fast) and kicks off a detached fetch for next launch,
+// so this cannot delay startup or scribble on the frame. See io/update.ts.
+const update = parsed.noUpdateCheck === true ? null : checkForUpdates();
+
+await runApp({ term, saves: makeSaveIo(), options: parsed, update });
 process.exit(0);

@@ -116,6 +116,8 @@ export interface MenuView {
   ascensionLabel: string;
   characters: { key: string; id: string; name: string; maxHp: number; relic: string; selected: boolean }[];
   continueDesc: string | null;
+  /** one-line "a newer version exists" notice, or null when current */
+  updateNotice: string | null;
   /** focus cursor: 0-3 heroes, 4 NEW RUN, 5 CONTINUE; null = no cursor */
   focusIdx: number | null;
 }
@@ -623,6 +625,13 @@ export function menuFocusCount(hasContinue: boolean): number {
   return 5 + (hasContinue ? 1 : 0);
 }
 
+/** The update line, in the game's voice. null when current or unknown. */
+function updateNoticeText(update: { behind: number } | null): string | null {
+  if (update === null || update.behind <= 0) return null;
+  const n = update.behind;
+  return `The Spire has shifted: ${n} commit${n === 1 ? "" : "s"} ahead. Run: slay --update`;
+}
+
 function buildMenu(ui: UiState, bundle: ContentBundle, focusI: number | null): MenuView {
   const continueDesc = ui.menuSave ? toAscii(ui.menuSave.desc) : null;
   const count = menuFocusCount(continueDesc !== null);
@@ -637,6 +646,7 @@ function buildMenu(ui: UiState, bundle: ContentBundle, focusI: number | null): M
       return { key: String(i + 1), id, name: s.name, maxHp: s.maxHp, relic: toAscii(s.relic), selected: ui.character === id };
     }),
     continueDesc,
+    updateNotice: updateNoticeText(ui.update),
     focusIdx: focusI !== null ? Math.min(focusI, count - 1) : null,
   };
 }

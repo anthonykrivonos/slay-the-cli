@@ -36,6 +36,8 @@ export interface AppDeps {
   saves: SaveIo;
   options?: AppOptions;
   bundle?: ContentBundle;
+  /** startup update check result (main.ts does the io; see io/update.ts) */
+  update?: { behind: number } | null;
 }
 
 export interface AppResult {
@@ -58,6 +60,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
     seed: options.seed ?? prefs.seed,
     character: options.character ?? prefs.character,
     ascension: options.ascension ?? prefs.ascension,
+    update: deps.update ?? null,
   });
 
   const refreshMenuSave = (): void => {

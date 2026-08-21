@@ -120,6 +120,15 @@ export function fxMenu(): Fixture {
   return { game: null, ui: { ...ui, menuSave: { desc: "Ironclad A0 - Floor 3 - Act 1" } } };
 }
 
+/** Menu with the startup update check reporting a newer version upstream. */
+export function fxMenuUpdate(): Fixture {
+  const ui = initialUiState({ seed: "SPIRE" });
+  return {
+    game: null,
+    ui: { ...ui, menuSave: { desc: "Ironclad A0 - Floor 3 - Act 1" }, update: { behind: 3 } },
+  };
+}
+
 export function fxNeow(): Fixture {
   const w = start("UISMOKE");
   return { game: w.s, ui: w.ui };
@@ -309,6 +318,7 @@ export function fxMapAct4(): Fixture {
 
 export const FIXTURES: Record<string, () => Fixture> = {
   menu: fxMenu,
+  "menu-update": fxMenuUpdate,
   neow: fxNeow,
   "map-act1": fxMapAct1,
   "map-act4": fxMapAct4,

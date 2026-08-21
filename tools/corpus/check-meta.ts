@@ -34,7 +34,7 @@ function check(name: string, ok: boolean, detail?: string) {
     pass++;
   } else {
     fail++;
-    console.error(`FAIL  ${name}${detail ? ` — ${detail}` : ""}`);
+    console.error(`FAIL  ${name}${detail ? ` - ${detail}` : ""}`);
   }
 }
 function eq(name: string, actual: unknown, expected: unknown) {

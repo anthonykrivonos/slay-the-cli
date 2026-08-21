@@ -1,4 +1,4 @@
-// Mugger — exact port from data/corpus/monsters-act2.json (mirrors Looter).
+// Mugger - exact port from data/corpus/monsters-act2.json (mirrors Looter).
 // Fixed script: MUG (turn 1), MUG (turn 2), then 50/50 SMOKE_BOMB -> ESCAPE or
 // LUNGE -> SMOKE_BOMB -> ESCAPE. MUG/LUNGE steal min(playerGold, THIEVERY)
 // gold (15; asc>=17: 20) BEFORE the attack; the escape keeps the stolen gold,

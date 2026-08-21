@@ -1,9 +1,9 @@
-// Lagavulin — exact port from data/corpus/monsters-act1.json (LAGAVULIN).
+// Lagavulin - exact port from data/corpus/monsters-act1.json (LAGAVULIN).
 // Standard (asleep) spawn: ASLEEP + METALLICIZE 8 + 8 starting block. Sleeps
 // turns 1-3; wakes early on any HP loss (ASLEEP power hook); the already-queued
 // SLEEP still executes that turn. Awake cycle: ATTACK, ATTACK, SIPHON_SOUL.
 // CONFLICT HONORED (wiki/real game over lightspeed): Metallicize is removed
-// (-8) on BOTH wake paths — the natural turn-3 wake clears ASLEEP and
+// (-8) on BOTH wake paths - the natural turn-3 wake clears ASLEEP and
 // Metallicize too (lightspeed only did so on a damage wake).
 // The Dead Adventurer event variant spawns it awake without the prebattle
 // buffs, opening on SIPHON_SOUL (handled: no ASLEEP -> first roll is SIPHON).

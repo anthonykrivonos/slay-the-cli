@@ -5,7 +5,7 @@
 // ENGINE-GAP: the interpreter's `loseHp` action on a MONSTER target does not
 // fire the wasHPLost hook (only unblocked attack damage does), so direct HP
 // loss from cards would not wake Lagavulin, tick Mode Shift, or trigger slime
-// splits. Attack damage — the overwhelmingly common path — behaves exactly.
+// splits. Attack damage - the overwhelmingly common path - behaves exactly.
 
 import type { PowerDef } from "../../engine/content/defs";
 import { replaceIntent } from "../monsters/act1/_shared";
@@ -40,7 +40,7 @@ export const act1MonsterPowers: PowerDef[] = [
     hooks: {},
   },
   {
-    // Lagavulin: any HP loss while asleep wakes it — ASLEEP removed and
+    // Lagavulin: any HP loss while asleep wakes it - ASLEEP removed and
     // METALLICIZE reduced by 8 (corpus adjudication: metallicize is lost on
     // BOTH wake paths; the natural turn-3 wake is handled in LAGAVULIN_SLEEP).
     // The already-queued SLEEP move still executes that turn.
@@ -83,7 +83,7 @@ export const act1MonsterPowers: PowerDef[] = [
           replaceIntent(m, "THE_GUARDIAN_DEFENSIVE_MODE");
         } else {
           // shift during the Guardian's own turn (thorns): rollMove runs after
-          // the move — getMove consumes this flag and returns DEFENSIVE_MODE.
+          // the move - getMove consumes this flag and returns DEFENSIVE_MODE.
           m.data.pendingModeShift = true;
         }
       },
@@ -91,7 +91,7 @@ export const act1MonsterPowers: PowerDef[] = [
   },
   {
     // Large slimes / Slime Boss: at <= 50% max HP the current intent is
-    // immediately replaced with the SPLIT move (exactly once — the monster
+    // immediately replaced with the SPLIT move (exactly once - the monster
     // leaves combat when SPLIT executes).
     id: "SPLIT",
     name: "Split",

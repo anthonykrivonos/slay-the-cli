@@ -98,7 +98,7 @@ describe("coverage report", () => {
       `powers: ${bundle.powers.size}`,
       `events: ${bundle.events.size}/51`,
     ].join("  |  ");
-    console.log(`CONTENT COVERAGE — ${report}`);
+    console.log(`CONTENT COVERAGE - ${report}`);
     expect(true).toBe(true);
   });
 });

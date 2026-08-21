@@ -1,4 +1,4 @@
-// Chosen — exact port from data/corpus/monsters-act2.json.
+// Chosen - exact port from data/corpus/monsters-act2.json.
 // A<17: turn 1 POKE, turn 2 HEX, then strict alternation of a debuff turn
 // (DEBILITATE 50% / DRAIN 50%) and an attack turn (ZAP 40% / POKE 60%).
 // A17+: turn 1 HEX, then the same alternation starting with a debuff turn.

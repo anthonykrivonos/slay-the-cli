@@ -1,4 +1,4 @@
-// Map screen — StS orientation, boss on top. Node columns sit at 5+6x with
+// Map screen - StS orientation, boss on top. Node columns sit at 5+6x with
 // glyphs M E $ R T ? B ("E*" burning elite, "@" you); the edge rows between
 // node rows use | / \ with X on crossings. Legal picks render as "n:G" and
 // echo on a "Next:" line. The full act is ~31 lines, so a vertical viewport
@@ -140,8 +140,8 @@ function legendPanel(screen: MapView, theme: Theme, accent: string): string[] {
   const { at, of } = actProgress(screen);
   return [
     theme.bold("LEGEND"),
-    theme.dim("M monster    E elite"),
-    theme.dim("$ shop       R rest"),
+    theme.dim("M enemy      E elite"),
+    theme.dim("$ merchant   R rest"),
     theme.dim("T treasure   ? unknown"),
     theme.dim("E* burning elite (+key)"),
     theme.dim("@ you        B boss"),
@@ -154,7 +154,7 @@ function legendPanel(screen: MapView, theme: Theme, accent: string): string[] {
   ];
 }
 
-/** `====[ BOSS: NAME ]====` across the map area — always visible. */
+/** `====[ BOSS: NAME ]====` across the map area - always visible. */
 function bossBanner(screen: MapView, theme: Theme): string {
   const label = `[ BOSS: ${screen.bossName.toUpperCase()} ]`;
   const total = Math.max(0, MAP_AREA_W - label.length);

@@ -1,8 +1,8 @@
-// Boss relics — values audited vs data/corpus/relics.json.
+// Boss relics - values audited vs data/corpus/relics.json.
 //
 // ENGINE-GAP(energy): "Gain 1 Energy at the start of your turn" on boss relics
 // means +1 energyPerTurn. PlayerCombatState.energyPerTurn is set from the
-// character at combat build and there is no hook to modify it — the engine
+// character at combat build and there is no hook to modify it - the engine
 // owner wires energyPerTurn from relics (per workstream agreement). Affected:
 // ECTOPLASM, SOZU, CURSED_KEY, BUSTED_CROWN, COFFEE_DRIPPER, FUSION_HAMMER,
 // RUNIC_DOME, VELVET_CHOKER, PHILOSOPHERS_STONE, MARK_OF_PAIN and the

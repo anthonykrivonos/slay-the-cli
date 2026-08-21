@@ -15,7 +15,7 @@ export const colorlessPowers: PowerDef[] = [
   {
     // "At the start of your turn, add X random Colorless cards into your hand."
     // ENGINE-NOTE: our startPlayerTurn draws synchronously, so the queued add
-    // lands after the turn's normal draw (the game adds before it) — Brutality
+    // lands after the turn's normal draw (the game adds before it) - Brutality
     // precedent in powers/ironclad.ts.
     id: "MAGNETISM",
     name: "Magnetism",
@@ -75,7 +75,7 @@ export const colorlessPowers: PowerDef[] = [
     // "Every time you play 5 cards in a single turn, deal X damage to ALL
     // enemies." Counter lives in power data; resets to 5 at the start of each
     // turn. The Panache card itself decrements the fresh counter to 4 (the
-    // power exists before the after-card trigger fires — game parity).
+    // power exists before the after-card trigger fires - game parity).
     id: "PANACHE",
     name: "Panache",
     kind: "buff",
@@ -101,7 +101,7 @@ export const colorlessPowers: PowerDef[] = [
     // "Whenever you apply a debuff to an enemy, they take X damage." (card:
     // SADISTIC_NATURE). Fires on the source-side onApplyPower notification,
     // which the power runtime only raises after a SUCCESSFUL application
-    // (Artifact-negated applications don't trigger — game parity). Negative
+    // (Artifact-negated applications don't trigger - game parity). Negative
     // Strength/Dexterity are buff-typed and don't trigger (game parity).
     id: "SADISTIC",
     name: "Sadistic",

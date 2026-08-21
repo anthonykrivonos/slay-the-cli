@@ -6,7 +6,7 @@
 //   bun tests/cli/gen-fixtures.ts
 //
 // Invariants (every fixture + a deterministic multi-seed sweep): exactly
-// `rows` lines, ANSI-stripped width exactly `cols`, pure ASCII, no tabs —
+// `rows` lines, ANSI-stripped width exactly `cols`, pure ASCII, no tabs -
 // in both THEME_PLAIN and THEME_256.
 
 import { test, expect, describe } from "bun:test";
@@ -27,7 +27,7 @@ import { formatEvent } from "../../src/cli/text/logfmt";
 function readFixture(file: string): string {
   const path = join(FIXTURE_DIR, file);
   if (!existsSync(path)) {
-    throw new Error(`missing fixture ${file} — run: bun tests/cli/gen-fixtures.ts`);
+    throw new Error(`missing fixture ${file} - run: bun tests/cli/gen-fixtures.ts`);
   }
   return readFileSync(path, "utf8").replace(/\n$/, "");
 }

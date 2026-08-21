@@ -1,4 +1,4 @@
-// Time Eater — exact port from data/corpus/monsters-act34.json (TIME_EATER).
+// Time Eater - exact port from data/corpus/monsters-act34.json (TIME_EATER).
 // TIME_WARP (powers/monstersAct34.ts) counts player card plays; the 12th
 // force-ends the turn and grants +2 Strength. Haste fires on the first roll
 // after dropping below 50% HP, exactly once: heals UP to exactly

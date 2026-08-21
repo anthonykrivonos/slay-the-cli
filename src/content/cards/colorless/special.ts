@@ -1,4 +1,4 @@
-// Colorless special/token cards (created by cards, relics, potions, events —
+// Colorless special/token cards (created by cards, relics, potions, events -
 // never in reward pools). Values audited against data/corpus/cards.json.
 // BECOME_ALMIGHTY / FAME_AND_FORTUNE / LIVE_FOREVER carry `unobtainable: true`
 // in the corpus (unused game files); implemented for completeness, flagged below.
@@ -24,7 +24,7 @@ export const colorlessSpecials: CardDef[] = [
     primitives: [{ do: "applyPower", power: "INTANGIBLE", n: "magic", target: "self" }],
   },
   {
-    // unobtainable: true in the corpus (unused game content) — cost -2 unplayable
+    // unobtainable: true in the corpus (unused game content) - cost -2 unplayable
     id: "BECOME_ALMIGHTY",
     name: "Become Almighty",
     color: "colorless",
@@ -96,7 +96,7 @@ export const colorlessSpecials: CardDef[] = [
     upgradeValues: { damage: 15 },
     keywords: [],
     onPlay: (ctx) => {
-      // "Deal 9(15) damage X times." — card.misc carries X (set by Conjure Blade)
+      // "Deal 9(15) damage X times." - card.misc carries X (set by Conjure Blade)
       const target = ctx.target ?? 0;
       const hits = Math.max(0, ctx.card.misc);
       const dmg = calcCardDamage(ctx, ctx.card, target, ctx.upgraded ? 15 : 9);
@@ -110,7 +110,7 @@ export const colorlessSpecials: CardDef[] = [
     },
   },
   {
-    // unobtainable: true in the corpus (unused game content) — cost -2 unplayable
+    // unobtainable: true in the corpus (unused game content) - cost -2 unplayable
     id: "FAME_AND_FORTUNE",
     name: "Fame and Fortune",
     color: "colorless",
@@ -155,7 +155,7 @@ export const colorlessSpecials: CardDef[] = [
     ],
   },
   {
-    // unobtainable: true in the corpus (unused game content) — cost -2 unplayable
+    // unobtainable: true in the corpus (unused game content) - cost -2 unplayable
     id: "LIVE_FOREVER",
     name: "Live Forever",
     color: "colorless",
@@ -209,7 +209,7 @@ export const colorlessSpecials: CardDef[] = [
     keywords: ["exhaust"],
     onPlay: (ctx) => {
       // damage + fatal growth resolve atomically (growth must land even when
-      // the kill ends the combat — see effects.ts); base grows with card.misc
+      // the kill ends the combat - see effects.ts); base grows with card.misc
       const target = ctx.target ?? 0;
       const dmg = calcCardDamage(ctx, ctx.card, target, 15 + ctx.card.misc);
       ctx.queue.addToBottom({

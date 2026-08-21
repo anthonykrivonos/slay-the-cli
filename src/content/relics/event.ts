@@ -1,4 +1,4 @@
-// Event + special relics — values audited vs data/corpus/relics.json.
+// Event + special relics - values audited vs data/corpus/relics.json.
 
 import type { RelicDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";
@@ -143,7 +143,7 @@ export const eventRelics: RelicDef[] = [
     // "At the end of each turn, you may shuffle 1 of 3 random cards into your
     // draw pile." ENGINE-GAP: a choice requested mid-end-turn strands the
     // actions queued behind it (endPlayerTurn/monsterTurn are dropped at the
-    // input point — the action queue is not serialized across a pending
+    // input point - the action queue is not serialized across a pending
     // choice). Needs engine support for mid-sequence choices.
     id: "NILRYS_CODEX",
     name: "Nilry's Codex",

@@ -1,8 +1,8 @@
-// Sentry — exact port from data/corpus/monsters-act1.json (SENTRY).
+// Sentry - exact port from data/corpus/monsters-act1.json (SENTRY).
 // Prebattle: ARTIFACT 1. First move by spawn position: idx % 2 == 0 -> BOLT,
 // idx % 2 == 1 -> BEAM (three-sentry elite: outer two open with Bolt). Then
 // strict BOLT/BEAM alternation for the rest of combat (one aiRng.random(99)
-// consumed per turn, unused — matching the reference).
+// consumed per turn, unused - matching the reference).
 
 import type { MonsterDef } from "../../../engine/content/defs";
 import { firstTurn, lastMove } from "../../util";

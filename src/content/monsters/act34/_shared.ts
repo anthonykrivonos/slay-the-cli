@@ -26,7 +26,7 @@ export const lastTwoContain = (m: MonsterState, move: string): boolean =>
   m.moveHistory[m.moveHistory.length - 2] === move;
 
 /** setMove: force the next rolled move (consumed by getMove before any bands;
- *  the engine's rollMove still consumes one aiRng.random(99) — matching the
+ *  the engine's rollMove still consumes one aiRng.random(99) - matching the
  *  reference's noOpRollMove parity call). */
 export const forceNext = (m: MonsterState, move: string): void => {
   m.data.next = move;
@@ -82,7 +82,7 @@ export function nonAttackDamage(ctx: EffectCtx, sourceIdx: number, amount: numbe
   });
 }
 
-/** Suicide(triggerRelics=true): a real death — on-death triggers fire. */
+/** Suicide(triggerRelics=true): a real death - on-death triggers fire. */
 export function suicide(ctx: EffectCtx, self: MonsterState): void {
   ctx.queue.addToBottom({ kind: "loseHp", target: monster(self.idx), amount: 99999 });
 }

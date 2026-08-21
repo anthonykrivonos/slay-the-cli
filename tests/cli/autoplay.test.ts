@@ -19,9 +19,9 @@ describe("headless autoplay", () => {
     const term = fakeTerminal({
       cols: 100,
       rows: 30,
-      // n: new run · 2: Neow option 1 (bonus-only) · 1: first map pick (combat
-      // on UISMOKE) · then three 1s: play card / enter targeting / target —
-      // whatever the hand order, at least one card resolves · q,y: quit
+      // n: new run, 2: Neow option 1 (bonus-only), 1: first map pick (combat
+      // on UISMOKE), then three 1s: play card / enter targeting / target, so
+      // whatever the hand order at least one card resolves, then q,y: quit
       script: ["n", "2", "1", "1", "1", "1", "q", "y"],
     });
 

@@ -63,7 +63,7 @@ describe("parseKeys", () => {
   });
 
   test("unknown CSI sequences are swallowed (parameters skipped)", () => {
-    // F5 = ESC [ 1 5 ~ — must not leak "15~" as chars
+    // F5 = ESC [ 1 5 ~ - must not leak "15~" as chars
     expect(parse("\x1b[15~x")).toEqual([{ kind: "char", ch: "x" }]);
   });
 

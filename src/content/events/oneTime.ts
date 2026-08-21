@@ -1,5 +1,5 @@
 // One-time special event pool (14 events; NOTE_FOR_YOURSELF drops out of the
-// pool at ascension >= 15) — data/corpus/events.json is the spec.
+// pool at ascension >= 15) - data/corpus/events.json is the spec.
 
 import type { EventDef, EffectCtx } from "../../engine/content/defs";
 import type { RewardEntry } from "../../engine/run/runState";

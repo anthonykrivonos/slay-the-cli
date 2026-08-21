@@ -10,7 +10,7 @@ import { PLAYER, monster } from "../../../engine/core/ids";
 
 export const watcherCommons: CardDef[] = [
   {
-    // "Deal 7(10) damage for each enemy in combat." — one hit per living enemy,
+    // "Deal 7(10) damage for each enemy in combat." - one hit per living enemy,
     // all aimed at the target (the game queues count separate DamageActions).
     id: "BOWLING_BASH",
     name: "Bowling Bash",
@@ -224,7 +224,7 @@ export const watcherCommons: CardDef[] = [
     },
   },
   {
-    // "Scry 1(2). Gain 2(3) Block. Deal 3(4) damage." — in that order.
+    // "Scry 1(2). Gain 2(3) Block. Deal 3(4) damage." - in that order.
     id: "JUST_LUCKY",
     name: "Just Lucky",
     color: "purple",

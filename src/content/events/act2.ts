@@ -1,4 +1,4 @@
-// Act 2 event pool (13 events) — data/corpus/events.json is the spec.
+// Act 2 event pool (13 events) - data/corpus/events.json is the spec.
 
 import type { EventDef, EffectCtx } from "../../engine/content/defs";
 import { obtainRelicFromPool, POTION_DROP } from "../../engine/run/rewards";

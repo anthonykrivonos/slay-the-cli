@@ -1,10 +1,10 @@
 // Defect powers (exact V2.3.4 behavior), created by the blue card pool. Ids and
-// semantics audited against data/corpus/powers.json — note the corpus ids that
+// semantics audited against data/corpus/powers.json - note the corpus ids that
 // differ from their card names: ELECTRO (Electrodynamics), HEATSINK (Heatsinks),
 // DRAW (Machine Learning), BIAS (Biased Cognition's downside), REPAIR (Self
 // Repair), ENERGIZED (Charge Battery), REBOUND (Rebound). FOCUS and BUFFER are
 // NOT defined here: relics/supportPowers.ts already carries the corpus-correct
-// defs (FOCUS with canGoNegative: true — required by Biased Cognition) and the
+// defs (FOCUS with canGoNegative: true - required by Biased Cognition) and the
 // integrator's map-merge keeps a single copy. Helper powers at the bottom are
 // engine workarounds, not corpus powers.
 
@@ -100,7 +100,7 @@ export const defectPowers: PowerDef[] = [
   },
   {
     // "Lightning hits ALL enemies." Read by the LIGHTNING orb effect; the
-    // Electrodynamics CARD does the channeling — this power only retargets.
+    // Electrodynamics CARD does the channeling - this power only retargets.
     id: "ELECTRO",
     name: "Electro",
     kind: "buff",
@@ -252,7 +252,7 @@ export const defectPowers: PowerDef[] = [
   },
   {
     // "At the end of combat, heal X HP." (Self Repair) Heals synchronously on
-    // victory — queued heals may be dropped once combat is over (Feed pattern).
+    // victory - queued heals may be dropped once combat is over (Feed pattern).
     id: "REPAIR",
     name: "Repair",
     kind: "buff",

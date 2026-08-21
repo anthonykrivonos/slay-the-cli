@@ -1,4 +1,4 @@
-// Act-1 monster content tests — every corpus entity: HP bands (A0 + A7/8/9),
+// Act-1 monster content tests - every corpus entity: HP bands (A0 + A7/8/9),
 // exact move damage through real combats, first-turn rules, and seed-swept
 // property tests of the corpus historyRules across 15+ end-turned rounds.
 
@@ -177,7 +177,7 @@ describe("Cultist", () => {
       expect(monPower(s, 0, "RITUAL")?.amount).toBe(ritual);
     }
     let s = fight(["CULTIST"]);
-    s = endTurn(s); // Incantation — no damage, Ritual queued (skips its first end-of-turn)
+    s = endTurn(s); // Incantation - no damage, Ritual queued (skips its first end-of-turn)
     const hp0 = s.run.hp;
     s = endTurn(s); // Dark Strike at Str 0
     expect(hp0 - s.run.hp).toBe(6);
@@ -191,7 +191,7 @@ describe("Cultist", () => {
 });
 
 // ------------------------------------------------------------------------------
-// Jaw Worm (exemplar entity — history rules only; numbers covered in slice.test.ts)
+// Jaw Worm (exemplar entity - history rules only; numbers covered in slice.test.ts)
 // ------------------------------------------------------------------------------
 
 describe("Jaw Worm", () => {
@@ -880,7 +880,7 @@ describe("Gremlin Nob", () => {
     }
   });
 
-  test("A18 (adjudicated): Bellow, then repeating [Skull Bash, Rush, Rush] — never Rush-forever", () => {
+  test("A18 (adjudicated): Bellow, then repeating [Skull Bash, Rush, Rush] - never Rush-forever", () => {
     const want = ["GREMLIN_NOB_BELLOW"];
     for (let i = 0; i < 5; i++) want.push("GREMLIN_NOB_SKULL_BASH", "GREMLIN_NOB_RUSH", "GREMLIN_NOB_RUSH");
     for (const moves of moveSequences("GREMLIN_NOB", { asc: 18, turns: 16 })) {

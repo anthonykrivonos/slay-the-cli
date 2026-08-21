@@ -138,7 +138,7 @@ describe("menu ladder", () => {
   test("hero cards degrade to the compact banner list when rows are scarce", () => {
     const rows = renderMenu(menuScreen(1), 100, 13, THEME_PLAIN).map(stripAnsi);
     expect(rows.length).toBe(13);
-    expect(rows.some((l) => l.includes("S L A Y"))).toBe(true);
+    expect(rows.some((l) => l.includes("SLAY THE CLI"))).toBe(true);
     expect(rows.some((l) => l.includes("[2] Silent"))).toBe(true);
     expect(rows.some((l) => l.includes("+=[1]"))).toBe(false); // no cards
   });

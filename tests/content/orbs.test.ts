@@ -75,7 +75,7 @@ describe("LIGHTNING", () => {
     t = play(t, "ZAP");
     const hpBefore = monsterHp(t);
     t = endTurn(t);
-    expect(monsterHp(t)).toBe(hpBefore); // floored at 0 — no damage
+    expect(monsterHp(t)).toBe(hpBefore); // floored at 0 - no damage
   });
 });
 
@@ -185,7 +185,7 @@ describe("LOOP power", () => {
     let s = fight({ deck: ["LOOP", "ZAP", "COOLHEADED", "DEFEND_BLUE", "DEFEND_BLUE"] });
     s = play(s, "LOOP");
     s = play(s, "ZAP");
-    s = play(s, "COOLHEADED"); // orbs: [LIGHTNING, FROST] — Loop hits index 0 only
+    s = play(s, "COOLHEADED"); // orbs: [LIGHTNING, FROST] - Loop hits index 0 only
     s = endTurn(s); // end-of-turn passives: 3 (L) dmg; start of turn: Loop -> L passive again
     expect(monsterHp(s)).toBe(194);
   });

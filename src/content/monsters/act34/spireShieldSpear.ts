@@ -1,4 +1,4 @@
-// Spire Shield & Spire Spear — exact ports from data/corpus/monsters-act34.json
+// Spire Shield & Spire Spear - exact ports from data/corpus/monsters-act34.json
 // (SPIRE_SHIELD, SPIRE_SPEAR). Act-4 elite pair: Shield slot 0 (left/behind),
 // Spear slot 1 (right/front).
 // Back Attack (CONFLICT HONORED: per real game, BACK_ATTACK on each elite +
@@ -10,7 +10,7 @@
 // Fixed cadences: Shield SMASH on turns 3/6/9..., Spear SKEWER on 2/5/8...;
 // between them the two other moves are used once each in a 50/50 order
 // (aiRng.randomBoolean(), the accompanying aiRng.random(99) roll consumed but
-// ignored — the engine's rollMove provides exactly that consumption).
+// ignored - the engine's rollMove provides exactly that consumption).
 // ENGINE-GAP: targeted potions do not update facing (no hook site); Smoke
 // Bomb's Surrounded restriction is a run-layer concern.
 

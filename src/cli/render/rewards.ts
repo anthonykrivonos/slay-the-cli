@@ -1,4 +1,4 @@
-// Rewards screen: a centered SPOILS OF BATTLE panel — single rewards as
+// Rewards screen: a centered SPOILS OF BATTLE panel - single rewards as
 // icon rows ([1] ($) 15 Gold), card / boss-relic picks as side-by-side card
 // boxes inside the panel, then the Continue action. Collapses groups to
 // one-liners (and finally the whole panel to the plain list) when tight.
@@ -40,7 +40,8 @@ export function renderRewards(
     else bodyRows += 1 + (groupBoxes(row) ? cardH : row.items.length);
   }
   bodyRows += 2; // blank + continue
-  const panelH = bodyRows + 4; // borders + title + title rule
+  // no title inside the panel: the header rule above it already names the screen
+  const panelH = bodyRows + 2; // borders
   if (panelH > height || panelW < 40) {
     return renderListScreen({ title: screen.title, intro: [], list: screen.list }, width, height, theme, { accent });
   }
@@ -108,8 +109,6 @@ export function renderRewards(
   const top = Math.max(0, Math.min(2, Math.floor((height - panelH) / 3)));
   for (let i = 0; i < top; i++) out.push("");
   out.push(`${pad}+${"-".repeat(panelW - 2)}+`);
-  out.push(`${pad}| ${padClip(theme.bold(theme.fg(C.gold, screen.title)), inner)} |`);
-  out.push(`${pad}|${"-".repeat(panelW - 2)}|`);
   for (const line of body) out.push(`${pad}| ${padClip(line, inner)} |`);
   out.push(`${pad}+${"-".repeat(panelW - 2)}+`);
 

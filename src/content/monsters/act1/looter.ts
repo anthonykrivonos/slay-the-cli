@@ -1,4 +1,4 @@
-// Looter — exact port from data/corpus/monsters-act1.json (LOOTER).
+// Looter - exact port from data/corpus/monsters-act1.json (LOOTER).
 // Turn 1+2: MUG. Turn 3: 50/50 LUNGE or SMOKE_BOMB. LUNGE -> SMOKE_BOMB -> ESCAPE.
 // MUG/LUNGE steal min(playerGold, THIEVERY) gold (15; asc>=17: 20). Escape keeps
 // the stolen gold; if killed first the reward layer refunds self.data.stolenGold.

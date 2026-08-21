@@ -1,4 +1,4 @@
-// Silent rare cards. Values audited against data/corpus/cards.json — corpus
+// Silent rare cards. Values audited against data/corpus/cards.json - corpus
 // numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
@@ -51,7 +51,7 @@ export const silentRares: CardDef[] = [
     keywords: ["exhaust", "tag:healing"],
     onPlay: (ctx) => {
       // "Obtain a random potion." The corpus doesn't pin the stream; the
-      // game's returnRandomPotion consumes potionRng — reuse the run-layer
+      // game's returnRandomPotion consumes potionRng - reuse the run-layer
       // roller for exactness.
       const id = returnRandomPotion(ctx);
       if (!id) return;
@@ -96,7 +96,7 @@ export const silentRares: CardDef[] = [
         if (c.cost >= 0) c.costForTurn = 0;
       }
       // ENGINE-GAP: NO_DRAW cannot veto card-effect draws (Battle Trance
-      // precedent, see powers/ironclad.ts) — "cannot draw additional cards
+      // precedent, see powers/ironclad.ts) - "cannot draw additional cards
       // this turn" is not enforced against draw effects.
       ctx.queue.addToBottom({ kind: "applyPower", source: PLAYER, target: PLAYER, powerId: "NO_DRAW", amount: 1 });
     },
@@ -155,7 +155,7 @@ export const silentRares: CardDef[] = [
     upgradeValues: {},
     keywords: ["exhaust"],
     onPlay: (ctx) => {
-      // "Next turn, draw X (X+1) cards and gain X (X+1) energy." — the game
+      // "Next turn, draw X (X+1) cards and gain X (X+1) energy." - the game
       // applies the two corpus powers DRAW_CARD_NEXT_TURN + ENERGIZED.
       const n = ctx.energyOnUse + (ctx.upgraded ? 1 : 0);
       if (n <= 0) return;

@@ -146,7 +146,7 @@ export const watcherPowers: PowerDef[] = [
     // "At the start of your turn, Scry X." (game id WIREHEADING)
     // ENGINE-NOTE: the game scries BEFORE the turn's draw; our startPlayerTurn
     // draws synchronously, so the queued scry resolves after it (Brutality
-    // precedent). Goes through watcher/scryStart, not the raw scry action —
+    // precedent). Goes through watcher/scryStart, not the raw scry action -
     // see the ENGINE-GAP note on scryStart in cards/watcher/effects.ts.
     id: "FORESIGHT",
     name: "Foresight",
@@ -198,7 +198,7 @@ export const watcherPowers: PowerDef[] = [
     },
   },
   {
-    // Blasphemy's "Die next turn." (game id ENDTURNDEATH). Pure HP loss —
+    // Blasphemy's "Die next turn." (game id ENDTURNDEATH). Pure HP loss -
     // bypasses block, hits the onLoseHp clamps like any other loss.
     id: "BLASPHEMER",
     name: "Blasphemer",
@@ -214,7 +214,7 @@ export const watcherPowers: PowerDef[] = [
   {
     // "At the start of your next X turns, put a Miracle+ into your hand."
     // ENGINE-NOTE: corpus powers.json tags COLLECT turnBased, but the game's
-    // CollectPower self-reduces when it triggers (not at end of round) — a
+    // CollectPower self-reduces when it triggers (not at end of round) - a
     // round-end tick on top would halve its lifetime, so turnBased stays false
     // here and the power decrements itself (exact "next X turns" behavior).
     id: "COLLECT",
@@ -261,7 +261,7 @@ export const watcherPowers: PowerDef[] = [
   {
     // Talk to the Hand's mark: "When attacked, you gain X Block." On the
     // MONSTER; the player gains the block. Triggers on every player attack
-    // damage action (per hit), even fully blocked ones (game parity —
+    // damage action (per hit), even fully blocked ones (game parity -
     // BlockReturnPower has no damage check).
     id: "BLOCK_RETURN",
     name: "Block Return",
@@ -278,7 +278,7 @@ export const watcherPowers: PowerDef[] = [
   },
   {
     // Pressure Points' mark: "Whenever you play Pressure Points, lose X HP."
-    // Inert marker — the HP loss is driven by the card (watcher/pressurePoints).
+    // Inert marker - the HP loss is driven by the card (watcher/pressurePoints).
     id: "MARK",
     name: "Mark",
     kind: "debuff",
@@ -333,7 +333,7 @@ export const watcherPowers: PowerDef[] = [
     //    watcher/gainMantra effect, which adds n and predicts the post-gain
     //    mantra in data.lastSeen;
     //  - by reconciliation: raw {kind:"gainMantra"} sources (Damaru) are caught
-    //    at the next checkpoint — a tracked gain, a mantra-driven Divinity
+    //    at the next checkpoint - a tracked gain, a mantra-driven Divinity
     //    entry (the +10 threshold crossing below), or a Brilliance play.
     // Known imprecision (documented): a direct Divinity entry that does NOT
     // come from mantra (Ambrosia potion) is indistinguishable from a raw

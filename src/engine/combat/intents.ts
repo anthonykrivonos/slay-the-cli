@@ -1,4 +1,4 @@
-// Intent display numbers — exactly what the game shows: the move's damage run
+// Intent display numbers - exactly what the game shows: the move's damage run
 // through the live calc pipeline (Strength, Weak, Vulnerable-on-player, etc.).
 //
 // Rather than duplicating per-move damage tables, we DRY-RUN the move's
@@ -69,7 +69,7 @@ export function computeIntent(ctx: EffectCtx, idx: number): IntentInfo | null {
 
 /**
  * UI entry point: intent for every monster slot, computed from a bare
- * GameState (no live RNG needed — the dry-run never rolls).
+ * GameState (no live RNG needed - the dry-run never rolls).
  */
 export function getIntents(
   state: { run: EffectCtx["run"]; combat: EffectCtx["combat"] },

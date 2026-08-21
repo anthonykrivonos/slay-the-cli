@@ -1,6 +1,6 @@
 // Fluid layout math shared by the per-screen renderers. Everything here is
 // pure and TOTAL: every function returns a sane value at any (cols, rows),
-// including absurdly small ones — the degradation ladders in the renderers
+// including absurdly small ones - the degradation ladders in the renderers
 // decide what to draw, this module only does the arithmetic.
 
 import { padClip } from "./widgets";
@@ -44,7 +44,7 @@ export function joinBlocks(blocks: string[][], widths: number[], gap: number, le
 
 /** Distribute the leftover rows (avail - fixed) across gap slots by weight.
  *  Returns one extra-row count per weight; earlier slots win remainders.
- *  Never negative — when the fixed content overflows, all gaps are 0. */
+ *  Never negative - when the fixed content overflows, all gaps are 0. */
 export function flexFill(avail: number, fixed: number, weights: number[]): number[] {
   const extra = Math.max(0, avail - fixed);
   const total = weights.reduce((a, b) => a + b, 0);

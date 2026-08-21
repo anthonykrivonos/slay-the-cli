@@ -1,4 +1,4 @@
-// Starter relics — values audited vs data/corpus/relics.json.
+// Starter relics - values audited vs data/corpus/relics.json.
 
 import type { RelicDef } from "../../engine/content/defs";
 import { healPlayer } from "./lib";
@@ -14,7 +14,7 @@ export const starterRelics: RelicDef[] = [
     hooks: { onVictory: (ctx) => healPlayer(ctx, 6) },
   },
   {
-    // "At the start of each combat, draw 2 additional cards." — first-turn draw only.
+    // "At the start of each combat, draw 2 additional cards." - first-turn draw only.
     id: "RING_OF_THE_SNAKE",
     name: "Ring of the Snake",
     tier: "starter",

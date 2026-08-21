@@ -170,7 +170,7 @@ export const ironcladPowers: PowerDef[] = [
         // all card-originated self HP loss reaches the player as either an "hpLoss"
         // action (Offering/Bloodletting/Hemokinesis/Combust/Brutality/Regret/Pain)
         // or a source-null "thorns" damage (Burn/Decay). Monster attacks/thorns
-        // carry a monster source and are excluded — matching V2.3.4 for every
+        // carry a monster source and are excluded - matching V2.3.4 for every
         // in-scope source.
         if (amount > 0 && info.source === null && (info.type === "hpLoss" || info.type === "thorns")) {
           ctx.queue.addToBottom({
@@ -267,7 +267,7 @@ export const ironcladPowers: PowerDef[] = [
     hooks: {
       // ENGINE-GAP: drawCards has no veto hook, so card-effect draws (Pommel
       // Strike after Battle Trance) cannot be blocked. modifyDrawPerTurn covers
-      // only the start-of-turn draw — moot anyway since the power is removed at
+      // only the start-of-turn draw - moot anyway since the power is removed at
       // end of turn. Enforcement of "cannot draw additional cards" is skipped.
       modifyDrawPerTurn: () => 0,
       atEndOfTurn: (ctx, isPlayerTurn) => {

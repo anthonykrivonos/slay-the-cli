@@ -1,4 +1,4 @@
-// The three act-3 Shapes — exact ports from data/corpus/monsters-act34.json
+// The three act-3 Shapes - exact ports from data/corpus/monsters-act34.json
 // (SPIKER, REPULSOR, EXPLODER). All are category "normal" per the corpus
 // conflict resolutions (spire-archive mislabels them Elite).
 
@@ -75,7 +75,7 @@ export const repulsor: MonsterDef = {
 };
 
 // ---------------------------------------------------------------------------
-// Exploder — fixed Slam, Slam, Explode. The explosion is 30 non-attack
+// Exploder - fixed Slam, Slam, Explode. The explosion is 30 non-attack
 // damage (blockable, unmodified) followed by a real suicide (on-death
 // triggers fire). EXPLOSIVE 3 is the countdown display.
 // ---------------------------------------------------------------------------

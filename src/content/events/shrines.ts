@@ -1,4 +1,4 @@
-// Shrine pool (6 events) — data/corpus/events.json is the spec.
+// Shrine pool (6 events) - data/corpus/events.json is the spec.
 
 import type { EventDef, EffectCtx } from "../../engine/content/defs";
 import type { CardId } from "../../engine/core/ids";

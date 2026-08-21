@@ -1,10 +1,10 @@
-// Reptomancer + Snake Dagger — exact ports from data/corpus/monsters-act34.json
+// Reptomancer + Snake Dagger - exact ports from data/corpus/monsters-act34.json
 // (REPTOMANCER, DAGGER). Turn 1 is always Summon (the spawn cap is NOT
 // consulted). Summoned daggers fill dead/empty slots in the fixed search
-// order [4, 1, 3, 0], have Stab preset (skipping the summon round — they are
+// order [4, 1, 3, 0], have Stab preset (skipping the summon round - they are
 // not in that round's move queue), consume one aiRng.random(99) each
 // (noOpRollMove parity), and get +1 Strength with Philosopher's Stone.
-// CONFLICT HONORED (spawn cap): per the wiki, at most 4 Daggers in play —
+// CONFLICT HONORED (spawn cap): per the wiki, at most 4 Daggers in play -
 // Summon becomes Snake Strike when 4 daggers are alive (lightspeed instead
 // counts all alive monsters incl. the Reptomancer; unresolved without the
 // JAR, wiki taken as the cap the brief adjudicates).
@@ -14,7 +14,7 @@
 // Slot geometry: acts.ts spawns [DAGGER, REPTOMANCER, DAGGER]; the array is
 // padded to 5 slots on the first summon so the [4,1,3,0] search order works
 // (the corpus's canonical layout has empties at 0 and 3 with the Reptomancer
-// in slot 2 — cosmetic positioning only).
+// in slot 2 - cosmetic positioning only).
 
 import type { MonsterDef } from "../../../engine/content/defs";
 import { spawnMonster } from "../../../engine/combat/interpreter";
@@ -94,7 +94,7 @@ export const reptomancer: MonsterDef = {
 };
 
 // ---------------------------------------------------------------------------
-// Snake Dagger — fixed two-turn life: Stab (9 + Wound to discard) then
+// Snake Dagger - fixed two-turn life: Stab (9 + Wound to discard) then
 // Explode (25, a real ATTACK) followed by a real suicide (on-death triggers
 // fire). Minion: flees when the Reptomancer dies.
 // ---------------------------------------------------------------------------

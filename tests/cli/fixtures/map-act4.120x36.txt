@@ -2,8 +2,8 @@
 -- MAP - act 4 ---------------------------------------------------------------------------------------------------------
 ==============[ BOSS: THE HEART ]===============                                                                        
                        B                          LEGEND                                                                
-                       |                          M monster    E elite                                                  
-                       E                          $ shop       R rest                                                   
+                       |                          M enemy      E elite                                                  
+                       E                          $ merchant   R rest                                                   
                        |                          T treasure   ? unknown                                                
                      1:$                          E* burning elite (+key)                                               
                        |                          @ you        B boss                                                   

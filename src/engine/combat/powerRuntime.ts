@@ -4,7 +4,7 @@
 //    "none" refreshes/ignores.
 //  - justApplied: turn-based debuffs applied to the PLAYER by a MONSTER skip
 //    their first end-of-round tick (the source-based rule the game uses via
-//    isSourceMonster in power constructors — e.g. Fungi Beast's death cloud).
+//    isSourceMonster in power constructors - e.g. Fungi Beast's death cloud).
 
 import type { ActorRef } from "../core/ids";
 import type { EffectCtx } from "../content/defs";

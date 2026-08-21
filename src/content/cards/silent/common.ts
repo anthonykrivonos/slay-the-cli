@@ -1,4 +1,4 @@
-// Silent common cards. Values audited against data/corpus/cards.json — corpus
+// Silent common cards. Values audited against data/corpus/cards.json - corpus
 // numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
@@ -237,7 +237,7 @@ export const silentCommons: CardDef[] = [
     onPlay: (ctx) => {
       // "ALL enemies lose 6 (8) Strength this turn": -Str now, restored by
       // GENERIC_STRENGTH_UP at the end of the monster's own turn. The -Str is
-      // Artifact-negated while the restore is a buff and is not — an Artifact
+      // Artifact-negated while the restore is a buff and is not - an Artifact
       // enemy nets +Str at end of turn (real-game parity).
       const n = ctx.upgraded ? 8 : 6;
       for (const m of ctx.combat!.monsters) {
@@ -339,7 +339,7 @@ export const silentCommons: CardDef[] = [
     primitives: [{ do: "damage", n: "damage" }],
     onPlay: (ctx) => {
       // "If you have discarded a card this turn, gain 2 energy." Manual
-      // discards only (end-of-turn discards don't count) — checked at use time.
+      // discards only (end-of-turn discards don't count) - checked at use time.
       if (ctx.combat!.turnFlags.manualDiscardsThisTurn > 0) {
         ctx.queue.addToBottom({ kind: "gainEnergy", n: 2 });
       }

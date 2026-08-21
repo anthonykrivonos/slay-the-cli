@@ -1,4 +1,4 @@
-// Spire Growth — exact port from data/corpus/monsters-act34.json
+// Spire Growth - exact port from data/corpus/monsters-act34.json
 // (SPIRE_GROWTH). Constrict applies the permanent CONSTRICTED debuff (the
 // player takes 10 / 12 asc17 damage at the end of each of their turns); at
 // asc17+ Constrict is used whenever legal, below that it needs roll >= 50.

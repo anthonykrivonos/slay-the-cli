@@ -1,5 +1,5 @@
 // The bottom info panel (shared frame chrome): explains whatever holds the
-// hover/selection focus — full card text, relic/potion effects, enemy
+// hover/selection focus - full card text, relic/potion effects, enemy
 // intents, map nodes. Height comes from layout.tipHeight (0 on tight
 // terminals); 1 rule + a head line + wrapped text lines.
 

@@ -70,7 +70,7 @@ describe("POISON end-to-end", () => {
     expect(monsterPower(s, "ASLEEP")).toBeUndefined();
     expect(monsterPower(s, "METALLICIZE")).toBeUndefined();
     // ENGINE-NOTE: the next-move roll happens inside the same monsterMove
-    // action, before the queued wake resolves — the SLEEP intent lingers one
+    // action, before the queued wake resolves - the SLEEP intent lingers one
     // extra turn vs the real game (documented in powers/silent.ts POISON).
     expect(s.combat!.monsters[0]!.move).toBe("LAGAVULIN_SLEEP");
     s = endTurn(s);
@@ -119,7 +119,7 @@ describe("ACCURACY", () => {
   });
 
   test("ADOPTED ORDER: with Accuracy applied before a Double Damage-style power, " +
-    "the add happens before the multiplier — (4+4)*2 = 16, matching the game's " +
+    "the add happens before the multiplier - (4+4)*2 = 16, matching the game's " +
     "base-damage semantics (see powers/silent.ts ACCURACY ordering caveat)", () => {
     let s = fight({ deck: ["ACCURACY", "PHANTASMAL_KILLER", "BLADE_DANCE", ...strikes(2)] });
     s = play(s, "ACCURACY");

@@ -65,7 +65,7 @@ export function makeSaveIo(dir: string = defaultSaveDir()): SaveIo {
         if (existsSync(savePath)) copyFileSync(savePath, bakPath);
         writeAtomic(savePath, JSON.stringify(g));
       } catch {
-        // storage unavailable — the game still plays, just unsaved
+        // storage unavailable - the game still plays, just unsaved
       }
     },
     deleteSave(): void {

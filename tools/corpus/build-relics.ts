@@ -4,7 +4,7 @@
 //  2. spire-archive data/sts1/relics.json + relic_values.json (parsed from game files:
 //     tier, color, numeric description values)
 //  3. wiki.gg Module:Relics/data (the 180-count truth; tier taxonomy that separates Event
-//     from Special; Character pool locks; mechanical rules text — flavor is NOT copied)
+//     from Special; Character pool locks; mechanical rules text - flavor is NOT copied)
 // Any disagreement is recorded in references/extracted/relics-conflicts.json.
 //
 // counter: lifetime of the relic's mutable state, grounded in sts_lightspeed's engine:
@@ -182,7 +182,7 @@ const COUNTER: Record<string, "turn" | "combat" | "persistent"> = {
   BOTTLED_TORNADO: "persistent",   // stored card choice
 };
 
-// Known, explained discrepancies — suppressed from the live conflict list so new ones
+// Known, explained discrepancies - suppressed from the live conflict list so new ones
 // stand out, but still written to the conflicts report under "adjudicated".
 const ADJUDICATED_WHY: Record<string, string> = {
   // spire-archive's relic_parser.py hardcodes KNOWN_CHARACTER_RELICS["CaptainsWheel"] = "watcher".
@@ -372,5 +372,5 @@ await Bun.write(
   JSON.stringify({ conflicts, adjudicated, missing, needsManualVerification }, null, 1),
 );
 await Bun.write(`${ROOT}/data/corpus/relics.json`, JSON.stringify(relics, null, 1));
-console.log(`${ok ? "ALL CHECKS PASSED — " : "CHECKS FAILED — "}wrote data/corpus/relics.json + references/extracted/relics-conflicts.json`);
+console.log(`${ok ? "ALL CHECKS PASSED - " : "CHECKS FAILED - "}wrote data/corpus/relics.json + references/extracted/relics-conflicts.json`);
 if (!ok) process.exit(1);

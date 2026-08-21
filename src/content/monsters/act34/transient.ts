@@ -1,7 +1,7 @@
-// Transient — exact port from data/corpus/monsters-act34.json (TRANSIENT).
+// Transient - exact port from data/corpus/monsters-act34.json (TRANSIENT).
 // Fixed 999 HP at all ascensions. Attack = (asc2? 40 : 30) + 10 per elapsed
 // turn. FADING 5 (asc17: 6) counts down via the engine's end-of-round tick;
-// on the turn FADING shows 1 it attacks and then fades away — modeled as a
+// on the turn FADING shows 1 it attacks and then fades away - modeled as a
 // monsterEscape (no on-death triggers fire, the player still wins if it was
 // alone), exactly like the reference's Suicide(triggerRelics=false).
 // ENGINE-GAP (rng parity): the reference makes NO monsterHpRng call for the

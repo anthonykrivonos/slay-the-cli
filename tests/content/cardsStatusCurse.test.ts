@@ -65,7 +65,7 @@ describe("statuses", () => {
     let s = fight({ deck: ["WOUND", ...strikes(4)] });
     expect(() => play(s, "WOUND")).toThrow("unplayable");
     s = endTurn(s);
-    // not ethereal: discarded, reshuffled and redrawn — never exhausted
+    // not ethereal: discarded, reshuffled and redrawn - never exhausted
     expect(pileNames(s, "exhaust")).toEqual([]);
     expect(handNames(s)).toContain("WOUND");
   });

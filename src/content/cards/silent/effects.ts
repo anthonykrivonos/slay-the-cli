@@ -84,7 +84,7 @@ function aliveMonsters(ctx: EffectCtx) {
 
 // ------------------------------------------------------------------------------
 // forced discard (Survivor / Prepared / Acrobatics / Dagger Throw / Concentrate
-// / Tools of the Trade) — discard exactly min(n, hand) chosen cards, manually
+// / Tools of the Trade) - discard exactly min(n, hand) chosen cards, manually
 // ------------------------------------------------------------------------------
 
 function discardChoose(ctx: EffectCtx, args: unknown): void {
@@ -113,7 +113,7 @@ function discardResume(ctx: EffectCtx, args: unknown): void {
 // deferred effects
 // ------------------------------------------------------------------------------
 
-/** Bouncing Flask: one bounce — poison a random alive enemy (cardRandomRng at resolve time). */
+/** Bouncing Flask: one bounce - poison a random alive enemy (cardRandomRng at resolve time). */
 function bouncingFlaskHit(ctx: EffectCtx, args: unknown): void {
   const { amount } = args as { amount: number };
   const alive = aliveMonsters(ctx);

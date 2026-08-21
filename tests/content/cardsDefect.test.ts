@@ -40,10 +40,10 @@ const MECH_UP = ["exhaust", "ethereal", "innate"];
 const pick = (flags: string[], allow: string[]) => new Set(flags.filter((f) => allow.includes(f)));
 
 // CHILL / STORM / HELLO_WORLD / MACHINE_LEARNING gain Innate on upgrade only
-// (corpus TEXT "[|$Innate.  // ]…", V2.3.4 behavior). The corpus base `flags`
+// (corpus TEXT "[|$Innate.  // ]...", V2.3.4 behavior). The corpus base `flags`
 // originally listed "innate" on these; the corpus has since been re-gated to
 // carry it in upgrade.flags only, so the exception set below is normally a
-// no-op — kept so the audit stays correct against either corpus revision.
+// no-op - kept so the audit stays correct against either corpus revision.
 const INNATE_ON_UPGRADE_ONLY = new Set(["CHILL", "STORM", "HELLO_WORLD", "MACHINE_LEARNING"]);
 
 const VALUE_KEYS = ["damage", "block", "magic", "hits"] as const;

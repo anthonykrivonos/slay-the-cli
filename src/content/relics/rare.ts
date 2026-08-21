@@ -1,4 +1,4 @@
-// Rare relics — values audited vs data/corpus/relics.json.
+// Rare relics - values audited vs data/corpus/relics.json.
 
 import type { RelicDef } from "../../engine/content/defs";
 import { f32mul } from "../../engine/core/math";

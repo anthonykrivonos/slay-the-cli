@@ -313,7 +313,7 @@ describe("EXPERTISE", () => {
 });
 
 describe("FINISHER", () => {
-  test("one 6 (8) hit per Attack played this turn — counts itself", () => {
+  test("one 6 (8) hit per Attack played this turn - counts itself", () => {
     let s = fight({ deck: ["FINISHER", "SLICE", "SLICE", ...strikes(2)] });
     s = play(s, "SLICE");
     s = play(s, "SLICE");
@@ -486,7 +486,7 @@ describe("REFLEX / TACTICIAN (manual-discard self-triggers)", () => {
     let s = fightWithInHand(["REFLEX"], { deck: ["REFLEX", ...strikes(9)] });
     const before = s.combat!.player.piles.draw.length;
     s = endTurn(s);
-    // next turn draws exactly 5 — no bonus draws happened at end of turn
+    // next turn draws exactly 5 - no bonus draws happened at end of turn
     expect(handNames(s).length).toBe(5);
     expect(before).toBeGreaterThanOrEqual(0);
   });

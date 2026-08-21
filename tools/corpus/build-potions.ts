@@ -61,7 +61,7 @@ const POTENCY: Record<string, number | null> = {
 const CLASS_COLOR: Record<string, string> = { Ironclad: "red", Silent: "green", Defect: "blue", Watcher: "purple" };
 const POOL_COLOR = ["red", "green", "blue", "purple"]; // CharacterClass order: IRONCLAD, SILENT, DEFECT, WATCHER
 
-// Known, explained discrepancies — suppressed so new ones stand out.
+// Known, explained discrepancies - suppressed so new ones stand out.
 const ADJUDICATED = new Set([
   // thrown at enemies but no single-target selection (hits ALL / whole combat);
   // lightspeed potionRequiresTarget correctly excludes them.

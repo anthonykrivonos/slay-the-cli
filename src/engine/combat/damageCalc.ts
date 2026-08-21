@@ -1,5 +1,5 @@
 // Damage & block CALCULATION pipelines with the game's exact stage order and
-// float32 rounding discipline. (Application — block absorb, HP loss, triggers —
+// float32 rounding discipline. (Application - block absorb, HP loss, triggers -
 // lives in the interpreter.)
 //
 // Card damage (player -> monster), stage order per the game:

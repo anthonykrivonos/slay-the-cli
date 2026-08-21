@@ -1,4 +1,4 @@
-// Watcher rares — behavior tests (base AND upgraded where values differ).
+// Watcher rares - behavior tests (base AND upgraded where values differ).
 
 import { test, expect, describe } from "bun:test";
 import {

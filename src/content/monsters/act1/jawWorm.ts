@@ -1,4 +1,4 @@
-// Jaw Worm — exact port from data/corpus/monsters-act1.json (JAW_WORM).
+// Jaw Worm - exact port from data/corpus/monsters-act1.json (JAW_WORM).
 // AI: turn 1 always Chomp (act 1); then roll d100:
 //   <25 Chomp (never twice: 56.25% Bellow else Thrash)
 //   <55 Thrash (never 3x: 35.7% Chomp else Bellow)

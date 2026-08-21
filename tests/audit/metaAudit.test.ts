@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 // Diffs the engine's HARD-CODED run-layer constants against the ground-truth
-// corpus (data/corpus/meta.json). The corpus is imported by TESTS ONLY — the
+// corpus (data/corpus/meta.json). The corpus is imported by TESTS ONLY - the
 // engine never reads it at runtime.
 
 import { CARD_REWARD, UPGRADE_CHANCES, POTION_DROP, GOLD_REWARDS, RELIC_TIER_ROLLS } from "../../src/engine/run/rewards";
@@ -143,7 +143,7 @@ describe("shop", () => {
     expect(meta.shop.disputed.ascension16Prices.length).toBe(2);
     const claims = meta.shop.disputed.ascension16Prices.map((c: { provenance: string }) => c.provenance).sort();
     expect(claims).toEqual(["sts_lightspeed", "wiki"]);
-    // lightspeed says 0.80 (cheaper), wiki says "more costly" — we ship 1.1
+    // lightspeed says 0.80 (cheaper), wiki says "more costly" - we ship 1.1
     expect(SHOP.ascension16Factor).toBe(1.1);
   });
 });

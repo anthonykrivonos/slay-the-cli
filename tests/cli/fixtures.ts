@@ -229,7 +229,7 @@ export function fxDeckOverlay(): Fixture {
   return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "deck", mode: "view", page: 0 }] } };
 }
 
-/** Synthetic crowd: the Louse pair cloned to five enemies — pins the enemy
+/** Synthetic crowd: the Louse pair cloned to five enemies - pins the enemy
  *  panel -> one-line ladder (panels at 120 cols, lines at 80). */
 export function fxCombatCrowd(): Fixture {
   const f = fxCombat();

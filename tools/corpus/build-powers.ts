@@ -1,4 +1,4 @@
-// Build data/corpus/powers.json — every power/status effect (player + monster) —
+// Build data/corpus/powers.json - every power/status effect (player + monster) -
 // by reconciling three independent sources:
 //  1. sts_lightspeed PlayerStatusEffects.h + MonsterStatusEffects.h
 //     (canonical enum ids, owner = which enum(s) a power appears in)
@@ -9,9 +9,9 @@
 // "Simmering Rage" vs "Wrath Next Turn", ...).
 //
 // Field semantics:
-//  kind      buff|debuff — wiki first (spire fallback), with 2-of-3-majority
+//  kind      buff|debuff - wiki first (spire fallback), with 2-of-3-majority
 //            adjudications where the wiki is wrong (see ADJUDICATED_KIND)
-//  stacking  how amounts combine: "intensity" (amounts add — includes the wiki's
+//  stacking  how amounts combine: "intensity" (amounts add - includes the wiki's
 //            "Counter" powers, whose counts add), "duration" (turns add), "none"
 //  turnBased true when the amount ticks down at end of round (wiki Stacks
 //            contains "Duration", plus DRAW_REDUCTION which the game marks
@@ -30,8 +30,8 @@ const wikiRaw = parseLuaModule(await Bun.file(`${ROOT}/references/wiki/Powers.lu
 
 // --- parse lightspeed headers ---------------------------------------------------
 // Enum ids come from the enum declarations themselves (the monster
-// monsterStatusEnumStrings[] array is internally misordered — REACTIVE sits in
-// the wrong place — so it is not used). Display names come from the
+// monsterStatusEnumStrings[] array is internally misordered - REACTIVE sits in
+// the wrong place - so it is not used). Display names come from the
 // playerStatusStrings/enemyStatusStrings arrays, which do align with the enums.
 const parseEnum = (src: string, name: string): string[] => {
   const m = src.match(new RegExp(`enum class ${name}\\s*:[^{]*\\{([\\s\\S]*?)\\};`));
@@ -98,7 +98,7 @@ const ADJUDICATED_KIND: Record<string, string> = {
   BLOCKRETURN: "debuff",     // applied to an enemy; spire agrees debuff (wiki says Buff)
   CORPSEEXPLOSION: "debuff", // applied to an enemy; spire agrees debuff (wiki says Buff)
   NOBLOCK: "debuff",         // ls + spire agree debuff (wiki says Buff)
-  FASTING: "debuff",         // ls + spire agree debuff (wiki says Buff) — verify vs game code
+  FASTING: "debuff",         // ls + spire agree debuff (wiki says Buff) - verify vs game code
 };
 // the game marks Draw Reduction turn-based; the wiki lists it as Intensity
 const TURN_BASED_EXTRA = new Set(["DRAWREDUCTION"]);

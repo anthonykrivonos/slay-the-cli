@@ -90,14 +90,14 @@ function afterHpLoss(ctx: EffectCtx): void {
   }
 }
 
-/** Event damage (lightspeed damagePlayer) — folds onLoseHp (Tungsten Rod). */
+/** Event damage (lightspeed damagePlayer) - folds onLoseHp (Tungsten Rod). */
 export function damagePlayer(ctx: EffectCtx, amount: number): void {
   const d = foldHook(ctx, PLAYER, "onLoseHp", amount);
   if (d > 0) ctx.run.hp = Math.max(0, ctx.run.hp - d);
   afterHpLoss(ctx);
 }
 
-/** Direct HP loss (lightspeed playerLoseHp) — same out-of-combat semantics. */
+/** Direct HP loss (lightspeed playerLoseHp) - same out-of-combat semantics. */
 export function loseHp(ctx: EffectCtx, amount: number): void {
   damagePlayer(ctx, amount);
 }
@@ -142,7 +142,7 @@ export function obtainCard(ctx: EffectCtx, defId: CardId, upgrades = 0, misc = 0
   ctx.run.deck.push({ defId, upgrades, misc, bottled: false });
 }
 
-/** Curse card ids (corpus-stable) — canSpawn(run) has no bundle access. */
+/** Curse card ids (corpus-stable) - canSpawn(run) has no bundle access. */
 export const CURSE_IDS: ReadonlySet<CardId> = new Set([
   "ASCENDERS_BANE",
   "CLUMSY",
@@ -169,7 +169,7 @@ export function removeDeckCards(ctx: EffectCtx, indices: number[]): void {
 }
 
 /** Transform: remove, then roll the replacement uniformly over the class pool
- *  (all rarities) with miscRng — identical to runFlow's runDeckChoiceResume. */
+ *  (all rarities) with miscRng - identical to runFlow's runDeckChoiceResume. */
 export function transformDeckCard(ctx: EffectCtx, deckIdx: number): void {
   if (!ctx.run.deck[deckIdx]) return;
   ctx.run.deck.splice(deckIdx, 1);
@@ -209,7 +209,7 @@ export function cardName(ctx: EffectCtx, mc: MasterCard): string {
   return mc.upgrades > 0 ? `${base}+` : base;
 }
 
-/** Random obtainable curse (rarity "curse" — excludes the special curses),
+/** Random obtainable curse (rarity "curse" - excludes the special curses),
  *  uniform with cardRng (Match and Keep). */
 export function randomCurse(ctx: EffectCtx): CardId | null {
   const pool: CardId[] = [];
@@ -233,7 +233,7 @@ export function colorlessViaShuffle(ctx: EffectCtx, rarity: "uncommon" | "rare")
   return null;
 }
 
-/** One colorless card reward (Sensory Stone): mirrors createCardReward — event
+/** One colorless card reward (Sensory Stone): mirrors createCardReward - event
  *  rarity roll + pity updates, COMMON promoted to UNCOMMON (no common colorless
  *  exists), dupe reroll, act-based upgrade roll for non-rares. Corpus pins the
  *  stream (cardRng); pity/upgrade participation follows the standard reward path. */

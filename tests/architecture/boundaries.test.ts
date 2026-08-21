@@ -53,7 +53,7 @@ describe("state serializability", () => {
         .replace(/\/\/[^\n]*/g, "")
         .replace(/\/\*[\s\S]*?\*\//g, "");
       expect(src).not.toMatch(/\bclass\s/);
-      expect(src).not.toMatch(/=>/); // interfaces only — no function-typed fields
+      expect(src).not.toMatch(/=>/); // interfaces only - no function-typed fields
     }
   });
 });

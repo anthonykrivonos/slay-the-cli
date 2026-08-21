@@ -73,7 +73,7 @@ export function hasPower(self: MonsterState, powerId: string): boolean {
 /**
  * Replace a monster's current intent in place (mode shift / split interrupts).
  * The last moveHistory entry is the pending intent (pushed by rollMove), so it
- * is rewritten too — move-chaining getMove implementations key off lastMove.
+ * is rewritten too - move-chaining getMove implementations key off lastMove.
  */
 export function replaceIntent(m: MonsterState, moveId: string): void {
   m.move = moveId;

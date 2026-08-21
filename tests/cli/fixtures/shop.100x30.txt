@@ -1,7 +1,7 @@
  HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | SPIRE              
 -- THE MERCHANT - you have 99G ---------------------------------------------------------------------
                                                                                                     
-                       "Coins for goods, friend. Everything a slayer needs."                        
+                                "Coins for goods. Goods for coins."                                 
 -- CARDS -------------------------------------------------------------------------------------------
  +(1)---------++(1)---------++(0)---------++(0)---------++(1)---------++(1)---------++(0)---------+ 
  | Cleave     || Sword Boom || Flex       || Intimidate || Rupture    || Madness    || Secret Wea | 

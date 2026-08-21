@@ -95,7 +95,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
     try {
       const next = advance(game, cmd, bundle);
       game = next;
-      // overlays are the means of picking a command — a successful advance
+      // overlays are the means of picking a command - a successful advance
       // closes them (the web UI closed its menus before advancing too)
       ui = { ...ui, choiceSel: [], choicePage: 0, overlays: [] };
       absorbEvents(next.eventLog);
@@ -152,7 +152,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
     ui = pushLog(ui, ["(restored saved run)"]);
     try {
       // stale/incompatible saves from an older engine build blow up on first
-      // render — probe once, discard and recover to the menu if so
+      // render - probe once, discard and recover to the menu if so
       renderFrame(buildView(game, ui, bundle), { cols: 100, rows: 30 }, THEME_PLAIN);
     } catch {
       saves.deleteSave();

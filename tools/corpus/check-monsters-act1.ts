@@ -241,7 +241,7 @@ for (const entity of corpus) {
     const dynamicArchive = archMove.damage === null || archMove.damage === -1;
     if (typeof move.damage === "number") {
       if (dynamicArchive) {
-        notes.push(`${entity.id}.${moveId}: archive has no base damage (corpus=${move.damage}) — skipped`);
+        notes.push(`${entity.id}.${moveId}: archive has no base damage (corpus=${move.damage}) - skipped`);
       } else if (move.damage !== archMove.damage) {
         const doc = documentedConflict(entity, moveId);
         (doc ? conflicts : errors).push(
@@ -256,7 +256,7 @@ for (const entity of corpus) {
       } else if (move.damage !== null || archMove.damage === -1) {
         // only worth a note when either side actually carries dynamic data
         notes.push(
-          `${entity.id}.${moveId}: dynamic/ranged damage (corpus=${JSON.stringify(move.damage)}, archive=${archMove.damage}) — skipped`,
+          `${entity.id}.${moveId}: dynamic/ranged damage (corpus=${JSON.stringify(move.damage)}, archive=${archMove.damage}) - skipped`,
         );
       }
     }
@@ -280,7 +280,7 @@ for (const entity of corpus) {
       }
     } else if (myAscDamage !== null) {
       notes.push(
-        `${entity.id}.${moveId}: corpus asc damage ${myAscDamage} not present in archive — skipped`,
+        `${entity.id}.${moveId}: corpus asc damage ${myAscDamage} not present in archive - skipped`,
       );
     }
 
@@ -292,7 +292,7 @@ for (const entity of corpus) {
     // block
     cmp(entity.id, `${moveId} block`, move.block ?? null, archMove.block ?? null, null);
 
-    // intent (informational only — archive intents are known to be lossy)
+    // intent (informational only - archive intents are known to be lossy)
     if (move.intent !== archMove.intent) {
       notes.push(`${entity.id}.${moveId} intent: corpus=${move.intent} spire-archive=${archMove.intent}`);
     }
@@ -303,7 +303,7 @@ for (const entity of corpus) {
     if (mappedArchIds.has(am.id)) continue;
     const known = KNOWN_UNMAPPED_ARCHIVE_MOVES[entity.id]?.[am.id];
     if (known) {
-      notes.push(`${entity.id}: archive move ${am.id} intentionally unmapped — ${known}`);
+      notes.push(`${entity.id}: archive move ${am.id} intentionally unmapped - ${known}`);
     } else if (entity.id === "LOOTER") {
       // handled above from the corpus side
     } else {

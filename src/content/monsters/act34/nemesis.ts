@@ -1,4 +1,4 @@
-// Nemesis — exact port from data/corpus/monsters-act34.json (NEMESIS).
+// Nemesis - exact port from data/corpus/monsters-act34.json (NEMESIS).
 // Intangible cycle: after executing ANY move, if it is not currently
 // Intangible it gains INTANGIBLE 2 (applied synchronously so the end-of-round
 // duration tick lands the same round, i.e. intangible on every even turn).

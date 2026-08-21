@@ -1,7 +1,7 @@
-// Bronze Automaton + Bronze Orb — exact ports from data/corpus/monsters-act2.json.
+// Bronze Automaton + Bronze Orb - exact ports from data/corpus/monsters-act2.json.
 //
 // Automaton (boss, slot 1 in the reference encounter; orbs spawn into slots
-// 0 and 2 — generically: the two lowest slots in 0..2 that are not its own).
+// 0 and 2 - generically: the two lowest slots in 0..2 that are not its own).
 // Prebattle: MINION_LEADER + ARTIFACT 3. Deterministic script:
 //   SPAWN_ORBS, then repeat [FLAIL, BOOST, FLAIL, BOOST, HYPER_BEAM, STUNNED];
 //   at A19 HYPER_BEAM chains into BOOST instead of STUNNED, so the post-first-
@@ -10,23 +10,23 @@
 // which this engine's per-turn rollMove reproduces exactly.
 //
 // Bronze Orb (minion): STASIS steals the highest-rarity card (RARE > UNCOMMON
-// > COMMON by the card's printed rarity — statuses count as COMMON in the
+// > COMMON by the card's printed rarity - statuses count as COMMON in the
 // reference's rarity table; if the pile holds none of those three, a uniform
 // pick over the whole pile) from the draw pile (discard only when draw is
-// empty; nothing when both are empty — the move still counts as used). The
+// empty; nothing when both are empty - the move still counts as used). The
 // stolen card leaves the piles, is held on the orb (self.data.stasisCardIid),
 // and returns to the player's HAND when the orb dies (overflow -> discard).
 // Candidates of the target rarity are stable-sorted by the reference's fixed
-// card sort order before the uniform cardRandomRng pick — approximated here by
+// card sort order before the uniform cardRandomRng pick - approximated here by
 // the card's display name (the reference's cardSortedIdx is name order).
 // AI: STASIS at most once per orb (75% per roll until used), then BEAM 70%
 // (never 3x) / SUPPORT_BEAM 30% (never 3x; +12 block to the Automaton).
-// CONFLICT HONORED (post-stasis odds): lightspeed thresholds — BEAM 70%,
+// CONFLICT HONORED (post-stasis odds): lightspeed thresholds - BEAM 70%,
 // SUPPORT_BEAM 30% (the wiki prose swaps them).
 // CONFLICT HONORED (category): minion (spire-archive's "Elite" is a mislabel).
 //
 // hp quirk (game parity): each orb construct burns one monsterHpRng roll over
-// the BASE range (52,58) before the real asc-tiered roll — reproduced in
+// the BASE range (52,58) before the real asc-tiered roll - reproduced in
 // SPAWN_ORBS since the spawner owns the rolls. ENGINE-GAP: an orb placed
 // directly in an encounter (never happens in the real game) skips the burn.
 

@@ -5,7 +5,7 @@
 // The reference's SINGLE-ROLL QUIRK is ported verbatim: one treasureRng
 // d100 decides BOTH whether the chest holds gold AND the relic tier, so gold
 // presence and relic tier are correlated (e.g. a small chest with an uncommon
-// relic — roll >= 75 — can never hold gold, since gold needs roll < 50).
+// relic - roll >= 75 - can never hold gold, since gold needs roll < 50).
 
 import type { EffectCtx } from "../content/defs";
 import type { ChestState, ChestSize } from "./runState";

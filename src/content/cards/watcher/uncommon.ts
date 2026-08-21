@@ -1,7 +1,7 @@
 // Watcher uncommons (35). Values audited vs data/corpus/cards.json.
 // ENGINE-NOTE on upgrade-gated keywords: for BATTLE_HYMN and WORSHIP the corpus
 // structured flags carry the keyword on the base card, but the corpus card TEXT
-// ("[|$Innate. ]", "[|$Retain. ]") and V2.3.4 gate it to the upgrade — the gate
+// ("[|$Innate. ]", "[|$Retain. ]") and V2.3.4 gate it to the upgrade - the gate
 // wins here (keywords/upgradeKeywords split), matching real behavior.
 
 import type { CardDef } from "../../../engine/content/defs";
@@ -109,7 +109,7 @@ export const watcherUncommons: CardDef[] = [
   },
   {
     // "Gain 3(4) Strength/Dexterity. Gain 1 less Energy at the start of each
-    // turn." — the energy loss is the FASTING power (see powers/watcher.ts).
+    // turn." - the energy loss is the FASTING power (see powers/watcher.ts).
     id: "FASTING",
     name: "Fasting",
     color: "purple",
@@ -284,7 +284,7 @@ export const watcherUncommons: CardDef[] = [
   },
   {
     // "Retain. Gain 5(7) Block. Whenever this card is Retained, increase its
-    // Block by 2(3)." — growth lives in card.misc (this combat).
+    // Block by 2(3)." - growth lives in card.misc (this combat).
     id: "PERSEVERANCE",
     name: "Perseverance",
     color: "purple",
@@ -369,7 +369,7 @@ export const watcherUncommons: CardDef[] = [
   },
   {
     // "Retain. Deal 20(26) damage. When Retained, lower its cost by 1 this
-    // combat." — permanent in-combat cost drop on the instance.
+    // combat." - permanent in-combat cost drop on the instance.
     id: "SANDS_OF_TIME",
     name: "Sands of Time",
     color: "purple",
@@ -407,7 +407,7 @@ export const watcherUncommons: CardDef[] = [
     primitives: [{ do: "damage", n: "damage" }],
   },
   {
-    // "At the start of your next turn, enter Wrath and draw 2(3) cards." —
+    // "At the start of your next turn, enter Wrath and draw 2(3) cards." -
     // the game's WrathNextTurnPower + DrawCardNextTurnPower pair.
     id: "SIMMERING_FURY",
     name: "Simmering Fury",
@@ -477,7 +477,7 @@ export const watcherUncommons: CardDef[] = [
   },
   {
     // "Deal 3 damage 3(4) times. Enter Wrath. Shuffle this card into your draw
-    // pile." — terminal destination handled by afterUse.
+    // pile." - terminal destination handled by afterUse.
     id: "TANTRUM",
     name: "Tantrum",
     color: "purple",
@@ -565,7 +565,7 @@ export const watcherUncommons: CardDef[] = [
   },
   {
     // "Retain. Deal 7(10) damage. When Retained, increase its damage by 4(5)
-    // this combat." — growth lives in card.misc.
+    // this combat." - growth lives in card.misc.
     id: "WINDMILL_STRIKE",
     name: "Windmill Strike",
     color: "purple",

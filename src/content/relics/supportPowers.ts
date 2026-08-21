@@ -1,6 +1,6 @@
 // Helper powers required by relics/potions in this workstream. Ids and
 // semantics audited against data/corpus/powers.json. Some of these (e.g.
-// LOSE_STRENGTH, PLATED_ARMOR, FOCUS) are shared with other workstreams —
+// LOSE_STRENGTH, PLATED_ARMOR, FOCUS) are shared with other workstreams -
 // definitions are corpus-identical, so map-merge by id is safe.
 
 import type { PowerDef } from "../../engine/content/defs";
@@ -154,7 +154,7 @@ export const relicSupportPowers: PowerDef[] = [
   },
   {
     // "This turn, your next X cards are played twice." (Duplication Potion)
-    // KNOWN LIMIT (ENGINE-GAP): a duplicated POWER card fizzles — the original
+    // KNOWN LIMIT (ENGINE-GAP): a duplicated POWER card fizzles - the original
     // resolution deletes the instance before the duplicate drains, because the
     // engine's card queue is id-based while the game replays the object.
     id: "DUPLICATION",

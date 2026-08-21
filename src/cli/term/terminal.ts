@@ -3,7 +3,16 @@
 // stream's own "resize" event; size is re-read on every draw anyway).
 // fakeTerminal() is the deterministic double for headless tests.
 
-import { ENTER_ALT_SCREEN, LEAVE_ALT_SCREEN, HIDE_CURSOR, SHOW_CURSOR, RESET } from "./ansi";
+import {
+  ENTER_ALT_SCREEN,
+  LEAVE_ALT_SCREEN,
+  HIDE_CURSOR,
+  SHOW_CURSOR,
+  RESET,
+  SET_TITLE,
+  PUSH_TITLE,
+  POP_TITLE,
+} from "./ansi";
 
 export interface TerminalPort {
   isTTY(): boolean;
@@ -42,12 +51,12 @@ export function realTerminal(): TerminalPort {
       active = true;
       if (typeof stdin.setRawMode === "function") stdin.setRawMode(true);
       stdin.resume();
-      stdout.write(ENTER_ALT_SCREEN + HIDE_CURSOR);
+      stdout.write(ENTER_ALT_SCREEN + HIDE_CURSOR + PUSH_TITLE + SET_TITLE);
     },
     restore: () => {
       if (!active) return;
       active = false;
-      stdout.write(RESET + SHOW_CURSOR + LEAVE_ALT_SCREEN);
+      stdout.write(RESET + SHOW_CURSOR + POP_TITLE + LEAVE_ALT_SCREEN);
       if (typeof stdin.setRawMode === "function") stdin.setRawMode(false);
       stdin.pause();
     },
@@ -104,7 +113,7 @@ export function fakeTerminal(opts: { cols?: number; rows?: number; script?: stri
     },
     restore: () => {
       term.restoreCount += 1;
-      term.output.push(RESET + SHOW_CURSOR + LEAVE_ALT_SCREEN);
+      term.output.push(RESET + SHOW_CURSOR + POP_TITLE + LEAVE_ALT_SCREEN);
     },
     feed: (s) => {
       dataCb?.(encode(s));

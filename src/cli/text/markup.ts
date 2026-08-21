@@ -14,7 +14,7 @@ export function resolveMarkup(text: string, upgraded: boolean): string {
     const parts = inner.split("|");
     return parts[parts.length - 1] ?? inner;
   });
-  // [base|upgraded] — no nesting of square brackets inside either side
+  // [base|upgraded] - no nesting of square brackets inside either side
   s = s.replace(/\[([^[\]|]*)\|([^[\]]*)\]/g, (_m, base: string, up: string) =>
     upgraded ? up : base,
   );

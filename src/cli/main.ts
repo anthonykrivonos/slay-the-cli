@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// slay — full-terminal Slay the Spire. Entry point: argv parsing, TTY guard,
+// Slay the CLI - Slay the Spire, adapted to the terminal. Entry point: argv parsing, TTY guard,
 // terminal-restore safety nets, then the app loop. Run with: bun src/cli/main.ts
 //   --seed FOO         starting seed
 //   --character SILENT IRONCLAD | SILENT | DEFECT | WATCHER
@@ -58,7 +58,7 @@ function parseArgv(argv: string[]): AppOptions | { error: string } {
   return opts;
 }
 
-const USAGE = `slay - a mechanically exact spire, in your terminal
+const USAGE = `Slay the CLI - the whole Spire, played in a terminal
 
 usage: bun src/cli/main.ts [--seed FOO] [--character IRONCLAD] [--ascension 0] [--no-color]
 

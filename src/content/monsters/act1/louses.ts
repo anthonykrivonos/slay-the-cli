@@ -1,10 +1,10 @@
-// Red & Green Louse — exact ports from data/corpus/monsters-act1.json.
+// Red & Green Louse - exact ports from data/corpus/monsters-act1.json.
 // Spawn: bite damage D = monsterHpRng.random(5,7) (asc>=2: 6,8), rolled once and
 // stored; BITE always deals D. Prebattle: CURL_UP = monsterHpRng over [3,7]
-// (asc>=7: [4,8]; asc>=17: [9,12]) — corpus specifies monsterHpRng for both.
+// (asc>=7: [4,8]; asc>=17: [9,12]) - corpus specifies monsterHpRng for both.
 // NOTE: the reference rolls each louse's D inside its constructor (interleaved
 // hp0,D0,hp1,D1...); this engine rolls all HP first, then preBattle per slot
-// (hp0,hp1,D0,CURL0,D1,CURL1) — same stream, slightly different order.
+// (hp0,hp1,D0,CURL0,D1,CURL1) - same stream, slightly different order.
 // AI (roll d100, 25% utility / 75% bite):
 //   <25: GROW/SPIT_WEB unless lastMove was it and (asc>=17 or the move before was too) -> BITE
 //   else: BITE unless last two were BITE -> GROW/SPIT_WEB

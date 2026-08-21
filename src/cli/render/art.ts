@@ -1,4 +1,4 @@
-// Original ASCII scene art (all drawn for this project — nothing copied) for
+// Original ASCII scene art (all drawn for this project - nothing copied) for
 // the non-combat screens, normalized to a uniform width so renderers can
 // center/place each piece as a block. The single-size pieces stay <= 8 rows;
 // Neow comes in tiers so wide terminals get more of his likeness.
@@ -30,7 +30,7 @@ export const ART_CAMPFIRE: Art = norm([
 //
 // Neow, drawn from his in-game likeness: a blunt whale head facing LEFT, body
 // running off the right edge. The features are what make him recognizable, so
-// every tier keeps all of them in the same places —
+// every tier keeps all of them in the same places -
 //   `( @ )`   the big dark eye, high on the brow, with a smaller eye up-right
 //             of it and a third, smaller still, below it
 //   `-X-`     the branching scar on his flank, right of centre

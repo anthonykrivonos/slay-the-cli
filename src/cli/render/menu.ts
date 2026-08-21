@@ -1,5 +1,5 @@
-// Main menu: SLAY in block letters, a row of hero cards (EVERY hero in its
-// own accent color — the selected one bold with '=' borders and a '>' mark),
+// Main menu: SLAY THE CLI in block letters, a row of hero cards (EVERY hero in its
+// own accent color - the selected one bold with '=' borders and a '>' mark),
 // ascension / seed controls, the run actions, and the selected hero's
 // portrait centered underneath its name rule.
 //
@@ -17,7 +17,8 @@ import { clamp, joinBlocks, rowWidth } from "./layout";
 import { ART_SPIRE, pickPortrait } from "./art";
 import { visibleWidth } from "../term/ansi";
 
-const CAPTION = "a mechanically exact spire";
+const TITLE = "SLAY THE CLI";
+const CAPTION = "The Spire awaits.";
 
 function accentOf(id: string): string {
   return CHARACTER_COLORS[id] ?? "#54689a";
@@ -69,7 +70,7 @@ function nameRule(name: string, accent: string, width: number, theme: Theme): st
 }
 
 export function renderMenu(screen: MenuView, width: number, height: number, theme: Theme): string[] {
-  const letters = bigWord("SLAY");
+  const letters = bigWord(TITLE);
   const boxW = clamp(Math.floor((width - 2) / 4), 19, 26);
   const boxRowW = rowWidth(4, boxW, 1);
   // hero cards grow a row when a starting-relic name has to wrap
@@ -137,11 +138,11 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
 
   // --- title ---
   const head: string[] = [];
-  const useBig = letters !== null && bigWordWidth("SLAY") <= width - 4;
+  const useBig = letters !== null && bigWordWidth(TITLE) <= width - 4;
   if (useBig) {
     for (const r of letters!) head.push(center(theme.bold(theme.fg(C.bright, r)), width));
   } else {
-    head.push(center(theme.bold(theme.fg(C.bright, "S L A Y")), width));
+    head.push(center(theme.bold(theme.fg(C.bright, TITLE)), width));
   }
   head.push(center(theme.dim(CAPTION), width));
   head.push("");
@@ -181,7 +182,7 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
 function renderMenuFallback(screen: MenuView, width: number, height: number, theme: Theme): string[] {
   const out: string[] = [];
   out.push("");
-  out.push(center(theme.bold(theme.fg(C.bright, "S L A Y")), width));
+  out.push(center(theme.bold(theme.fg(C.bright, TITLE)), width));
   out.push(center(theme.dim(CAPTION), width));
   out.push("");
   screen.characters.forEach((ch, i) => {

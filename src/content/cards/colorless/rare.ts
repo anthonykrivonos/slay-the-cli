@@ -1,5 +1,5 @@
 // Colorless rare cards (the obtainable colorless pool, rare half).
-// Values audited against data/corpus/cards.json — corpus numbers only.
+// Values audited against data/corpus/cards.json - corpus numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
 import { calcCardDamage } from "../../../engine/combat/damageCalc";
@@ -51,7 +51,7 @@ export const colorlessRares: CardDef[] = [
     keywords: [],
     onPlay: (ctx) => {
       // damage + fatal gold resolve atomically (the gold must land even when
-      // the kill ends the combat — see effects.ts, Feed pattern)
+      // the kill ends the combat - see effects.ts, Feed pattern)
       const target = ctx.target ?? 0;
       const dmg = calcCardDamage(ctx, ctx.card, target, ctx.upgraded ? 25 : 20);
       ctx.queue.addToBottom({

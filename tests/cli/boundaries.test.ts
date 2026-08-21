@@ -1,5 +1,5 @@
 // CLI purity boundaries: render/, input/, state/, text/ plus the two pure
-// term files (ansi.ts, keys.ts) must never touch the OS — no process, no
+// term files (ansi.ts, keys.ts) must never touch the OS - no process, no
 // Bun.*, no node: imports, no DOM. Only term/terminal.ts, io/, app.ts and
 // main.ts may. This keeps renderFrame/buildView/mapKey snapshot-testable and
 // portable. (Engine purity has its own suite in tests/architecture/.)
@@ -68,7 +68,7 @@ describe("cli purity", () => {
 
   test("only the view layer (and text/) consult the content bundle", () => {
     // render/ and input/ operate on the View alone; type-only imports of
-    // engine shapes (e.g. the Command union) are fine — no runtime coupling
+    // engine shapes (e.g. the Command union) are fine - no runtime coupling
     const files = [...walk(join(CLI_ROOT, "render")), ...walk(join(CLI_ROOT, "input"))];
     const re = /^import\s+(?!type\b)[^;]*from\s+["'][^"']*\/(content|engine)\//m;
     const offenders = files.filter((f) => re.test(readFileSync(f, "utf8")));

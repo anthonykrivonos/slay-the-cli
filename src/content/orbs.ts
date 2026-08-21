@@ -1,18 +1,18 @@
 // The Defect's four orbs (exact V2.3.4 behavior). Values audited against
 // data/corpus/orbs.json:
-//   LIGHTNING passive 3 / evoke 8 (+Focus)  — damage to a random enemy
+//   LIGHTNING passive 3 / evoke 8 (+Focus) - damage to a random enemy
 //                                             (ALL enemies with the Electro power)
-//   FROST     passive 2 / evoke 5 (+Focus)  — Block (no Dexterity)
+//   FROST     passive 2 / evoke 5 (+Focus) - Block (no Dexterity)
 //   DARK      passive 6 (+Focus) growth; evoke deals the stored total (starts at
 //             6; Focus modifies the per-turn growth, NOT the initial 6 and NOT
 //             the evoke) to the enemy with the lowest HP
-//   PLASMA    passive 1 / evoke 2           — Energy; Focus never applies; its
+//   PLASMA    passive 1 / evoke 2 - Energy; Focus never applies; its
 //             passive fires at the START of the turn (engine handles the timing)
 //
 // Orb damage is NOT an attack: it bypasses Strength/Weak/Vulnerable ("thorns"
 // type through the engine's damage application, which skips the attack calc
 // pipeline). Lock-On multiplies Lightning/Dark orb damage on the marked enemy
-// by 1.5 (int-truncated, i.e. floor for positive amounts) — applied explicitly
+// by 1.5 (int-truncated, i.e. floor for positive amounts) - applied explicitly
 // here. Targets are rolled when the damage ACTION resolves (cardRandomRng),
 // matching the game's *(OrbPassive)Action timing.
 
@@ -76,7 +76,7 @@ export function trackedEvoke(ctx: EffectCtx, times: number): void {
 // Hidden helper power CHANNEL_TALLY (defined in powers/defect.ts) counts every
 // channel via its onChannel hook. Because powers cannot exist at battle start,
 // the first content-driven orb operation creates it and seeds the counts from
-// the orbs currently in play — battle-start relic channels (Cracked Core etc.)
+// the orbs currently in play - battle-start relic channels (Cracked Core etc.)
 // are still sitting in the orb row at that point, so they are counted exactly.
 
 export function ensureChannelTally(ctx: EffectCtx): void {

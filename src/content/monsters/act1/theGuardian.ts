@@ -1,4 +1,4 @@
-// The Guardian — exact port from data/corpus/monsters-act1.json (THE_GUARDIAN).
+// The Guardian - exact port from data/corpus/monsters-act1.json (THE_GUARDIAN).
 // Offensive loop: CHARGING_UP (+9 block) -> FIERCE_BASH -> VENT_STEAM ->
 // WHIRLWIND -> repeat. MODE_SHIFT (prebattle 30; asc>=9: 35; asc>=19: 40) counts
 // down with every HP loss; at <= 0 it is removed, 20 block is gained, and the

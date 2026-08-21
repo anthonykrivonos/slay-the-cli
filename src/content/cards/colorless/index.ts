@@ -1,5 +1,5 @@
 // Colorless content slice: the full colorless card pool (20 uncommon + 15 rare
-// obtainable, 16 special/token — statuses live in cards/statuses.ts), plus the
+// obtainable, 16 special/token - statuses live in cards/statuses.ts), plus the
 // powers and effects these cards create and use.
 //
 // Integration (orchestrator): merge colorlessCards / colorlessPowers /

@@ -1,6 +1,6 @@
 // Regenerates the checked-in frame snapshot fixtures:
 //   bun tests/cli/gen-fixtures.ts
-// Inspect the diff before committing — these files ARE the expected UI.
+// Inspect the diff before committing - these files ARE the expected UI.
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";

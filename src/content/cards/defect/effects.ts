@@ -1,5 +1,5 @@
 // Named effect continuations for the Defect card pool. Same two flavors as the
-// ironclad slice: deferred effects (work happens at the right queue position —
+// ironclad slice: deferred effects (work happens at the right queue position -
 // random targets and pile counts resolve at action time) and choose/resume
 // pairs (choice built from LIVE pile contents; single/zero-candidate choices
 // auto-resolve). All channels and evokes go through trackedChannel/trackedEvoke
@@ -141,7 +141,7 @@ function fission(ctx: EffectCtx, args: unknown): void {
 /**
  * Recursion: Evoke the leftmost orb, then Channel an orb of the same type.
  * The game re-channels the same orb instance, so a Dark orb KEEPS its
- * accumulated evoke damage — restored onto the fresh instance here.
+ * accumulated evoke damage - restored onto the fresh instance here.
  */
 function recursion(ctx: EffectCtx): void {
   const player = ctx.combat!.player;
@@ -279,7 +279,7 @@ function reboundArm(ctx: EffectCtx): void {
  * Hello World / Creative AI / White Noise card creation. Pools filter the blue
  * class pool (like the game's returnTrulyRandomCardInCombat), sorted by id for
  * determinism (ENGINE-NOTE: the game's library order differs, so specific
- * cardRandomRng rolls map to different cards — same caveat as Infernal Blade).
+ * cardRandomRng rolls map to different cards - same caveat as Infernal Blade).
  */
 function addRandomCard(ctx: EffectCtx, args: unknown): void {
   const { pool, n, costZeroThisTurn } = args as { pool: "common" | "power"; n: number; costZeroThisTurn?: boolean };

@@ -1,4 +1,4 @@
-// Silent uncommon cards. Values audited against data/corpus/cards.json —
+// Silent uncommon cards. Values audited against data/corpus/cards.json -
 // corpus numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
@@ -295,7 +295,7 @@ export const silentUncommons: CardDef[] = [
     values: { damage: 7 },
     upgradeValues: { damage: 9 },
     keywords: [],
-    // "Costs 1 less for each card discarded this turn" — manual discards only,
+    // "Costs 1 less for each card discarded this turn" - manual discards only,
     // floor 0. Based on costForTurn so other cost-for-turn effects compose.
     dynamicCost: (ctx, c) => Math.max(0, c.costForTurn - ctx.combat!.turnFlags.manualDiscardsThisTurn),
     primitives: [{ do: "damage", n: "damage", hits: 3 }],
@@ -329,7 +329,7 @@ export const silentUncommons: CardDef[] = [
     upgradeValues: { damage: 8 },
     keywords: [],
     onPlay: (ctx) => {
-      // one hit per Attack played this turn — the counter is incremented
+      // one hit per Attack played this turn - the counter is incremented
       // before onPlay runs, so Finisher counts itself (game parity: the card
       // joins cardsPlayedThisTurn before use()).
       const target = ctx.target ?? 0;
@@ -447,7 +447,7 @@ export const silentUncommons: CardDef[] = [
     upgradeValues: { damage: 16 },
     keywords: [],
     // "Costs 1 additional energy for each time you lose HP this combat."
-    // INSTANCES, not amounts — counted by the hidden MASTERFUL_STAB power the
+    // INSTANCES, not amounts - counted by the hidden MASTERFUL_STAB power the
     // card applies when drawn (see powers/silent.ts for the ENGINE-GAP note).
     dynamicCost: (ctx, c) => c.costForTurn + getPowerAmount(ctx, PLAYER, "MASTERFUL_STAB"),
     onDrawThis: (ctx) => {

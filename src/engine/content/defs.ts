@@ -1,4 +1,4 @@
-// Content-definition interfaces — the contract between the engine and the
+// Content-definition interfaces - the contract between the engine and the
 // (forkable) content bundle. Defs may contain functions; game STATE never does.
 
 import type {
@@ -86,7 +86,7 @@ export interface CardDef {
   upgradeValues: { cost?: number; damage?: number; block?: number; magic?: number; hits?: number };
   keywords: string[]; // exhaust, ethereal, innate, retain, selfRetain, purgeOnUse, strike, multiUpgrade
   upgradeKeywords?: string[]; // full keyword set when upgraded (if it changes)
-  // behavior — primitives for simple cards, onPlay for the rest
+  // behavior - primitives for simple cards, onPlay for the rest
   primitives?: CardPrimitive[];
   onPlay?: CardEffectFn;
   canUse?: (ctx: CardCtx) => boolean;
@@ -190,7 +190,7 @@ export interface EventOption {
   choose(ctx: EffectCtx, svc: EventServices): void;
 }
 
-/** Runtime services handed to EventOption.choose by run/eventRuntime — the only
+/** Runtime services handed to EventOption.choose by run/eventRuntime - the only
  *  way event content may start combats (they need GameState/registry access). */
 export interface EventServices {
   /** start an event combat; victory routes to EventDef.onCombatVictory */
@@ -211,7 +211,7 @@ export interface EventDef {
   pool: "act1" | "act2" | "act3" | "shrine" | "oneTime" | "special";
   canSpawn?(run: RunState): boolean;
   /** build the current screen from run.room (event variant) state. MUST be
-   *  side-effect free and consume no rng — it can be re-rendered any time. */
+   *  side-effect free and consume no rng - it can be re-rendered any time. */
   build(ctx: EffectCtx): { summary: string; options: EventOption[] };
   /** one-time setup rolls, fired right after the event room is entered */
   onEnter?(ctx: EffectCtx): void;

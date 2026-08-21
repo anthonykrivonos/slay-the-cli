@@ -1,7 +1,7 @@
-// Snecko — exact port from data/corpus/monsters-act2.json.
-// Turn 1 always PERPLEXING_GLARE (applies CONFUSED — the shared def in
+// Snecko - exact port from data/corpus/monsters-act2.json.
+// Turn 1 always PERPLEXING_GLARE (applies CONFUSED - the shared def in
 // relics/supportPowers.ts: every drawn card's cost is randomized 0-3, roll
-// always consumed — the only source of Confused in the game). GLARE is never
+// always consumed - the only source of Confused in the game). GLARE is never
 // selected again. Then per roll: BITE 60% (never 3x), TAIL_WHIP 40%.
 
 import type { MonsterDef } from "../../../engine/content/defs";

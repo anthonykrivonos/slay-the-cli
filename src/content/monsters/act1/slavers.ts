@@ -1,4 +1,4 @@
-// Blue & Red Slaver — exact ports from data/corpus/monsters-act1.json.
+// Blue & Red Slaver - exact ports from data/corpus/monsters-act1.json.
 // CONFLICTS HONORED (wiki/real game over lightspeed):
 //  - Blue Slaver asc>=17: RAKE never twice in a row (lightspeed's OR-flattened
 //    expression made the asc17 clause dead code).
@@ -7,7 +7,7 @@
 //  - Red Slaver asc>=17: SCRAPE never twice in a row (same OR-flattening bug).
 // UNRESOLVED CONFLICT (kept lightspeed): post-entangle STAB branch threshold is
 // roll >= 50 (the wiki prose says 55%, i.e. roll >= 45; unresolvable without
-// the game jar — corpus does not adjudicate, so the transcribed 50 stands).
+// the game jar - corpus does not adjudicate, so the transcribed 50 stands).
 
 import type { MonsterDef } from "../../../engine/content/defs";
 import { lastMove, lastTwoMovesWere } from "../../util";

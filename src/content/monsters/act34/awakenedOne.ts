@@ -1,20 +1,20 @@
-// Awakened One — exact port from data/corpus/monsters-act34.json
+// Awakened One - exact port from data/corpus/monsters-act34.json
 // (AWAKENED_ONE). Phase 1 ends in half-death: block cleared, all debuffs
 // wiped (negative Strength -> 0), Curiosity removed, pending player card
 // plays fizzle, intent forced to Rebirth. Its Rebirth turn (driven by the
-// AWAKENED_REBIRTH power's atEndOfRound hook — the engine skips halfDead
+// AWAKENED_REBIRTH power's atEndOfRound hook - the engine skips halfDead
 // monsters in the monster phase) sets max HP to the flat 300 (asc9+: 320),
 // fully heals, keeps positive Strength, grants Minion Leader and forces Dark
 // Echo. Killing it in phase 2 ends the fight: the two Cultists flee.
 // CONFLICT HONORED (hp.asc): asc9+ initHp rolls hpRng.random(300,320) (a real
 // roll for RNG parity); REBIRTH then overwrites maxHp with the flat value.
 // CONFLICT HONORED (CURIOSITY): the on-Power-card Strength gain is real-game
-// behavior (lightspeed comments it out) — implemented in the CURIOSITY power.
+// behavior (lightspeed comments it out) - implemented in the CURIOSITY power.
 // Encounter: 2 Cultists (slots 0,1) + Awakened One (slot 2); the Cultists
 // are NOT minions. The run layer must resolve the AWAKENED_ONE boss
 // encounter to ["CULTIST","CULTIST","AWAKENED_ONE"] (see act34BossEncounters
 // in ./index.ts); as a fallback, when spawned alone this preBattle appends
-// the two Cultists (their HP rolls then land AFTER the boss's — an
+// the two Cultists (their HP rolls then land AFTER the boss's - an
 // ENGINE-GAP vs the reference's slot-order stream).
 
 import type { MonsterDef } from "../../../engine/content/defs";
@@ -114,7 +114,7 @@ export const awakenedOne: MonsterDef = {
       replaceIntent(self, REBIRTH);
       return;
     }
-    // phase-2 real death: Minion Leader — the Cultists flee, fight over
+    // phase-2 real death: Minion Leader - the Cultists flee, fight over
     for (const m of ctx.combat!.monsters) {
       if (m.idx !== self.idx && !m.isDead && !m.isEscaped) m.isEscaped = true;
     }

@@ -1,5 +1,5 @@
 // Ironclad common cards (BODY_SLAM and ANGER live in basics.ts).
-// Values audited against data/corpus/cards.json — corpus numbers only.
+// Values audited against data/corpus/cards.json - corpus numbers only.
 
 import type { CardDef, CardCtx } from "../../../engine/content/defs";
 import { calcCardDamage } from "../../../engine/combat/damageCalc";

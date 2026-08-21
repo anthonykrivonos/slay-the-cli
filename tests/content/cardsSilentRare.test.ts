@@ -298,7 +298,7 @@ describe("NIGHTMARE", () => {
 });
 
 describe("PHANTASMAL_KILLER", () => {
-  test("NEXT turn attacks deal double damage — not this turn, not the one after", () => {
+  test("NEXT turn attacks deal double damage - not this turn, not the one after", () => {
     let s = fight({ deck: ["PHANTASMAL_KILLER", ...strikes(4)], monsters: ["T_GUARD"] });
     s = play(s, "PHANTASMAL_KILLER");
     expect(playerPower(s, "PHANTASMAL")).toBe(1);

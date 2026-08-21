@@ -1,4 +1,4 @@
-// Act 3 event pool (7 events) — data/corpus/events.json is the spec.
+// Act 3 event pool (7 events) - data/corpus/events.json is the spec.
 
 import type { EventDef, EffectCtx } from "../../engine/content/defs";
 import { JavaRandom, javaShuffle } from "../../engine/core/rng";

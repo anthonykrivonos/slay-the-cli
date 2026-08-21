@@ -6,7 +6,7 @@
 //   order. Value-modifying hooks fold left through the same order.
 //
 // Every engine call site fires hooks through the functions at the bottom of
-// this file — never by iterating powers/relics itself.
+// this file - never by iterating powers/relics itself.
 
 import type { ActorRef, CardId } from "./ids";
 import type { CardInstance, MonsterState, PowerInstance } from "../combat/combatState";
@@ -43,7 +43,7 @@ export interface Hooks {
   onEnergyRecharge?(ctx: HookCtx): void;
   // --- card lifecycle ---
   canPlayCard?(ctx: HookCtx, card: CardInstance): boolean; // Velvet Choker, Normality, Entangled
-  /** fold: (ctx, cost, card) — value-first like all fold hooks */
+  /** fold: (ctx, cost, card) - value-first like all fold hooks */
   modifyCardCost?(ctx: HookCtx, cost: number, card: CardInstance): number; // Corruption
   onUseCard?(ctx: HookCtx, card: CardInstance, target: number | null): void; // during resolution
   onAfterCardPlayed?(ctx: HookCtx, card: CardInstance): void; // Time Eater counter site
@@ -122,7 +122,7 @@ function playerSources(ctx: EffectCtx): HookSource[] {
     }
     const stanceDef = ctx.bundle.stances.get(combat.player.stance);
     if (stanceDef) {
-      // stances expose enter/exit/multipliers, not general hooks — placeholder for parity
+      // stances expose enter/exit/multipliers, not general hooks - placeholder for parity
     }
   }
   for (const r of ctx.run.relics) {

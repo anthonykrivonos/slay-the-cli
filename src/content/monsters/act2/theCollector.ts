@@ -1,22 +1,22 @@
-// The Collector + Torch Head — exact ports from data/corpus/monsters-act2.json.
+// The Collector + Torch Head - exact ports from data/corpus/monsters-act2.json.
 //
 // Collector (boss, slot 2 in the reference encounter; Torch Heads spawn into
 // slots 0 and 1 and act BEFORE her, so fresh heads first act the round after
 // spawning). Prebattle: MINION_LEADER. AI: turn 1 always SPAWN; the roll made
 // on turn 3 unconditionally selects MEGA_DEBUFF for turn 4 (exactly once);
 // otherwise roll <= 25 SPAWN (only while fewer than 2 heads live, never twice
-// in a row), roll <= 70 FIREBALL (never 3x), BUFF (never twice in a row —
+// in a row), roll <= 70 FIREBALL (never 3x), BUFF (never twice in a row -
 // after a BUFF the fallthrough is FIREBALL).
 // SPAWN summons (3 - monstersAlive) heads: first into slot 1 if open else 0,
 // second into 0. Each head is constructed with TWO monsterHpRng rolls (the
-// game's construct + re-initHp bug — the second roll wins), its move preset to
+// game's construct + re-initHp bug - the second roll wins), its move preset to
 // TACKLE (getMove never runs in the reference), MINION (+1 STR with
 // Philosopher's Stone), and one aiRng.random(99) burned per head.
 // CONFLICT HONORED (BUFF block): 15 base, 18 from A9, 23 from A19 (wiki tiered
 // AscText; lightspeed groups the 18 at A4). STR 3 / 4@A4 / 5@A19 (all sources).
 // CONFLICT HONORED (MEGA_DEBUFF): 3 each, 5 each from A19 (wiki tiered AscText;
 // lightspeed hardcodes 3).
-// ENGINE-GAP (Torch Head): the reference never rolls a Torch Head move — this
+// ENGINE-GAP (Torch Head): the reference never rolls a Torch Head move - this
 // engine's rollMove burns one aiRng.random(99) per turn per head (getMove
 // always returns TACKLE).
 
@@ -70,7 +70,7 @@ export const theCollector: MonsterDef = {
           }
           ctx.rng("aiRng").random(99); // burned per spawned head (game parity)
           const head = ctx.combat!.monsters[slot]!;
-          head.move = "TORCH_HEAD_TACKLE"; // preset — no move roll
+          head.move = "TORCH_HEAD_TACKLE"; // preset - no move roll
           head.moveHistory.push("TORCH_HEAD_TACKLE");
         }
       },
@@ -119,7 +119,7 @@ export const theCollector: MonsterDef = {
   },
   getMove: (ctx, self, roll) => {
     if (firstTurn(self)) return SPAWN;
-    if (ctx.combat!.turn === 3) return MEGA_DEBUFF; // this roll selects turn 4 — exactly once
+    if (ctx.combat!.turn === 3) return MEGA_DEBUFF; // this roll selects turn 4 - exactly once
     const canSpawn = aliveCount(ctx) < 3 && lastMove(self) !== SPAWN;
     if (roll <= 25 && canSpawn) return SPAWN;
     if (roll <= 70 && !lastTwoMovesWere(self, FIREBALL)) return FIREBALL;

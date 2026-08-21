@@ -353,7 +353,7 @@ describe("SEEK", () => {
 });
 
 describe("THUNDER_STRIKE", () => {
-  test("one 7/9 hit per Lightning channeled this combat — Cracked Core counts", () => {
+  test("one 7/9 hit per Lightning channeled this combat - Cracked Core counts", () => {
     for (const [up, per] of [
       [0, 7],
       [1, 9],

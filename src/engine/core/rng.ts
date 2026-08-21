@@ -39,7 +39,7 @@ export class Rng {
   private seed1: bigint;
 
   constructor(seed: bigint, targetCounter?: number) {
-    // mask to u64 FIRST — callers pass seed+offset which must wrap like C++/Java
+    // mask to u64 FIRST - callers pass seed+offset which must wrap like C++/Java
     const s = u64(seed);
     this.seed0 = murmurHash3(s === 0n ? ONE_IN_MOST_SIGNIFICANT : s);
     this.seed1 = murmurHash3(this.seed0);
@@ -135,7 +135,7 @@ export class Rng {
   }
 
   /**
-   * Raw bounded int in [0, n) WITHOUT ticking the counter — the map generator's
+   * Raw bounded int in [0, n) WITHOUT ticking the counter - the map generator's
    * in-place room shuffle uses this internal directly (ported exactly).
    */
   nextIntRaw(n: number): number {
@@ -179,7 +179,7 @@ export class JavaRandom {
     if ((bound & m) === 0) {
       r = Number((BigInt(bound) * BigInt(r)) >> 31n);
     } else {
-      // int32 overflow in (u - r + m) is the rejection signal — emulate with |0
+      // int32 overflow in (u - r + m) is the rejection signal - emulate with |0
       for (let u = r; ((u - (r = u % bound) + m) | 0) < 0; u = this.next(31));
     }
     return r;

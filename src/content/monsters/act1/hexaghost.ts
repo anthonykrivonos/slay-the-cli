@@ -1,13 +1,13 @@
-// Hexaghost — exact port from data/corpus/monsters-act1.json (HEXAGHOST).
+// Hexaghost - exact port from data/corpus/monsters-act1.json (HEXAGHOST).
 // Turn 1 ACTIVATE (sets dividerDamage = floor(playerHP/12) + 1), turn 2 DIVIDER
 // (dividerDamage x6), then the fixed repeating 7-move loop
 // [SEAR, TACKLE, SEAR, INFLAME, TACKLE, SEAR, INFERNO] driven by counter seq.
 // No randomness in move selection (one aiRng.random(99) per turn is consumed,
-// unused — matching the reference).
+// unused - matching the reference).
 // CONFLICT (kept lightspeed, per corpus transcription): INFERNO only attacks;
 // Sear Burns are created upgraded from game turn 10 onward (exactly every SEAR
 // after the first INFERNO). The real game additionally adds 3 Burn+ on Inferno
-// and retro-upgrades existing Burns — omitted here as in the transcription.
+// and retro-upgrades existing Burns - omitted here as in the transcription.
 
 import type { MonsterDef } from "../../../engine/content/defs";
 import { firstTurn, lastMove } from "../../util";

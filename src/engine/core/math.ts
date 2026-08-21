@@ -1,5 +1,5 @@
 // Java-float (32-bit) arithmetic helpers. The game computes damage/block in
-// Java floats; exact rounding of chains like Frail 0.75f × Vulnerable 1.5f
+// Java floats; exact rounding of chains like Frail 0.75f x Vulnerable 1.5f
 // depends on rounding to float32 after every operation.
 
 export const f32 = Math.fround;

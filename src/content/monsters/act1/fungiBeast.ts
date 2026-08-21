@@ -1,5 +1,5 @@
-// Fungi Beast — exact port from data/corpus/monsters-act1.json (FUNGI_BEAST).
-// AI: roll d100 — <60 BITE (never 3x in a row), else GROW (never twice in a row).
+// Fungi Beast - exact port from data/corpus/monsters-act1.json (FUNGI_BEAST).
+// AI: roll d100 - <60 BITE (never 3x in a row), else GROW (never twice in a row).
 // SPORE_CLOUD 2 (prebattle, always 2): on death applies 2 VULNERABLE to the
 // player, even when killed during the monster turn.
 

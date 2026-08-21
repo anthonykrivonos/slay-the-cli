@@ -1,12 +1,12 @@
-// Shelled Parasite — exact port from data/corpus/monsters-act2.json.
+// Shelled Parasite - exact port from data/corpus/monsters-act2.json.
 // Prebattle: PLATED_ARMOR 14 (shared def: 14 block at the end of each of its
 // turns, -1 per unblocked attack hit) + 14 starting block (covers turn 1), and
 // the armor-break stun marker (see powers/monstersAct2.ts): the hit that
-// empties the armor replaces the current move with STUNNED — at most once per
+// empties the armor replaces the current move with STUNNED - at most once per
 // combat, since Plated Armor never returns.
 // AI: first turn A<17 aiRng.randomBoolean() -> DOUBLE_STRIKE / SUCK (never
 // FELL); A17+ always FELL. Then per roll FELL 20% (never twice in a row; a
-// blocked FELL burns aiRng.random(20,99) — the reference compares roll, not
+// blocked FELL burns aiRng.random(20,99) - the reference compares roll, not
 // the reroll, so the fallthrough always lands in the DOUBLE_STRIKE branch),
 // DOUBLE_STRIKE 40% (never 3x), SUCK 40% (never 3x).
 // The reference's stun turn rewrites its own history entry to FELL before

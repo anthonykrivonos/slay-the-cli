@@ -109,7 +109,7 @@ describe("act 3 boss gating", () => {
     const kinds = s.run.map!.rows.slice(0, 4).map((r) => r[3]?.kind);
     expect(kinds).toEqual(["rest", "shop", "elite", "boss"]);
 
-    // walk the column: rest (recall unavailable — already have ruby) -> shop -> elite -> heart
+    // walk the column: rest (recall unavailable - already have ruby) -> shop -> elite -> heart
     s = adv(s, { cmd: "mapPick", x: 3, y: 0 });
     expect(s.run.room?.kind).toBe("rest");
     s = adv(s, { cmd: "restOption", kind: "rest" });

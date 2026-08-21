@@ -129,7 +129,7 @@ describe("A20: double act-3 boss", () => {
     expect(firstBoss).toBe(bossList[0]!);
 
     // winCombat chews through BOTH bosses (the second starts immediately,
-    // with no reward screen between) — verify via post-conditions + a
+    // with no reward screen between) - verify via post-conditions + a
     // transition trace collected during the fight loop.
     const seenEncounters: string[] = [firstBoss];
     let guard = 400;

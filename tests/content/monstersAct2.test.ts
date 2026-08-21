@@ -1,4 +1,4 @@
-// Act-2 monster content tests — every corpus entity: HP bands (A0 + A7/8/9 by
+// Act-2 monster content tests - every corpus entity: HP bands (A0 + A7/8/9 by
 // category), exact move damage/effects through real combats, first-turn rules,
 // seed-swept property tests of the corpus historyRules, and the boss/elite
 // specifics (Champ phase 2, Collector re-summon, Automaton beam cycle, Gremlin
@@ -801,7 +801,7 @@ describe("Book of Stabbing", () => {
     throw new Error("multi stab never observed");
   });
 
-  test("A18 (adjudicated): stabCount grows every turn — a Multi Stab on turn T hits T+1 times", () => {
+  test("A18 (adjudicated): stabCount grows every turn - a Multi Stab on turn T hits T+1 times", () => {
     for (const seed of SEEDS.slice(0, 5)) {
       let s = fight(["BOOK_OF_STABBING"], { seed, asc: 18 });
       for (let turn = 1; turn <= 6; turn++) {
@@ -840,7 +840,7 @@ describe("Gremlin Leader", () => {
     expect(monPower(s, 1, "MINION")).toBeDefined();
   });
 
-  test("Encourage: self Str 3, minions Str 3 + 6 block (A3: 4/6; A18: 5/10 — adjudicated)", () => {
+  test("Encourage: self Str 3, minions Str 3 + 6 block (A3: 4/6; A18: 5/10 - adjudicated)", () => {
     for (const [asc, str, block] of [
       [0, 3, 6],
       [3, 4, 6],
@@ -1238,7 +1238,7 @@ describe("The Collector", () => {
     }
   });
 
-  test("turn 4 is always Mega Debuff: Weak/Vulnerable/Frail 3 (A19: 5 — adjudicated)", () => {
+  test("turn 4 is always Mega Debuff: Weak/Vulnerable/Frail 3 (A19: 5 - adjudicated)", () => {
     for (const seed of SEEDS.slice(0, 6)) {
       let s = fight(["THE_COLLECTOR"], { seed });
       for (let t = 1; t < 4; t++) s = endTurn(s);
@@ -1401,7 +1401,7 @@ describe("The Champ", () => {
     }
   });
 
-  test("Gloat gives Strength 2 (A4: 3, A19: 4 — adjudicated)", () => {
+  test("Gloat gives Strength 2 (A4: 3, A19: 4 - adjudicated)", () => {
     for (const [asc, str] of [
       [0, 2],
       [4, 3],

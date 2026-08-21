@@ -2,7 +2,7 @@
 // the powers/effects the blue cards create and use.
 //
 // Integration (orchestrator): merge defectCards into bundle.cards, defectPowers
-// into bundle.powers (map-merge by id — FOCUS/BUFFER stay owned by
+// into bundle.powers (map-merge by id - FOCUS/BUFFER stay owned by
 // relics/supportPowers.ts, which is already corpus-correct incl. FOCUS
 // canGoNegative), defectEffects into bundle.effects, and allOrbs into
 // bundle.orbs (currently an empty map in src/content/index.ts).

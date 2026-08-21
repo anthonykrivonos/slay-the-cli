@@ -1,4 +1,4 @@
-// Act 1 event pool (11 events) — data/corpus/events.json is the spec; all
+// Act 1 event pool (11 events) - data/corpus/events.json is the spec; all
 // labels/summaries are our own terse functional text.
 
 import type { EventDef, EffectCtx } from "../../engine/content/defs";

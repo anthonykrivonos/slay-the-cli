@@ -1,6 +1,6 @@
 // Unit tests for the fluid-layout plumbing: layout math, the 5x5 big font,
 // the scene art constraints, card/button boxes, and the actor panels. All
-// pure — geometry is asserted exactly (visible width via stripAnsi).
+// pure - geometry is asserted exactly (visible width via stripAnsi).
 
 import { test, expect, describe } from "bun:test";
 import { clamp, fits, rowWidth, rowGap, joinBlocks, flexFill, tipHeight } from "../../src/cli/render/layout";
@@ -80,7 +80,7 @@ describe("layout math", () => {
 
 describe("bigfont", () => {
   test("every glyph is 5 rows of 5 columns", () => {
-    for (const word of ["SLAY", "VICTORY", "DEFEAT", "THE HEART FALLS", "NEW RUN"]) {
+    for (const word of ["SLAY THE CLI", "VICTORY", "DEFEAT", "THE HEART FALLS", "NEW RUN"]) {
       expect(canBigWord(word)).toBe(true);
       const rows = bigWord(word)!;
       expect(rows.length).toBe(BIG_ROWS);
@@ -88,6 +88,7 @@ describe("bigfont", () => {
     }
   });
   test("word widths match the 6n-1 formula", () => {
+    expect(bigWordWidth("SLAY THE CLI")).toBe(71); // fits the 80-column floor
     expect(bigWordWidth("SLAY")).toBe(23);
     expect(bigWordWidth("VICTORY")).toBe(41);
     expect(bigWordWidth("DEFEAT")).toBe(35);

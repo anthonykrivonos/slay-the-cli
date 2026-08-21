@@ -6,7 +6,7 @@
 // DONU_AND_DECA) and runFlow's fixed act-4 lineups (SHIELD_AND_SPEAR,
 // THE_HEART). act34BossEncounters below restates the corpus lineups for
 // reference/tests. As a defensive fallback the Awakened One's preBattle also
-// appends the two Cultists when it is spawned alone — note that path rolls
+// appends the two Cultists when it is spawned alone - note that path rolls
 // the boss's HP before the Cultists' (reordered monsterHpRng stream vs the
 // reference; the bossEncounters lineup rolls in true slot order).
 

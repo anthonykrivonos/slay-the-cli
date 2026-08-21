@@ -1,4 +1,4 @@
-// Watcher commons — behavior tests (base AND upgraded where values differ).
+// Watcher commons - behavior tests (base AND upgraded where values differ).
 
 import { test, expect, describe } from "bun:test";
 import {
@@ -236,7 +236,7 @@ describe("HALT", () => {
 });
 
 describe("JUST_LUCKY", () => {
-  test("scry 1, gain 2 block, deal 3 — for 0 energy", () => {
+  test("scry 1, gain 2 block, deal 3 - for 0 energy", () => {
     let s = fightWithInHand(["JUST_LUCKY"], { deck: ["JUST_LUCKY", ...strikes(4), ...defends(2)] });
     s = play(s, "JUST_LUCKY");
     expect(s.pending?.request.kind).toBe("scry");

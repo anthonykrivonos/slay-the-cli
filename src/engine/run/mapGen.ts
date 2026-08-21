@@ -63,7 +63,7 @@ const minXParent = (n: GenMapNode) => Math.min(...n.parents);
 
 function getCommonAncestor(nodes: GenMapNode[][], x1: number, x2: number, y: number): number {
   if (y < 0) return -1;
-  // `x1 < y` is the reference's exact comparison (not x1 < x2) — kept verbatim
+  // `x1 < y` is the reference's exact comparison (not x1 < x2) - kept verbatim
   let lNode: number;
   let rNode: number;
   if (x1 < y) {

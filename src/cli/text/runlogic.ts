@@ -1,7 +1,7 @@
 // Pure run-UI logic: seed handling, save validation, map-pick legality, and
 // all display-text resolution (Neow options, rewards, glyphs, loot diffs).
 // Salvaged from the web UI (src/ui/runlogic.ts) with the storage-key constants
-// and the URL seed parser dropped — everything here is headlessly
+// and the URL seed parser dropped - everything here is headlessly
 // unit-testable (tests/cli/); the rendering half lives in src/cli/render/.
 
 import type { GameState } from "../../engine/game";
@@ -170,7 +170,7 @@ export function masterCardCost(def: CardDef, upgrades: number): number {
 
 export function costText(cost: number): string {
   if (cost === -1) return "X";
-  if (cost === -2) return "–";
+  if (cost === -2) return "-";
   return String(cost);
 }
 
@@ -284,7 +284,7 @@ export interface EventScreenView {
 }
 
 /** Read-only EffectCtx over live state (mirrors tests/fuzz/realRun.test.ts):
- *  EventDef.build()/enabled() are pure — no rng consumption, no writes. */
+ *  EventDef.build()/enabled() are pure - no rng consumption, no writes. */
 function readonlyEventCtx(state: GameState, bundle: ContentBundle): EffectCtx {
   const registry = RngRegistry.fromState(state.rng);
   return {
@@ -357,24 +357,6 @@ export function orbName(bundle: ContentBundle, id: string): string {
   return bundle.orbs.get(id)?.name ?? titleCase(id);
 }
 
-// --- keys -------------------------------------------------------------------------------
-
-export interface KeyView {
-  key: "emerald" | "ruby" | "sapphire";
-  name: string;
-  owned: boolean;
-  color: string;
-}
-
-/** The three Act 4 keys, in display order, with lit colors. */
-export function keyViews(run: RunState): KeyView[] {
-  return [
-    { key: "emerald", name: "Emerald", owned: run.keys.emerald, color: "#6fce87" },
-    { key: "ruby", name: "Ruby", owned: run.keys.ruby, color: "#e06a7a" },
-    { key: "sapphire", name: "Sapphire", owned: run.keys.sapphire, color: "#7db8f0" },
-  ];
-}
-
 // --- rest ------------------------------------------------------------------------
 
 /** Actual HP a rest would restore right now (30% of max, capped by missing). */
@@ -395,9 +377,9 @@ export function rewardLabel(e: RewardEntry, bundle: ContentBundle): string {
     case "gold":
       return `${e.amount} Gold`;
     case "potion":
-      return `Potion — ${potionName(bundle, e.id)}`;
+      return potionName(bundle, e.id);
     case "relic":
-      return `Relic — ${relicName(bundle, e.id)}`;
+      return relicName(bundle, e.id);
     case "emeraldKey":
       return "Emerald Key";
     case "card":
@@ -468,16 +450,10 @@ export function gameOverTitle(victory: boolean, act: number): string {
 }
 
 export function gameOverSubtitle(victory: boolean, act: number): string {
-  if (!victory) return "Slain in the Spire.";
+  if (!victory) return "The Spire keeps what it takes.";
   return act >= 4
-    ? "The Corrupt Heart is destroyed — the true ending."
-    : "You defeated the Act 3 boss and stepped through the door.";
-}
-
-/** Stats block for the game-over screen (character + ascension + progress). */
-export function gameOverStats(g: GameState, bundle: ContentBundle): string {
-  const name = bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character);
-  return `${name} · Ascension ${g.run.ascension}\nFloor ${g.run.floor} · Act ${g.run.act}\nseed ${g.seed}`;
+    ? "The Corrupt Heart lies still. The climb is over."
+    : "You step through the door and leave the Spire behind.";
 }
 
 // --- pending choices ----------------------------------------------------------------

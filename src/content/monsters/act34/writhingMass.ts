@@ -1,4 +1,4 @@
-// Writhing Mass — exact port from data/corpus/monsters-act34.json
+// Writhing Mass - exact port from data/corpus/monsters-act34.json
 // (WRITHING_MASS): the full conditional band cascade with in-band re-rolls.
 // CONFLICT HONORED (MALLEABLE): starts at 4 per the wiki (lightspeed
 // hardcodes 3; block amounts are invisible to its seed tests); the reset

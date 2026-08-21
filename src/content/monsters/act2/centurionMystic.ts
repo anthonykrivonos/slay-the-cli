@@ -1,9 +1,9 @@
-// Centurion & Mystic — exact ports from data/corpus/monsters-act2.json.
+// Centurion & Mystic - exact ports from data/corpus/monsters-act2.json.
 // Encounter layout (CENTURION_AND_HEALER): Centurion slot 0, Mystic slot 1.
 //
 // CONFLICT HONORED (Centurion hp.asc): [78,83] at A7+ per spire-archive+wiki
 // majority (lightspeed's 76 min is a transcription error).
-// CONFLICT HONORED (Centurion DEFEND when alone): lightspeed transcription —
+// CONFLICT HONORED (Centurion DEFEND when alone): lightspeed transcription -
 // the move is a no-op if the Mystic is dead at execution time (the real game's
 // self-block variant is only reachable through a stale intent).
 // CONFLICT HONORED (Mystic heal repeat): no lastTwoMoves gate on HEAL

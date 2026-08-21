@@ -1,5 +1,5 @@
 // Colorless uncommon cards (the obtainable colorless pool, uncommon half).
-// Values audited against data/corpus/cards.json — corpus numbers only.
+// Values audited against data/corpus/cards.json - corpus numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
 import { calcCardDamage } from "../../../engine/combat/damageCalc";

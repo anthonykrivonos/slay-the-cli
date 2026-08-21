@@ -1,4 +1,4 @@
-// Uncommon relics — values audited vs data/corpus/relics.json.
+// Uncommon relics - values audited vs data/corpus/relics.json.
 
 import type { RelicDef } from "../../engine/content/defs";
 import type { CardInstance } from "../../engine/combat/combatState";

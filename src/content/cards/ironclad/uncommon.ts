@@ -1,5 +1,5 @@
 // Ironclad uncommon cards (WHIRLWIND lives in basics.ts).
-// Values audited against data/corpus/cards.json — corpus numbers only.
+// Values audited against data/corpus/cards.json - corpus numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";
 import { calcCardDamage, calcBlock } from "../../../engine/combat/damageCalc";
@@ -420,7 +420,7 @@ export const ironcladUncommons: CardDef[] = [
     upgradeValues: { damage: 8, magic: 8 },
     keywords: [],
     onPlay: (ctx) => {
-      // growth is stored in card.misc — per combat, since instances are per-combat
+      // growth is stored in card.misc - per combat, since instances are per-combat
       const target = ctx.target ?? 0;
       const dmg = calcCardDamage(ctx, ctx.card, target, 8 + ctx.card.misc);
       ctx.queue.addToBottom({

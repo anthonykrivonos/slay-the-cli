@@ -69,7 +69,7 @@ function chooseOne(
     return;
   }
   // ENGINE-NOTE: advance() rebuilds the runtime slot AND the action queue, so
-  // pausing mid-resolution would lose rt.currentItem (exhaustOnUse — keyword or
+  // pausing mid-resolution would lose rt.currentItem (exhaustOnUse - keyword or
   // Corruption) and drop every queued action behind this effect (the card's
   // trailing actions, onUseCard hook actions, and the terminal __afterCardUsed).
   // Both are plain data: snapshot them into resumeArgs; the resume restores the
@@ -128,7 +128,7 @@ function swordBoomerangHit(ctx: EffectCtx, args: unknown): void {
 
 /**
  * Heal the player inside an effect body. Feed/Reaper must heal even when their
- * damage just ended the combat — runQueue drops queued actions once combatOver
+ * damage just ended the combat - runQueue drops queued actions once combatOver
  * is set, so the heal happens synchronously here (onHeal fold still applied).
  */
 function healPlayerNow(ctx: EffectCtx, amount: number): void {
@@ -177,7 +177,7 @@ function havocPlayTop(ctx: EffectCtx): void {
     if (piles.draw.length === 0) return;
   }
   // PlayTopCardAction always rolls a random target (cardRandomRng), even when
-  // the played card is untargeted — keep the roll for RNG-stream parity.
+  // the played card is untargeted - keep the roll for RNG-stream parity.
   const target = randomAliveIdx(ctx);
   if (target === null) return;
   const iid = piles.draw[0]!;

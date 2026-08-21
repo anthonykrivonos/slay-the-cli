@@ -110,13 +110,14 @@ bun --hot ./index.ts
 
 For more information, read the Bun API docs in `node_modules/bun-types/docs/**.mdx`.
 
-## This project (slay)
+## This project (Slay the CLI)
 
-Mechanically exact Slay the Spire clone. Terminal game: `bun src/cli/main.ts`.
-- `src/engine` — pure deterministic core. No DOM/Bun APIs/randomness outside the seeded RNG (enforced by tests/architecture).
-- `src/content` — the forkable content bundle; corpus-audited against `data/corpus/*.json` (ground truth; imported by tests/tools ONLY).
-- `src/cli` — TUI. `render/ input/ state/ text/` are pure (no process/Bun./node: — enforced); only `term/ io/ app.ts main.ts` touch the OS. Frames are snapshot-tested; keep output ASCII-only.
+Mechanically exact Slay the Spire clone, adapted to the terminal: `bun src/cli/main.ts`.
+- `src/engine`: pure deterministic core. No DOM/Bun APIs/randomness outside the seeded RNG (enforced by tests/architecture).
+- `src/content`: the forkable content bundle; corpus-audited against `data/corpus/*.json` (ground truth; imported by tests/tools ONLY).
+- `src/cli`: TUI. `render/ input/ state/ text/` are pure (no process/Bun./node:, enforced); only `term/ io/ app.ts main.ts` touch the OS. Frames are snapshot-tested; keep output ASCII-only.
 - Exactness rule: game numbers/behavior come from the corpus, never from memory. Deviations get a flagging comment (`ENGINE-GAP`, `VERIFY-JAR`, etc.).
+- Copy rule: no em dashes or other typographic punctuation in copy or comments; UI copy stays in the game's own terse voice.
 - Full suite: `bun test`. Corpus audit: `bun tools/corpus/check-all.ts`.
 
 ## TUI snapshots

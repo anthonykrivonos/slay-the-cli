@@ -1,4 +1,4 @@
-// Orb Walker — exact port from data/corpus/monsters-act34.json (ORB_WALKER).
+// Orb Walker - exact port from data/corpus/monsters-act34.json (ORB_WALKER).
 // ENGINE-GAP (rng parity): the reference's initHp consumes and DISCARDS one
 // extra monsterHpRng.random(90,96) before the real HP roll; the engine's
 // combat setup rolls HP once per monster, so the monsterHpRng stream diverges

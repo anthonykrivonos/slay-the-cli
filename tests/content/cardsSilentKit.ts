@@ -40,7 +40,7 @@ const tank: MonsterDef = {
   getMove: () => "ATTACK",
 };
 
-/** 200 HP wall that always defends (never attacks) — for clean HP accounting. */
+/** 200 HP wall that always defends (never attacks) - for clean HP accounting. */
 const guard: MonsterDef = {
   id: "T_GUARD",
   name: "Test Guard",

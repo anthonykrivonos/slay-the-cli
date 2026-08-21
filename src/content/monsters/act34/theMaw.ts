@@ -1,4 +1,4 @@
-// The Maw — exact port from data/corpus/monsters-act34.json (THE_MAW).
+// The Maw - exact port from data/corpus/monsters-act34.json (THE_MAW).
 // Fixed 300 HP at every ascension (the only enemy whose max HP never scales).
 // Nom hit count at execution = floor((turn+1)/2); Nom is always followed by
 // a forced Drool.

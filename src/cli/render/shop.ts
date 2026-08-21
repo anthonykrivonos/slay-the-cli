@@ -14,7 +14,7 @@ import { cardBox, cardBoxHeight, buttonBox, buttonBoxHeight, tintFocus, type Car
 import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 import { ART_MERCHANT } from "./art";
 
-const QUOTE = '"Coins for goods, friend. Everything a slayer needs."';
+const QUOTE = '"Coins for goods. Goods for coins."';
 
 function keyOf(items: ListItemView[], i: number): string {
   return items.find((it) => it.i === i)?.key ?? ".";
@@ -80,13 +80,8 @@ export function renderShop(
 
   // merchant art: beside the quote on wide terminals, dropped otherwise
   if (width >= 108 && spare >= ART_MERCHANT.h) {
-    const text = [
-      "",
-      "",
-      theme.dim(QUOTE),
-      "",
-      `${theme.fg(C.gold, `${screen.gold}G`)} ${theme.dim("in your purse")}`,
-    ];
+    // the title rule already carries the gold, so the merchant just talks
+    const text = ["", "", theme.dim(QUOTE)];
     out.push(...joinBlocks([ART_MERCHANT.rows.map((r) => theme.dim(r)), text], [ART_MERCHANT.w, width - ART_MERCHANT.w - 6], 2, 2));
   } else if (spare >= 2) {
     out.push("");

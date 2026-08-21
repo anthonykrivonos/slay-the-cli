@@ -24,11 +24,11 @@ export function runQueue(ctx: EffectCtx): void {
   let iterations = 0;
   for (;;) {
     // defeat and pending choices halt immediately; VICTORY keeps draining the
-    // action queue (the game finishes in-flight actions — Feed/Reaper resolve)
+    // action queue (the game finishes in-flight actions - Feed/Reaper resolve)
     // but pulls no further card plays.
     if (ctx.rt.pending || ctx.rt.combatOver === "defeat") return;
     if (++iterations > ITERATION_CAP) {
-      throw new Error(`interpreter iteration cap exceeded — likely infinite combo loop`);
+      throw new Error(`interpreter iteration cap exceeded - likely infinite combo loop`);
     }
     const action = ctx.queue.pop();
     if (action) {

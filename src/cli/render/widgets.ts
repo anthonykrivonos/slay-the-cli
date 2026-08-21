@@ -23,7 +23,7 @@ export function center(s: string, width: number): string {
   return " ".repeat(left) + s;
 }
 
-/** `[####......]` — never divides by zero, clamps ratio to 0..1. */
+/** `[####......]` - never divides by zero, clamps ratio to 0..1. */
 export function bar(cur: number, max: number, inner: number): string {
   const ratio = max > 0 ? Math.max(0, Math.min(1, cur / max)) : 0;
   const filled = Math.round(ratio * inner);

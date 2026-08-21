@@ -1,5 +1,5 @@
 // Minimal stub ContentBundle for engine tests. Content here is deliberately
-// fake (T_-prefixed) — real content lands in src/content, audited against the
+// fake (T_-prefixed) - real content lands in src/content, audited against the
 // corpus. This bundle exercises: primitives, powers with f32 damage/block
 // modifiers, monster AI rolls with history rules, block, and victory/defeat.
 

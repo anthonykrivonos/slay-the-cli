@@ -142,7 +142,7 @@ describe("real-bundle full act 1 runs", () => {
   }
 
   test("boosted-HP flow probe: full 3-act traversal to the victory screen", () => {
-    // A blind bot can't win honestly (as in the real game) — boost HP to
+    // A blind bot can't win honestly (as in the real game) - boost HP to
     // exercise the WHOLE flow: all acts, all bosses, events, shops, rests.
     const boosted = buildBaseContentBundle();
     const ic = boosted.characters.get("IRONCLAD")!;
@@ -168,7 +168,7 @@ describe("real-bundle full act 1 runs", () => {
         return; // one full climb is enough
       }
     }
-    throw new Error("no boosted run reached the act-3 victory in 8 tries — flow bug");
+    throw new Error("no boosted run reached the act-3 victory in 8 tries - flow bug");
   });
 });
 

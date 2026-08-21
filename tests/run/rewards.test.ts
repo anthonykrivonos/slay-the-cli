@@ -146,7 +146,7 @@ describe("potion drop pity", () => {
     expect(ctx.rng("potionRng").counter).toBe(counterBefore + 1);
   });
 
-  test("rarity split <65 common, <90 uncommon, else rare — all rarities occur", () => {
+  test("rarity split <65 common, <90 uncommon, else rare - all rarities occur", () => {
     const { ctx } = ctxFor("PRAR");
     const seen = new Set<string>();
     for (let i = 0; i < 80; i++) {
@@ -233,13 +233,13 @@ describe("chests", () => {
     for (let i = 0; i < 200; i++) {
       const { ctx } = ctxFor(`CQ${i}`);
       const chest = setupTreasureRoom(ctx);
-      // small: gold needs roll<50, uncommon needs roll>=75 — mutually exclusive
+      // small: gold needs roll<50, uncommon needs roll>=75 - mutually exclusive
       if (chest.size === "small" && chest.relicTier === "uncommon") expect(chest.goldPresent).toBe(false);
       // small chests never hold rare relics
       if (chest.size === "small") expect(chest.relicTier).not.toBe("rare");
       // large: common share is 0
       if (chest.size === "large") expect(chest.relicTier).not.toBe("common");
-      // medium: rare needs roll>=85, gold needs roll<35 — mutually exclusive
+      // medium: rare needs roll>=85, gold needs roll<35 - mutually exclusive
       if (chest.size === "medium" && chest.relicTier === "rare") expect(chest.goldPresent).toBe(false);
       // large: gold needs roll<50 which is inside the uncommon band
       if (chest.size === "large" && chest.goldPresent) expect(chest.relicTier).toBe("uncommon");

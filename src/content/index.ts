@@ -1,4 +1,4 @@
-// The base-game ContentBundle — the forkable layer. Merges all content
+// The base-game ContentBundle - the forkable layer. Merges all content
 // workstreams; the corpus audit (tests/audit/contentAudit.test.ts) enforces
 // envelope exactness and tracks coverage.
 

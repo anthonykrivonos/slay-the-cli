@@ -117,7 +117,7 @@ function toActMap(gm: ReturnType<typeof generateMap>, act: number, bossId: Monst
   return { act, rows, bossId, burningEliteBuff: gm.burningEliteBuff };
 }
 
-/** Act 4: fixed 4-node column at x=3 — rest -> shop -> elite -> boss (the Heart). */
+/** Act 4: fixed 4-node column at x=3 - rest -> shop -> elite -> boss (the Heart). */
 function act4ActMap(): ActMap {
   const rows: (MapNode | null)[][] = Array.from({ length: MAP_HEIGHT }, () =>
     new Array<MapNode | null>(MAP_WIDTH).fill(null),
@@ -264,7 +264,7 @@ export function resolveUnknownRoom(ctx: EffectCtx): "monster" | "shop" | "treasu
 // --- event selection --------------------------------------------------------------------
 
 /** generateEvent (GameContext.cpp:2032-2047): the selection rolls run on a COPY
- *  of eventRng (the reference passes it by value) — only the ?-room outcome
+ *  of eventRng (the reference passes it by value) - only the ?-room outcome
  *  roll advances the main stream. Chosen ids are removed from their pool.
  *  Returns null for INVALID (all pools empty). Exported for tests. */
 export function generateEventId(ctx: EffectCtx): EventId | null {
@@ -532,7 +532,7 @@ export function runDeckChoiceResume(ctx: EffectCtx, args: unknown): void {
       run.deck.splice(i, 1);
       if (action === "transform") {
         // TODO exact transform rng is not pinned by meta.json; the real game
-        // transforms with miscRng — uniform over the class pool, all rarities.
+        // transforms with miscRng - uniform over the class pool, all rarities.
         const pool = [...classCardPool(ctx, "common"), ...classCardPool(ctx, "uncommon"), ...classCardPool(ctx, "rare")];
         if (pool.length > 0) {
           run.deck.push({ defId: pool[ctx.rng("miscRng").random(pool.length - 1)]!, upgrades: 0, misc: 0, bottled: false });

@@ -1,14 +1,14 @@
-// Taskmaster — exact port from data/corpus/monsters-act2.json (elite; middle
+// Taskmaster - exact port from data/corpus/monsters-act2.json (elite; middle
 // monster of the SLAVERS encounter, also The Colosseum).
 // SCOURING_WHIP every turn: attack 7 (never asc-scaled), then Wounds into the
-// discard pile — 1 base / 2 from asc>=3 / 3 (+1 self Strength first) at asc>=18.
+// discard pile - 1 base / 2 from asc>=3 / 3 (+1 self Strength first) at asc>=18.
 // CONFLICT HONORED (wound tier): the 2-Wound tier starts at asc >= 3
 // (lightspeed elite damage-tier; the wiki data module is internally
 // inconsistent between A2 and A3).
 // ENGINE-GAP (hp quirk): the reference's initHp burns one extra
 // monsterHpRng.random(54,60) BEFORE its real HP roll; this engine rolls all
 // encounter HP up front, so the parity burn happens in preBattle (after the
-// encounter's HP rolls) — total stream consumption matches, exact interleaving
+// encounter's HP rolls) - total stream consumption matches, exact interleaving
 // inside the encounter does not.
 
 import type { MonsterDef } from "../../../engine/content/defs";

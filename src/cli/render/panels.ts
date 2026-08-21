@@ -1,4 +1,4 @@
-// Combat actor panels — one bordered box per enemy (intent overhead, HP bar,
+// Combat actor panels - one bordered box per enemy (intent overhead, HP bar,
 // power chips) and the player's status panel (energy orb in the border,
 // stance badge, orbs/mantra, power chips). Pure: plain data in, exact-width
 // rows out. The combat renderer maps View shapes onto these.

@@ -11,7 +11,7 @@ export interface MasterCard {
 
 export interface RelicState {
   defId: RelicId;
-  /** persistent counter (Matryoshka uses left, Omamori charges, Pen Nib count, …) */
+  /** persistent counter (Matryoshka uses left, Omamori charges, Pen Nib count, and so on) */
   counter: number;
   /** per-combat/turn flags live in combat scratch, not here */
 }
@@ -30,7 +30,7 @@ export interface MapNode {
 
 export interface ActMap {
   act: number;
-  /** rows[y][x] — null where no node */
+  /** rows[y][x] - null where no node */
   rows: (MapNode | null)[][];
   bossId: MonsterId;
   /** burning-elite buff rolled by mapGen (0-3); -1/undefined = none */
@@ -172,7 +172,7 @@ export type RoomState =
 
 export interface RunState {
   character: CharacterId;
-  ascension: number; // 0–20
+  ascension: number; // 0-20
   act: number;
   floor: number; // global floor counter (1-based within the run)
   hp: number;

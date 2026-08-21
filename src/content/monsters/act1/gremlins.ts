@@ -1,9 +1,9 @@
-// The five gremlin-gang gremlins — exact ports from data/corpus/monsters-act1.json.
+// The five gremlin-gang gremlins - exact ports from data/corpus/monsters-act1.json.
 // CONFLICT HONORED (SHIELD_GREMLIN Protect block): 7 / 8 / 11 with tiers at
 // asc>=7 and asc>=17 (lightspeed + Weekly Patch 17 note; the wiki's asc-2 tier
 // text is presumed wrong).
 // NOTE (MAD_GREMLIN): the corpus says ANGRY triggers even on fully blocked
-// attacks; the shared core ANGRY power requires unblocked damage > 0 — kept
+// attacks; the shared core ANGRY power requires unblocked damage > 0 - kept
 // as-is per file ownership (core.ts is out of scope). Flagged in the report.
 
 import type { MonsterDef } from "../../../engine/content/defs";

@@ -11,7 +11,7 @@
 //  - REGENERATE is the Awakened One's non-decaying end-of-turn heal. The
 //    monsters corpus lists it under lightspeed's enum name REGEN; the powers
 //    corpus separates player REGEN (ticks down) from monster REGENERATE
-//    (flat) — REGENERATE is used to avoid colliding with the potion power.
+//    (flat) - REGENERATE is used to avoid colliding with the potion power.
 //  - TIME_WARP force-ends the player's turn via the engine's queueEndTurn
 //    (callEndTurnEarlySequence equivalent) after clearing pending card plays.
 //  - INVINCIBLE: amount is the remaining per-turn HP-loss allowance, clamped
@@ -74,7 +74,7 @@ export const act34MonsterPowers: PowerDef[] = [
   {
     // Orb Walker: gains X Strength at the end of each of its turns
     // (persistent). ID NOTE: lightspeed's GENERIC_STRENGTH_UP enum covers two
-    // DIFFERENT game powers — Dark Shackles' one-shot GainStrengthPower
+    // DIFFERENT game powers - Dark Shackles' one-shot GainStrengthPower
     // (owned by the colorless workstream under GENERIC_STRENGTH_UP, removes
     // itself after firing) and the Orb Walker's persistent StrengthUpPower
     // (wiki: "Strength Up"). Registered as STRENGTH_UP to keep both exact.
@@ -393,7 +393,7 @@ export const act34MonsterPowers: PowerDef[] = [
     },
   },
   {
-    // Deca asc19 (and Shelled Parasite in act 2 — corpus-identical dup is
+    // Deca asc19 (and Shelled Parasite in act 2 - corpus-identical dup is
     // merge-safe): end-of-turn block X; unblocked attack damage removes 1.
     id: "PLATED_ARMOR",
     name: "Plated Armor",
@@ -417,7 +417,7 @@ export const act34MonsterPowers: PowerDef[] = [
   },
   {
     // Corrupt Heart: the player takes X (blockable, unmodified) damage after
-    // every card they play. Player Intangible caps it at 1 (checked here —
+    // every card they play. Player Intangible caps it at 1 (checked here -
     // the engine folds atDamageFinalReceive only in the calc pipelines).
     id: "BEAT_OF_DEATH",
     name: "Beat of Death",

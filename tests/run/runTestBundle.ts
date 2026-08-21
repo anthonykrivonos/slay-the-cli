@@ -133,7 +133,7 @@ export function makeRunTestBundle(): ContentBundle {
   for (const p of potions) bundle.potions.set(p.id, p);
   for (const r of relics) bundle.relics.set(r.id, r);
   bundle.acts = [stubAct(1), stubAct(2), stubAct(3)];
-  // bosses are MonsterIds — map every stub boss id to a T_DUMMY-alike def
+  // bosses are MonsterIds - map every stub boss id to a T_DUMMY-alike def
   const dummy = bundle.monsters.get("T_DUMMY")!;
   for (const act of bundle.acts) {
     for (const b of act.bosses) bundle.monsters.set(b, { ...dummy, id: b, category: "boss" });

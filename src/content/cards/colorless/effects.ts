@@ -45,7 +45,7 @@ function classColor(ctx: EffectCtx): "red" | "green" | "blue" | "purple" {
 
 /**
  * Obtainable class card pool (common/uncommon/rare), optionally filtered by
- * type — the game's returnTrulyRandomCardInCombat(type). ENGINE-NOTE: pool
+ * type - the game's returnTrulyRandomCardInCombat(type). ENGINE-NOTE: pool
  * sorted by id for determinism (Infernal Blade precedent); the game's library
  * order differs, so specific rolls map to different cards even with an
  * identical cardRandomRng stream.
@@ -64,7 +64,7 @@ function classPool(ctx: EffectCtx, type?: "attack" | "skill"): CardDef[] {
     .sort((a, b) => (a.id < b.id ? -1 : 1));
 }
 
-/** Obtainable colorless pool (uncommon + rare) — returnTrulyRandomColorlessCardInCombat. */
+/** Obtainable colorless pool (uncommon + rare) - returnTrulyRandomColorlessCardInCombat. */
 function colorlessPool(ctx: EffectCtx): CardDef[] {
   return [...ctx.bundle.cards.values()]
     .filter((d) => d.color === "colorless" && (d.rarity === "uncommon" || d.rarity === "rare"))
@@ -251,7 +251,7 @@ function madnessZeroCost(ctx: EffectCtx): void {
 
 /**
  * Mayhem: play the top card of the draw pile (free, random target, NOT
- * exhausted — contrast Havoc). PlayTopCardAction reshuffles an empty draw pile
+ * exhausted - contrast Havoc). PlayTopCardAction reshuffles an empty draw pile
  * and always rolls a random target even for untargeted cards (RNG parity).
  * Items are PUSHED (not unshifted) so multi-stack Mayhem plays keep pile order.
  */

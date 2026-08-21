@@ -1,7 +1,7 @@
 // Colorless card pool tests:
-//   1. corpus table audit — all 51 colorless (non-status) cards present with
+//   1. corpus table audit - all 51 colorless (non-status) cards present with
 //      exact envelopes (cost/type/rarity/target/values/upgrade/keywords);
-//   2. local merged-bundle audit — replica of tests/audit/contentAudit.test.ts
+//   2. local merged-bundle audit - replica of tests/audit/contentAudit.test.ts
 //      card checks over buildBaseContentBundle() + the colorless slice, proving
 //      envelope exactness before the orchestrator integrates the exports;
 //   3. behavior tests for every bespoke card (base AND upgraded), using a local
@@ -111,7 +111,7 @@ describe("corpus audit: per-card exact values", () => {
       }
 
       // upgraded values resolve through the deltas. A null corpus upgrade value
-      // means "no upgrade value" (even when the base is set — Apparition magic,
+      // means "no upgrade value" (even when the base is set - Apparition magic,
       // Ritual Dagger damage): the def must not declare a delta there.
       expect(def.upgradeValues.cost ?? def.cost).toBe(c.upgrade.cost);
       for (const k of VALUE_KEYS) {
@@ -196,7 +196,7 @@ describe("local audit: colorless merged into the base bundle", () => {
 });
 
 // ------------------------------------------------------------------------------
-// 3. behavior tests — local test kit (merged bundle; cardsTestKit unmodified)
+// 3. behavior tests - local test kit (merged bundle; cardsTestKit unmodified)
 // ------------------------------------------------------------------------------
 
 function colorlessBundle(): ContentBundle {

@@ -1,10 +1,10 @@
-// Common relics — values audited vs data/corpus/relics.json.
+// Common relics - values audited vs data/corpus/relics.json.
 //
 // Flags used throughout:
-//   // RUN-LAYER  — hook side implemented; the engine does not fire this hook yet
+//   // RUN-LAYER - hook side implemented; the engine does not fire this hook yet
 //                   (run layer absent) or the behavior needs run-level systems.
-//   // ENGINE-GAP — not expressible with current hooks; def is a marker.
-//   // DEPENDS    — needs content from another workstream (guarded).
+//   // ENGINE-GAP - not expressible with current hooks; def is a marker.
+//   // DEPENDS - needs content from another workstream (guarded).
 
 import type { RelicDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";
@@ -397,7 +397,7 @@ export const commonRelics: RelicDef[] = [
   {
     // "Whenever you apply Poison, apply an additional 1 Poison."
     // ENGINE-GAP: the engine does not fire onApplyPower yet, and the hook carries
-    // no amount to modify — implemented with a reentrancy flag so it is exact
+    // no amount to modify - implemented with a reentrancy flag so it is exact
     // once the call site lands. DEPENDS: POISON power (Silent workstream).
     id: "SNECKO_SKULL",
     name: "Snecko Skull",
@@ -408,7 +408,7 @@ export const commonRelics: RelicDef[] = [
         if (powerId !== "POISON" || target.kind !== "monster" || source?.kind !== "player") return;
         if (!ctx.bundle.powers.has("POISON")) return;
         if (cnt(ctx).get() === 1) {
-          cnt(ctx).set(0); // our own extra application — don't recurse
+          cnt(ctx).set(0); // our own extra application - don't recurse
           return;
         }
         cnt(ctx).set(1);

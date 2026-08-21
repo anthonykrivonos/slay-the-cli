@@ -153,14 +153,14 @@ const moveMap: Record<string, Record<string, string | null>> = {
 
 // Mismatches that are documented in the corpus file's per-entity "conflicts"
 // arrays (or are known spire-archive data-quality gaps). Anything listed here
-// is reported as an allowed, documented conflict — anything NOT listed fails.
+// is reported as an allowed, documented conflict - anything NOT listed fails.
 const documentedConflicts: Record<string, string> = {
   "AWAKENED_ONE.hp.asc":
     "lightspeed rolls hpRng.random(300,320) at asc9+; archive/wiki record flat 320 (see corpus conflicts)",
   "TRANSIENT.hp.asc":
     "archive has no ascended HP row (Transient HP is a fixed 999 at all ascensions)",
   "DARKLING.DARKLING_CHOMP.hits":
-    "archive/wiki say 2 hits; lightspeed implements 1 hit — corpus records 2 (documented conflict)",
+    "archive/wiki say 2 hits; lightspeed implements 1 hit - corpus records 2 (documented conflict)",
   "GIANT_HEAD.GIANT_HEAD_IT_IS_TIME.damage":
     "archive stores 5/15 (the per-turn increment); real base is 30/40 +5-per-turn (documented conflict)",
   "GIANT_HEAD.GIANT_HEAD_IT_IS_TIME.damage_asc":
@@ -170,7 +170,7 @@ const documentedConflicts: Record<string, string> = {
   "EXPLODER.EXPLODER_EXPLODE.damage":
     "archive lists the explode row (id BLOCK) with null damage; explode deals a flat 30 (documented conflict)",
   "WRITHING_MASS.WRITHING_MASS_FLAIL.block":
-    "archive block is null; lightspeed says 16 (18 at asc2) — wiki says flat 16 (documented conflict)",
+    "archive block is null; lightspeed says 16 (18 at asc2) - wiki says flat 16 (documented conflict)",
   "SPIRE_SHIELD.SPIRE_SHIELD_SMASH.block":
     "archive stores the asc18 flat 99; base behavior is block = damage dealt (corpus block null + effect)",
   "TIME_EATER.TIME_EATER_HASTE.block_base":
@@ -311,4 +311,4 @@ console.log(
     `${checks - allowed - failures} clean, ${allowed} documented conflicts, ${failures} failures`,
 );
 if (failures > 0) process.exit(1);
-console.log("OK — no silent mismatches");
+console.log("OK - no silent mismatches");

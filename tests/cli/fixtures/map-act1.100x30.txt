@@ -2,8 +2,8 @@
 -- MAP - act 1 -------------------------------------------------------------------------------------
 ==============[ BOSS: SLIME BOSS ]==============                                                    
         /  |              /  |     |     |        LEGEND                                            
-     E*    ?           $     ?     M     ?        M monster    E elite                              
-     |        \     /        |  /        |        $ shop       R rest                               
+     E*    ?           $     ?     M     ?        M enemy      E elite                              
+     |        \     /        |  /        |        $ merchant   R rest                               
      R           M           R           M        T treasure   ? unknown                            
         \        |           |  \     /           E* burning elite (+key)                           
            T     T           T     T              @ you        B boss                               

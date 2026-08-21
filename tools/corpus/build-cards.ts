@@ -95,7 +95,7 @@ const EXTRA_FLAGS: Record<string, string[]> = {
   SEARING_BLOW: ["multiUpgrade"], // can be upgraded any number of times; dmg = 12 + n(n+7)/2
 };
 
-// Known, explained discrepancies — suppressed from the report so new ones stand out.
+// Known, explained discrepancies - suppressed from the report so new ones stand out.
 // lightspeed's cardColors[] has two internally-misordered 4-card windows; wiki color verified correct.
 const ADJUDICATED = new Set([
   "BRILLIANCE|color|lightspeed", "BRUTALITY|color|lightspeed", "BUFFER|color|lightspeed",

@@ -7,7 +7,7 @@
                       #   # #     #     #     #   #   #                         
                       ####  ##### #     ##### #   #   #                         
                                                                                 
-                              Slain in the Spire.                               
+                         The Spire keeps what it takes.                         
                                                                                 
                            +------------------------+                           
                            | Ironclad - Ascension 0 |                           
@@ -15,9 +15,9 @@
                            | seed UISMNKE           |                           
                            +------------------------+                           
                                                                                 
-                             [1] New run - same hero, next seed                 
+                             [1] Climb again                                    
+                                   Same hero, next seed                         
                              [2] Back to the menu                               
-                                                                                
                                                                                 
                                                                                 
                                                                                 

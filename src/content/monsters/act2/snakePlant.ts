@@ -1,8 +1,8 @@
-// Snake Plant — exact port from data/corpus/monsters-act2.json.
+// Snake Plant - exact port from data/corpus/monsters-act2.json.
 // Prebattle: MALLEABLE 3 (block equal to the current amount per unblocked
 // attack hit, +1 per trigger, reset to 3 at the end of every round).
 // AI per roll: CHOMP 65% (never 3x), ENFEEBLING_SPORES 35%.
-// CONFLICT HONORED (A17 pattern): lightspeed — the A17 change only loosens the
+// CONFLICT HONORED (A17 pattern): lightspeed - the A17 change only loosens the
 // spores gate from "never 2x in a row" to "never 3x in a row" (the wiki's
 // fixed CHOMP,CHOMP,SPORES cycle claim is from an under-construction page).
 

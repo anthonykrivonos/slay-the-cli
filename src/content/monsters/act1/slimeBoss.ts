@@ -1,4 +1,4 @@
-// Slime Boss — exact port from data/corpus/monsters-act1.json (SLIME_BOSS).
+// Slime Boss - exact port from data/corpus/monsters-act1.json (SLIME_BOSS).
 // Fixed 3-turn loop: GOOP_SPRAY -> PREPARING -> SLAM -> ... At <= 50% max HP the
 // intent is interrupted (SPLIT power) and SPLIT replaces whatever was queued,
 // including SLAM. SPLIT removes the boss and spawns SPIKE_SLIME_L at slot 0 and

@@ -1,8 +1,8 @@
-// Cultist — exact port from data/corpus/monsters-act1.json (CULTIST).
+// Cultist - exact port from data/corpus/monsters-act1.json (CULTIST).
 // AI: turn 1 always Incantation (roll consumed, unused), Dark Strike forever after.
 // RITUAL R = 3 (asc>=2: 4, asc>=17: 5); core RITUAL grants +R Strength at the end
 // of each of the Cultist's turns starting the turn AFTER it was applied (the
-// queued application lands after the turn-1 atEndOfTurn hook fires — skipFirst).
+// queued application lands after the turn-1 atEndOfTurn hook fires - skipFirst).
 
 import type { MonsterDef } from "../../../engine/content/defs";
 import { ascTier, firstTurn } from "../../util";

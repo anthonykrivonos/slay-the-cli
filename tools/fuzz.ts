@@ -37,5 +37,5 @@ for (let i = 0; i < seedCount; i++) {
 }
 
 const secs = ((performance.now() - start) / 1000).toFixed(1);
-console.log(`\n${seedCount} playouts in ${secs}s — outcomes: ${JSON.stringify(outcomes)} — failures: ${failures}`);
+console.log(`\n${seedCount} playouts in ${secs}s - outcomes: ${JSON.stringify(outcomes)} - failures: ${failures}`);
 process.exit(failures > 0 ? 1 : 0);

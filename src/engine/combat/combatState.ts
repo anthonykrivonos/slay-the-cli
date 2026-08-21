@@ -1,5 +1,5 @@
 // Combat state: plain JSON-serializable data only. No class instances, no
-// functions — behavior is looked up in the ContentBundle by def id at
+// functions - behavior is looked up in the ContentBundle by def id at
 // execution time.
 
 import type { CardId, CardInstanceId, MonsterId, MoveId, OrbId, PotionId, PowerId, StanceId } from "../core/ids";
@@ -16,7 +16,7 @@ export interface CardInstance {
   freeToPlayOnce: boolean;
   /** link back to the master deck index; null for cards created during combat */
   masterIdx: number | null;
-  /** card-specific scratch value (Ritual Dagger accumulated damage, Genetic Algorithm block, X value…) */
+  /** card-specific scratch value (Ritual Dagger accumulated damage, Genetic Algorithm block, X value) */
   misc: number;
   /** set while a power grants temporary retain (Well-Laid Plans selection) */
   retainOnce: boolean;
@@ -45,7 +45,7 @@ export interface PlayerCombatState {
   energyPerTurn: number;
   stance: StanceId;
   mantra: number; // accumulates; at >=10 subtract 10 and enter Divinity
-  powers: PowerInstance[]; // application order preserved — hook order depends on it
+  powers: PowerInstance[]; // application order preserved - hook order depends on it
   orbs: OrbInstance[]; // index 0 = oldest (evokes first)
   orbSlots: number;
   piles: Record<Pile, CardInstanceId[]>;
@@ -65,7 +65,7 @@ export interface MonsterState {
   isDead: boolean;
   isEscaped: boolean;
   halfDead: boolean; // Awakened One phase 1 corpse
-  /** monster-specific scratch (Louse rolled damage, Guardian mode-shift threshold…) */
+  /** monster-specific scratch (Louse rolled damage, Guardian mode-shift threshold) */
   data: Record<string, unknown>;
 }
 

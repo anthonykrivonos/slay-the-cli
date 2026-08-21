@@ -1,11 +1,11 @@
-// Spheric Guardian — exact port from data/corpus/monsters-act2.json.
+// Spheric Guardian - exact port from data/corpus/monsters-act2.json.
 // Prebattle: ARTIFACT 3, BARRICADE (block never expires), 40 block.
 // Fixed script: ACTIVATE (+25 block; asc>=17: +35), ATTACK_DEBUFF (10 + Frail 5),
 // then SLAM (10x2), HARDEN (+15 block, 10), SLAM, HARDEN, ... forever. A2: 11s.
 // CONFLICT HONORED (ACTIVATE block): 25 (A17: 35) per lightspeed+wiki;
 // spire-archive's 95 is bad data.
 // CONFLICT HONORED (hp.asc): fixed 20/20 at every ascension (not a real
-// disagreement — the game never raises its HP).
+// disagreement - the game never raises its HP).
 // ENGINE-GAP: the reference's initHp consumes NO monsterHpRng roll for the
 // fixed 20 HP; this engine's combat setup rolls randomRange(20,20) (one call,
 // value forced). One aiRng.random(99) per turn matches the reference exactly

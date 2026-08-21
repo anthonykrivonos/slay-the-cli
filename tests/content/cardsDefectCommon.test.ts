@@ -161,7 +161,7 @@ describe("COMPILE_DRIVER", () => {
         deck: [{ defId: "COMPILE_DRIVER", upgrades: up }, "ZAP", "ZAP", "STRIKE_BLUE", "DEFEND_BLUE", "STRIKE_BLUE", "DEFEND_BLUE"],
         seed: "CD" + up,
       });
-      // ensure COMPILE_DRIVER + both ZAPs in hand: deck of 7, draw 5 — search seeds
+      // ensure COMPILE_DRIVER + both ZAPs in hand: deck of 7, draw 5 - search seeds
       if (!handNames(s).includes("COMPILE_DRIVER") || handNames(s).filter((n) => n === "ZAP").length < 2) {
         for (const seed of ["A", "B", "C", "D", "E", "F", "G", "H"]) {
           s = fight({

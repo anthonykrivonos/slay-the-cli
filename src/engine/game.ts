@@ -90,7 +90,7 @@ function makeCtx(state: GameState, bundle: ContentBundle): CtxBox {
     emit: (event, payload) => state.eventLog.push({ event, payload }),
     requestChoice: (choice) => {
       // no picks once the fight is decided (content may request synchronously
-      // during the victory drain — e.g. a scry landing on the killing blow)
+      // during the victory drain - e.g. a scry landing on the killing blow)
       if (rt.combatOver) return;
       rt.pending = choice;
     },

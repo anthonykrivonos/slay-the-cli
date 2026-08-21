@@ -30,7 +30,7 @@ export const watcherBasics: CardDef[] = [
     primitives: [{ do: "block", n: "block" }],
   },
   {
-    // "Deal 9 damage. Enter Wrath." — damage resolves BEFORE the stance change
+    // "Deal 9 damage. Enter Wrath." - damage resolves BEFORE the stance change
     // (no self-double), matching the game's action order.
     id: "ERUPTION",
     name: "Eruption",

@@ -2,7 +2,7 @@
 // (sts_lightspeed Shop.cpp). Streams: card identities/rarities = cardRng,
 // relic tiers + ALL price jitter + sale slot = merchantRng, potions = potionRng.
 //
-// ASCENSION 16 — DISPUTED (meta.shop.disputed.ascension16Prices):
+// ASCENSION 16 - DISPUTED (meta.shop.disputed.ascension16Prices):
 //   sts_lightspeed applies applyDiscount(0.80f) at ascension >= 16, which makes
 //   shops CHEAPER; the wiki documents A16 as "Shops are more costly." (commonly
 //   +10%). We implement the WIKI side: prices (and removal cost) x1.10, rounded,
@@ -31,10 +31,10 @@ export const SHOP = {
   saleSlots: 5, // saleIdx = merchantRng.random(4)
   removal: { basePrice: 75, increasePerPurchase: 25, smilingMask: 50 },
   relicTierRoll: { commonBelow: 48, uncommonBelow: 82 },
-  ascension16Factor: 1.1, // DISPUTED — wiki side implemented (lightspeed uses 0.80)
+  ascension16Factor: 1.1, // DISPUTED - wiki side implemented (lightspeed uses 0.80)
 } as const;
 
-/** Shop::rollCardRarityShop — reads cardRarityFactor but does NOT update it. */
+/** Shop::rollCardRarityShop - reads cardRarityFactor but does NOT update it. */
 export function rollCardRarityShop(ctx: EffectCtx): CardRarityRoll {
   const roll = ctx.rng("cardRng").random(99) + ctx.run.blizzard.cardRarityFactor;
   if (roll < SHOP.cardRarityRoll.rareBelow) return "rare";
@@ -78,7 +78,7 @@ export function computeRemovalCost(ctx: EffectCtx): number {
 }
 
 function applyA16(ctx: EffectCtx, price: number): number {
-  // DISPUTED A16 multiplier — wiki side (+10%); see file header.
+  // DISPUTED A16 multiplier - wiki side (+10%); see file header.
   return ctx.run.ascension >= 16 ? Math.round(price * SHOP.ascension16Factor) : price;
 }
 
@@ -110,7 +110,7 @@ export function generateShop(ctx: EffectCtx): ShopState {
   picks.push({ id: rollColorlessCard(ctx, "uncommon"), rarity: "uncommon", colorless: true });
   picks.push({ id: rollColorlessCard(ctx, "rare"), rarity: "rare", colorless: true });
 
-  // prices: int(base * merchantRng.random(0.9, 1.1)) — colorless x1.2, then sale
+  // prices: int(base * merchantRng.random(0.9, 1.1)) - colorless x1.2, then sale
   const cards: ShopCardSlot[] = picks.map((p) => {
     const base = SHOP.basePrices.cardByRarity[p.rarity];
     const jitter = merchantRng.randomFloatRange(SHOP.cardJitter.min, SHOP.cardJitter.max);

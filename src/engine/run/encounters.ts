@@ -13,7 +13,7 @@ import type { MonsterId } from "../core/ids";
 import { Rng, JavaRandom, javaShuffle } from "../core/rng";
 import { f32, f32add } from "../core/math";
 
-/** meta.encounters.listLengths — audited against the corpus by tests. */
+/** meta.encounters.listLengths - audited against the corpus by tests. */
 export const ENCOUNTER_LIST_LENGTHS = {
   weakGeneratedPerAct: { act1: 3, act2: 2, act3: 2 },
   strongGenerated: 13, // 1 first strong + 12
@@ -81,7 +81,7 @@ export interface GeneratedEncounters {
 export function generateEncounters(actDef: ActDef, monsterRng: Rng): GeneratedEncounters {
   const monsterList: string[] = [];
 
-  // weak (uniform weights: 1/4, 1/5, 1/3 per act — always 1/poolSize)
+  // weak (uniform weights: 1/4, 1/5, 1/3 per act - always 1/poolSize)
   const weakIds = actDef.weakEncounters.map((e) => e.id);
   const weakWeights = weakIds.map(() => f32(1 / weakIds.length));
   populateMonsterList(monsterList, weakIds, weakWeights, actDef.weakCount, monsterRng);

@@ -1,7 +1,7 @@
 // Engine-event -> readable log sentence. Harvested from the web UI's
 // pushEvents ticker (src/ui/main.ts) plus the full emit() inventory of
 // src/engine + src/content. Unknown events fall back to the web UI's raw
-// format: `event + clipped payload JSON`. Pure — no Bun/node APIs.
+// format: `event + clipped payload JSON`. Pure - no Bun/node APIs.
 
 import type { GameEvent } from "../../engine/game";
 import type { ContentBundle } from "../../engine/content/defs";

@@ -1,5 +1,5 @@
 // Color themes. THEME_256 maps the salvaged hex tables onto xterm-256 with a
-// pure quantizer (no Bun.color — render/ stays OS-free). THEME_PLAIN is the
+// pure quantizer (no Bun.color - render/ stays OS-free). THEME_PLAIN is the
 // identity theme used for snapshots, NO_COLOR, --no-color, and non-TTY pipes.
 
 import { fg256, sgr, RESET } from "../term/ansi";

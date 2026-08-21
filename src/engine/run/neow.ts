@@ -63,7 +63,7 @@ export const NEOW_CARD_UNCOMMON_CHANCE = 0.33;
 
 // --- option generation ---------------------------------------------------------------
 
-/** Neow::getOptions — exact roll order: random(0,5), 6+random(0,4),
+/** Neow::getOptions - exact roll order: random(0,5), 6+random(0,4),
  *  drawback 2+random(0,3), bonus random(0,5) into the drawback table (or
  *  11+random(0,6) over all tier-2 for PERCENT_DAMAGE), then a trailing
  *  random(0,0) after the boss-relic option is assigned. */

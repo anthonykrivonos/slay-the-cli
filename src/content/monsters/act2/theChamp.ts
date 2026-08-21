@@ -1,13 +1,13 @@
-// The Champ — exact port from data/corpus/monsters-act2.json (boss).
+// The Champ - exact port from data/corpus/monsters-act2.json (boss).
 // Phase 1: TAUNT is forced on turns 4, 8, 12, ... (the roll made when
 // (turnNumber+1) % 4 == 0). The first roll made at < 50% HP sets the phase-2
 // flag and returns ANGER (exactly once: removes all debuffs, negative Strength
 // floored to 0, then +6 / +9@A4 / +12@A19 Strength). In phase 2, EXECUTE is
 // forced unless it was one of the last two moves (net: every 3rd turn).
 // Shared table (phase-1 non-taunt turns and blocked-EXECUTE phase-2 turns):
-//   roll <= 15 (A19: 30) DEFENSIVE_STANCE — max 2 uses/combat, never twice in
-//     a row; roll <= 30 GLOAT — never after GLOAT or DEFENSIVE_STANCE;
-//   roll <= 55 FACE_SLAP — never twice in a row; else HEAVY_SLASH — never
+//   roll <= 15 (A19: 30) DEFENSIVE_STANCE - max 2 uses/combat, never twice in
+//     a row; roll <= 30 GLOAT - never after GLOAT or DEFENSIVE_STANCE;
+//   roll <= 55 FACE_SLAP - never twice in a row; else HEAVY_SLASH - never
 //     twice in a row (falls back to FACE_SLAP).
 // CONFLICT HONORED (GLOAT): Strength 2 / 3@A4 / 4@A19 (wiki tiered AscText,
 // consistent with Anger = 3x Gloat at every tier; lightspeed's {3,4,5} is an

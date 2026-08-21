@@ -85,12 +85,12 @@ function replayTail(ctx: EffectCtx, args: unknown): void {
  * ENGINE-GAP: the raw {kind:"scry"} action is unusable from card effects for
  * two reasons, so this effect replaces it (engine untouched):
  *   1. its "__scryResolve" continuation expects {discarded: iids} but the
- *      public choose command supplies {chosen: indices} — the built-in resume
+ *      public choose command supplies {chosen: indices} - the built-in resume
  *      path cannot be driven through advance();
  *   2. the engine's startScry pauses WITHOUT snapshotting the current card
  *      item + queued tail, so a card's post-scry actions (Cut Through Fate's
  *      draw, __afterCardUsed) would be dropped by the pause.
- * This effect mirrors startScry (top-n of draw, no-op when empty — no onScry
+ * This effect mirrors startScry (top-n of draw, no-op when empty - no onScry
  * on an empty scry, matching the engine), pauses via the standard snapshot,
  * and the resume maps chosen->discarded and calls the ENGINE's exported
  * scryResolve so onScry hooks (Nirvana) and onScryThisInDiscard self-triggers
@@ -118,7 +118,7 @@ function scryResume(ctx: EffectCtx, args: unknown): void {
 }
 
 // ------------------------------------------------------------------------------
-// mantra (tracked for Brilliance — see MANTRA_GAINED in powers/watcher.ts)
+// mantra (tracked for Brilliance - see MANTRA_GAINED in powers/watcher.ts)
 // ------------------------------------------------------------------------------
 
 function mantraTally(ctx: EffectCtx): PowerInstance {
@@ -158,7 +158,7 @@ export function mantraGainedThisCombat(ctx: EffectCtx): number {
   return p.amount;
 }
 
-/** "watcher/enterDivinity": direct entry (Blasphemy) — no +10 threshold cross. */
+/** "watcher/enterDivinity": direct entry (Blasphemy) - no +10 threshold cross. */
 function enterDivinityDirect(ctx: EffectCtx): void {
   const p = getPower(ctx, PLAYER, "MANTRA_GAINED");
   if (p) {
@@ -173,7 +173,7 @@ function enterDivinityDirect(ctx: EffectCtx): void {
 // deferred effects
 // ------------------------------------------------------------------------------
 
-/** "watcher/endTurn": Conclude/Meditate/Vault — end the turn at resolve time. */
+/** "watcher/endTurn": Conclude/Meditate/Vault - end the turn at resolve time. */
 function endTurnEffect(ctx: EffectCtx): void {
   queueEndTurn(ctx);
 }

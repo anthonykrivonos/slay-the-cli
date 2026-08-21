@@ -1,4 +1,4 @@
-// Silent basic cards. Values audited against data/corpus/cards.json — corpus
+// Silent basic cards. Values audited against data/corpus/cards.json - corpus
 // numbers only.
 
 import type { CardDef } from "../../../engine/content/defs";

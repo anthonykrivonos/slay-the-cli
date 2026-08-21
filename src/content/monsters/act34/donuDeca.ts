@@ -1,6 +1,6 @@
-// Donu & Deca — exact ports from data/corpus/monsters-act34.json (DONU,
+// Donu & Deca - exact ports from data/corpus/monsters-act34.json (DONU,
 // DECA). Paired boss: Deca in slot 0, Donu in slot 1 (the DONU_AND_DECA boss
-// encounter must resolve to BOTH — see act34BossEncounters in ./index.ts).
+// encounter must resolve to BOTH - see act34BossEncounters in ./index.ts).
 // Strict out-of-phase alternation with no AI randomness after the initial
 // forced first moves: turn 1 Deca Beam + Donu Circle of Power, turn 2 Deca
 // Square of Protection + Donu Beam, repeat.
@@ -14,7 +14,7 @@ import { firstTurn, lastMove } from "../../util";
 import { attackPlayer, prePower } from "../act1/_shared";
 import { statusCardsNow } from "./_shared";
 
-/** Apply an action to every combat slot (dead included — harmless, per the
+/** Apply an action to every combat slot (dead included - harmless, per the
  *  corpus note that Circle of Power hits a dead Deca; escaped/gap skipped). */
 function eachSlot(ctx: EffectCtx, fn: (idx: number) => void): void {
   for (const m of ctx.combat!.monsters) {

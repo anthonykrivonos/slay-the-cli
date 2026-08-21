@@ -1,4 +1,4 @@
-// The six act-1 slimes — exact ports from data/corpus/monsters-act1.json.
+// The six act-1 slimes - exact ports from data/corpus/monsters-act1.json.
 // Large slimes carry the SPLIT power (prebattle): at <= 50% max HP the intent is
 // interrupted and replaced with SPLIT, which removes the slime and spawns two
 // medium slimes of its type at slots [idx, idx+1] with hp = maxHp = its current
@@ -6,7 +6,7 @@
 // Philosopher's Stone).
 // CONFLICT HONORED (ACID_SLIME_L, asc>=17): lightspeed's roll<40 branch tests the
 // MEDIUM slime's spit id (constant-false typo); per the wiki/real game we test the
-// L slime's OWN Corrosive Spit — never 3x in a row.
+// L slime's OWN Corrosive Spit - never 3x in a row.
 
 import type { MonsterDef, EffectCtx } from "../../../engine/content/defs";
 import type { MonsterState } from "../../../engine/combat/combatState";

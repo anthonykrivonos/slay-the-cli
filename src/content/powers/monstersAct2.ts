@@ -3,16 +3,16 @@
 // per-monster specs in data/corpus/monsters-act2.json.
 //
 // REUSED (defined elsewhere, semantics verified against the act-2 corpus):
-//   PLATED_ARMOR  relics/supportPowers.ts — end-of-its-turn block + loses 1 per
+//   PLATED_ARMOR  relics/supportPowers.ts - end-of-its-turn block + loses 1 per
 //                 unblocked attack hit (Shelled Parasite; the armor-break stun
 //                 is the marker power below).
-//   CONFUSED      relics/supportPowers.ts — randomizes drawn card costs 0-3,
+//   CONFUSED      relics/supportPowers.ts - randomizes drawn card costs 0-3,
 //                 roll always consumed (Snecko's Perplexing Glare).
-//   THIEVERY      powers/monstersAct1.ts — gold stolen per attack (Mugger).
+//   THIEVERY      powers/monstersAct1.ts - gold stolen per attack (Mugger).
 //   ARTIFACT/BARRICADE/METALLICIZE/STRENGTH/... powers/core.ts.
 //
 // CONFLICT HONORED (BYRD flight-removal): the corpus adjudicates the game/wiki
-// power semantics over lightspeed's status bookkeeping — FLIGHT is REMOVED when
+// power semantics over lightspeed's status bookkeeping - FLIGHT is REMOVED when
 // it hits 0 (a grounded Byrd takes full damage and only regains Flight via
 // BYRD_FLY); lightspeed's AI logic is kept for all move selection.
 
@@ -91,7 +91,7 @@ export const act2MonsterPowers: PowerDef[] = [
   },
   {
     // Book of Stabbing: every unblocked attack hit it lands on the player adds
-    // X Wounds (X = 1) to the discard pile — one trigger per damaging hit.
+    // X Wounds (X = 1) to the discard pile - one trigger per damaging hit.
     id: "PAINFUL_STABS",
     name: "Painful Stabs",
     kind: "buff",
@@ -164,7 +164,7 @@ export const act2MonsterPowers: PowerDef[] = [
     hooks: {},
   },
   {
-    // Shelled Parasite's Suck: one-shot marker applied around the attack —
+    // Shelled Parasite's Suck: one-shot marker applied around the attack -
     // heals the owner for the unblocked damage the hit dealt (the reference's
     // VampireAttack heals min(attackDamage, damage taken); unblocked damage
     // here is that minimum by construction). Removed right after the attack.
@@ -182,7 +182,7 @@ export const act2MonsterPowers: PowerDef[] = [
   },
   {
     // Shelled Parasite: engine-side rule in the reference (Monster.cpp
-    // attackedUnblockedHelper) — when the unblocked attack hit that empties
+    // attackedUnblockedHelper) - when the unblocked attack hit that empties
     // PLATED_ARMOR lands, the current move is replaced with the stun (it loses
     // its next turn). The shared PLATED_ARMOR power QUEUES its -1, so this
     // marker (applied after it, firing in the same hook pass) still sees the

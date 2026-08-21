@@ -1,7 +1,7 @@
 // Generic event-room interpreter. runFlow delegates here for: room entry
 // (EventDef.onEnter setup rolls), the eventOption command (validate against
 // enabled(), apply choose()), and event-combat victories (EventDef.onCombatVictory
-// builds the event-defined rewards — the standard buildCombatRewards path would
+// builds the event-defined rewards - the standard buildCombatRewards path would
 // consume the wrong rng streams).
 //
 // Unknown / null event ids keep the historical stub behavior: a single implicit

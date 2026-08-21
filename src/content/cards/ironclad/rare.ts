@@ -130,7 +130,7 @@ export const ironcladRares: CardDef[] = [
     keywords: ["exhaust", "tag:healing"],
     onPlay: (ctx) => {
       // damage + fatal bonus resolve atomically (the bonus must land even when
-      // the kill ends the combat — see effects.ts)
+      // the kill ends the combat - see effects.ts)
       const target = ctx.target ?? 0;
       const dmg = calcCardDamage(ctx, ctx.card, target, ctx.upgraded ? 12 : 10);
       ctx.queue.addToBottom({
@@ -256,7 +256,7 @@ export const ironcladRares: CardDef[] = [
     keywords: ["exhaust", "tag:healing"],
     onPlay: (ctx) => {
       // damage + heal resolve atomically (the heal must land even when the
-      // sweep ends the combat — see effects.ts)
+      // sweep ends the combat - see effects.ts)
       const base = ctx.upgraded ? 5 : 4;
       const amounts = ctx.combat!.monsters.map((_, i) => calcCardDamage(ctx, ctx.card, i, base));
       ctx.queue.addToBottom({ kind: "effect", ref: "ironclad/reaper", args: { amounts } });

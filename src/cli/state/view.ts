@@ -416,8 +416,7 @@ function instCostLabel(card: CardInstance): string {
 }
 
 function masterCostLabel(cost: number): string {
-  const t = costText(cost);
-  return t === "–" ? "-" : t;
+  return costText(cost);
 }
 
 function prettyMove(monsterId: string, moveId: string): string {
@@ -736,9 +735,9 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
     const blocked = rewardBlocked(e, g.run);
     const isCard = e.kind === "card";
     return {
-      label:
-        (e.kind === "card" || e.kind === "bossRelic" ? (e.kind === "card" ? "Card - " : "Boss relic - ") : "") +
-        rewardLabel(e, bundle),
+      // the icon and the grouping already say what a row is, so the label is
+      // just the thing's name, the way the game lists its spoils
+      label: rewardLabel(e, bundle),
       sub: isCard && !e.taken ? firstRulesLine(e.id, e.upgraded ? 1 : 0) : null,
       enabled: blocked === null,
       note: e.taken ? "taken" : blocked,
@@ -746,7 +745,7 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
     };
   });
   items.push({
-    label: room.source === "boss" ? "Continue - enter the next act" : "Continue",
+    label: room.source === "boss" ? "Continue to the next act" : "Continue",
     action: cmd({ cmd: "skipRewards" }),
   });
 
@@ -794,7 +793,8 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
 
   return {
     kind: "rewards",
-    title: `SPOILS OF BATTLE - ${room.source}`,
+    // the game says enemy, not monster
+    title: `SPOILS OF BATTLE - ${room.source === "monster" ? "enemy" : room.source}`,
     rows,
     continueI: room.entries.length,
     list: makeList(items, page, focusI),
@@ -903,20 +903,24 @@ function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, pag
   } else {
     const heal = restHealPreview(g.run);
     const smithable = smithableDeckIndices(g.run, bundle);
+    // the game names these in one word, with the detail underneath
+    // subs stay short: at 80 columns a button box has 13 usable characters
     items.push({
-      label: `Rest - heal ${heal} HP  (${g.run.hp} -> ${Math.min(g.run.maxHp, g.run.hp + heal)})`,
+      label: "Rest",
+      sub: `Heal ${heal} HP`,
       action: cmd({ cmd: "restOption", kind: "rest" }),
     });
     items.push({
-      label: "Smith - upgrade a card",
+      label: "Smith",
+      sub: "Upgrade a card",
       enabled: smithable.length > 0,
       note: smithable.length === 0 ? "nothing to upgrade" : null,
       action: uiAct({ type: "openOverlay", overlay: { kind: "deck", mode: "smith", page: 0 } }),
     });
     if (canRecall(g.run, room.used)) {
       items.push({
-        label: "Recall - take the Ruby Key",
-        sub: "Uses the rest site - one of three keys needed to reach Act 4",
+        label: "Recall",
+        sub: "Take the Ruby Key",
         action: cmd({ cmd: "restOption", kind: "recall" }),
       });
     }
@@ -972,7 +976,7 @@ function buildEvent(g: GameState, room: Extract<RoomState, { kind: "event" }>, p
 function buildGameOver(g: GameState, room: Extract<RoomState, { kind: "gameOver" }>, page: number, focusI: number | null, bundle: ContentBundle): GameOverView {
   const name = bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character);
   const items: RawItem[] = [
-    { label: "New run - same hero, next seed", action: uiAct({ type: "rerun" }) },
+    { label: "Climb again", sub: "Same hero, next seed", action: uiAct({ type: "rerun" }) },
     { label: "Back to the menu", action: uiAct({ type: "backToMenu" }) },
   ];
   return {
@@ -1001,7 +1005,7 @@ function buildChoiceOverlay(g: GameState, pending: PendingChoice, ui: UiState, f
       ? describeChoiceReason(req.reason)
       : req.kind === "option"
         ? req.reason
-        : "Scry - choose cards to discard";
+        : "Choose cards to discard";
   const constraint = req.kind === "scry" ? "any number" : min === max ? `exactly ${min}` : `${min}-${max}`;
   const single = req.kind === "option" || (min === 1 && max === 1);
 
@@ -1077,8 +1081,8 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         top.mode === "view"
           ? `Deck - ${deck.length} card${deck.length === 1 ? "" : "s"}`
           : top.mode === "smith"
-            ? "SMITH - choose a card to upgrade"
-            : `REMOVE - choose a card (${shopRoom?.shop.removalCost ?? "?"} G)`;
+            ? "UPGRADE A CARD"
+            : `REMOVE A CARD (${shopRoom?.shop.removalCost ?? "?"} G)`;
       const items: RawItem[] = deck.map((mc, deckIdx) => {
         const def = bundle.cards.get(mc.defId);
         const smithOk = top.mode !== "smith" || canSmithMaster(bundle, mc);
@@ -1117,7 +1121,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
           type: def?.type ?? "?",
         };
       });
-      // draw-pile order is hidden information — present it sorted
+      // draw-pile order is hidden information - present it sorted
       if (top.pile === "draw") rows = rows.sort((a, b) => a.name.localeCompare(b.name));
       const items: RawItem[] = rows.map((r) => ({ label: `${r.name} (${r.cost}) [${r.type}]`, action: null }));
       if (items.length === 0) items.push({ label: "(empty)", enabled: false, action: null });
@@ -1245,7 +1249,7 @@ function buildTargeting(g: GameState, ui: UiState, bundle: ContentBundle): Targe
 // The read-only hover/selection focus: Tab and the arrow keys move a pointer
 // through the current mode's focusables; the bottom info panel explains the
 // pointed-at thing; Enter activates it on menu-like screens. Enumeration
-// order here mirrors the order the builders above emit — list screens use
+// order here mirrors the order the builders above emit - list screens use
 // the absolute list index directly.
 
 const TIP_COLOR = {
@@ -1350,9 +1354,9 @@ function tipEnemy(
 }
 
 const NODE_INFO: Record<string, [string, string]> = {
-  monster: ["Monster", "A standard combat. Victory pays gold and offers a card."],
+  monster: ["Enemy", "A standard combat. Victory pays gold and offers a card."],
   elite: ["Elite", "A dangerous fight. Drops a relic on top of the usual spoils."],
-  shop: ["Merchant", "Buy cards, relics and potions - or pay to remove a card."],
+  shop: ["Merchant", "Buy cards, relics and potions, or pay to remove a card."],
   rest: ["Rest Site", "Rest to heal 30% of max HP, or smith to upgrade a card."],
   treasure: ["Treasure", "A chest holding a free relic."],
   unknown: ["Unknown", "Could be an event, a fight, a shop, or treasure."],
@@ -1367,7 +1371,7 @@ function tipNode(kind: string, burning: boolean, key: string): TooltipView {
     color: TIP_COLOR.node,
     name,
     meta: `travel with [${key}]`,
-    lines: [burning ? `${desc} This one burns - it also drops the Emerald Key.` : desc],
+    lines: [burning ? `${desc} This one burns, and it drops the Emerald Key.` : desc],
   };
 }
 
@@ -1442,10 +1446,11 @@ function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusI
   };
 }
 
+// phrased the way the game phrases them
 const STANCE_TIPS: Record<string, string> = {
-  CALM: "Serenity. On exiting Calm, gain 2 Energy.",
-  WRATH: "Fury. You deal double attack damage - and take double attack damage.",
-  DIVINITY: "Transcendence. You deal triple attack damage. Exits at the end of your turn.",
+  CALM: "Serenity. Gain 2 Energy when you exit Calm.",
+  WRATH: "Fury. Deal double damage. Receive double damage.",
+  DIVINITY: "Transcendence. Deal triple damage. Exit Divinity at the end of your turn.",
 };
 
 function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle, accent: string): FocusInfo {
@@ -1748,7 +1753,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
   }
 
   // input precedence: overlay-top > pending choice > targeting > room kind
-  // (mode is resolved FIRST so the focus cursor can flow into the builders —
+  // (mode is resolved FIRST so the focus cursor can flow into the builders -
   // the page auto-follows the cursor)
   const top = ui.overlays[ui.overlays.length - 1];
   let targeting: TargetingView | null = null;

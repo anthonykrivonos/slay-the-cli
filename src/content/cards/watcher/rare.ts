@@ -2,7 +2,7 @@
 // ENGINE-NOTE on upgrade-gated keywords: for ALPHA, ESTABLISHMENT (Innate) and
 // BLASPHEMY (Retain) the corpus structured flags carry the keyword on the base
 // card, but the corpus card TEXT ("[|$Innate. ]", "[|$Retain. ]") and V2.3.4
-// gate it to the upgrade — the gate wins here (keywords/upgradeKeywords split).
+// gate it to the upgrade - the gate wins here (keywords/upgradeKeywords split).
 
 import type { CardDef } from "../../../engine/content/defs";
 import { calcCardDamage, calcBlock } from "../../../engine/combat/damageCalc";
@@ -25,7 +25,7 @@ export const watcherRares: CardDef[] = [
     primitives: [{ do: "makeCard", card: "BETA", dest: "draw" }],
   },
   {
-    // "Enter Divinity. Die next turn. Exhaust" — the death is the BLASPHEMER
+    // "Enter Divinity. Die next turn. Exhaust" - the death is the BLASPHEMER
     // power; the Divinity entry goes through watcher/enterDivinity so the
     // Brilliance mantra tally doesn't misread it as a +10 threshold crossing.
     id: "BLASPHEMY",
@@ -46,7 +46,7 @@ export const watcherRares: CardDef[] = [
   },
   {
     // "Deal 12(16) damage. Deals additional damage equal to Mantra gained this
-    // combat." (tracked tally — see MANTRA_GAINED in powers/watcher.ts)
+    // combat." (tracked tally - see MANTRA_GAINED in powers/watcher.ts)
     id: "BRILLIANCE",
     name: "Brilliance",
     color: "purple",
@@ -86,7 +86,7 @@ export const watcherRares: CardDef[] = [
   },
   {
     // "Unplayable. When you draw this card, add 2(3) Miracles to your hand and
-    // Exhaust." — pure onDrawThis self-trigger.
+    // Exhaust." - pure onDrawThis self-trigger.
     id: "DEUS_EX_MACHINA",
     name: "Deus Ex Machina",
     color: "purple",
@@ -212,7 +212,7 @@ export const watcherRares: CardDef[] = [
     },
   },
   {
-    // "Deal 5(6) damage to a random enemy 5(6) times." — target rolled per hit
+    // "Deal 5(6) damage to a random enemy 5(6) times." - target rolled per hit
     // at resolve time, per-target damage calc (Sword Boomerang pattern).
     id: "RAGNAROK",
     name: "Ragnarok",
@@ -249,7 +249,7 @@ export const watcherRares: CardDef[] = [
   },
   {
     // "Gain 3(4) Block for each card in your hand." (the resolving card sits
-    // in limbo, so it doesn't count itself — game parity)
+    // in limbo, so it doesn't count itself - game parity)
     id: "SPIRIT_SHIELD",
     name: "Spirit Shield",
     color: "purple",
@@ -268,7 +268,7 @@ export const watcherRares: CardDef[] = [
     },
   },
   {
-    // "Take an extra turn after this one. End your turn." — the coming monster
+    // "Take an extra turn after this one. End your turn." - the coming monster
     // turn is skipped entirely (round-end ticks still happen).
     id: "VAULT",
     name: "Vault",

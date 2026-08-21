@@ -41,7 +41,7 @@ const tank: MonsterDef = {
   getMove: () => "ATTACK",
 };
 
-/** 200 HP wall that always defends (never attacks) — for intent checks. */
+/** 200 HP wall that always defends (never attacks) - for intent checks. */
 const guard: MonsterDef = {
   id: "T_GUARD",
   name: "Test Guard",

@@ -53,7 +53,7 @@ describe("pure helpers", () => {
     expect(mapGlyph("treasure")).toBe("T");
     expect(mapGlyph("unknown")).toBe("?");
     expect(costText(-1)).toBe("X");
-    expect(costText(-2)).toBe("–");
+    expect(costText(-2)).toBe("-");
     expect(costText(2)).toBe("2");
     expect(titleCase("JAW_WORM")).toBe("Jaw Worm");
     expect(chestTitle("small")).toBe("Small Chest");

@@ -1,6 +1,6 @@
-// Corrupt Heart — exact port from data/corpus/monsters-act34.json
+// Corrupt Heart - exact port from data/corpus/monsters-act34.json
 // (CORRUPT_HEART). Turn 1 always Debilitate (Vuln/Weak/Frail 2 + exactly 1
-// EACH of Dazed/Slimed/Wound/Burn/Void shuffled into the draw pile —
+// EACH of Dazed/Slimed/Wound/Burn/Void shuffled into the draw pile -
 // CONFLICT NOTE: all sources agree on 1 each). Attacks then alternate; a
 // turn number divisible by 3 forces BUFF next turn (turns 4, 7, 10, 13,
 // 16...). BUFF: negative Strength cleared then +2, plus the escalating extra

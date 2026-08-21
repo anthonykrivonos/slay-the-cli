@@ -40,7 +40,7 @@ const tank: MonsterDef = {
   getMove: () => "ATTACK",
 };
 
-/** 200 HP wall that always defends (never attacks) — for intent checks. */
+/** 200 HP wall that always defends (never attacks) - for intent checks. */
 const guard: MonsterDef = {
   id: "T_GUARD",
   name: "Test Guard",
@@ -69,7 +69,7 @@ const frail: MonsterDef = {
 export function defectBundle(): ContentBundle {
   const b = makeTestBundle();
   for (const p of corePowers) b.powers.set(p.id, p);
-  for (const p of relicSupportPowers) b.powers.set(p.id, p); // FOCUS, BUFFER, …
+  for (const p of relicSupportPowers) b.powers.set(p.id, p); // FOCUS, BUFFER, and so on
   for (const p of defectPowers) b.powers.set(p.id, p);
   for (const c of [...defectCards, ...statusCards, ...curseCards]) b.cards.set(c.id, c);
   for (const [k, v] of defectEffects) b.effects.set(k, v);

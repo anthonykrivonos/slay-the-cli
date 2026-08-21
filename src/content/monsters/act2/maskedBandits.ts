@@ -1,10 +1,10 @@
-// The Masked Bandits event fighters — exact ports from
+// The Masked Bandits event fighters - exact ports from
 // data/corpus/monsters-act2.json (Pointy idx 0, Romeo idx 1, Bear idx 2).
 // All three run fixed scripts and consume no aiRng after the initial roll in
 // the reference.
 // CONFLICT HONORED (Bear hp.base): [38,42] per spire-archive+wiki majority
 // (lightspeed's 52 max is a transcription typo for 42).
-// CONFLICT HONORED (Romeo A17): lightspeed's script (no A17 branch — strict
+// CONFLICT HONORED (Romeo A17): lightspeed's script (no A17 branch - strict
 // AGONIZING/CROSS alternation at every ascension) transcribed as primary; the
 // wiki's A17 double-Cross-Slash cycle is noted but not implemented.
 // CONFLICT HONORED (categories): all three are event-only fighters.

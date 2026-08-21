@@ -1,7 +1,7 @@
-// Gremlin Leader — exact port from data/corpus/monsters-act2.json (elite).
+// Gremlin Leader - exact port from data/corpus/monsters-act2.json (elite).
 // Corpus encounter layout: leader at slot 3, the two starting gremlins at
 // slots 1 and 2, slot 0 empty; up to 3 minions alive at once. The reference
-// group setup marks the starting gremlins as MINIONs — this engine's encounter
+// group setup marks the starting gremlins as MINIONs - this engine's encounter
 // data cannot, so the leader's preBattle marks every other monster in slots
 // 0..2 (and its own MINION_LEADER; on death all MINIONs abandon combat).
 // AI tables by living-gremlin count (slots 0..2):
@@ -13,7 +13,7 @@
 // RALLY summons 2 gremlins into open slots searched in order 1, 2, then 0:
 // each is a uniform aiRng.random(7) pick from the 8-entry pool, rolls fresh HP
 // from monsterHpRng, gets MINION (+1 STR with Philosopher's Stone) and
-// immediately rolls its own first move — per-gremlin, in slot order.
+// immediately rolls its own first move - per-gremlin, in slot order.
 // CONFLICT HONORED (ENCOURAGE): minion block 6, raised to 10 at A18 (wiki
 // tiered AscText; lightspeed's asc>=3 threshold for 10 is a slipped tier);
 // STR 3 / 4@A3 / 5@A18 per all sources.

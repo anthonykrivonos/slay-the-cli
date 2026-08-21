@@ -1,4 +1,4 @@
-// Potions — all 42, audited vs data/corpus/potions.json.
+// Potions - all 42, audited vs data/corpus/potions.json.
 //
 // Contract: onUse(ctx, target, potency) receives the ALREADY-RESOLVED potency.
 // The use site (run layer / tests) computes it via effectivePotency(), which

@@ -1,5 +1,5 @@
-// Byrd — exact port from data/corpus/monsters-act2.json.
-// Prebattle: FLIGHT 3 (asc>=17: 4) — halves attack damage, loses 1 per
+// Byrd - exact port from data/corpus/monsters-act2.json.
+// Prebattle: FLIGHT 3 (asc>=17: 4) - halves attack damage, loses 1 per
 // unblocked attack hit, resets to full at the end of every round, and is
 // REMOVED at 0 (corpus adjudication), grounding the Byrd: the current intent
 // becomes STUNNED, then the fixed grounded script STUNNED -> HEADBUTT -> FLY

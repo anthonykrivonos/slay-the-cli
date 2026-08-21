@@ -1,6 +1,6 @@
 // The closed GameAction union. Cards/powers/relics/potions enqueue these; the
 // interpreter in combat/interpreter.ts executes them synchronously. Everything
-// here is plain data so an in-flight queue could in principle be serialized —
+// here is plain data so an in-flight queue could in principle be serialized -
 // but by design the queue is always empty at player-input points.
 
 import type { ActorRef, CardId, CardInstanceId, EffectRefId, OrbId, PowerId, StanceId } from "./ids";

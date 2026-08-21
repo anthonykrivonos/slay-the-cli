@@ -43,7 +43,7 @@ export const curseCards: CardDef[] = [
     values: {},
     upgradeValues: {},
     keywords: [],
-    // ENGINE-GAP: unremovable from the deck — run-layer rule, see Ascender's Bane.
+    // ENGINE-GAP: unremovable from the deck - run-layer rule, see Ascender's Bane.
   },
   {
     id: "DECAY",
@@ -133,7 +133,7 @@ export const curseCards: CardDef[] = [
     values: {},
     upgradeValues: {},
     keywords: [],
-    // "While in hand, lose 1 HP when other cards are played" — via the PAIN
+    // "While in hand, lose 1 HP when other cards are played" - via the PAIN
     // helper power (see powers/ironclad.ts), applied on draw
     onDrawThis: (ctx) => {
       ctx.queue.addToBottom({ kind: "applyPower", source: PLAYER, target: PLAYER, powerId: "PAIN", amount: 1 });

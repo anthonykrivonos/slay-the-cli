@@ -104,7 +104,7 @@ class Parser {
     if (ident === "true") return true;
     if (ident === "false") return false;
     if (ident === "nil") return null;
-    if (ident !== null) return ident; // bare identifier used as value — keep as string
+    if (ident !== null) return ident; // bare identifier used as value - keep as string
     throw new Error(`unexpected char '${c}' at ${this.i}`);
   }
 

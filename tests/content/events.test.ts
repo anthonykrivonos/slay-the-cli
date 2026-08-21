@@ -141,7 +141,7 @@ describe("act 1 events", () => {
       const goldBefore = s.run.gold;
       const relicsBefore = s.run.relics.length;
       s = pick(s, 0);
-      if (roomOf(s).kind !== "event") continue; // ambush — covered below
+      if (roomOf(s).kind !== "event") continue; // ambush - covered below
       expect(dataOf(s).phase).toBe(1);
       if (rewards[0] === "GOLD") expect(s.run.gold).toBe(goldBefore + 30);
       else expect(s.run.gold).toBe(goldBefore);

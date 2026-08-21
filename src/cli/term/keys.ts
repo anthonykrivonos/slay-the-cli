@@ -3,7 +3,7 @@
 // Handles: printable ASCII, Enter, Esc, Backspace, Tab, arrow keys (CSI and
 // SS3 forms), and Ctrl+C (raw mode delivers it as byte 0x03). Lone-ESC rule:
 // an ESC byte not followed (in the same chunk) by a recognizable sequence is
-// the Escape key — real escape sequences arrive within a single read.
+// the Escape key - real escape sequences arrive within a single read.
 
 export type Key =
   | { kind: "char"; ch: string }

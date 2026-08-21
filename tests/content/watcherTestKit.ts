@@ -1,5 +1,5 @@
 // Local test kit for the Watcher card tests: merges the watcher slice (cards,
-// powers, effects) into the REAL base bundle (buildBaseContentBundle — needed
+// powers, effects) into the REAL base bundle (buildBaseContentBundle - needed
 // for the live stance defs, the colorless tokens the purple cards create, and
 // relics like Damaru/Violet Lotus), plus deterministic test monsters.
 // cardsTestKit.ts itself is not modified; its bundle-independent helpers are
@@ -39,7 +39,7 @@ const tank: MonsterDef = {
   getMove: () => "ATTACK",
 };
 
-/** 200 HP wall that always defends (intent: defend) — never attacks. */
+/** 200 HP wall that always defends (intent: defend) - never attacks. */
 const guard: MonsterDef = {
   id: "T_WGUARD",
   name: "Watcher Test Guard",

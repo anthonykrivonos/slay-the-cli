@@ -268,7 +268,7 @@ export function combatRelicTier(ctx: EffectCtx): RelicPoolTier {
 
 // --- reward screen assembly --------------------------------------------------------
 
-/** Next unused group id within this rewards screen (kept deterministic —
+/** Next unused group id within this rewards screen (kept deterministic -
  *  group ids are per-screen, never process-global). */
 export function nextRewardGroup(entries: RewardEntry[]): number {
   let g = 0;

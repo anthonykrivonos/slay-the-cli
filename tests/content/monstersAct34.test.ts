@@ -1,4 +1,4 @@
-// Act-3/4 monster content tests — every corpus entity in
+// Act-3/4 monster content tests - every corpus entity in
 // data/corpus/monsters-act34.json: HP bands (A0 + A7/8/9), exact move damage
 // through real combats (ascension tiers included), seed-swept history rules,
 // and the boss mechanics: Darkling revive/true-death, Awakened One phase
@@ -440,7 +440,7 @@ describe("Transient", () => {
     expect(hp3 - s2.run.hp).toBe(40);
   });
 
-  test("Fading 5 (A17: 6): attacks that many turns then fades away — player wins", () => {
+  test("Fading 5 (A17: 6): attacks that many turns then fades away - player wins", () => {
     for (const [asc, turns] of [
       [0, 5],
       [17, 6],
@@ -854,7 +854,7 @@ describe("Reptomancer", () => {
     expect(sawAttack).toBe(true);
   });
 
-  test("killing the Reptomancer ends the fight — daggers flee", () => {
+  test("killing the Reptomancer ends the fight - daggers flee", () => {
     let s = fight(["DAGGER", "REPTOMANCER", "DAGGER"], { seed: "RKILL", deck: nukeDeck });
     s = play(s, "T_NUKE", 1);
     expect(won(s)).toBe(true);
@@ -961,7 +961,7 @@ describe("Awakened One", () => {
     s = endTurn(s);
     expect(hp0 - s.run.hp).toBe(40 + 12);
     expect(["AWAKENED_ONE_SLUDGE", "AWAKENED_ONE_TACKLE"]).toContain(mon(s, 2).move!);
-    // killing it in phase 2 ends the fight — the Cultists flee
+    // killing it in phase 2 ends the fight - the Cultists flee
     s = play(s, "T_NUKE", 2);
     expect(won(s)).toBe(true);
     expect(mon(s, 2).isDead).toBe(true);
@@ -1266,7 +1266,7 @@ describe("Spire Shield & Spear", () => {
   test("A18: Burn Strike puts 2 Burns on TOP of the draw pile; Smash block is a flat 99", () => {
     let s = fight(SPIRE, { seed: "SP18", asc: 18 });
     s = endTurn(s);
-    // the 2 Burns landed on TOP of the draw pile — the next turn drew them
+    // the 2 Burns landed on TOP of the draw pile - the next turn drew them
     const burnsInHand = s.combat!.player.piles.hand.filter(
       (iid) => s.combat!.cards[iid]!.defId === "BURN",
     ).length;

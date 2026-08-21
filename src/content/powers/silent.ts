@@ -2,12 +2,12 @@
 // Audited against data/corpus/powers.json. Where a power id here differs from
 // the corpus id it is noted inline (the workstream disambiguates card/power id
 // collisions with a _POWER suffix: WRAITH_FORM_POWER / CORPSE_EXPLOSION_POWER /
-// NIGHTMARE_POWER; A_THOUSAND_CUTS keeps the card's id — corpus power id is
+// NIGHTMARE_POWER; A_THOUSAND_CUTS keeps the card's id - corpus power id is
 // THOUSAND_CUTS). MASTERFUL_STAB at the bottom is a helper power (engine
 // workaround, not a corpus power).
 //
 // Shared corpus powers used by green cards but owned by other slices are
-// re-exported by reference at the bottom (map-merge by id is safe — identical
+// re-exported by reference at the bottom (map-merge by id is safe - identical
 // objects): NO_DRAW (ironclad), GENERIC_STRENGTH_UP (colorless),
 // NEXT_TURN_BLOCK (relic support).
 
@@ -42,11 +42,11 @@ export const silentPowers: PowerDef[] = [
       atStartOfTurn: (ctx) => {
         const amt = ctx.power!.amount;
         if (amt <= 0) return;
-        // SYNCHRONOUS loseHp (bypasses block; fires wasHPLost — wakes Lagavulin,
+        // SYNCHRONOUS loseHp (bypasses block; fires wasHPLost - wakes Lagavulin,
         // triggers Corpse Explosion/Mode Shift) so the HP loss lands before the
         // owner's move queues its damage. THEN stacks -1 (removed at 0).
         // ENGINE-GAP: executeMonsterMove checks isDead only on entry, before
-        // this hook fires — a monster killed by its own start-of-turn poison
+        // this hook fires - a monster killed by its own start-of-turn poison
         // still executes its already-rolled move this turn (the real game
         // re-checks isDeadOrEscaped before takeTurn). Its next-move roll also
         // happens before queued wake effects resolve (see the Lagavulin test).
@@ -149,7 +149,7 @@ export const silentPowers: PowerDef[] = [
     // "At the end of your turn, lose X Dexterity." Corpus id: WRAITH_FORM.
     // CONFLICT HONORED: the corpus power text says "start of your turn"; the
     // card text ("At the end of your turn, lose 1 Dexterity") and V2.3.4's
-    // WraithFormPower.atEndOfTurn agree on end of turn — end of turn it is.
+    // WraithFormPower.atEndOfTurn agree on end of turn - end of turn it is.
     id: "WRAITH_FORM_POWER",
     name: "Wraith Form",
     kind: "debuff",
@@ -239,7 +239,7 @@ export const silentPowers: PowerDef[] = [
   {
     // "Deal Double Damage for the next X turns." (Phantasmal Killer)
     // Corpus marks it turnBased, but the game's PhantasmalPower decrements
-    // itself at the START of the turn it grants Double Damage — end-of-round
+    // itself at the START of the turn it grants Double Damage - end-of-round
     // ticking would remove it before it ever fires. Self-managed countdown.
     id: "PHANTASMAL",
     name: "Phantasmal",
@@ -313,7 +313,7 @@ export const silentPowers: PowerDef[] = [
       },
       atEndOfTurn: (ctx, isPlayerTurn) => {
         // monster-owned power: its atEndOfTurn site fires with isPlayerTurn
-        // false at the end of ITS turn — no card can be played between the
+        // false at the end of ITS turn - no card can be played between the
         // player's end of turn and this, so removal here still means "this turn"
         if (!isPlayerTurn) ctx.queue.addToBottom({ kind: "removePower", target: ctx.owner, powerId: "CHOKED" });
       },
@@ -322,7 +322,7 @@ export const silentPowers: PowerDef[] = [
   {
     // "Block is not removed at the beginning of your next X turns."
     // Corpus marks it turnBased, but the countdown belongs at the start of the
-    // player's turn AFTER the retention check — end-of-round ticking would
+    // player's turn AFTER the retention check - end-of-round ticking would
     // remove a 1-stack Blur before it ever preserved anything. Self-managed.
     id: "BLUR",
     name: "Blur",
@@ -340,7 +340,7 @@ export const silentPowers: PowerDef[] = [
     // "At the end of your turn, Retain up to X cards." Fires before the
     // end-of-turn cards (Burn et al.); the selection is a player choice, so
     // the hook enqueues an effect (pause snapshots the queued tail, including
-    // the endPlayerTurn marker — see effects.ts).
+    // the endPlayerTurn marker - see effects.ts).
     id: "WELL_LAID_PLANS",
     name: "Well-Laid Plans",
     kind: "buff",
@@ -409,7 +409,7 @@ export const silentPowers: PowerDef[] = [
   {
     // ENGINE-GAP workaround: Masterful Stab "costs 1 additional energy for each
     // TIME you lose HP this combat". combatFlags.hpLostThisCombat accumulates
-    // AMOUNTS, not instances, and card defs have no wasHPLost hook — so the
+    // AMOUNTS, not instances, and card defs have no wasHPLost hook - so the
     // card applies this hidden power when drawn (Blood for Blood precedent);
     // its amount counts HP-loss EVENTS, which the card's dynamicCost reads.
     // Losses occurring before the first copy is drawn are not counted (the

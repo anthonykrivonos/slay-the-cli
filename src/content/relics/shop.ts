@@ -1,4 +1,4 @@
-// Shop relics — values audited vs data/corpus/relics.json.
+// Shop relics - values audited vs data/corpus/relics.json.
 
 import type { RelicDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";

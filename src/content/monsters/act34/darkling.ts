@@ -1,11 +1,11 @@
-// Darkling — exact port from data/corpus/monsters-act34.json (DARKLING).
-// CONFLICT HONORED (CHOMP hits): 8x2 (asc2: 9x2) — wiki + spire-archive + the
+// Darkling - exact port from data/corpus/monsters-act34.json (DARKLING).
+// CONFLICT HONORED (CHOMP hits): 8x2 (asc2: 9x2) - wiki + spire-archive + the
 // decompiled game's two DamageActions; lightspeed's single hit is a bug.
-// CONFLICT HONORED (NIP asc2): lightspeed primary — construct rolls
+// CONFLICT HONORED (NIP asc2): lightspeed primary - construct rolls
 // monsterHpRng.random(9,13) at asc2+ AND the move adds +2 (effective 11-15).
 // Life Link / revive cycle: on death, if any OTHER Darkling is still truly
 // alive, this one becomes halfDead (untargetable corpse) and revives at 50%
-// max HP two of its turns later (REGROW turn, then REINCARNATE) — driven by
+// max HP two of its turns later (REGROW turn, then REINCARNATE) - driven by
 // the REGROW power's atEndOfRound hook, since the engine skips halfDead
 // monsters in the monster phase. Killing the last living Darkling wins the
 // fight even while others are regrowing (the corpses die for real).
@@ -68,7 +68,7 @@ export const darkling: MonsterDef = {
     if (self.halfDead) {
       // only reached when it dies during its own turn (thorns): the engine
       // still rolls after the move; the corpus forces REINCARNATE while
-      // halfDead — REGROW is shown while more than one revive turn remains.
+      // halfDead - REGROW is shown while more than one revive turn remains.
       const regrow = self.powers.find((p) => p.id === "REGROW");
       const ticks = (regrow?.data?.ticks as number | undefined) ?? 0;
       return ticks > 1 ? REGROW : REINCARNATE;

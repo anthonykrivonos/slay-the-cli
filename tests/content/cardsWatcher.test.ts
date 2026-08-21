@@ -1,7 +1,7 @@
 // Watcher card pool tests, part 1:
-//   1. corpus table audit — all 75 purple cards present with exact envelopes
+//   1. corpus table audit - all 75 purple cards present with exact envelopes
 //      (cost/type/rarity/target/values/upgrade/keywords);
-//   2. local merged-bundle audit — replica of tests/audit/contentAudit.test.ts
+//   2. local merged-bundle audit - replica of tests/audit/contentAudit.test.ts
 //      card checks over buildBaseContentBundle() + the watcher slice;
 //   3. basics + the stance engine integration math (energy on stance dance,
 //      Wrath/Divinity multipliers, mantra thresholds incl. overflow).
@@ -73,7 +73,7 @@ const MECH_UP = ["exhaust", "ethereal", "innate", "selfRetain"];
 // Upgrade-gated keywords: the corpus structured flags list these on the BASE
 // card, but the corpus card TEXT ("[|$Innate. ]" / "[|$Retain. ]") and V2.3.4
 // gate them to the upgrade. The defs implement the gate (base keywords exclude
-// them; upgradeKeywords carry them) — see the ENGINE-NOTEs in the card files.
+// them; upgradeKeywords carry them) - see the ENGINE-NOTEs in the card files.
 // (corpus rebuilt 2026-08-20: upgrade-gated keywords are now gated in the
 // corpus itself, so no documented divergences remain)
 const GATED: Record<string, string> = {};

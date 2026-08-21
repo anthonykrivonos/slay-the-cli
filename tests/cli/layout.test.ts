@@ -29,6 +29,7 @@ import {
 import {
   enemyPanel,
   enemyPanelWidth,
+  enemyPanelHeight,
   playerPanel,
   playerPanelWidth,
   playerPanelHeight,
@@ -36,7 +37,7 @@ import {
   type EnemyPanelData,
   type PlayerPanelData,
 } from "../../src/cli/render/panels";
-import { THEME_PLAIN, THEME_256 } from "../../src/cli/render/theme";
+import { THEME_PLAIN, THEME_256, hexToAnsi256 } from "../../src/cli/render/theme";
 import { stripAnsi } from "../../src/cli/term/ansi";
 
 function widths(lines: string[]): number[] {
@@ -291,11 +292,28 @@ describe("enemy panels", () => {
       { name: "Weak", amount: 1, kind: "debuff" },
     ],
     gone: null,
+    art: [],
+    tint: "#278c9f",
   };
   test("width ladder", () => {
     expect(enemyPanelWidth(120, 5)).toBe(22);
     expect(enemyPanelWidth(80, 2)).toBe(30);
     expect(enemyPanelWidth(80, 5)).toBe(18); // clamped floor -> line fallback territory
+    // portraits earn the panel more room, up to 46 columns
+    expect(enemyPanelWidth(120, 1, true)).toBe(46);
+    expect(enemyPanelWidth(120, 1, false)).toBe(30);
+    expect(enemyPanelWidth(80, 5, true)).toBe(18); // the floor is the floor
+  });
+  test("a portrait adds its rows and wears the creature's tint", () => {
+    const art = ["  ###  ", " ##### ", "  ###  "];
+    const rows = enemyPanel({ ...enemy, art }, 24, THEME_256);
+    expect(rows.length).toBe(enemyPanelHeight(art.length));
+    expect(widths(rows)).toEqual(new Array(enemyPanelHeight(art.length)).fill(24));
+    expect(rows.join("")).toContain(`38;5;${hexToAnsi256("#278c9f")}`);
+    // the portrait sits between the intent row and the name
+    expect(stripAnsi(rows[1]!)).toContain("/! 11");
+    expect(stripAnsi(rows[2]!)).toContain("###");
+    expect(stripAnsi(rows[2 + art.length]!)).toContain("Jaw Worm");
   });
   test("exact 6-row geometry at several widths in both themes", () => {
     for (const theme of [THEME_PLAIN, THEME_256]) {
@@ -340,7 +358,22 @@ describe("player panel", () => {
       { text: "( - )", empty: true, color: null },
     ],
     powers: [{ name: "Vigor", amount: 8, kind: "buff" }],
+    art: [],
+    tint: "#b8a1d9",
   };
+  test("the hero portrait stands at the left, stats beside him", () => {
+    const art = ["  #  ", " ### ", "  #  ", " / \\ "];
+    const rows = playerPanel({ ...player, art }, 44, THEME_256);
+    expect(rows.length).toBe(playerPanelHeight({ ...player, art }));
+    expect(widths(rows)).toEqual(new Array(rows.length).fill(44));
+    expect(rows.join("")).toContain(`38;5;${hexToAnsi256("#b8a1d9")}`);
+    // stats still readable next to him
+    const plain = rows.map(stripAnsi).join("\n");
+    expect(plain).toContain("Watcher");
+    expect(plain).toContain("61/72");
+    // he stands on the panel floor: his last row is the last content row
+    expect(stripAnsi(rows[rows.length - 2]!)).toContain("/ \\");
+  });
   test("width formula", () => {
     expect(playerPanelWidth(80)).toBe(36);
     expect(playerPanelWidth(120)).toBe(52);

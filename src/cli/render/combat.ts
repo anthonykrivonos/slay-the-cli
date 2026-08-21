@@ -1,9 +1,10 @@
-// Combat screen, game-shaped: a relic/potion strip, enemy intent panels
-// (right-aligned), the player status panel (bottom-left), inline log tail,
-// and the hand as a row of card boxes over a DRAW/END TURN/DISCARD bar.
+// Combat screen, game-shaped: a relic/potion strip, enemy panels holding each
+// creature's ASCII portrait under its intent (right-aligned), the player status
+// panel with the hero's portrait (bottom-left), inline log tail, and the hand
+// as a row of card boxes over a DRAW/END TURN/DISCARD bar.
 //
-// Vertical budget (degrade in order: log -> enemy panels -> player panel ->
-// card boxes):
+// Vertical budget (degrade in order: portraits -> log -> enemy panels ->
+// player panel -> card boxes):
 //   need = 1(strip) + 1 + eH + 1 + pH + logL [+1 targeting] + 1(HAND) + cardH + 1(bar)
 // Leftover rows flex into the gap after the enemies (weight 3) and after the
 // player panel (weight 1). Every fancy block keeps the original one-line
@@ -18,6 +19,7 @@ import { cardBox, cardBoxWidth, cardBoxHeight, tintFocus, type CardBoxData } fro
 import {
   enemyPanel,
   enemyPanelWidth,
+  enemyPanelHeight,
   playerPanel,
   playerPanelHeight,
   playerPanelWidth,
@@ -25,7 +27,8 @@ import {
   type EnemyPanelData,
   type PlayerPanelData,
 } from "./panels";
-import { CARD_COLOR_ACCENTS } from "../text/runlogic";
+import { monsterPortrait, monsterTint, sharedMonsterTier, pickPortrait } from "./art";
+import { CARD_COLOR_ACCENTS, CHARACTER_COLORS } from "../text/runlogic";
 import { visibleWidth } from "../term/ansi";
 
 const TYPE_LETTER: Record<string, string> = {
@@ -46,7 +49,7 @@ const TYPE_WORD: Record<string, string> = {
 
 // --- data mapping -----------------------------------------------------------------
 
-function enemyData(e: CombatView["enemies"][number]): EnemyPanelData {
+function enemyData(e: CombatView["enemies"][number], art: string[]): EnemyPanelData {
   return {
     key: e.key,
     name: e.name,
@@ -58,12 +61,29 @@ function enemyData(e: CombatView["enemies"][number]): EnemyPanelData {
     move: e.move,
     powers: e.powers,
     gone: e.gone,
+    art,
+    tint: monsterTint(e.id),
   };
 }
 
-function playerData(v: CombatView): PlayerPanelData {
+/**
+ * The portraits for one row of enemies: a shared tier so the panels line up,
+ * each padded on TOP to the tallest of them so the creatures stand on a common
+ * ground line. Empty arrays when no tier fits the space.
+ */
+function enemyArt(ids: string[], maxW: number, maxH: number): string[][] {
+  const tier = maxH <= 0 ? -1 : sharedMonsterTier(ids, maxW, maxH);
+  if (tier < 0) return ids.map(() => []);
+  const arts = ids.map((id) => monsterPortrait(id, tier)!.rows);
+  const tallest = arts.reduce((m, a) => Math.max(m, a.length), 0);
+  return arts.map((a) => [...Array<string>(tallest - a.length).fill(""), ...a]);
+}
+
+function playerData(v: CombatView, art: string[]): PlayerPanelData {
   return {
-    name: `YOU  ${v.you.name}`,
+    art,
+    tint: CHARACTER_COLORS[v.you.id] ?? C.text,
+    name: v.you.name,
     hp: v.you.hp,
     maxHp: v.you.maxHp,
     block: v.you.block,
@@ -234,14 +254,43 @@ export function renderCombat(
     twoRows = true;
   }
   const cardH = cardBoxHeight(height);
-  const pData = playerData(screen);
 
-  const enemyRows = (): number => (panelsOk ? ENEMY_PANEL_H : m);
+  // Portraits: sized from the rows left once everything else has its own, so
+  // they are what a tight terminal gives up first. The enemy row shares one
+  // tier; the hero takes whatever fits beside his stats.
+  let art = screen.enemies.map(() => [] as string[]);
+  let heroArt: string[] = [];
+  const pDataOf = (hero: string[]): PlayerPanelData => playerData(screen, hero);
+  const bareNeed =
+    1 + 1 + (panelsOk ? ENEMY_PANEL_H : m) + 1 + playerPanelHeight(pDataOf([])) + logL + targRow + 1 +
+    (n === 0 ? 1 : boxesOk ? cardH * (twoRows ? 2 : 1) : n) + 1;
+  if (panelsOk) {
+    const spare = height - bareNeed;
+    // The hero goes first, but cheaply: his panel is already several rows tall,
+    // so a portrait that short costs nothing, and beyond that he takes a third
+    // of the spare rows. The enemies get everything left.
+    const statsH = playerPanelHeight(pDataOf([]));
+    const heroCap = Math.min(10, statsH - 2 + Math.max(0, Math.floor(spare / 3)));
+    const hero = heroCap >= 3 ? pickPortrait(screen.you.id, playerPanelWidth(width) - 26, heroCap) : null;
+    heroArt = hero !== null ? hero.rows : [];
+    const heroCost = Math.max(0, heroArt.length + 2 - statsH);
+    const eW = enemyPanelWidth(width, m, true);
+    art = enemyArt(screen.enemies.map((e) => e.id), eW - 4, Math.min(spare - heroCost, 18));
+  }
+  let pData = pDataOf(heroArt);
+
+  const artH = (): number => art[0]?.length ?? 0;
+  const enemyRows = (): number => (panelsOk ? enemyPanelHeight(artH()) : m);
   const playerRows = (): number => (playerPanelOk ? playerPanelHeight(pData) : youLines(screen, width, theme).length);
   const cardRows = (): number => (n === 0 ? 1 : boxesOk ? cardH * (twoRows ? 2 : 1) : n);
   const need = (): number => 1 + 1 + enemyRows() + 1 + playerRows() + logL + targRow + 1 + cardRows() + 1;
 
-  // degrade: log -> enemy panels -> player panel -> card boxes
+  // degrade: portraits -> log -> enemy panels -> player panel -> card boxes
+  if (need() > height && artH() > 0) art = screen.enemies.map(() => []);
+  if (need() > height && heroArt.length > 0) {
+    heroArt = [];
+    pData = pDataOf(heroArt);
+  }
   if (need() > height && logL > 0) logL = 0;
   if (need() > height && panelsOk) panelsOk = false;
   if (need() > height && playerPanelOk) playerPanelOk = false;
@@ -259,9 +308,9 @@ export function renderCombat(
 
   // 2. enemies (right-aligned panels, or the one-line ladder floor)
   if (panelsOk) {
-    const eW = enemyPanelWidth(width, m);
+    const eW = enemyPanelWidth(width, m, artH() > 0);
     const blocks = screen.enemies.map((e, i) => {
-      const p = enemyPanel(enemyData(e), eW, theme);
+      const p = enemyPanel(enemyData(e, art[i] ?? []), eW, theme);
       return screen.focusEnemy === i ? tintFocus(p, theme, accent) : p;
     });
     const rowW = rowWidth(m, eW, 1);

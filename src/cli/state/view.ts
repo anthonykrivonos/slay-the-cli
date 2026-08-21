@@ -172,6 +172,8 @@ export interface IntentView {
 
 export interface EnemyPanelView {
   key: string | null; // targeting number for alive enemies
+  /** monster id, for the ASCII portrait and its tint */
+  id: string;
   name: string;
   hp: number;
   maxHp: number;
@@ -196,6 +198,8 @@ export interface CombatView {
   turn: number;
   enemies: EnemyPanelView[];
   you: {
+    /** character id, for the ASCII portrait in the player panel */
+    id: string;
     name: string;
     hp: number;
     maxHp: number;
@@ -620,6 +624,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     const info = intents[idx] ?? null;
     return {
       key: gone ? null : (keyFor(targetNo++) ?? null),
+      id: m.id,
       name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
       hp: m.hp,
       maxHp: m.maxHp,
@@ -692,6 +697,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     turn: c.turn,
     enemies,
     you: {
+      id: g.run.character,
       name: toAscii(bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character)),
       hp: g.run.hp,
       maxHp: g.run.maxHp,

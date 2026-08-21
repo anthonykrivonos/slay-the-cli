@@ -18,7 +18,8 @@ bun src/cli/main.ts --no-color        # also honors NO_COLOR
 Needs an interactive terminal, at least 80x24. The layout is fluid and uses
 everything you give it: enemy panels, card-shaped boxes, scene art and a bottom
 INFO panel appear as the window grows, and at 80x24 every screen compacts to
-dense one-liners. Number keys select, letters act (`e` end turn, `l` combat log,
+dense one-liners. Give it room (120x36 and up) and the monsters and your hero
+appear as ASCII portraits inside their panels, each creature in its own color. Number keys select, letters act (`e` end turn, `l` combat log,
 `d` deck, `p` potions, `q` quit). `Tab` and the arrow keys move a read-only
 hover cursor whose target is explained in the INFO panel; on menus and lists
 that cursor doubles as a selection (`Enter` activates, `Esc` clears). Runs save
@@ -44,7 +45,10 @@ only).
 Mechanics, numbers and behavior mirror the original game exactly, and the few
 deliberate deviations are flagged in code. The repo holds no binary assets and
 no text from the game itself. Event prose is paraphrased, and the scene art is
-original except for the menu hero portraits, which are low-resolution ASCII
-renderings derived from the game's character art (see `tools/ascii-art.ts`).
-Slay the Spire is by MegaCrit. Buy it. This is a fan reimplementation for
-private use.
+original, but the portraits are not: every hero and all 65 monsters are
+low-resolution ASCII renderings derived from the game's character art, each
+monster tinted with the average color of its own sprite. Regenerate them with
+`tools/gen-hero-portraits.ts` and `tools/gen-monster-portraits.ts`, which read
+images from a local directory and document where to fetch them; the images
+themselves are never committed. Slay the Spire is by MegaCrit. Buy it. This is
+a fan reimplementation for private use.

@@ -118,6 +118,7 @@ Mechanically exact Slay the Spire clone, adapted to the terminal: `bun src/cli/m
 - `src/cli`: TUI. `render/ input/ state/ text/` are pure (no process/Bun./node:, enforced); only `term/ io/ app.ts main.ts` touch the OS. Frames are snapshot-tested; keep output ASCII-only.
 - Exactness rule: game numbers/behavior come from the corpus, never from memory. Deviations get a flagging comment (`ENGINE-GAP`, `VERIFY-JAR`, etc.).
 - Copy rule: no em dashes or other typographic punctuation in copy or comments; UI copy stays in the game's own terse voice.
+- Portraits (`src/cli/render/{heroPortraits,monsterPortraits}.ts`) are GENERATED: edit `tools/gen-hero-portraits.ts` / `tools/gen-monster-portraits.ts` and rerun them against a local image directory, never the generated files. Source images are deliberately not committed.
 - Full suite: `bun test`. Corpus audit: `bun tools/corpus/check-all.ts`.
 
 ## TUI snapshots

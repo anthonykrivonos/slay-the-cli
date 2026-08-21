@@ -14,7 +14,7 @@ import { inflateSync } from "node:zlib";
 
 const RAMP = " .:-=+*#%@";
 
-interface Img {
+export interface Img {
   w: number;
   h: number;
   /** RGBA, 8-bit */
@@ -198,6 +198,44 @@ export function toAsciiArt(img: Img, outW: number, invert: boolean, gamma: numbe
 export async function renderFile(path: string, outW: number, invert: boolean, gamma: number): Promise<string[]> {
   const bytes = new Uint8Array(await Bun.file(path).arrayBuffer());
   return toAsciiArt(cropVisible(decodePng(bytes)), outW, invert, gamma);
+}
+
+/** Decode + crop once, for callers rendering several widths of one image. */
+export async function loadImage(path: string): Promise<Img> {
+  return cropVisible(decodePng(new Uint8Array(await Bun.file(path).arrayBuffer())));
+}
+
+/**
+ * The sprite's own color as "#rrggbb": the alpha-weighted mean of its visible
+ * pixels, pushed away from grey so a terminal palette can tell one creature
+ * from another. Very dark means near-black art, so it floors at a readable
+ * lightness rather than going invisible.
+ */
+export function spriteTint(img: Img): string {
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  let a = 0;
+  for (let i = 0; i < img.px.length; i += 4) {
+    const al = img.px[i + 3]! / 255;
+    if (al < 0.25) continue;
+    r += img.px[i]! * al;
+    g += img.px[i + 1]! * al;
+    b += img.px[i + 2]! * al;
+    a += al;
+  }
+  if (a === 0) return "#c9d0e0";
+  r /= a;
+  g /= a;
+  b /= a;
+  // saturate: push each channel away from the mean, then lift the whole thing
+  const mean = (r + g + b) / 3;
+  const SAT = 1.7;
+  let out = [r, g, b].map((c) => mean + (c - mean) * SAT);
+  const peak = Math.max(...out);
+  if (peak < 150) out = out.map((c) => (c * 150) / Math.max(1, peak)); // readable floor
+  const hex = out.map((c) => Math.round(Math.max(0, Math.min(255, c))).toString(16).padStart(2, "0")).join("");
+  return `#${hex}`;
 }
 
 if (import.meta.main) {

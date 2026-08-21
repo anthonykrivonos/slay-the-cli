@@ -29,13 +29,25 @@ export interface EnemyPanelData {
   move: string | null;
   powers: PowerChipData[];
   gone: "dead" | "escaped" | null;
+  /** the creature's ASCII portrait, already padded to the row's height */
+  art: string[];
+  /** the creature's own color, for its portrait */
+  tint: string;
 }
 
+/** Rows of chrome around the portrait: borders, intent, name, HP, powers. */
 export const ENEMY_PANEL_H = 6;
 
 /** Panel width for m enemies across `cols`. <18 = panels don't fit. */
-export function enemyPanelWidth(cols: number, m: number): number {
-  return clamp(Math.floor((cols - 2) / Math.max(1, m)) - 1, 18, 30);
+export function enemyPanelWidth(cols: number, m: number, withArt = false): number {
+  // portraits earn the panel more room: creatures need columns to read as
+  // themselves, and a lone enemy should loom
+  return clamp(Math.floor((cols - 2) / Math.max(1, m)) - 1, 18, withArt ? 46 : 30);
+}
+
+/** Total panel height once a portrait of artH rows sits inside it. */
+export function enemyPanelHeight(artH: number): number {
+  return ENEMY_PANEL_H + artH;
 }
 
 function chipText(p: PowerChipData): string {
@@ -71,14 +83,21 @@ function hpRow(hp: number, maxHp: number, block: number, iw: number, prefix: str
   return `${txt} ${theme.fg(C.hp, bar(hp, maxHp, barInner))}${block > 0 ? theme.fg(C.block, blk) : ""}`;
 }
 
-/** Render one enemy panel: exactly ENEMY_PANEL_H rows of w visible columns. */
+/** Render one enemy panel: exactly enemyPanelHeight(art) rows of w columns. */
 export function enemyPanel(e: EnemyPanelData, w: number, theme: Theme): string[] {
   const iw = w - 4;
   const border = `+${"-".repeat(w - 2)}+`;
   const line = (s: string): string => `| ${padClip(s, iw)} |`;
+  const centered = (s: string): string => {
+    const pad = Math.max(0, Math.floor((iw - s.length) / 2));
+    return " ".repeat(pad) + s;
+  };
+  // the portrait in the creature's own color; a corpse keeps the shape but
+  // loses the color, like the game greying out a dead monster
+  const artRows = e.art.map((r) => line(e.gone !== null ? theme.dim(centered(r)) : theme.fg(e.tint, centered(r))));
 
   if (e.gone !== null) {
-    const rows = [border, line(""), line(e.name), line(`x ${e.gone} x`), line(""), border];
+    const rows = [border, line(""), ...artRows, line(e.name), line(`x ${e.gone} x`), line(""), border];
     return rows.map((r) => theme.dim(padClip(r, w)));
   }
 
@@ -102,6 +121,7 @@ export function enemyPanel(e: EnemyPanelData, w: number, theme: Theme): string[]
   const rows = [
     border,
     line(intentRow),
+    ...artRows,
     line(theme.bold(padClip(e.name, iw))),
     line(hpRow(e.hp, e.maxHp, e.block, iw, "", theme, clamp(w - 20, 6, 14))),
     line(powersRow(e.powers, iw, theme)),
@@ -132,21 +152,32 @@ export interface PlayerPanelData {
   mantra: string | null;
   orbs: OrbChipData[] | null;
   powers: PowerChipData[];
+  /** the hero's ASCII portrait, drawn to the left of the stats (empty = none) */
+  art: string[];
+  /** the hero's accent, for the portrait */
+  tint: string;
 }
 
 export function playerPanelWidth(cols: number): number {
   return clamp(Math.floor(cols * 0.45), 34, 52);
 }
 
-/** Panel height for this data: 4 (borders+name+hp) +1 orbs/mantra +1 powers. */
+/** Width the portrait column takes inside the panel (0 when there is none). */
+function artColumn(p: PlayerPanelData): number {
+  return p.art.length === 0 ? 0 : p.art.reduce((m, r) => Math.max(m, r.length), 0) + 2;
+}
+
+/** Panel height: 4 (borders+name+hp) +1 orbs/mantra +1 powers, or the portrait
+ *  if it is taller than the stats stack. */
 export function playerPanelHeight(p: PlayerPanelData): number {
-  return 4 + (p.orbs !== null || p.mantra !== null ? 1 : 0) + (p.powers.length > 0 ? 1 : 0);
+  const stats = 4 + (p.orbs !== null || p.mantra !== null ? 1 : 0) + (p.powers.length > 0 ? 1 : 0);
+  return Math.max(stats, p.art.length + 2);
 }
 
 /** Render the player panel: exactly playerPanelHeight(p) rows, w visible cols. */
 export function playerPanel(p: PlayerPanelData, w: number, theme: Theme): string[] {
-  const iw = w - 4;
-  const line = (s: string): string => `| ${padClip(s, iw)} |`;
+  const aw = artColumn(p);
+  const iw = w - 4 - aw;
 
   // energy orb lives in the top border: +==( 3/3 )======+
   const orb = `( ${p.energy}/${p.energyMax} )`;
@@ -161,8 +192,8 @@ export function playerPanel(p: PlayerPanelData, w: number, theme: Theme): string
   const badgeLen = p.stance !== null ? p.stance.length + 2 : 0;
   const nameRow = `${theme.bold(padClip(p.name, iw - badgeLen - (badgeLen > 0 ? 1 : 0)))}${badgeLen > 0 ? " " + badge : ""}`;
 
-  const rows: string[] = [top, line(nameRow), line(hpRow(p.hp, p.maxHp, p.block, iw, "HP ", theme, clamp(w - 32, 10, 24)))];
-
+  // the stats stack, top-aligned inside the panel
+  const stats: string[] = [nameRow, hpRow(p.hp, p.maxHp, p.block, iw, "HP ", theme, clamp(w - 32, 10, 24))];
   if (p.orbs !== null || p.mantra !== null) {
     const parts: string[] = [];
     if (p.mantra !== null) parts.push(theme.fg(C.gold, `Mantra ${p.mantra}`));
@@ -173,10 +204,18 @@ export function playerPanel(p: PlayerPanelData, w: number, theme: Theme): string
           .join(""),
       );
     }
-    rows.push(line(parts.join("  ")));
+    stats.push(parts.join("  "));
   }
-  if (p.powers.length > 0) {
-    rows.push(line(powersRow(p.powers, iw, theme, 3)));
+  if (p.powers.length > 0) stats.push(powersRow(p.powers, iw, theme, 3));
+
+  // the hero stands at the left, on the panel floor, with the stats beside him
+  const contentH = playerPanelHeight(p) - 2;
+  const artTop = contentH - p.art.length;
+  const rows: string[] = [top];
+  for (let i = 0; i < contentH; i++) {
+    const art = i >= artTop ? (p.art[i - artTop] ?? "") : "";
+    const artCell = aw === 0 ? "" : `${padClip(art === "" ? "" : theme.fg(p.tint, art), aw - 2)}  `;
+    rows.push(`| ${artCell}${padClip(stats[i] ?? "", iw)} |`);
   }
   rows.push(bottom);
   return rows.map((r) => padClip(r, w));

@@ -12,7 +12,7 @@
                                                                                                     
                                                                                                     
  +==( 3/3 )==================================+                                                      
- | YOU  Ironclad                             |                                                      
+ | Ironclad                                  |                                                      
  | HP 80/80 [#############]                  |                                                      
  +===========================================+                                                      
  Choose a target for Strike: >[1] Red Louse  [2] Green Louse                                        

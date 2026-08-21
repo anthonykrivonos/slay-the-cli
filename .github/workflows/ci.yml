@@ -1,0 +1,75 @@
+# Required checks for main. Every job here is a merge gate, so keep them fast
+# and keep them honest: the suite is ~5s, so there is no excuse for skipping.
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# a new push to a PR makes the previous run pointless
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Suite
+        run: bun test
+      - name: Corpus audit
+        run: bun run audit
+
+  generated:
+    name: generated files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+
+      # The snapshots ARE the expected UI, so a hand-edited fixture is the one
+      # change CONTRIBUTING.md promises to reject. Regenerating and diffing
+      # catches both a hand-edit and a stale commit, without trusting anyone.
+      - name: Snapshots match the renderer
+        run: |
+          bun run fixtures
+          git diff --exit-code --stat tests/cli/fixtures || {
+            echo "::error::tests/cli/fixtures is out of sync. Run 'bun run fixtures' and commit the diff."
+            exit 1
+          }
+
+      - name: Screenshots match the renderer
+        run: |
+          bun run shots
+          git diff --exit-code --stat docs/shots || {
+            echo "::error::docs/shots is out of sync. Run 'bun run shots' and commit the diff."
+            exit 1
+          }
+
+  node:
+    name: node
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      # The docs promise npm/pnpm/yarn users can play without Bun. Prove the
+      # whole module graph loads under Node/tsx, not just that install worked.
+      - name: Loads under Node
+        run: npm start --silent -- --help | grep -q "the whole Spire"

@@ -1,0 +1,32 @@
+name: Diverges from the original
+description: A number or behavior that does not match Slay the Spire.
+labels: [divergence]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most valuable kind of report. "Matches the original" beats
+        "reads nicer" here, so a citation is what makes it actionable.
+  - type: input
+    id: subject
+    attributes:
+      label: What diverges
+      placeholder: Curl Up triggers on unblocked attack damage only
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the game does, and how you know
+      description: >
+        A corpus entry, the wiki, decompiled source, or a reproducible in-game
+        observation. Without a source this cannot be acted on.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What this does instead
+      description: Include the seed and floor if it is observable in a run.
+    validations:
+      required: true

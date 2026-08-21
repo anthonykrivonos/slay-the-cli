@@ -1,0 +1,46 @@
+name: Bug or crash
+description: Something broke. The seed makes it reproducible.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The engine is deterministic, so a seed plus a floor reproduces your run
+        exactly. That turns a bug report into a test case, so please include it.
+  - type: input
+    id: seed
+    attributes:
+      label: Seed
+      description: The header shows it, as does the menu.
+      placeholder: SPIRE
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Character, ascension, act and floor
+      placeholder: Watcher, A1, Act 1, floor 6
+    validations:
+      required: true
+  - type: input
+    id: size
+    attributes:
+      label: Terminal size and program
+      description: Layout bugs are usually size-specific.
+      placeholder: 100x30, iTerm2 on macOS
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got. Paste any stack trace.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit
+      description: >
+        `git -C ~/.slay-the-cli/app rev-parse --short HEAD`, or the version the
+        menu's update notice mentions.

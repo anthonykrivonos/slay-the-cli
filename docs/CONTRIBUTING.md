@@ -31,6 +31,26 @@ parity is covered without it: `tests/audit/contentAudit.test.ts` verifies all
 370 cards, 181 relics, 42 potions, 65 monsters and 51 events from `data/corpus`
 alone, and it runs as part of the suite.
 
+## How a change lands
+
+`main` is protected, so every change arrives as a pull request. Nothing here is
+unusual, but it is all enforced rather than requested:
+
+1. **Branch or fork**, then push and open a PR against `main`.
+2. **CI must pass.** Three required checks: `test`, `generated files`, and
+   `node`. They run on every push to the PR, take about a minute, and a red one
+   blocks the merge button.
+3. **One approving review** is required, and pushing new commits dismisses a
+   stale approval. Review comment threads have to be resolved before merging.
+4. **Your branch must be up to date with `main`** before merging. The button to
+   update it is on the PR.
+5. **Merges are squash-only.** Your commits become one commit on `main`, titled
+   with the PR title, and the branch is deleted automatically. `main` keeps a
+   linear history, and force pushes and deletions are refused.
+
+So write the PR title as the commit message you want in the log: a short
+imperative sentence, no prefix tags. `git log` on `main` shows the house style.
+
 ## Scripts
 
 Every task has a package script, so `npm run <name>`, `pnpm <name>`,

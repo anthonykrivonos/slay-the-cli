@@ -5,7 +5,7 @@
 import { test, expect, describe } from "bun:test";
 import { clamp, fits, rowWidth, rowGap, joinBlocks, flexFill, tipHeight } from "../../src/cli/render/layout";
 import { bigWord, bigWordWidth, canBigWord, BIG_ROWS } from "../../src/cli/render/bigfont";
-import { ART_CAMPFIRE, ART_WHALE, ART_CHEST, ART_MERCHANT, ART_SPIRE, type Art } from "../../src/cli/render/art";
+import { ART_CAMPFIRE, ART_WHALE, ART_CHEST, ART_MERCHANT, ART_SPIRE, ART_HEROES, type Art } from "../../src/cli/render/art";
 import {
   cardBox,
   cardBoxWidth,
@@ -115,6 +115,22 @@ describe("art", () => {
       }
     });
   }
+
+  test("hero portraits: all four heroes, <=12 rows, uniform width, pure ASCII", () => {
+    expect(Object.keys(ART_HEROES).sort()).toEqual(["DEFECT", "IRONCLAD", "SILENT", "WATCHER"]);
+    for (const art of Object.values(ART_HEROES)) {
+      expect(art.h).toBeLessThanOrEqual(12);
+      expect(art.rows.length).toBe(art.h);
+      for (const r of art.rows) {
+        expect(r.length).toBe(art.w);
+        for (let i = 0; i < r.length; i++) {
+          const code = r.charCodeAt(i);
+          expect(code).toBeGreaterThanOrEqual(0x20);
+          expect(code).toBeLessThan(0x80);
+        }
+      }
+    }
+  });
 });
 
 describe("card boxes", () => {

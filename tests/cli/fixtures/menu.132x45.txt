@@ -15,19 +15,19 @@
                                                       ####  ##### #   #   #                                                         
                                                      a mechanically exact spire                                                     
                                                                                                                                     
-            +=[1]====================+ +-[2]--------------------+ +-[3]--------------------+ +-[4]--------------------+             
-            | Ironclad               | | Silent                 | | Defect                 | | Watcher                |             
-            | 80 HP                  | | 70 HP                  | | 75 HP                  | | 72 HP                  |             
-            | Burning Blood          | | Ring of the Snake      | | Cracked Core           | | Pure Water             |             
-            +========================+ +------------------------+ +------------------------+ +------------------------+             
-                                                                                                                                    
-             Ascension 0 - The standard climb   [a] up / [A] down                                                                   
-             Seed: SPIRE   [s] edit                                                                                                 
-                                                                                                                                    
-              [n] NEW RUN                                                                                                           
-              [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                                                                          
-                                                                                                                                    
-                                                                                                                                    
++=[1]====================+ +-[2]--------------------+ +-[3]--------------------+ +-[4]--------------------+            .-""-.       
+| Ironclad               | | Silent                 | | Defect                 | | Watcher                |           /|____|\      
+| 80 HP                  | | 70 HP                  | | 75 HP                  | | 72 HP                  |          | [ o o ] |    
+| Burning Blood          | | Ring of the Snake      | | Cracked Core           | | Pure Water             |          _\  --  /_     
++========================+ +------------------------+ +------------------------+ +------------------------+       .-'  '----'  '-.  
+                                                                                                                 / |   .-++-.   | \ 
+ Ascension 0 - The standard climb   [a] up / [A] down                                                           |] |  /  ||  \  | [|
+ Seed: SPIRE   [s] edit                                                                                         |] | |   ||   | | [|
+                                                                                                                 \ |  \__||__/  | / 
+  [n] NEW RUN                                                                                                      |     ||     |   
+  [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                                                                    /|_____||_____|\  
+                                                                                                                 '======[==]======' 
+                                                                                                                     Ironclad       
                                                                                                                                     
                                                                                                                                     
                                                                                                                                     

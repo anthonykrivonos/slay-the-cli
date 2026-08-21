@@ -67,3 +67,77 @@ export const ART_SPIRE: Art = norm([
   "    /|   ||   |\\",
   "   /_|___||___|_\\",
 ]);
+
+// --- hero portraits (menu) -------------------------------------------------------
+//
+// Original archetype drawings (nothing traced or converted from any image):
+// an armored knight, a hooded rogue, an automaton with its orb, and a
+// meditating monk. <= 12 rows each; shown beside the menu on wide terminals.
+
+const HERO_IRONCLAD: Art = norm([
+  "        .-\"\"-.",
+  "       /|____|\\",
+  "      | [ o o ] |",
+  "      _\\  --  /_",
+  "   .-'  '----'  '-.",
+  "  / |   .-++-.   | \\",
+  " |] |  /  ||  \\  | [|",
+  " |] | |   ||   | | [|",
+  "  \\ |  \\__||__/  | /",
+  "    |     ||     |",
+  "   /|_____||_____|\\",
+  "  '======[==]======'",
+]);
+
+const HERO_SILENT: Art = norm([
+  "        _____",
+  "      .'     '.",
+  "     /  _____  \\",
+  "    |  /     \\  |",
+  "    | | -   - | |",
+  "     \\|   \\   |/",
+  "  \\   \\  ---  /   /",
+  "   \\.  '.___.'  ./",
+  "    \\\\  |   |  //",
+  "     \\> |   | </",
+  "      ` |___| `",
+  "       /__|__\\",
+]);
+
+const HERO_DEFECT: Art = norm([
+  "      ________",
+  "     | ______ |",
+  "     || o  o ||     .-.",
+  "     ||  __  ||    ( o )",
+  "     ||______||     '-'",
+  "    _|________|_   *",
+  "   | |##|  |##| | *",
+  "  [| |::|--|::| |]",
+  "   |_|::|__|::|_|",
+  "     |___||___|",
+  "     |___||___|",
+  "    _|__|  |__|_",
+]);
+
+const HERO_WATCHER: Art = norm([
+  "         .--.",
+  "        /    \\",
+  "       | -  - |",
+  "        \\ __ /",
+  "      .-'    '-.",
+  "     /  |    |  \\",
+  "    |   |    |   |",
+  "  .-\\   |____|   /-.",
+  " (   '--|    |--'   )",
+  "  '-.__/      \\__.-'",
+  "   ( _/--.__.--\\_ )",
+  "    '--__|__|__--'",
+]);
+
+/** Portrait per menu character id. */
+export const ART_HEROES: Record<string, Art> = {
+  IRONCLAD: HERO_IRONCLAD,
+  SILENT: HERO_SILENT,
+  DEFECT: HERO_DEFECT,
+  WATCHER: HERO_WATCHER,
+};

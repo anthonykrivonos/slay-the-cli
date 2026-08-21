@@ -10,7 +10,7 @@ import { padClip, center, wrapPlain } from "./widgets";
 import { CHARACTER_COLORS } from "../text/runlogic";
 import { bigWord, bigWordWidth, BIG_ROWS } from "./bigfont";
 import { clamp, joinBlocks, rowWidth } from "./layout";
-import { ART_SPIRE } from "./art";
+import { ART_SPIRE, ART_HEROES } from "./art";
 
 const CAPTION = "a mechanically exact spire";
 
@@ -41,7 +41,15 @@ function heroBox(
 
 export function renderMenu(screen: MenuView, width: number, height: number, theme: Theme): string[] {
   const letters = bigWord("SLAY");
-  const boxW = clamp(Math.floor((width - 2) / 4), 19, 26);
+
+  // the selected hero's portrait joins the block on wide terminals; the
+  // hero boxes shrink (never below their minimum) to make room for it
+  const selected = screen.characters.find((ch) => ch.selected) ?? screen.characters[0];
+  const portrait = selected !== undefined ? ART_HEROES[selected.id] : undefined;
+  const portraitGap = 4;
+  const wantPortrait = portrait !== undefined && width >= 108;
+  const boxSpace = wantPortrait ? width - 2 - portrait!.w - portraitGap : width - 2;
+  const boxW = clamp(Math.floor(boxSpace / 4), 19, 26);
   const boxRowW = rowWidth(4, boxW, 1);
   // box height: relic names may wrap onto a second line on narrow boxes
   const relicRows = Math.max(
@@ -50,8 +58,11 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   );
   const boxH = 4 + relicRows;
 
-  // vertical budget: letters(5)+caption+blank+boxes+blank+asc+seed+blank+actions(2)
-  const needBig = BIG_ROWS + 1 + 1 + boxH + 1 + 2 + 1 + 2;
+  // vertical budget: letters(5)+caption+blank+block; the block is the boxes
+  // + controls column, stretched to the portrait's height when shown
+  const leftBlockH = boxH + 1 + 2 + 1 + 1 + (screen.continueDesc !== null ? 1 : 0);
+  const blockH = wantPortrait ? Math.max(leftBlockH, portrait!.h + 1) : leftBlockH;
+  const needBig = BIG_ROWS + 1 + 1 + blockH;
   const useBig = letters !== null && bigWordWidth("SLAY") <= width - 4 && height >= needBig;
   const useBoxes = boxRowW <= width && height >= (useBig ? needBig : needBig - BIG_ROWS);
 
@@ -72,39 +83,50 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   out.push(center(theme.dim(CAPTION), width));
   out.push("");
 
-  // hero boxes
+  // left column: hero boxes + controls (built at boxRowW, then joined with
+  // the portrait column and centered as one block)
+  const left: string[] = [];
   const blocks = screen.characters.map((ch, i) => heroBox(ch, boxW, boxH, screen.focusIdx === i, theme));
-  const leftPad = Math.max(0, Math.floor((width - boxRowW) / 2));
-  out.push(...joinBlocks(blocks, blocks.map(() => boxW), 1, leftPad));
-  out.push("");
-
-  // ascension + seed, aligned with the box row
-  const margin = " ".repeat(leftPad + 1);
+  left.push(...joinBlocks(blocks, blocks.map(() => boxW), 1, 0));
+  left.push("");
+  const margin = " ";
   const ascTag = `Ascension ${screen.ascension}`;
-  out.push(
+  left.push(
     `${margin}${screen.ascension > 0 ? theme.fg(C.gold, ascTag) : ascTag} - ${theme.dim(screen.ascensionLabel)}   ${theme.dim("[a] up / [A] down")}`,
   );
   if (screen.seedEdit !== null) {
-    out.push(`${margin}Seed: ${theme.bold(`${screen.seedEdit}_`)}   ${theme.dim("typing... [Enter] confirm  [Esc] cancel")}`);
+    left.push(`${margin}Seed: ${theme.bold(`${screen.seedEdit}_`)}   ${theme.dim("typing... [Enter] confirm  [Esc] cancel")}`);
   } else {
-    out.push(`${margin}Seed: ${theme.bold(screen.seed)}   ${theme.dim("[s] edit")}`);
+    left.push(`${margin}Seed: ${theme.bold(screen.seed)}   ${theme.dim("[s] edit")}`);
   }
-  out.push("");
-
-  // actions (focus cursor rows 4 and 5)
+  left.push("");
   const newRun = `${screen.focusIdx === 4 ? ">" : " "} [n] NEW RUN`;
-  out.push(
+  left.push(
     screen.focusIdx === 4
       ? `${margin}${theme.bold(theme.fg(C.current, newRun))}`
       : `${margin} ${theme.bold(theme.fg(C.good, newRun.slice(2)))}`,
   );
   if (screen.continueDesc !== null) {
     const cont = `${screen.focusIdx === 5 ? ">" : " "} [c] CONTINUE - ${screen.continueDesc}`;
-    out.push(
+    left.push(
       screen.focusIdx === 5
         ? `${margin}${theme.bold(theme.fg(C.current, cont))}`
         : `${margin} ${theme.fg(C.text, cont.slice(2))}`,
     );
+  }
+
+  if (wantPortrait && portrait !== undefined && selected !== undefined) {
+    const accent = CHARACTER_COLORS[selected.id] ?? "#54689a";
+    const right = [
+      ...portrait.rows.map((r) => theme.fg(accent, r)),
+      center(theme.bold(theme.fg(accent, selected.name)), portrait.w),
+    ];
+    const assemblyW = boxRowW + portraitGap + portrait.w;
+    const leftPad = Math.max(0, Math.floor((width - assemblyW) / 2));
+    out.push(...joinBlocks([left, right], [boxRowW, portrait.w], portraitGap, leftPad));
+  } else {
+    const leftPad = Math.max(0, Math.floor((width - boxRowW) / 2));
+    for (const line of left) out.push(" ".repeat(leftPad) + line);
   }
   return out.slice(0, height).map((l) => padClip(l, width));
 }

@@ -2,6 +2,7 @@
 // Run: bun tools/corpus/check-all.ts
 
 import { $ } from "bun";
+import { existsSync } from "node:fs";
 
 const ROOT = `${import.meta.dir}/../..`;
 let failures = 0;
@@ -9,6 +10,21 @@ const fail = (msg: string) => {
   failures++;
   console.error(`FAIL: ${msg}`);
 };
+
+// The reference clones under references/ are deliberately not committed, so this
+// audit is a maintainer tool and cannot run from a bare checkout (which is why it
+// is not a CI gate). Say so plainly rather than dying on an ENOENT stack.
+const NEEDED_REFS = ["sts_lightspeed", "spire-archive", "wiki", "extracted"];
+const absentRefs = NEEDED_REFS.filter((d) => !existsSync(`${ROOT}/references/${d}`));
+if (absentRefs.length > 0) {
+  console.error(`corpus audit needs the reference clones under references/.`);
+  console.error(`missing: ${absentRefs.join(", ")}`);
+  console.error(``);
+  console.error(`They are deliberately not committed, so this audit only runs where they`);
+  console.error(`exist. Content parity itself is covered by \`bun test\``);
+  console.error(`(tests/audit/contentAudit.test.ts), which needs only data/corpus.`);
+  process.exit(1);
+}
 
 // --- monster id coverage vs MonsterIds.h --------------------------------------
 const idsH = await Bun.file(`${ROOT}/references/sts_lightspeed/include/constants/MonsterIds.h`).text();

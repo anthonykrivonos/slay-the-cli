@@ -4,10 +4,9 @@
 
 ## Checks
 
-<!-- Both must pass locally. CI runs them again. -->
+<!-- CI runs this again, plus a generated-file check and a Node load check. -->
 
-- [ ] `bun test`
-- [ ] `bun run audit` prints "corpus audit clean"
+- [ ] `bun test` passes
 
 ## The rules
 

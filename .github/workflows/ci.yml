@@ -28,8 +28,11 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Suite
         run: bun test
-      - name: Corpus audit
-        run: bun run audit
+      # `bun run audit` is deliberately NOT here. It cross-checks data/corpus
+      # against the reference clones in references/, which are gitignored on
+      # purpose, so it cannot run from a bare checkout. Content parity is still
+      # gated: tests/audit/contentAudit.test.ts covers it from data/corpus alone
+      # and runs as part of the suite above.
 
   generated:
     name: generated files

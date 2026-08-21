@@ -18,8 +18,18 @@ Before you open a pull request:
 
 ```sh
 bun test        # the whole suite, all of it must pass
-bun run audit   # must print "corpus audit clean"
 ```
+
+That is the gate, and CI runs it again on every PR along with two more checks:
+that the fixtures and screenshots still regenerate byte-identically, and that
+the game still loads under Node through tsx.
+
+`bun run audit` is a maintainer tool, not a contributor step. It cross-checks
+`data/corpus` against reference clones under `references/` which are gitignored
+on purpose, so it exits with an explanation from a normal checkout. Content
+parity is covered without it: `tests/audit/contentAudit.test.ts` verifies all
+370 cards, 181 relics, 42 potions, 65 monsters and 51 events from `data/corpus`
+alone, and it runs as part of the suite.
 
 ## Scripts
 
@@ -29,7 +39,7 @@ because the test runner and the compiler are Bun's.
 
 ```sh
 bun test           # npm test       full suite
-bun run audit      # npm run audit  corpus ground-truth audit
+bun run audit      # npm run audit  corpus audit (needs references/, see above)
 bun run fuzz       # npm run fuzz   long-run combat fuzzing
 bun run build      # npm run build  compile a single binary to dist/slay
 bun run fixtures   #                regenerate the UI snapshots

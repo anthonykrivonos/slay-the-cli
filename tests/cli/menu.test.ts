@@ -11,7 +11,7 @@ import { initialUiState, applyUiAction, type UiState } from "../../src/cli/state
 import { CHARACTER_COLORS, CHARACTER_IDS } from "../../src/cli/text/runlogic";
 import { HERO_PORTRAITS } from "../../src/cli/render/art";
 import { stripAnsi } from "../../src/cli/term/ansi";
-import { bundle } from "./fixtures";
+import { bundle, fxCombatStance, fxRest, fxMapAct1 } from "./fixtures";
 
 function menuUi(selectedIdx: number | null): UiState {
   let ui = initialUiState({ seed: "SPIRE" });
@@ -77,6 +77,54 @@ describe("menu portrait placement", () => {
     const lines = frame(menuUi(0), 80, 24, THEME_PLAIN).map(stripAnsi);
     expect(lines.some((l) => l.includes("NEW RUN"))).toBe(true);
     expect(lines.some((l) => l.includes("IRONCLAD ---"))).toBe(false);
+  });
+});
+
+describe("highlight color follows the character", () => {
+  const GENERIC = `38;5;${hexToAnsi256("#ffd75e")}`; // the old fixed-gold highlight
+
+  test("menu: the focused action wears the selected hero's color, never the generic gold", () => {
+    for (const [i, id] of CHARACTER_IDS.entries()) {
+      let ui = menuUi(i);
+      ui = applyUiAction(ui, { type: "focusSet", scope: "menu", idx: 4 }); // NEW RUN
+      ui = { ...ui, character: id };
+      const row = frame(ui, 120, 36).find((l) => l.includes("NEW RUN"));
+      expect(row).toBeDefined();
+      expect(row!).toContain(code(id));
+      expect(row!).not.toContain(GENERIC);
+    }
+  });
+
+  test("combat: the focused card border wears the run character's accent", () => {
+    const f = fxCombatStance(); // Watcher
+    const view = buildView(f.game, { ...f.ui, focus: { scope: "combat", idx: 0 } }, bundle);
+    expect(view.accent).toBe(CHARACTER_COLORS.WATCHER!);
+    const lines = renderFrame(view, { cols: 120, rows: 36 }, THEME_256);
+    expect(lines.some((l) => l.includes(code("WATCHER")) && l.includes("+"))).toBe(true);
+    expect(lines.join("\n")).not.toContain(GENERIC);
+  });
+
+  test("list screens: the cursor row wears the run character's accent", () => {
+    const f = fxRest();
+    const view = buildView(f.game, { ...f.ui, focus: { scope: "rest", idx: 0 } }, bundle);
+    const accent = `38;5;${hexToAnsi256(view.accent)}`;
+    const lines = renderFrame(view, { cols: 100, rows: 30 }, THEME_256);
+    expect(lines.some((l) => l.includes(accent))).toBe(true);
+    expect(lines.join("\n")).not.toContain(GENERIC);
+  });
+
+  test("map: the pick cursor and the floor gauge wear the accent", () => {
+    const f = fxMapAct1();
+    const view = buildView(f.game, { ...f.ui, focus: { scope: "map", idx: 0 } }, bundle);
+    const accent = `38;5;${hexToAnsi256(view.accent)}`;
+    const lines = renderFrame(view, { cols: 100, rows: 30 }, THEME_256);
+    expect(lines.some((l) => l.includes("Next:") && l.includes(accent))).toBe(true);
+    expect(lines.some((l) => l.includes("FLOOR") && l.includes(accent))).toBe(true);
+  });
+
+  test("View.accent tracks the run's character", () => {
+    expect(buildView(fxCombatStance().game, fxCombatStance().ui, bundle).accent).toBe(CHARACTER_COLORS.WATCHER!);
+    expect(buildView(fxRest().game, fxRest().ui, bundle).accent).toBe(CHARACTER_COLORS.IRONCLAD!);
   });
 });
 

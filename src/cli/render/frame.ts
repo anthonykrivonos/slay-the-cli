@@ -74,29 +74,32 @@ function screenLabel(view: View): string {
 }
 
 function renderBody(view: View, cols: number, bodyH: number, theme: Theme): string[] {
-  if (view.overlay) return renderOverlay(view.overlay, cols, bodyH, theme);
+  // view.accent is the highlight color for focus/selection chrome: whichever
+  // character is being played (or selected on the menu) tints the cursor
+  const a = view.accent;
+  if (view.overlay) return renderOverlay(view.overlay, cols, bodyH, theme, a);
   const s = view.screen;
   switch (s.kind) {
     case "menu":
       return renderMenu(s, cols, bodyH, theme);
     case "map":
-      return renderMap(s, cols, bodyH, theme);
+      return renderMap(s, cols, bodyH, theme, a);
     case "combat":
-      return renderCombat(s, view.targeting, cols, bodyH, theme);
+      return renderCombat(s, view.targeting, cols, bodyH, theme, a);
     case "neow":
-      return renderNeow(s, cols, bodyH, theme);
+      return renderNeow(s, cols, bodyH, theme, a);
     case "event":
-      return renderEvent(s, cols, bodyH, theme);
+      return renderEvent(s, cols, bodyH, theme, a);
     case "shop":
-      return renderShop(s, cols, bodyH, theme);
+      return renderShop(s, cols, bodyH, theme, a);
     case "rest":
-      return renderRest(s, cols, bodyH, theme);
+      return renderRest(s, cols, bodyH, theme, a);
     case "rewards":
-      return renderRewards(s, cols, bodyH, theme);
+      return renderRewards(s, cols, bodyH, theme, a);
     case "treasure":
-      return renderTreasure(s, cols, bodyH, theme);
+      return renderTreasure(s, cols, bodyH, theme, a);
     case "gameOver":
-      return renderGameOver(s, cols, bodyH, theme);
+      return renderGameOver(s, cols, bodyH, theme, a);
   }
 }
 

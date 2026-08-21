@@ -11,10 +11,16 @@ import { joinBlocks, clamp } from "./layout";
 import { buttonBox, buttonBoxHeight, itemButton, tintFocus } from "./cardbox";
 import { ART_WHALE } from "./art";
 
-export function renderNeow(screen: SimpleListScreen, width: number, height: number, theme: Theme): string[] {
+export function renderNeow(
+  screen: SimpleListScreen,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const items = screen.list.items;
   const k = items.length;
-  if (k === 0) return renderListScreen(screen, width, height, theme);
+  if (k === 0) return renderListScreen(screen, width, height, theme, { accent });
 
   const sideArt = width >= 108;
   const bW = sideArt ? clamp(width - ART_WHALE.w - 9, 40, 76) : clamp(width - 8, 40, 76);
@@ -22,12 +28,12 @@ export function renderNeow(screen: SimpleListScreen, width: number, height: numb
   // uniform height per button keeps the stack rhythmic
   const bH = buttonBoxHeight(buttons);
   const stackH = k * bH;
-  if (stackH + 1 > height) return renderListScreen(screen, width, height, theme);
+  if (stackH + 1 > height) return renderListScreen(screen, width, height, theme, { accent });
 
   const stack: string[] = [];
   items.forEach((it, i) => {
     const box = buttonBox(buttons[i]!, bW, bH, theme);
-    stack.push(...(screen.list.focusI === it.i ? tintFocus(box, theme) : box));
+    stack.push(...(screen.list.focusI === it.i ? tintFocus(box, theme, accent) : box));
   });
 
   const out: string[] = [];

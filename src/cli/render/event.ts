@@ -4,12 +4,19 @@
 
 import type { SimpleListScreen } from "../state/view";
 import type { Theme } from "./theme";
+import { C } from "./theme";
 import { padClip, wrapPlain } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp } from "./layout";
 import { buttonBox, buttonBoxHeight, itemButton, tintFocus } from "./cardbox";
 
-export function renderEvent(screen: SimpleListScreen, width: number, height: number, theme: Theme): string[] {
+export function renderEvent(
+  screen: SimpleListScreen,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const items = screen.list.items;
   const k = items.length;
   const panelW = clamp(width - 8, 40, 78);
@@ -26,7 +33,7 @@ export function renderEvent(screen: SimpleListScreen, width: number, height: num
   const buttons = items.map((it) => itemButton(it, panelW - 4));
   const bH = buttonBoxHeight(buttons);
   if (k === 0 || panelH + 1 + k * bH > height) {
-    return renderListScreen(screen, width, height, theme);
+    return renderListScreen(screen, width, height, theme, { accent });
   }
 
   const pad = " ".repeat(Math.max(0, Math.floor((width - panelW) / 2)));
@@ -37,7 +44,7 @@ export function renderEvent(screen: SimpleListScreen, width: number, height: num
   out.push("");
   items.forEach((it, i) => {
     const box = buttonBox(buttons[i]!, panelW, bH, theme);
-    for (const r of screen.list.focusI === it.i ? tintFocus(box, theme) : box) out.push(pad + r);
+    for (const r of screen.list.focusI === it.i ? tintFocus(box, theme, accent) : box) out.push(pad + r);
   });
 
   return out.slice(0, height).map((l) => padClip(l, width));

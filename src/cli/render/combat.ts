@@ -148,7 +148,7 @@ function youLines(v: CombatView, width: number, theme: Theme): string[] {
   return lines;
 }
 
-function handLine(h: CombatView["hand"][number], focused: boolean, theme: Theme): string {
+function handLine(h: CombatView["hand"][number], focused: boolean, theme: Theme, accent: string): string {
   const cursor = focused ? ">" : " ";
   const key = `[${h.key ?? " "}]`;
   const name = h.name.slice(0, 18).padEnd(18);
@@ -157,7 +157,7 @@ function handLine(h: CombatView["hand"][number], focused: boolean, theme: Theme)
   const rules = h.rules[0] ?? "";
   const line = `${cursor}${key} ${name} ${cost}${t} ${rules}`;
   if (!h.playable) return theme.dim(line);
-  if (focused) return `${theme.bold(theme.fg(C.current, `${cursor}${key}`))} ${name} ${theme.fg(C.energy, cost)}${t} ${theme.dim(rules)}`;
+  if (focused) return `${theme.bold(theme.fg(accent, `${cursor}${key}`))} ${name} ${theme.fg(C.energy, cost)}${t} ${theme.dim(rules)}`;
   return `${cursor}${theme.bold(theme.fg(C.text, key))} ${name} ${theme.fg(C.energy, cost)}${t} ${theme.dim(rules)}`;
 }
 
@@ -217,6 +217,7 @@ export function renderCombat(
   width: number,
   height: number,
   theme: Theme,
+  accent: string = C.current,
 ): string[] {
   const m = screen.enemies.length;
   const n = screen.hand.length;
@@ -261,7 +262,7 @@ export function renderCombat(
     const eW = enemyPanelWidth(width, m);
     const blocks = screen.enemies.map((e, i) => {
       const p = enemyPanel(enemyData(e), eW, theme);
-      return screen.focusEnemy === i ? tintFocus(p, theme) : p;
+      return screen.focusEnemy === i ? tintFocus(p, theme, accent) : p;
     });
     const rowW = rowWidth(m, eW, 1);
     const leftPad = Math.max(0, width - rowW - 1);
@@ -312,7 +313,7 @@ export function renderCombat(
     const renderRow = (cards: CombatView["hand"], baseIdx: number): void => {
       const blocks = cards.map((h, k) => {
         const b = cardBox(cardData(h, typeRow), w, cardH, theme);
-        return screen.focusHand === baseIdx + k ? tintFocus(b, theme) : b;
+        return screen.focusHand === baseIdx + k ? tintFocus(b, theme, accent) : b;
       });
       const gap = rowWidth(cards.length, w, 1) <= width ? 1 : 0;
       const rowW = rowWidth(cards.length, w, gap);
@@ -326,7 +327,7 @@ export function renderCombat(
       renderRow(screen.hand, 0);
     }
   } else {
-    screen.hand.forEach((h, i) => out.push(handLine(h, screen.focusHand === i, theme)));
+    screen.hand.forEach((h, i) => out.push(handLine(h, screen.focusHand === i, theme, accent)));
   }
 
   // 9. bottom bar pinned to the last row

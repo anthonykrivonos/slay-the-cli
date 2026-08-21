@@ -61,12 +61,18 @@ class CharRow {
 
 const dimStyle: Style = (s, t) => t.dim(s);
 const pickStyle: Style = (s, t) => t.bold(t.fg(C.pick, s));
-const currentStyle: Style = (s, t) => t.bold(t.fg(C.current, s));
+/** "@ you" wears the character accent, so the style is built per render. */
+const currentStyleFor = (accent: string): Style => (s, t) => t.bold(t.fg(accent, s));
 const burningStyle: Style = (s, t) => t.fg(C.burning, s);
 const bossStyle: Style = (s, t) => t.fg(C.bad, s);
 
 /** Every line of the full map, top (boss) first. Exported for unit tests. */
-export function buildMapLines(screen: MapView, theme: Theme): { lines: string[]; nodeRowLine: (y: number) => number } {
+export function buildMapLines(
+  screen: MapView,
+  theme: Theme,
+  accent: string = C.current,
+): { lines: string[]; nodeRowLine: (y: number) => number } {
+  const currentStyle = currentStyleFor(accent);
   const rows = screen.nodeRows;
   const maxY = screen.maxY;
   const out: CharRow[] = [];
@@ -130,7 +136,7 @@ function actProgress(screen: MapView): { at: number; of: number } {
   return { at: Math.min(at, of), of };
 }
 
-function legendPanel(screen: MapView, theme: Theme): string[] {
+function legendPanel(screen: MapView, theme: Theme, accent: string): string[] {
   const { at, of } = actProgress(screen);
   return [
     theme.bold("LEGEND"),
@@ -141,7 +147,7 @@ function legendPanel(screen: MapView, theme: Theme): string[] {
     theme.dim("@ you        B boss"),
     "",
     `BOSS  ${theme.fg(C.bad, screen.bossName)}`,
-    `FLOOR ${screen.floor}  ${theme.fg(C.current, bar(at, of, 8))} ${theme.dim(`${at}/${of}`)}`,
+    `FLOOR ${screen.floor}  ${theme.fg(accent, bar(at, of, 8))} ${theme.dim(`${at}/${of}`)}`,
     `KEYS  ${screen.keysOwned}`,
     `DECK  ${screen.deckCount}   RELICS ${screen.relicCount}`,
     theme.dim(`seed ${screen.seed}`),
@@ -156,8 +162,14 @@ function bossBanner(screen: MapView, theme: Theme): string {
   return `${"=".repeat(left)}${theme.bold(theme.fg(C.bad, label))}${"=".repeat(total - left)}`;
 }
 
-export function renderMap(screen: MapView, width: number, height: number, theme: Theme): string[] {
-  const { lines: full, nodeRowLine } = buildMapLines(screen, theme);
+export function renderMap(
+  screen: MapView,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
+  const { lines: full, nodeRowLine } = buildMapLines(screen, theme, accent);
   const mapH = Math.max(1, height - 2); // row 0 = boss banner, last = "Next:" echo
 
   // auto-follow the frontier: center the window on the pick row (or position)
@@ -168,7 +180,7 @@ export function renderMap(screen: MapView, width: number, height: number, theme:
   start = Math.max(0, Math.min(start, full.length - mapH));
   const windowLines = full.length <= mapH ? full : full.slice(start, start + mapH);
 
-  const panel = width >= 96 ? legendPanel(screen, theme) : [];
+  const panel = width >= 96 ? legendPanel(screen, theme, accent) : [];
   const out: string[] = [bossBanner(screen, theme)];
   for (let i = 0; i < Math.min(mapH, Math.max(windowLines.length, panel.length)); i++) {
     const mapLine = windowLines[i] ?? "";
@@ -183,7 +195,7 @@ export function renderMap(screen: MapView, width: number, height: number, theme:
   const nextParts = screen.picks.map((p, k) => {
     const cursor = screen.focusPick === k ? ">" : "";
     const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}`;
-    return screen.focusPick === k ? theme.bold(theme.fg(C.current, label)) : theme.bold(theme.fg(C.pick, label));
+    return screen.focusPick === k ? theme.bold(theme.fg(accent, label)) : theme.bold(theme.fg(C.pick, label));
   });
   const scrollNote = full.length > mapH ? theme.dim("   [j/k] scroll") : "";
   out.push(`Next: ${nextParts.join("  ")}${scrollNote}`);

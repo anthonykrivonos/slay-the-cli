@@ -68,7 +68,13 @@ export function wrapPlain(s: string, width: number): string[] {
 /** Render a ListView as numbered lines: `[1] label  (note)` + optional
  *  indented sub line, with a `>` cursor on the focused item. Subs are
  *  dropped first when space is tight. */
-export function listLines(list: ListView, width: number, theme: Theme, maxLines: number): string[] {
+export function listLines(
+  list: ListView,
+  width: number,
+  theme: Theme,
+  maxLines: number,
+  accent: string = C.current,
+): string[] {
   const withSubs: string[] = [];
   const noSubs: string[] = [];
   for (const item of list.items) {
@@ -80,7 +86,7 @@ export function listLines(list: ListView, width: number, theme: Theme, maxLines:
     if (!item.enabled) {
       main = theme.dim(`${cursor}${keyPart}${item.label}${notePart}`);
     } else if (focused) {
-      main = theme.bold(theme.fg(C.current, `${cursor}${keyPart}${item.label}`)) + theme.dim(notePart);
+      main = theme.bold(theme.fg(accent, `${cursor}${keyPart}${item.label}`)) + theme.dim(notePart);
     } else {
       main = `${cursor}${theme.bold(theme.fg(C.text, keyPart))}${item.label}${theme.dim(notePart)}`;
     }

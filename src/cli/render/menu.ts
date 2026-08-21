@@ -116,8 +116,9 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   const newRunTxt = `[n] NEW RUN`;
   const styleAction = (txt: string, focusedIdx: number, color: string): string => {
     const cursor = screen.focusIdx === focusedIdx ? "> " : "  ";
+    // the focus highlight wears the selected hero's color
     return screen.focusIdx === focusedIdx
-      ? theme.bold(theme.fg(C.current, `${cursor}${txt}`))
+      ? theme.bold(theme.fg(accent, `${cursor}${txt}`))
       : `${cursor}${theme.bold(theme.fg(color, txt))}`;
   };
   const newRunStyled = styleAction(newRunTxt, 4, C.good);
@@ -199,11 +200,13 @@ function renderMenuFallback(screen: MenuView, width: number, height: number, the
     out.push(`   Seed: ${theme.bold(screen.seed)}   ${theme.dim("[s] edit")}`);
   }
   out.push("");
+  const selectedFb = screen.characters.find((ch) => ch.selected) ?? screen.characters[0];
+  const accentFb = selectedFb !== undefined ? accentOf(selectedFb.id) : C.good;
   const newRun = `${screen.focusIdx === 4 ? ">" : " "} [n] NEW RUN`;
-  out.push(screen.focusIdx === 4 ? ` ${theme.bold(theme.fg(C.current, newRun))}` : `  ${theme.bold(theme.fg(C.good, newRun.slice(2)))}`);
+  out.push(screen.focusIdx === 4 ? ` ${theme.bold(theme.fg(accentFb, newRun))}` : `  ${theme.bold(theme.fg(C.good, newRun.slice(2)))}`);
   if (screen.continueDesc !== null) {
     const cont = `${screen.focusIdx === 5 ? ">" : " "} [c] CONTINUE - ${screen.continueDesc}`;
-    out.push(screen.focusIdx === 5 ? ` ${theme.bold(theme.fg(C.current, cont))}` : `  ${theme.fg(C.text, cont.slice(2))}`);
+    out.push(screen.focusIdx === 5 ? ` ${theme.bold(theme.fg(accentFb, cont))}` : `  ${theme.fg(C.text, cont.slice(2))}`);
   }
   return out.slice(0, height).map((l) => padClip(l, width));
 }

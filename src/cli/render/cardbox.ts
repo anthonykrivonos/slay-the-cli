@@ -186,9 +186,10 @@ export function itemButton(item: ListItemView, iw: number): ButtonBoxData {
   return { key: item.key, label: title, subs, enabled: item.enabled, note: item.note };
 }
 
-/** Re-tint a box's top/bottom borders to mark the hover/selection focus. */
-export function tintFocus(rows: string[], theme: Theme): string[] {
+/** Re-tint a box's top/bottom borders to mark the hover/selection focus, in
+ *  the current character's accent (falls back to the generic highlight). */
+export function tintFocus(rows: string[], theme: Theme, accent: string = C.current): string[] {
   return rows.map((r, i) =>
-    i === 0 || i === rows.length - 1 ? theme.bold(theme.fg(C.current, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
+    i === 0 || i === rows.length - 1 ? theme.bold(theme.fg(accent, r.replace(/\x1b\[[0-9;]*m/g, ""))) : r,
   );
 }

@@ -8,7 +8,13 @@ import { C } from "./theme";
 import { padClip, center, listLines } from "./widgets";
 import { bigWord, bigWordWidth, BIG_ROWS } from "./bigfont";
 
-export function renderGameOver(screen: GameOverView, width: number, height: number, theme: Theme): string[] {
+export function renderGameOver(
+  screen: GameOverView,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const color = screen.victory ? C.gold : C.bad;
   const letters = bigWord(screen.title);
   const useBig = letters !== null && bigWordWidth(screen.title) <= width - 4;
@@ -41,7 +47,7 @@ export function renderGameOver(screen: GameOverView, width: number, height: numb
 
   // actions, aligned under the stats box
   const remaining = Math.max(1, height - out.length);
-  const list = listLines(screen.list, Math.max(20, width - pad.length), theme, remaining);
+  const list = listLines(screen.list, Math.max(20, width - pad.length), theme, remaining, accent);
   for (const l of list) out.push(pad + l);
 
   return out.slice(0, height).map((l) => padClip(l, width));

@@ -354,6 +354,10 @@ export interface TooltipView {
 
 export interface View {
   mode: ViewMode;
+  /** highlight color for focus/selection chrome: the current character's
+   *  accent (the selected hero on the menu), so the cursor always wears the
+   *  color of whoever is being played. */
+  accent: string;
   header: HeaderView | null;
   screen: ScreenView;
   overlay: OverlayView | null;
@@ -1367,12 +1371,12 @@ function tipNode(kind: string, burning: boolean, key: string): TooltipView {
   };
 }
 
-function tipChoiceItem(list: ListView, idx: number): TooltipView | null {
+function tipChoiceItem(list: ListView, idx: number, accent: string): TooltipView | null {
   const item = list.items.find((it) => it.i === idx);
   if (!item) return null;
   return {
     chip: "CHOICE",
-    color: TIP_COLOR.choice,
+    color: accent,
     name: item.label,
     meta: item.note !== null ? `(${item.note})` : "",
     lines: item.sub !== null ? [item.sub] : [],
@@ -1418,7 +1422,7 @@ function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusI
       idx,
       tooltip: {
         chip: "CHOICE",
-        color: TIP_COLOR.choice,
+        color: CHARACTER_COLORS[ui.character] ?? TIP_COLOR.choice,
         name: "NEW RUN",
         meta: "",
         lines: ["Begin a fresh climb with the selected hero, ascension and seed."],
@@ -1430,7 +1434,7 @@ function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusI
     idx,
     tooltip: {
       chip: "CHOICE",
-      color: TIP_COLOR.choice,
+      color: CHARACTER_COLORS[ui.character] ?? TIP_COLOR.choice,
       name: "CONTINUE",
       meta: "",
       lines: [screen.continueDesc ?? ""],
@@ -1444,7 +1448,7 @@ const STANCE_TIPS: Record<string, string> = {
   DIVINITY: "Transcendence. You deal triple attack damage. Exits at the end of your turn.",
 };
 
-function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInfo {
+function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle, accent: string): FocusInfo {
   const c = g.combat;
   if (!c) return NO_FOCUS;
   const hand = c.player.piles.hand;
@@ -1497,7 +1501,7 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle): FocusInf
       idx,
       tooltip: {
         chip: "ORB",
-        color: TIP_COLOR.choice,
+        color: accent,
         name: toAscii(orbName(bundle, orb.id)),
         meta: val !== null ? `value ${val}` : "",
         lines,
@@ -1543,20 +1547,20 @@ function mapFocus(g: GameState, ui: UiState, screen: MapView): FocusInfo {
   return { count, idx, tooltip: tipNode(kind, node?.burningElite ?? false, p.key) };
 }
 
-function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView, bundle: ContentBundle): FocusInfo {
+function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView, bundle: ContentBundle, accent: string): FocusInfo {
   if (overlay.kind !== "choice") return NO_FOCUS;
   const count = overlay.list.total;
   const idx = overlay.list.focusI;
   if (idx === null) return { count, idx: null, tooltip: null };
   const req = pending.request;
   if (req.kind === "option") {
-    return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+    return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
   }
   const iid = req.iids[idx];
   if (iid === undefined) return { count, idx, tooltip: null };
   if (!g.combat) {
     const mc = g.run.deck[iid];
-    if (!mc) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+    if (!mc) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
     const def = bundle.cards.get(mc.defId);
     return {
       count,
@@ -1565,11 +1569,11 @@ function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView,
     };
   }
   const card = g.combat.cards[iid];
-  if (!card) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+  if (!card) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
   return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)) };
 }
 
-function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: ContentBundle): FocusInfo {
+function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: ContentBundle, accent: string): FocusInfo {
   if (overlay.kind !== "list") return NO_FOCUS;
   const count = overlay.list.total;
   const idx = overlay.list.focusI;
@@ -1598,7 +1602,7 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
     }
     case "potions": {
       const id = g.run.potions[idx];
-      if (id == null) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx) };
+      if (id == null) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
       return { count, idx, tooltip: tipPotion(bundle, id) };
     }
     default:
@@ -1611,6 +1615,7 @@ function listScreenFocus(
   room: RoomState,
   screen: { list: ListView },
   bundle: ContentBundle,
+  accent: string,
 ): FocusInfo {
   const count = screen.list.total;
   const idx = screen.list.focusI;
@@ -1638,7 +1643,7 @@ function listScreenFocus(
       const slot = shop.potions[k]!;
       return { count, idx, tooltip: tipPotion(bundle, slot.id, ` - ${slot.price}G`) };
     }
-    return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
+    return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
   }
   if (room.kind === "rewards") {
     const e = room.entries[idx];
@@ -1655,9 +1660,9 @@ function listScreenFocus(
       if (e.kind === "relic" || e.kind === "bossRelic") return { count, idx, tooltip: tipRelic(bundle, e.id) };
       if (e.kind === "potion") return { count, idx, tooltip: tipPotion(bundle, e.id) };
     }
-    return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
+    return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
   }
-  return { count, idx, tooltip: tipChoiceItem(screen.list, idx) };
+  return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
 }
 
 // --- hints ------------------------------------------------------------------------------
@@ -1728,6 +1733,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     const focus = mode === "menu" ? menuFocus(ui, bundle, screen) : NO_FOCUS;
     return {
       mode,
+      accent: CHARACTER_COLORS[ui.character] ?? "#54689a",
       header: null,
       screen,
       overlay: null,
@@ -1802,23 +1808,24 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
   // focus + tooltip for the active mode
   let focus: FocusInfo;
   if (mode === "overlay" && top && overlay) {
-    focus = overlayFocus(game, top, overlay, bundle);
+    focus = overlayFocus(game, top, overlay, bundle, header.accent);
   } else if (mode === "choice" && game.pending && overlay) {
-    focus = choiceFocus(game, game.pending, overlay, bundle);
+    focus = choiceFocus(game, game.pending, overlay, bundle, header.accent);
   } else if (mode === "targeting" && targeting) {
     focus = targetingFocus(game, bundle, targeting);
   } else if (mode === "combat") {
-    focus = combatFocus(game, ui, bundle);
+    focus = combatFocus(game, ui, bundle, header.accent);
   } else if (mode === "map" && screen.kind === "map") {
     focus = mapFocus(game, ui, screen);
   } else if (screen.kind !== "map" && screen.kind !== "combat" && mode === room.kind) {
-    focus = listScreenFocus(game, room, screen, bundle);
+    focus = listScreenFocus(game, room, screen, bundle, header.accent);
   } else {
     focus = NO_FOCUS;
   }
 
   return {
     mode,
+    accent: header.accent,
     header,
     screen,
     overlay,

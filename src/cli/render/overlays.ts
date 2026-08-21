@@ -10,7 +10,7 @@ import { padClip, center, boxLines, wrapPlain } from "./widgets";
 import { cardBox, type CardBoxData } from "./cardbox";
 import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 
-function plainListBody(list: ListView, theme: Theme, maxLines: number): string[] {
+function plainListBody(list: ListView, theme: Theme, maxLines: number, accent: string): string[] {
   const out: string[] = [];
   for (const item of list.items) {
     const focused = list.focusI !== null && item.i === list.focusI;
@@ -20,13 +20,13 @@ function plainListBody(list: ListView, theme: Theme, maxLines: number): string[]
     let line = `${cursor}${keyPart}${item.label}${notePart}`;
     if (item.sub !== null) line += `  - ${item.sub}`;
     if (!item.enabled) out.push(theme.dim(line));
-    else out.push(focused ? theme.bold(theme.fg(C.current, line)) : line);
+    else out.push(focused ? theme.bold(theme.fg(accent, line)) : line);
   }
   if (list.pages > 1) out.push(theme.dim(`page ${list.page + 1}/${list.pages} - [n] next [p] prev`));
   return out.slice(0, maxLines);
 }
 
-function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, maxLines: number): string[] {
+function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, maxLines: number, accent: string): string[] {
   const out: string[] = [];
   out.push(theme.dim(`choose ${o.constraint}${o.canCancel ? "  (Esc cancels)" : ""}`));
   out.push("");
@@ -36,7 +36,7 @@ function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, m
     const mark = o.single ? "" : o.selected.includes(item.i) ? "[x] " : "[ ] ";
     const line = `${cursor}[${item.key ?? " "}] ${mark}${item.label}`;
     if (o.selected.includes(item.i)) out.push(theme.bold(theme.fg(C.gold, line)));
-    else out.push(focused ? theme.bold(theme.fg(C.current, line)) : line);
+    else out.push(focused ? theme.bold(theme.fg(accent, line)) : line);
   }
   if (o.list.pages > 1) out.push(theme.dim(`page ${o.list.page + 1}/${o.list.pages} - [n] next [p] prev`));
   if (!o.single) {
@@ -46,7 +46,13 @@ function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, m
   return out.slice(0, maxLines);
 }
 
-export function renderOverlay(overlay: OverlayView, width: number, height: number, theme: Theme): string[] {
+export function renderOverlay(
+  overlay: OverlayView,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const boxW = Math.min(width - 2, 76);
   const bodyMax = Math.max(1, height - 4); // box chrome eats 4 lines
   let title: string;
@@ -107,11 +113,11 @@ export function renderOverlay(overlay: OverlayView, width: number, height: numbe
     }
     case "choice":
       title = overlay.title;
-      body = choiceBody(overlay, theme, bodyMax);
+      body = choiceBody(overlay, theme, bodyMax, accent);
       break;
     case "list":
       title = overlay.title;
-      body = plainListBody(overlay.list, theme, bodyMax);
+      body = plainListBody(overlay.list, theme, bodyMax, accent);
       break;
   }
   const box = boxLines(title, body.slice(0, bodyMax), boxW, theme);

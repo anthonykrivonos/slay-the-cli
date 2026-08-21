@@ -10,7 +10,7 @@ export function renderListScreen(
   width: number,
   height: number,
   theme: Theme,
-  opts: { bigTitle?: string } = {},
+  opts: { bigTitle?: string; accent?: string } = {},
 ): string[] {
   const out: string[] = [];
   if (opts.bigTitle !== undefined) {
@@ -31,6 +31,6 @@ export function renderListScreen(
   }
   out.push("");
   const listMax = Math.max(1, height - out.length);
-  out.push(...listLines(screen.list, width, theme, listMax));
+  out.push(...listLines(screen.list, width, theme, listMax, opts.accent));
   return out.slice(0, height).map((l) => padClip(l, width));
 }

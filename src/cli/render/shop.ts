@@ -32,7 +32,7 @@ function priceLen(row: { price: number; sold: boolean; affordable: boolean }): n
   return 1 + String(row.price).length;
 }
 
-function shopRowLine(row: ShopRowView, screen: ShopView, width: number, theme: Theme): string {
+function shopRowLine(row: ShopRowView, screen: ShopView, width: number, theme: Theme, accent: string): string {
   const focused = screen.list.focusI === row.i;
   const cursor = focused ? "> " : "  ";
   const key = `[${keyOf(screen.list.items, row.i)}]`;
@@ -41,12 +41,18 @@ function shopRowLine(row: ShopRowView, screen: ShopView, width: number, theme: T
   const price = (row.affordable ? `${row.price}G` : `need ${row.price}G`).padStart(10);
   const plain = `${cursor}${key} ${name} ${tier} ${price}  ${row.text}`;
   if (row.sold) return theme.dim(`${cursor}${key} ${name} ${tier}       SOLD`);
-  if (focused) return theme.bold(theme.fg(C.current, padClip(plain, width)));
+  if (focused) return theme.bold(theme.fg(accent, padClip(plain, width)));
   if (!row.affordable) return theme.dim(plain);
   return `${cursor}${theme.bold(key)} ${name} ${theme.dim(tier)} ${theme.fg(C.gold, price)}  ${theme.dim(row.text)}`;
 }
 
-export function renderShop(screen: ShopView, width: number, height: number, theme: Theme): string[] {
+export function renderShop(
+  screen: ShopView,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const nCards = screen.cards.length;
   const cardH = cardBoxHeight(height);
   const boxesOk = nCards > 0 && Math.floor((width - 2) / nCards) >= 12;
@@ -66,7 +72,7 @@ export function renderShop(screen: ShopView, width: number, height: number, them
     (screen.list.pages > 1 ? 1 : 0);
   if (!boxesOk || rowsNeeded > height) {
     // ladder floor: the plain numbered list
-    return renderListScreen({ title: screen.title, intro: [], list: screen.list }, width, height, theme);
+    return renderListScreen({ title: screen.title, intro: [], list: screen.list }, width, height, theme, { accent });
   }
 
   const out: string[] = [];
@@ -105,7 +111,7 @@ export function renderShop(screen: ShopView, width: number, height: number, them
       dim: c.sold || !c.affordable,
     };
     const box = cardBox(data, w, cardH, theme);
-    return screen.list.focusI === c.i ? tintFocus(box, theme) : box;
+    return screen.list.focusI === c.i ? tintFocus(box, theme, accent) : box;
   });
   out.push(...joinBlocks(blocks, blocks.map(() => w), gap, leftPad));
   // prices under each box
@@ -120,19 +126,19 @@ export function renderShop(screen: ShopView, width: number, height: number, them
 
   // -- RELICS / POTIONS --
   out.push(theme.dim(rule("RELICS / POTIONS", width)));
-  for (const r of screen.relics) out.push(shopRowLine(r, screen, width, theme));
-  for (const p of screen.potions) out.push(shopRowLine(p, screen, width, theme));
+  for (const r of screen.relics) out.push(shopRowLine(r, screen, width, theme, accent));
+  for (const p of screen.potions) out.push(shopRowLine(p, screen, width, theme, accent));
 
   // -- SERVICES --
   out.push(theme.dim(rule("SERVICES", width)));
   const removalFocused = screen.list.focusI === screen.removal.i;
   const bw = Math.min(width - 4, 44);
   const removalBox = buttonBox(removalData, bw, removalH, theme);
-  for (const r of removalFocused ? tintFocus(removalBox, theme) : removalBox) out.push(`  ${r}`);
+  for (const r of removalFocused ? tintFocus(removalBox, theme, accent) : removalBox) out.push(`  ${r}`);
 
   const leaveFocused = screen.list.focusI === screen.leave.i;
   const leave = `${leaveFocused ? "> " : "  "}[Enter] Leave the shop`;
-  out.push(leaveFocused ? theme.bold(theme.fg(C.current, leave)) : `  ${theme.bold("[Enter]")} Leave the shop`);
+  out.push(leaveFocused ? theme.bold(theme.fg(accent, leave)) : `  ${theme.bold("[Enter]")} Leave the shop`);
   if (screen.list.pages > 1) {
     out.push(theme.dim(`  page ${screen.list.page + 1}/${screen.list.pages} - [n] next [p] prev - hotkeys act on this page`));
   }

@@ -18,7 +18,13 @@ function keyOf(items: ListItemView[], i: number): string {
 
 type GroupRow = Extract<RewardRowView, { type: "group" }>;
 
-export function renderRewards(screen: RewardsView, width: number, height: number, theme: Theme): string[] {
+export function renderRewards(
+  screen: RewardsView,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const panelW = Math.min(width - 4, 72);
   const inner = panelW - 4;
   /** row width available to a card-box group (1 leading pad column) */
@@ -36,7 +42,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
   bodyRows += 2; // blank + continue
   const panelH = bodyRows + 4; // borders + title + title rule
   if (panelH > height || panelW < 40) {
-    return renderListScreen({ title: screen.title, intro: [], list: screen.list }, width, height, theme);
+    return renderListScreen({ title: screen.title, intro: [], list: screen.list }, width, height, theme, { accent });
   }
 
   const body: string[] = [];
@@ -49,7 +55,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
       const note = row.note !== null ? `  (${row.note})` : "";
       const plain = `${cursor}${key} ${row.icon} ${row.label}${note}`;
       if (!row.enabled) body.push(theme.dim(plain));
-      else if (focused) body.push(theme.bold(theme.fg(C.current, plain)));
+      else if (focused) body.push(theme.bold(theme.fg(accent, plain)));
       else body.push(`${cursor}${theme.bold(key)} ${theme.fg(C.gold, row.icon)} ${row.label}${theme.dim(note)}`);
     } else {
       body.push(theme.dim(row.title));
@@ -68,7 +74,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
             dim: !it.enabled,
           };
           const box = cardBox(data, w, cardH, theme);
-          return focusI === it.i ? tintFocus(box, theme) : box;
+          return focusI === it.i ? tintFocus(box, theme, accent) : box;
         });
         body.push(...joinBlocks(blocks, blocks.map(() => w), gap, 1));
       } else {
@@ -79,7 +85,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
           const note = it.note !== null ? `  (${it.note})` : "";
           const plain = `${cursor}${key} ${it.name}${it.cost.length > 0 ? ` (${it.cost})` : ""}  ${it.rules[0] ?? ""}${note}`;
           if (!it.enabled) body.push(theme.dim(plain));
-          else if (focused) body.push(theme.bold(theme.fg(C.current, padClip(plain, inner))));
+          else if (focused) body.push(theme.bold(theme.fg(accent, padClip(plain, inner))));
           else body.push(plain);
         }
       }
@@ -93,7 +99,7 @@ export function renderRewards(screen: RewardsView, width: number, height: number
     const key = `[${keyOf(screen.list.items, i)}]`;
     const label = screen.list.items.find((it) => it.i === i)?.label ?? "Continue";
     const plain = `${cursor}${key} ${label}`;
-    body.push(focused ? theme.bold(theme.fg(C.current, plain)) : `${cursor}${theme.bold(key)} ${label}`);
+    body.push(focused ? theme.bold(theme.fg(accent, plain)) : `${cursor}${theme.bold(key)} ${label}`);
   }
 
   // compose the centered panel

@@ -10,7 +10,13 @@ import { joinBlocks, rowWidth, clamp } from "./layout";
 import { buttonBox, buttonBoxHeight, itemButton, tintFocus } from "./cardbox";
 import { ART_CHEST } from "./art";
 
-export function renderTreasure(screen: SimpleListScreen, width: number, height: number, theme: Theme): string[] {
+export function renderTreasure(
+  screen: SimpleListScreen,
+  width: number,
+  height: number,
+  theme: Theme,
+  accent: string = C.current,
+): string[] {
   const items = screen.list.items;
   const k = items.length;
   const bW = clamp(Math.floor((width - 2) / Math.max(1, k)), 18, 40);
@@ -20,7 +26,7 @@ export function renderTreasure(screen: SimpleListScreen, width: number, height: 
   const introRows = screen.intro.length + 1;
   const need = bH + introRows + 1;
   if (!sideBySide || need > height) {
-    return renderListScreen(screen, width, height, theme);
+    return renderListScreen(screen, width, height, theme, { accent });
   }
 
   const out: string[] = [];
@@ -36,7 +42,7 @@ export function renderTreasure(screen: SimpleListScreen, width: number, height: 
 
   const blocks = items.map((it, i) => {
     const box = buttonBox(buttons[i]!, bW, bH, theme);
-    return screen.list.focusI === it.i ? tintFocus(box, theme) : box;
+    return screen.list.focusI === it.i ? tintFocus(box, theme, accent) : box;
   });
   const leftPad = Math.max(0, Math.floor((width - rowWidth(k, bW, 2)) / 2));
   out.push(...joinBlocks(blocks, blocks.map(() => bW), 2, leftPad));

@@ -10,7 +10,7 @@ import { padClip, center, wrapPlain } from "./widgets";
 import { CHARACTER_COLORS } from "../text/runlogic";
 import { bigWord, bigWordWidth, BIG_ROWS } from "./bigfont";
 import { clamp, joinBlocks, rowWidth } from "./layout";
-import { ART_SPIRE, ART_HEROES } from "./art";
+import { ART_SPIRE, pickPortrait } from "./art";
 
 const CAPTION = "a mechanically exact spire";
 
@@ -43,11 +43,15 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   const letters = bigWord("SLAY");
 
   // the selected hero's portrait joins the block on wide terminals; the
-  // hero boxes shrink (never below their minimum) to make room for it
+  // hero boxes shrink (never below their minimum) to make room for it and
+  // the portrait tier grows with the terminal (up to the full-size art)
   const selected = screen.characters.find((ch) => ch.selected) ?? screen.characters[0];
-  const portrait = selected !== undefined ? ART_HEROES[selected.id] : undefined;
   const portraitGap = 4;
-  const wantPortrait = portrait !== undefined && width >= 108;
+  const portraitMaxW = width - 2 - portraitGap - rowWidth(4, 19, 1); // boxes at their minimum
+  const portraitMaxH = height - (BIG_ROWS + 3) - 1; // title block + name caption
+  const portrait =
+    selected !== undefined && width >= 108 ? pickPortrait(selected.id, portraitMaxW, portraitMaxH) : null;
+  const wantPortrait = portrait !== null;
   const boxSpace = wantPortrait ? width - 2 - portrait!.w - portraitGap : width - 2;
   const boxW = clamp(Math.floor(boxSpace / 4), 19, 26);
   const boxRowW = rowWidth(4, boxW, 1);
@@ -115,7 +119,7 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
     );
   }
 
-  if (wantPortrait && portrait !== undefined && selected !== undefined) {
+  if (wantPortrait && portrait !== null && selected !== undefined) {
     const accent = CHARACTER_COLORS[selected.id] ?? "#54689a";
     const right = [
       ...portrait.rows.map((r) => theme.fg(accent, r)),

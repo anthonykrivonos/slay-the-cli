@@ -38,6 +38,9 @@ damage pipeline), `src/content` (the forkable game-content bundle),
 `data/corpus` (audited ground-truth data; tests/tools only).
 
 Mechanics, numbers, and behavior mirror the original game exactly (documented
-deviations are flagged in code). Contains no assets or text from the game
-itself; event/narrative text is paraphrased. Slay the Spire is by MegaCrit —
-buy it; this is a fan reimplementation for private use.
+deviations are flagged in code). Contains no binary assets or text from the
+game itself; event/narrative text is paraphrased and the scene art is
+original — except the menu hero portraits, which are low-resolution ASCII
+renderings derived from the game's character art (via `tools/ascii-art.ts`).
+Slay the Spire is by MegaCrit — buy it; this is a fan reimplementation for
+private use.

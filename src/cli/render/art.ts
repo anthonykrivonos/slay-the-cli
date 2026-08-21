@@ -70,74 +70,23 @@ export const ART_SPIRE: Art = norm([
 
 // --- hero portraits (menu) -------------------------------------------------------
 //
-// Original archetype drawings (nothing traced or converted from any image):
-// an armored knight, a hooded rogue, an automaton with its orb, and a
-// meditating monk. <= 12 rows each; shown beside the menu on wide terminals.
+// Sprite-likeness portraits in several sizes, generated from the character
+// images by tools/gen-hero-portraits.ts (see that file to regenerate). The
+// menu shows the largest tier that fits beside the hero boxes.
 
-const HERO_IRONCLAD: Art = norm([
-  "        .-\"\"-.",
-  "       /|____|\\",
-  "      | [ o o ] |",
-  "      _\\  --  /_",
-  "   .-'  '----'  '-.",
-  "  / |   .-++-.   | \\",
-  " |] |  /  ||  \\  | [|",
-  " |] | |   ||   | | [|",
-  "  \\ |  \\__||__/  | /",
-  "    |     ||     |",
-  "   /|_____||_____|\\",
-  "  '======[==]======'",
-]);
+import { HERO_PORTRAIT_ROWS } from "./heroPortraits";
 
-const HERO_SILENT: Art = norm([
-  "        _____",
-  "      .'     '.",
-  "     /  _____  \\",
-  "    |  /     \\  |",
-  "    | | -   - | |",
-  "     \\|   \\   |/",
-  "  \\   \\  ---  /   /",
-  "   \\.  '.___.'  ./",
-  "    \\\\  |   |  //",
-  "     \\> |   | </",
-  "      ` |___| `",
-  "       /__|__\\",
-]);
+export const HERO_PORTRAITS: Record<string, Art[]> = Object.fromEntries(
+  Object.entries(HERO_PORTRAIT_ROWS).map(([id, tiers]) => [id, tiers.map(norm)]),
+);
 
-const HERO_DEFECT: Art = norm([
-  "      ________",
-  "     | ______ |",
-  "     || o  o ||     .-.",
-  "     ||  __  ||    ( o )",
-  "     ||______||     '-'",
-  "    _|________|_   *",
-  "   | |##|  |##| | *",
-  "  [| |::|--|::| |]",
-  "   |_|::|__|::|_|",
-  "     |___||___|",
-  "     |___||___|",
-  "    _|__|  |__|_",
-]);
-
-const HERO_WATCHER: Art = norm([
-  "         .--.",
-  "        /    \\",
-  "       | -  - |",
-  "        \\ __ /",
-  "      .-'    '-.",
-  "     /  |    |  \\",
-  "    |   |    |   |",
-  "  .-\\   |____|   /-.",
-  " (   '--|    |--'   )",
-  "  '-.__/      \\__.-'",
-  "   ( _/--.__.--\\_ )",
-  "    '--__|__|__--'",
-]);
-
-/** Portrait per menu character id. */
-export const ART_HEROES: Record<string, Art> = {
-  IRONCLAD: HERO_IRONCLAD,
-  SILENT: HERO_SILENT,
-  DEFECT: HERO_DEFECT,
-  WATCHER: HERO_WATCHER,
-};
+/** Largest portrait tier that fits in maxW x maxH, or null. */
+export function pickPortrait(id: string, maxW: number, maxH: number): Art | null {
+  const tiers = HERO_PORTRAITS[id];
+  if (!tiers) return null;
+  let best: Art | null = null;
+  for (const t of tiers) {
+    if (t.w <= maxW && t.h <= maxH) best = t;
+  }
+  return best;
+}

@@ -5,7 +5,16 @@
 import { test, expect, describe } from "bun:test";
 import { clamp, fits, rowWidth, rowGap, joinBlocks, flexFill, tipHeight } from "../../src/cli/render/layout";
 import { bigWord, bigWordWidth, canBigWord, BIG_ROWS } from "../../src/cli/render/bigfont";
-import { ART_CAMPFIRE, ART_WHALE, ART_CHEST, ART_MERCHANT, ART_SPIRE, ART_HEROES, type Art } from "../../src/cli/render/art";
+import {
+  ART_CAMPFIRE,
+  ART_WHALE,
+  ART_CHEST,
+  ART_MERCHANT,
+  ART_SPIRE,
+  HERO_PORTRAITS,
+  pickPortrait,
+  type Art,
+} from "../../src/cli/render/art";
 import {
   cardBox,
   cardBoxWidth,
@@ -116,20 +125,33 @@ describe("art", () => {
     });
   }
 
-  test("hero portraits: all four heroes, <=12 rows, uniform width, pure ASCII", () => {
-    expect(Object.keys(ART_HEROES).sort()).toEqual(["DEFECT", "IRONCLAD", "SILENT", "WATCHER"]);
-    for (const art of Object.values(ART_HEROES)) {
-      expect(art.h).toBeLessThanOrEqual(12);
-      expect(art.rows.length).toBe(art.h);
-      for (const r of art.rows) {
-        expect(r.length).toBe(art.w);
-        for (let i = 0; i < r.length; i++) {
-          const code = r.charCodeAt(i);
-          expect(code).toBeGreaterThanOrEqual(0x20);
-          expect(code).toBeLessThan(0x80);
+  test("hero portraits: four heroes, ascending tiers, uniform width, pure ASCII", () => {
+    expect(Object.keys(HERO_PORTRAITS).sort()).toEqual(["DEFECT", "IRONCLAD", "SILENT", "WATCHER"]);
+    for (const tiers of Object.values(HERO_PORTRAITS)) {
+      expect(tiers.length).toBeGreaterThanOrEqual(3);
+      for (let t = 1; t < tiers.length; t++) expect(tiers[t]!.w).toBeGreaterThan(tiers[t - 1]!.w);
+      for (const art of tiers) {
+        expect(art.rows.length).toBe(art.h);
+        for (const r of art.rows) {
+          expect(r.length).toBe(art.w);
+          for (let i = 0; i < r.length; i++) {
+            const code = r.charCodeAt(i);
+            expect(code).toBeGreaterThanOrEqual(0x20);
+            expect(code).toBeLessThan(0x80);
+          }
         }
       }
     }
+  });
+
+  test("pickPortrait returns the largest fitting tier (or null)", () => {
+    const tiers = HERO_PORTRAITS.IRONCLAD!;
+    const big = pickPortrait("IRONCLAD", 999, 999)!;
+    expect(big.w).toBe(tiers[tiers.length - 1]!.w);
+    const small = pickPortrait("IRONCLAD", tiers[0]!.w, tiers[0]!.h)!;
+    expect(small.w).toBe(tiers[0]!.w);
+    expect(pickPortrait("IRONCLAD", 5, 5)).toBeNull();
+    expect(pickPortrait("NOBODY", 999, 999)).toBeNull();
   });
 });
 

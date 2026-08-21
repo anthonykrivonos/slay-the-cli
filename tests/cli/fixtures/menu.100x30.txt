@@ -8,21 +8,21 @@
                                      a mechanically exact spire                                     
                                                                                                     
 +=[1]==================+ +-[2]------------------+ +-[3]------------------+ +-[4]------------------+ 
-| Ironclad             | | Silent               | | Defect               | | Watcher              | 
+| IRONCLAD             | | Silent               | | Defect               | | Watcher              | 
 | 80 HP                | | 70 HP                | | 75 HP                | | 72 HP                | 
 | Burning Blood        | | Ring of the Snake    | | Cracked Core         | | Pure Water           | 
 +======================+ +----------------------+ +----------------------+ +----------------------+ 
                                                                                                     
- Ascension 0 - The standard climb   [a] up / [A] down                                               
- Seed: SPIRE   [s] edit                                                                             
+                Ascension 0 - The standard climb                 [a] up / [A] down                  
+                Seed: SPIRE                                               [s] edit                  
                                                                                                     
-  [n] NEW RUN                                                                                       
-  [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                                                      
+                  [n] NEW RUN     [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                      
                                                                                                     
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
+                                    --------- IRONCLAD ---------                                    
+                                                   ++                                               
+                                                  *#**                                              
+                                                 ####                                               
+                                                 *   *#                                             
                                                                                                     
 -- INFO --------------------------------------------------------------------------------------------
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              

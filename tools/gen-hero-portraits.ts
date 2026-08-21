@@ -13,7 +13,7 @@ import { renderFile } from "./ascii-art";
 import { join } from "node:path";
 
 const OUT = join(import.meta.dir, "../src/cli/render/heroPortraits.ts");
-const WIDTHS = [22, 34, 46, 81];
+const WIDTHS = [12, 16, 22, 30, 38, 46, 60, 81];
 const HEROES: [string, string][] = [
   ["IRONCLAD", "Ironclad.png"],
   ["SILENT", "Silent.png"],

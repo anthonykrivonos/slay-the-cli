@@ -1,0 +1,23 @@
+{
+  "name": "slay-the-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/cli/main.ts",
+    "dev": "tsx watch src/cli/main.ts",
+    "start:bun": "bun src/cli/main.ts",
+    "dev:bun": "bun --watch src/cli/main.ts",
+    "build": "bun build --compile src/cli/main.ts --outfile dist/slay",
+    "test": "bun test",
+    "audit": "bun tools/corpus/check-all.ts",
+    "fuzz": "bun tools/fuzz.ts --seeds 500",
+    "fixtures": "bun tests/cli/gen-fixtures.ts",
+    "shots": "bun tools/gen-readme-shots.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsx": "^4.20.6"
+  }
+}

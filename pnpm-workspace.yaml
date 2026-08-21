@@ -1,0 +1,8 @@
+# pnpm settings live here as of pnpm 11.
+#
+# tsx (the Node runner for `npm start`) pulls in esbuild, whose postinstall
+# script pnpm blocks by default and then errors on. esbuild does not actually
+# need it: the prebuilt binary ships inside its own platform package, and tsx
+# runs fine without the script. So downgrade the error rather than approve the
+# build, and the scripts stay blocked.
+strictDepBuilds: false

@@ -1,0 +1,24 @@
+ HP 80/80 | G 99 | F34 A3 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad 
+-- VICTORY ---------------------------------------------------------------------
+                                                                                
+                   #   # #####  #### #####  ###  ####  #   #                    
+                   #   #   #   #       #   #   # #   #  # #                     
+                   #   #   #   #       #   #   # ####    #                      
+                    # #    #   #       #   #   # #  #    #                      
+                     #   #####  ####   #    ###  #   #   #                      
+                                                                                
+             You step through the door and leave the Spire behind.              
+                                                                                
+                           +------------------------+                           
+                           | Ironclad - Ascension 0 |                           
+                           | Floor 34 - Act 3       |                           
+                           | seed UISMNKE           |                           
+                           +------------------------+                           
+                                                                                
+                             [1] Climb again                                    
+                                   Same hero, next seed                         
+                             [2] Back to the menu                               
+                                                                                
+                                                                                
+                                                                                
+[1] new run  [2] menu  [q] quit                                                 

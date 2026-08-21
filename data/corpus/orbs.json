@@ -1,0 +1,94 @@
+[
+ {
+  "id": "LIGHTNING",
+  "name": "Lightning",
+  "passive": {
+   "base": 3,
+   "timing": "endOfTurn",
+   "text": "Deal 3 damage to a random enemy."
+  },
+  "evoke": {
+   "base": 8,
+   "text": "Deal 8 damage to a random enemy."
+  },
+  "focusApplies": {
+   "passive": true,
+   "evoke": true
+  },
+  "notes": "With the Electro power, Lightning hits ALL enemies instead. Orb damage is not affected by Strength; Lock-On increases it by 50%.",
+  "sources": {
+   "spire": "LIGHTNING",
+   "wiki": "Keywords.lua:Lightning",
+   "lightspeed": "PlayerStatusEffects.h:Orb::LIGHTNING"
+  }
+ },
+ {
+  "id": "FROST",
+  "name": "Frost",
+  "passive": {
+   "base": 2,
+   "timing": "endOfTurn",
+   "text": "Gain 2 Block."
+  },
+  "evoke": {
+   "base": 5,
+   "text": "Gain 5 Block."
+  },
+  "focusApplies": {
+   "passive": true,
+   "evoke": true
+  },
+  "notes": null,
+  "sources": {
+   "spire": "FROST",
+   "wiki": "Keywords.lua:Frost",
+   "lightspeed": "PlayerStatusEffects.h:Orb::FROST"
+  }
+ },
+ {
+  "id": "DARK",
+  "name": "Dark",
+  "passive": {
+   "base": 6,
+   "timing": "endOfTurn",
+   "text": "This orb's stored Evoke damage increases by 6."
+  },
+  "evoke": {
+   "base": 6,
+   "text": "Deal stored damage (starts at 6) to the enemy with the lowest HP."
+  },
+  "focusApplies": {
+   "passive": true,
+   "evoke": false
+  },
+  "notes": "Accumulates: starts storing 6 Evoke damage when channeled; each end of turn it gains 6 (+Focus) more. Focus modifies the per-turn growth, not the initial 6.",
+  "sources": {
+   "spire": "DARK",
+   "wiki": "Keywords.lua:Dark",
+   "lightspeed": "PlayerStatusEffects.h:Orb::DARK"
+  }
+ },
+ {
+  "id": "PLASMA",
+  "name": "Plasma",
+  "passive": {
+   "base": 1,
+   "timing": "startOfTurn",
+   "text": "Gain 1 Energy."
+  },
+  "evoke": {
+   "base": 2,
+   "text": "Gain 2 Energy."
+  },
+  "focusApplies": {
+   "passive": false,
+   "evoke": false
+  },
+  "notes": "The only orb whose passive triggers at the start of the player's turn; Focus never applies.",
+  "sources": {
+   "spire": "PLASMA",
+   "wiki": "Keywords.lua:Plasma",
+   "lightspeed": "PlayerStatusEffects.h:Orb::FUSION"
+  }
+ }
+]

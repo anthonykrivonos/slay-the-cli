@@ -1,0 +1,36 @@
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | SPIRE                                  
+-- THE MERCHANT - you have 99G -----------------------------------------------------------------------------------------
+    ._._._._._._._._._._.                                                                                               
+   /_/_/_/_/_/_/_/_/_/_/_\                                                                                              
+   |                     |  "Coins for goods. Goods for coins."                                                         
+   |  [$]   .---.   [?]  |                                                                                              
+   |        |o o|        |                                                                                              
+   |  ___ __|\_/|__ ___  |                                                                                              
+   |_/___X_________X___\_|                                                                                              
+-- CARDS ---------------------------------------------------------------------------------------------------------------
+ +(1)-----------+ +(1)-----------+ +(0)-----------+ +(0)-----------+ +(1)-----------+ +(1)-----------+ +(0)-----------+ 
+ | Cleave       | | Sword Boomer | | Flex         | | Intimidate   | | Rupture      | | Madness      | | Secret Weapo | 
+ | Deal 8       | | Deal 3       | | Gain 2       | | Apply 1 Weak | | Whenever you | | Reduce the   | | Put an       | 
+ | damage to    | | damage to a  | | Strength.    | | to ALL       | | lose HP from | | cost of a    | | Attack from  | 
+ | ALL enemies. | | random...    | | At the...    | | enemies. +   | | a card,...   | | random...    | | your draw... | 
+ +-----[1]------+ +-----[2]------+ +-----[3]------+ +-----[4]------+ +-----[5]------+ +-----[6]------+ +-----[7]------+ 
+       23G              48G              47G              68G              70G              90G           need 174G     
+-- RELICS / POTIONS ----------------------------------------------------------------------------------------------------
+  [8] Potion Belt          common     need 143G  Upon pickup, gain 2 Potion slots.                                      
+  [9] Tiny Chest           common     need 157G  Every 4th ? room is a Treasure room.                                   
+  [0] Hand Drill           shop       need 156G  Whenever you break an enemy's Block, apply 2 Vulnerable.               
+  [.] Regen Potion         uncommon         78G  Gain 5 Regeneration.                                                   
+  [.] Swift Potion         common           50G  Draw 3 cards.                                                          
+  [.] Power Potion         common           50G  Choose 1 of 3 random Power cards to add to your hand. It costs 0 this t
+-- SERVICES ------------------------------------------------------------------------------------------------------------
+  +-[.]--------------------------------------+                                                                          
+  | CARD REMOVAL  75G                        |                                                                          
+  | Remove a card from your deck             |                                                                          
+  +------------------------------------------+                                                                          
+  [Enter] Leave the shop                                                                                                
+  page 1/2 - [n] next [p] prev - hotkeys act on this page                                                               
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
+                                                                                                                        
+                                                                                                                        
+[1-0] buy  [n/p] page  [Enter] leave  [d/r/p]  [q] quit                                                                 

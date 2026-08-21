@@ -1,0 +1,54 @@
+# dependencies (bun install)
+node_modules
+
+# bun.lock is the lockfile we commit; the others are per-contributor
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp.*
+.yarn/
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
+
+# reference clones (re-cloneable; see memory/plan)
+references/
+
+# compiled CLI binary
+dist/
+
+# save data, in case the clone lands directly in ~/.slay-the-cli
+/save.json
+/save.json.bak
+/prefs.json
+/*.json.tmp
+/.ascend-nudge

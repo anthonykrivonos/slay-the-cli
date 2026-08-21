@@ -1,0 +1,24 @@
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad |
+-- MAP - act 1 -----------------------------------------------------------------
+                ==============[ BOSS: SLIME BOSS ]==============                
+                     R           M           R           M     :                
+                        \        |           |  \     /        :                
+                           T     T           T     T           :                
+                           |  /  |        /     /              :                
+                           M     R     R     M                 :                
+                        /  |     |        \  |  \              :                
+                     M     R     M           ?     E           :                
+                     |  /           \     /  |        \        #                
+                     E                 E     R           M     #                
+                     |              /     \     \     /        #                
+                     M           ?           M     ?           #                
+                     |  \     /                 \  |           #                
+                     M     ?                       M           #                
+                        \  |  \                    |  \        #                
+                           M     $                 M     M     #                
+                           |  \  |                 |     |     #                
+                           ?     ?                 ?     M     #                
+                        /        |                 |  /        #                
+                   1:M         2:M               3:M           #                
+                Next: 1:M  2:M  3:M   [up/down] scroll                          
+[<-/->] path  [Enter] go  [up/dn] scroll  [1-9] travel  [d/r/p] deck  [q] quit  

@@ -1,0 +1,24 @@
+ HP 0/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | 
+-- DEFEAT ----------------------------------------------------------------------
+                                                                                
+                      ####  ##### ##### #####  ###  #####                       
+                      #   # #     #     #     #   #   #                         
+                      #   # ####  ####  ####  #####   #                         
+                      #   # #     #     #     #   #   #                         
+                      ####  ##### #     ##### #   #   #                         
+                                                                                
+                         The Spire keeps what it takes.                         
+                                                                                
+                           +------------------------+                           
+                           | Ironclad - Ascension 0 |                           
+                           | Floor 1 - Act 1        |                           
+                           | seed UISMNKE           |                           
+                           +------------------------+                           
+                                                                                
+                             [1] Climb again                                    
+                                   Same hero, next seed                         
+                             [2] Back to the menu                               
+                                                                                
+                                                                                
+                                                                                
+[1] new run  [2] menu  [q] quit                                                 

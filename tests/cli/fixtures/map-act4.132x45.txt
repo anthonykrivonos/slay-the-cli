@@ -1,0 +1,45 @@
+ HP 80/80 | G 99 | F52 A4 | ASC0 | K:ERS | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                           
+-- MAP - act 4 ---------------------------------------------------------------------------------------------------------------------
+                             ==============[ BOSS: THE HEART ]===============                                                       
+                                                    B                          LEGEND                                               
+                                                    |                          M enemy      E elite                                 
+                                                    E                          $ merchant   R rest                                  
+                                                    |                          T treasure   ? unknown                               
+                                                  1:$                          E* burning elite (+key)                              
+                                                    |                          @ you        B boss                                  
+                                                    @                                                                               
+                                                                               BOSS  The Heart                                      
+                                                                               FLOOR 52  [##......] 1/5                             
+                                                                               KEYS  ERS                                            
+                                                                               DECK  10   RELICS 1                                  
+                                                                               seed UISMNKE                                         
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                                                                                                                                    
+                             Next: 1:$                                                                                              
+-- INFO ----------------------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                              
+                                                                                                                                    
+                                                                                                                                    
+[<-/->] path  [Enter] go  [up/dn] scroll  [1-9] travel  [d/r/p] deck  [q] quit                                                      

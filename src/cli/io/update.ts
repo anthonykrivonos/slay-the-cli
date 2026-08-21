@@ -41,7 +41,7 @@ function looksLikeRepo(dir: string): boolean {
 export function findRepo(): string | null {
   const candidates: string[] = [];
 
-  // an explicit install root wins (this is what the README's SLAY_HOME sets)
+  // an explicit install root wins (this is what docs/INSTALL.md's SLAY_HOME sets)
   const home = process.env.SLAY_HOME;
   if (home !== undefined && home.trim().length > 0) {
     candidates.push(join(home, "app"), home);

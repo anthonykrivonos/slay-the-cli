@@ -13,7 +13,7 @@
 | Deal 8 damage  | | Deal 3 damage  | | Gain 2         | | Apply 1 Weak   | | Whenever you   | | Reduce the     | | Put an Attack  |
 | to ALL         | | to a random    | | Strength.      | | to ALL         | | lose HP from a | | cost of a      | | from your draw |
 | enemies.       | | enemy 3 times. | | At the end of  | | enemies.       | | card,          | | random card in | | pile into your |
-|                | |                | | this turn,     | | Exhaust.       | | gain 1         | | your hand to 0 | | hand.          |
+|                | |                | | this turn,...  | | Exhaust.       | | gain 1...      | | your hand...   | | hand. +        |
 +------[1]-------+ +------[2]-------+ +------[3]-------+ +------[4]-------+ +------[5]-------+ +------[6]-------+ +------[7]-------+
        23G                48G                47G                68G                70G                90G             need 174G     
 -- RELICS / POTIONS ----------------------------------------------------------------------------------------------------------------

@@ -12,7 +12,7 @@
  | Cleave       | | Sword Boomer | | Flex         | | Intimidate   | | Rupture      | | Madness      | | Secret Weapo | 
  | Deal 8       | | Deal 3       | | Gain 2       | | Apply 1 Weak | | Whenever you | | Reduce the   | | Put an       | 
  | damage to    | | damage to a  | | Strength.    | | to ALL       | | lose HP from | | cost of a    | | Attack from  | 
- | ALL enemies. | | random enemy | | At the end   | | enemies.     | | a card,      | | random card  | | your draw    | 
+ | ALL enemies. | | random...    | | At the...    | | enemies. +   | | a card,...   | | random...    | | your draw... | 
  +-----[1]------+ +-----[2]------+ +-----[3]------+ +-----[4]------+ +-----[5]------+ +-----[6]------+ +-----[7]------+ 
        23G              48G              47G              68G              70G              90G           need 174G     
 -- RELICS / POTIONS ----------------------------------------------------------------------------------------------------

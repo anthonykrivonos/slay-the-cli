@@ -250,6 +250,38 @@ describe("overlay mode", () => {
     expect(mapKey(ch("d"), v)).toEqual({ kind: "cmd", cmd: { cmd: "discardPotion", slot } });
     expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "closeOverlay" } });
   });
+  test("rewards: [i] inspects the offer, Enter takes the inspected card", () => {
+    const f = fxRewards();
+    const v = buildView(f.game, f.ui, bundle);
+    if (v.screen.kind !== "rewards") throw new Error("expected rewards");
+    const offers = v.screen.rows.flatMap((r) => (r.type === "group" && r.kind === "card" ? r.items : []));
+    expect(offers.length).toBeGreaterThan(1);
+
+    // no cursor: inspection starts on the first card on offer
+    expect(mapKey(ch("i"), v)).toEqual({
+      kind: "ui",
+      act: { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 0 } },
+    });
+    // with the cursor on the second card, inspection starts there
+    const uiFocus = applyUiAction(f.ui, { type: "focusSet", scope: "rewards", idx: offers[1]!.i });
+    const vFocus = buildView(f.game, uiFocus, bundle);
+    expect(mapKey(ch("i"), vFocus)).toEqual({
+      kind: "ui",
+      act: { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 1 } },
+    });
+
+    // inside the overlay the full rules text is there, and Enter takes it
+    const uiOpen = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 0 } });
+    const vOpen = buildView(f.game, uiOpen, bundle);
+    if (vOpen.overlay?.kind !== "inspect") throw new Error("expected inspect overlay");
+    expect(vOpen.overlay.count).toBe(offers.length);
+    expect(vOpen.overlay.takeIndex).toBe(offers[0]!.i);
+    expect(vOpen.hint).toContain("[Enter] take");
+    expect(mapKey(ENTER, vOpen)).toEqual({ kind: "cmd", cmd: { cmd: "takeReward", i: offers[0]!.i } });
+    // and the box in the panel had to cut that text short
+    expect(offers[0]!.rules.join(" ").length).toBeGreaterThan(0);
+  });
+
   test("inspect overlay: Enter plays a card from hand, but not one from the deck", () => {
     const f = fxCombat();
     const inHand = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });
@@ -278,6 +310,8 @@ describe("focus / selection cursor", () => {
   const TAB: Key = { kind: "tab" };
   const DOWN: Key = { kind: "down" };
   const UP: Key = { kind: "up" };
+  const LEFT: Key = { kind: "left" };
+  const RIGHT: Key = { kind: "right" };
 
   function withFocus(f: Fixture, scope: string, idx: number): Fixture {
     return { ...f, ui: { ...f.ui, focus: { scope, idx } } };
@@ -405,17 +439,27 @@ describe("focus / selection cursor", () => {
     expect(mapKey(ENTER, v2)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 2, target: 1 } });
   });
 
-  test("map: Tab cycles picks, Enter travels, unfocused arrows still scroll", () => {
+  test("map: left/right choose the path, up/down scroll, Enter travels", () => {
     const f = fxMapAct1();
     const v0 = viewOf(f);
+    // vertical is the scroll axis, whether or not a path is highlighted
     expect(mapKey(DOWN, v0)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: 1 } });
+    expect(mapKey(UP, v0)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: -1 } });
+    // right takes the cursor from nothing, without needing Tab first
+    expect(mapKey(RIGHT, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 0 } });
     expect(mapKey(TAB, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 0 } });
+
     const v1 = viewOf(withFocus(f, "map", 0));
     expect(v1.tooltip?.chip).toBe("NODE");
+    expect(mapKey(RIGHT, v1)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 1 } });
+    expect(mapKey(DOWN, v1)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: 1 } });
     const a = mapKey(ENTER, v1);
     expect(a?.kind).toBe("cmd");
     if (a?.kind === "cmd") expect(a.cmd.cmd).toBe("mapPick");
-    expect(mapKey(DOWN, v1)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: 1 } });
+
+    // left from nothing wraps to the last path
+    const picks = v0.screen.kind === "map" ? v0.screen.picks.length : 0;
+    expect(mapKey(LEFT, v0)).toEqual({ kind: "ui", act: { type: "focusSet", scope: "map", idx: picks - 1 } });
   });
 
   test("shop cursor auto-pages: focusing item 12 shows page 2", () => {

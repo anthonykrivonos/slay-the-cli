@@ -163,6 +163,10 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (o.kind === "inspect") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
         if (key.kind === "char" && key.ch === "i") return ui({ type: "closeOverlay" });
+        // a card you are looking at because it is on offer is a card you take
+        if (key.kind === "enter" && o.source === "reward" && o.takeIndex !== null) {
+          return cmd({ cmd: "takeReward", i: o.takeIndex });
+        }
         // a card you are looking at in your hand is a card you can play
         if (key.kind === "enter" && o.source === "hand" && view.screen.kind === "combat") {
           const h = view.screen.hand[o.index];
@@ -311,13 +315,23 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         if (view.focusIdx !== null) return ui({ type: "focusClear" });
         return ui({ type: "backToMenu" });
       }
-      if (key.kind === "enter" && view.focusIdx !== null) {
-        const pick = s.picks[view.focusIdx];
-        return pick ? cmd({ cmd: "mapPick", x: pick.x, y: pick.y }) : null;
+      const travel = (pick: { x: number; y: number } | undefined): KeyAction | null =>
+        pick ? cmd({ cmd: "mapPick", x: pick.x, y: pick.y }) : null;
+      if (key.kind === "enter") {
+        // the highlighted path, or the only path there is
+        if (view.focusIdx !== null) return travel(s.picks[view.focusIdx]);
+        return s.picks.length === 1 ? travel(s.picks[0]) : null;
       }
-      // Tab always cycles the pick cursor; arrows steer it once active,
-      // otherwise they keep scrolling the viewport (j/k always scroll)
-      if (key.kind === "tab" || view.focusIdx !== null) {
+      // The paths sit side by side, so left/right choose between them and take
+      // the cursor on first press; up/down are the scroll axis (so is j/k).
+      if (key.kind === "left" || key.kind === "right") {
+        const n = s.picks.length;
+        if (n === 0) return null;
+        const step = key.kind === "right" ? 1 : -1;
+        const next = view.focusIdx === null ? (step === 1 ? 0 : n - 1) : (view.focusIdx + step + n) % n;
+        return ui({ type: "focusSet", scope: "map", idx: next });
+      }
+      if (key.kind === "tab" || key.kind === "shiftTab") {
         const focus = focusKeys(key, view);
         if (focus) return focus;
       }
@@ -365,6 +379,17 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (paging) return paging;
       const d = digitIndex(ch);
       if (d !== null) return selectItem(itemAt(s.list.items, d));
+      if (view.mode === "rewards" && ch === "i" && s.kind === "rewards") {
+        // reward card boxes are narrow, so [i] opens the offer full size,
+        // starting on whichever card the cursor is pointing at
+        const offers = s.rows.flatMap((r) => (r.type === "group" && r.kind === "card" ? r.items : []));
+        if (offers.length === 0) return ui({ type: "toast", text: "No card to inspect" });
+        const at = offers.findIndex((o) => o.i === view.focusIdx);
+        return ui({
+          type: "openOverlay",
+          overlay: { kind: "inspect", source: "reward", index: Math.max(0, at) },
+        });
+      }
       if (view.mode === "rewards" && ch === "c") return cmd({ cmd: "skipRewards" });
       if (view.mode === "shop" && ch === "c") return cmd({ cmd: "proceed" });
       if (view.mode === "gameOver") {

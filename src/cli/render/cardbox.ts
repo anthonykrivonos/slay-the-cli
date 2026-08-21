@@ -98,6 +98,23 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
     wrapped.push(...wrapPlain(line, iw));
   }
   const shown = wrapped.slice(0, rulesRows);
+  // Say when there is more text than the box can hold, rather than stopping
+  // dead and reading like the whole rule. A cut inside a sentence trails off;
+  // a whole sentence with more sentences after it gets a "+". Either way, the
+  // full card is one [i] away.
+  if (wrapped.length > rulesRows && shown.length > 0) {
+    const last = shown[shown.length - 1]!;
+    if (/[.!?]$/.test(last)) {
+      shown[shown.length - 1] = last.length + 2 <= iw ? `${last} +` : `${last.slice(0, iw - 2)} +`;
+    } else if (last.length + 3 <= iw) {
+      shown[shown.length - 1] = `${last}...`;
+    } else {
+      // trim back to a word boundary so the tail is not a chopped word
+      const cut = last.slice(0, Math.max(0, iw - 3));
+      const space = cut.lastIndexOf(" ");
+      shown[shown.length - 1] = `${(space > 0 ? cut.slice(0, space) : cut).trimEnd()}...`;
+    }
+  }
   while (shown.length < rulesRows) shown.push("");
 
   const rows: string[] = [];

@@ -4,7 +4,7 @@
 // keeps them pure, snapshot-testable, and ignorant of game internals.
 
 import type { GameState, Command } from "../../engine/game";
-import type { RoomState } from "../../engine/run/runState";
+import type { RoomState, RewardEntry } from "../../engine/run/runState";
 import type { CardInstance } from "../../engine/combat/combatState";
 import type { ContentBundle } from "../../engine/content/defs";
 import type { PendingChoice } from "../../engine/core/actions";
@@ -339,8 +339,11 @@ export type OverlayView =
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
   | {
       kind: "inspect";
-      /** where it came from: a card in hand can be played from here */
-      source: "hand" | "deck";
+      /** where it came from: a card in hand can be played from here, and a
+       *  card being offered as a reward can be taken */
+      source: "hand" | "deck" | "reward";
+      /** reward entry Enter should take (reward source only) */
+      takeIndex: number | null;
       name: string;
       cost: string;
       color: string;
@@ -1263,7 +1266,8 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
     case "inspect": {
       const empty = (what: string): OverlayView => ({
         kind: "inspect",
-        source: what === "hand" ? "hand" : "deck",
+        source: what === "hand" ? "hand" : what === "reward" ? "reward" : "deck",
+        takeIndex: null,
         name: `(empty ${what})`,
         cost: "-",
         color: "?",
@@ -1279,7 +1283,26 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       let costLabel: string;
       let index: number;
       let count: number;
-      if (top.source === "hand" && g.combat) {
+      /** the reward entry Enter should take, when inspecting an offer */
+      let takeIndex: number | null = null;
+      if (top.source === "reward") {
+        // the cards this reward screen is offering, in the order it shows them
+        const room = g.run.room;
+        const entries = room?.kind === "rewards" ? room.entries : [];
+        const offers = entries
+          .map((e, i) => ({ e, i }))
+          .filter(({ e }) => e.kind === "card" && !e.taken);
+        count = offers.length;
+        if (count === 0) return empty("reward");
+        index = Math.max(0, Math.min(count - 1, top.index));
+        const offer = offers[index]!;
+        const entry = offer.e as Extract<RewardEntry, { kind: "card" }>;
+        defId = entry.id;
+        upgrades = entry.upgraded ? 1 : 0;
+        const def = bundle.cards.get(defId);
+        costLabel = def ? masterCostLabel(masterCardCost(def, upgrades)) : "?";
+        takeIndex = offer.i;
+      } else if (top.source === "hand" && g.combat) {
         const handIids = g.combat.player.piles.hand;
         count = handIids.length;
         index = Math.max(0, Math.min(count - 1, top.index));
@@ -1304,7 +1327,8 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       const fromHand = top.source === "hand" && g.combat !== null;
       return {
         kind: "inspect",
-        source: fromHand ? "hand" : "deck",
+        source: takeIndex !== null ? "reward" : fromHand ? "hand" : "deck",
+        takeIndex,
         name: toAscii(cardName(bundle, defId, upgrades)),
         cost: costLabel,
         color: def?.color ?? "?",
@@ -1841,9 +1865,8 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       if (o.kind === "confirmQuit") return "[y] quit  [n] keep playing";
       if (o.kind === "potionMenu") return "[Enter/u] use  [d] discard  [Esc] cancel";
       if (o.kind === "inspect") {
-        return o.source === "hand"
-          ? "[Enter] play  [j/k] next/prev card  [Esc] close"
-          : "[j/k] next/prev card  [Esc] close";
+        const cta = o.source === "hand" ? "[Enter] play  " : o.source === "reward" ? "[Enter] take  " : "";
+        return `${cta}[j/k] next/prev card  [Esc] close`;
       }
       if (o.kind === "log") return "[Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
@@ -1854,11 +1877,11 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
     case "combat":
       return "[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit";
     case "map":
-      return "[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit";
+      return "[<-/->] path  [Enter] go  [up/dn] scroll  [1-9] travel  [d/r/p] deck  [q] quit";
     case "neow":
       return "[1-4] choose a blessing  [d] deck  [r] relics  [q] quit";
     case "rewards":
-      return "[1-9] take  [Enter] continue  [d/r/p] deck/relics/potions  [q] quit";
+      return "[1-9] take  [i] inspect  [Enter] continue  [d/r/p] deck  [q] quit";
     case "shop": {
       const s = view.screen as ShopView;
       const paging = s.list.pages > 1 ? "  [n/p] page" : "";

@@ -26,7 +26,7 @@
    | Miracle            | | Defend             | | Strike             | | Strike             | | Defend             |   
    | Skill              | | Skill              | | Attack           > | | Attack           > | | Skill              |   
    | Retain.            | | Gain 5 Block.      | | Deal 6 damage.     | | Deal 6 damage.     | | Gain 5 Block.      |   
-   | Gain [E].          | |                    | |                    | |                    | |                    |   
+   | Gain [E]. +        | |                    | |                    | |                    | |                    |   
    +--------[1]---------+ +--------[2]---------+ +--------[3]---------+ +--------[4]---------+ +--------[5]---------+   
  DRAW 5                                               [e] END TURN                                 DISCARD 1  EXHAUST 0 
 -- INFO ----------------------------------------------------------------------------------------------------------------

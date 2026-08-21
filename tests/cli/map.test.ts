@@ -166,9 +166,43 @@ describe("viewport", () => {
   test("body row 0 is the always-visible boss banner", () => {
     const out = renderMap(tallView(), 80, 15, THEME_PLAIN);
     expect(out[0]).toContain("[ BOSS: HEXAGHOST ]");
-    expect(out[0]!.trimEnd().startsWith("=")).toBe(true);
+    expect(out[0]!.trim().startsWith("=")).toBe(true);
     // even when the boss door itself is scrolled out of the viewport
     expect(out.slice(1).some((l) => l.includes("B Hexaghost"))).toBe(false);
+  });
+
+  test("the block is centered, and the banner sits over the map area", () => {
+    const out = renderMap(tallView(), 120, 15, THEME_PLAIN);
+    const bannerPad = out[0]!.length - out[0]!.trimStart().length;
+    // 48-column map plus the legend beside it, centered in 120 columns
+    expect(bannerPad).toBeGreaterThan(10);
+    const nodePad = out.find((l) => l.includes("1:M"))!.length - out.find((l) => l.includes("1:M"))!.trimStart().length;
+    expect(Math.abs(nodePad - bannerPad)).toBeLessThan(NODE_COL(3));
+    // narrower terminals drop the legend and center the map alone, further right
+    const narrow = renderMap(tallView(), 80, 15, THEME_PLAIN);
+    const narrowPad = narrow[0]!.length - narrow[0]!.trimStart().length;
+    expect(narrowPad).toBe(Math.floor((80 - 48) / 2));
+  });
+
+  test("a clipped map grows a scrollbar; a map that fits does not", () => {
+    const short = renderMap(tallView(), 80, 15, THEME_PLAIN);
+    expect(short.some((l) => l.includes("#"))).toBe(true); // thumb
+    expect(short.some((l) => l.includes(":"))).toBe(true); // track
+    expect(short[short.length - 1]).toContain("[up/down] scroll");
+    // 31 map lines + banner + Next line fits in 33 rows
+    const tall = renderMap(tallView(), 80, 33, THEME_PLAIN);
+    expect(tall[tall.length - 1]).not.toContain("scroll");
+  });
+
+  test("the highlighted path is marked on the map, not just the Next line", () => {
+    const v = { ...tallView(), focusPick: 0 };
+    const out = renderMap(v, 80, 15, THEME_PLAIN);
+    expect(out.some((l) => l.includes("1>M"))).toBe(true);
+    expect(out[out.length - 1]).toContain("Next: >1:M");
+    // unfocused it goes back to the plain "n:G" form
+    const plain = renderMap(tallView(), 80, 15, THEME_PLAIN);
+    expect(plain.some((l) => l.includes("1>M"))).toBe(false);
+    expect(plain.some((l) => l.includes("1:M"))).toBe(true);
   });
 
   test("legend shows the FLOOR gauge at >=96 cols", () => {

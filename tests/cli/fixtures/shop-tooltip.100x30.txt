@@ -7,7 +7,7 @@
  | Cleave     || Sword Boom || Flex       || Intimidate || Rupture    || Madness    || Secret Wea | 
  | Deal 8     || Deal 3     || Gain 2     || Apply 1    || Whenever   || Reduce the || Put an     | 
  | damage to  || damage to  || Strength.  || Weak to    || you lose   || cost of a  || Attack     | 
- | ALL        || a random   || At the end || ALL        || HP from a  || random     || from your  | 
+ | ALL...     || a...       || At the...  || ALL...     || HP...      || random...  || from...    | 
  +----[1]-----++----[2]-----++----[3]-----++----[4]-----++----[5]-----++----[6]-----++----[7]-----+ 
       23G           48G           47G           68G           70G           90G        need 174G    
 -- RELICS / POTIONS --------------------------------------------------------------------------------

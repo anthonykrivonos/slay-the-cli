@@ -1,13 +1,17 @@
-// Map screen - StS orientation, boss on top. Node columns sit at 5+6x with
+// Map screen - StS orientation, boss on top, the whole block centered in the
+// terminal. Node columns sit at 5+6x with
 // glyphs M E $ R T ? B ("E*" burning elite, "@" you); the edge rows between
 // node rows use | / \ with X on crossings. Legal picks render as "n:G" and
-// echo on a "Next:" line. The full act is ~31 lines, so a vertical viewport
-// follows the frontier (j/k scrolls). A legend panel appears at >= 96 cols.
+// echo on a "Next:" line, and the highlighted one reads "1>M" on the map
+// itself. The full act is ~31 lines, so a vertical viewport follows the
+// frontier and scrolls (up/down, j/k) with a scrollbar in the map area last
+// column. A legend panel appears beside the map at >= 96 cols.
 
 import type { MapView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, bar } from "./widgets";
+import { visibleWidth } from "../term/ansi";
 
 export const NODE_COL = (x: number): number => 5 + 6 * x;
 const BOSS_COL = NODE_COL(3);
@@ -73,14 +77,21 @@ export function buildMapLines(
   accent: string = C.current,
 ): { lines: string[]; nodeRowLine: (y: number) => number } {
   const currentStyle = currentStyleFor(accent);
+  // the highlighted path, so the map itself can show which way you are going
+  const focus = screen.focusPick !== null ? (screen.picks[screen.focusPick] ?? null) : null;
   const rows = screen.nodeRows;
   const maxY = screen.maxY;
   const out: CharRow[] = [];
 
   if (screen.hasBossDoor) {
     const bossRow = new CharRow(MAP_AREA_W);
-    const label = `${screen.bossPickKey !== null ? `${screen.bossPickKey}:` : ""}B ${screen.bossName}`;
-    bossRow.put(screen.bossPickKey !== null ? BOSS_COL - 2 : BOSS_COL, label, screen.bossPickKey !== null ? pickStyle : bossStyle);
+    const bossFocused = focus !== null && focus.y > maxY;
+    const label = `${screen.bossPickKey !== null ? `${screen.bossPickKey}${bossFocused ? ">" : ":"}` : ""}B ${screen.bossName}`;
+    bossRow.put(
+      screen.bossPickKey !== null ? BOSS_COL - 2 : BOSS_COL,
+      label,
+      screen.bossPickKey !== null ? (bossFocused ? currentStyle : pickStyle) : bossStyle,
+    );
     out.push(bossRow);
     // edge row: every top-row node climbs to the boss door
     const edge = new CharRow(MAP_AREA_W);
@@ -99,9 +110,21 @@ export function buildMapLines(
       if (!node) continue;
       const col = NODE_COL(node.x);
       const glyph = node.current ? "@" : node.glyph + (node.burning ? "*" : "");
-      const style: Style = node.current ? currentStyle : node.pickKey !== null ? pickStyle : node.burning ? burningStyle : node.glyph === "B" ? bossStyle : dimStyle;
+      const focused = focus !== null && focus.x === node.x && focus.y === y;
+      const style: Style = focused
+        ? currentStyle
+        : node.current
+          ? currentStyle
+          : node.pickKey !== null
+            ? pickStyle
+            : node.burning
+              ? burningStyle
+              : node.glyph === "B"
+                ? bossStyle
+                : dimStyle;
       if (node.pickKey !== null) {
-        nodeRow.put(col - 2, `${node.pickKey}:`, pickStyle);
+        // the highlighted path points at itself: "1>M" rather than "1:M"
+        nodeRow.put(col - 2, `${node.pickKey}${focused ? ">" : ":"}`, focused ? currentStyle : pickStyle);
       }
       nodeRow.put(col, glyph, style);
     }
@@ -180,15 +203,25 @@ export function renderMap(
   start = Math.max(0, Math.min(start, full.length - mapH));
   const windowLines = full.length <= mapH ? full : full.slice(start, start + mapH);
 
+  // A clipped map gets a scrollbar in the map area's last column, so it is
+  // obvious there is more of the act above or below.
+  const clipped = full.length > mapH;
+  const thumbH = clipped ? Math.max(1, Math.round((mapH * mapH) / full.length)) : 0;
+  const thumbTop = clipped ? Math.round((start / (full.length - mapH)) * (mapH - thumbH)) : 0;
+  const scrollCell = (i: number): string =>
+    !clipped ? "" : theme.dim(i >= thumbTop && i < thumbTop + thumbH ? "#" : ":");
+
+  // The whole thing is centered as one block: map area, then the legend beside
+  // it when the terminal is wide enough to hold both.
   const panel = width >= 96 ? legendPanel(screen, theme, accent) : [];
-  const out: string[] = [bossBanner(screen, theme)];
+  const panelW = panel.reduce((m, l) => Math.max(m, visibleWidth(l)), 0);
+  const blockW = MAP_AREA_W + (panelW > 0 ? 2 + panelW : 0);
+  const pad = " ".repeat(Math.max(0, Math.floor((width - blockW) / 2)));
+
+  const out: string[] = [pad + bossBanner(screen, theme)];
   for (let i = 0; i < Math.min(mapH, Math.max(windowLines.length, panel.length)); i++) {
-    const mapLine = windowLines[i] ?? "";
-    if (panel.length > 0) {
-      out.push(padClip(mapLine, 50) + (panel[i] ?? ""));
-    } else {
-      out.push(mapLine);
-    }
+    const mapCol = padClip(windowLines[i] ?? "", MAP_AREA_W - 1) + scrollCell(i);
+    out.push(pad + (panel.length > 0 ? `${padClip(mapCol, MAP_AREA_W)}  ${panel[i] ?? ""}` : mapCol));
   }
   while (out.length < mapH + 1) out.push("");
 
@@ -197,7 +230,7 @@ export function renderMap(
     const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}`;
     return screen.focusPick === k ? theme.bold(theme.fg(accent, label)) : theme.bold(theme.fg(C.pick, label));
   });
-  const scrollNote = full.length > mapH ? theme.dim("   [j/k] scroll") : "";
-  out.push(`Next: ${nextParts.join("  ")}${scrollNote}`);
+  const scrollNote = clipped ? theme.dim("   [up/down] scroll") : "";
+  out.push(`${pad}Next: ${nextParts.join("  ")}${scrollNote}`);
   return out.slice(0, height).map((l) => padClip(l, width));
 }

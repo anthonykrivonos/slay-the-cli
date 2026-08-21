@@ -15,7 +15,9 @@ export type Overlay =
   | { kind: "pile"; pile: PileName; page: number }
   | { kind: "potions" }
   | { kind: "potionMenu"; slot: number }
-  | { kind: "inspect"; source: "hand" | "deck"; index: number }
+  /** index is a position within the source: hand slot, deck slot, or which of
+   *  the offered reward cards */
+  | { kind: "inspect"; source: "hand" | "deck" | "reward"; index: number }
   | { kind: "log" }
   | { kind: "confirmQuit" };
 

@@ -18,7 +18,7 @@
 +(0)----------+ +(1)----------+ +(1)----------+ +(1)----------+ +(1)----------+ 
 | Miracle     | | Defend      | | Strike    > | | Strike    > | | Defend      | 
 | Retain.     | | Gain 5      | | Deal 6      | | Deal 6      | | Gain 5      | 
-| Gain [E].   | | Block.      | | damage.     | | damage.     | | Block.      | 
+| Gain [E]. + | | Block.      | | damage.     | | damage.     | | Block.      | 
 +-----[1]-----+ +-----[2]-----+ +-----[3]-----+ +-----[4]-----+ +-----[5]-----+ 
  DRAW 5                           [e] END TURN             DISCARD 1  EXHAUST 0 
 [1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] dec

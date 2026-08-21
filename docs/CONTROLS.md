@@ -14,16 +14,16 @@ Number keys select, letters act.
 | `Tab` / `Shift-Tab` | move the hover cursor forward and back |
 | arrows | move the hover cursor; on the map, scroll and change path |
 | `e` | end turn |
-| `i` | inspect the focused card |
+| `i` | inspect cards up close; arrows step through them |
 | `l` | combat log |
 | `d` / `r` / `p` | deck, relics, potions |
 | `w` / `x` / `z` | draw, discard and exhaust piles |
 | `n` / `p` | next and previous page, on any list that has more than one |
 | `n` / `c` | new run, continue (on the menu) |
-| `a` / `A` | ascension up and down (on the menu) |
+| `a` / `A` | ascension up and down (on the menu); `+` and `-` also work |
 | `s` | edit the seed (on the menu) |
-| `q` | quit, with a confirmation first |
-| `Ctrl+C` | quit immediately, still safely |
+| `q` | quit: instant on the menu, `[y]`/`[n]` confirmation mid-run |
+| `Ctrl+C` | quit immediately from anywhere, still safely |
 
 Every screen prints its own key hints along the bottom row, so this table is a
 reference rather than something to memorize.

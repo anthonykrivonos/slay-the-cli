@@ -142,9 +142,10 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       }
       if (o.kind === "potionMenu") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
-        if (key.kind !== "char") return null;
-        if (key.ch === "d") return cmd({ cmd: "discardPotion", slot: o.slot });
-        if (key.ch === "u") {
+        if (key.kind !== "char" && key.kind !== "enter") return null;
+        if (key.kind === "char" && key.ch === "d") return cmd({ cmd: "discardPotion", slot: o.slot });
+        // drinking it is the point of opening this, so Enter drinks it
+        if (key.kind === "enter" || key.ch === "u") {
           if (!o.targeted) return cmd({ cmd: "usePotion", slot: o.slot });
           // targeted potions need a combat target
           if (view.screen.kind === "combat") {
@@ -162,6 +163,23 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (o.kind === "inspect") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
         if (key.kind === "char" && key.ch === "i") return ui({ type: "closeOverlay" });
+        // a card you are looking at in your hand is a card you can play
+        if (key.kind === "enter" && o.source === "hand" && view.screen.kind === "combat") {
+          const h = view.screen.hand[o.index];
+          if (!h) return null;
+          if (!h.playable) {
+            return ui({ type: "toast", text: h.cost === "-" ? `${h.name} is unplayable` : `Not enough energy for ${h.name}` });
+          }
+          if (h.targeted) {
+            const alive = view.screen.enemies.filter((e) => e.gone === null);
+            if (alive.length === 1) {
+              const idx = view.screen.enemies.findIndex((e) => e.gone === null);
+              return cmd({ cmd: "playCard", handIdx: o.index, target: idx });
+            }
+            return ui({ type: "setTargeting", targeting: { kind: "card", handIdx: o.index } });
+          }
+          return cmd({ cmd: "playCard", handIdx: o.index });
+        }
         if ((key.kind === "char" && key.ch === "j") || key.kind === "down" || key.kind === "right") {
           return ui({ type: "inspectMove", delta: 1, count: o.count });
         }
@@ -244,13 +262,9 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         if (view.focusIdx !== null) return ui({ type: "focusClear" });
         return ui({ type: "backToMenu" }); // run is saved per-advance
       }
-      const focus = focusKeys(key, view); // read-only hover: digits still play
-      if (focus) return focus;
-      if (key.kind !== "char") return null;
-      const ch = key.ch;
-      const d = digitIndex(ch);
-      if (d !== null) {
-        const h = s.hand[d];
+      // playing a card is the same act whether a digit or Enter asked for it
+      const playCard = (handIdx: number): KeyAction | null => {
+        const h = s.hand[handIdx];
         if (!h) return null;
         if (!h.playable) {
           return ui({ type: "toast", text: h.cost === "-" ? `${h.name} is unplayable` : `Not enough energy for ${h.name}` });
@@ -260,12 +274,27 @@ export function mapKey(key: Key, view: View): KeyAction | null {
           const alive = s.enemies.filter((e) => e.gone === null);
           if (alive.length === 1) {
             const idx = s.enemies.findIndex((e) => e.gone === null);
-            return cmd({ cmd: "playCard", handIdx: d, target: idx });
+            return cmd({ cmd: "playCard", handIdx, target: idx });
           }
-          return ui({ type: "setTargeting", targeting: { kind: "card", handIdx: d } });
+          return ui({ type: "setTargeting", targeting: { kind: "card", handIdx } });
         }
-        return cmd({ cmd: "playCard", handIdx: d });
+        return cmd({ cmd: "playCard", handIdx });
+      };
+      // Enter always does the obvious thing to whatever is highlighted
+      if (key.kind === "enter") {
+        if (s.focusHand !== null) return playCard(s.focusHand);
+        if (s.focusPotionSlot !== null) {
+          return ui({ type: "openOverlay", overlay: { kind: "potionMenu", slot: s.focusPotionSlot } });
+        }
+        if (s.focusEnemy !== null) return ui({ type: "toast", text: "Pick a card to aim at it" });
+        return null;
       }
+      const focus = focusKeys(key, view);
+      if (focus) return focus;
+      if (key.kind !== "char") return null;
+      const ch = key.ch;
+      const d = digitIndex(ch);
+      if (d !== null) return playCard(d);
       if (ch === "e") return cmd({ cmd: "endTurn" });
       if (ch === "l") return ui({ type: "openOverlay", overlay: { kind: "log" } });
       if (ch === "i") return ui({ type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });

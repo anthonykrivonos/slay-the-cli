@@ -33,4 +33,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
-[j/k] next/prev card  [Esc] close                                                                                       
+[Enter] play  [j/k] next/prev card  [Esc] close                                                                         

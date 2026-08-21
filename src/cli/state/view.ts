@@ -244,6 +244,8 @@ export interface CombatView {
   focusHand: number | null;
   /** enemies[] index holding the hover focus, or null */
   focusEnemy: number | null;
+  /** potion slot holding the hover focus, or null: Enter uses that potion */
+  focusPotionSlot: number | null;
 }
 
 export interface SimpleListScreen {
@@ -337,6 +339,8 @@ export type OverlayView =
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
   | {
       kind: "inspect";
+      /** where it came from: a card in hand can be played from here */
+      source: "hand" | "deck";
       name: string;
       cost: string;
       color: string;
@@ -763,20 +767,27 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     };
   });
 
-  // resolve the hover focus onto a hand card or an enemy panel (the focus
-  // enumeration order is hand -> alive enemies -> relics -> potions -> ...)
+  // Resolve the hover focus onto the thing it points at. The enumeration order
+  // is hand -> alive enemies -> relics -> potions -> orbs -> stance, and it has
+  // to match combatFocus, which builds the tooltip from the same cursor.
   let focusHand: number | null = null;
   let focusEnemy: number | null = null;
+  let focusPotionSlot: number | null = null;
   if (screenFocus !== null) {
-    if (screenFocus < hand.length) {
-      focusHand = screenFocus;
-    } else {
-      const alivePos = screenFocus - hand.length;
-      const aliveIdx: number[] = [];
-      c.monsters.forEach((m, idx) => {
-        if (!m.isDead && !m.isEscaped) aliveIdx.push(idx);
-      });
-      if (alivePos < aliveIdx.length) focusEnemy = aliveIdx[alivePos]!;
+    const aliveIdx: number[] = [];
+    c.monsters.forEach((m, idx) => {
+      if (!m.isDead && !m.isEscaped) aliveIdx.push(idx);
+    });
+    const potionSlots = g.run.potions.map((id, slot) => ({ id, slot })).filter((p) => p.id !== null);
+    let k = screenFocus;
+    if (k < hand.length) {
+      focusHand = k;
+    } else if ((k -= hand.length) < aliveIdx.length) {
+      focusEnemy = aliveIdx[k]!;
+    } else if ((k -= aliveIdx.length) < g.run.relics.length) {
+      // relics do nothing when you press Enter on them; they are already doing it
+    } else if ((k -= g.run.relics.length) < potionSlots.length) {
+      focusPotionSlot = potionSlots[k]!.slot;
     }
   }
 
@@ -814,6 +825,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     log: ui.log.slice(-8).map(toAscii),
     focusHand,
     focusEnemy,
+    focusPotionSlot,
   };
 }
 
@@ -1251,6 +1263,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
     case "inspect": {
       const empty = (what: string): OverlayView => ({
         kind: "inspect",
+        source: what === "hand" ? "hand" : "deck",
         name: `(empty ${what})`,
         cost: "-",
         color: "?",
@@ -1288,8 +1301,10 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         costLabel = def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?";
       }
       const def = bundle.cards.get(defId);
+      const fromHand = top.source === "hand" && g.combat !== null;
       return {
         kind: "inspect",
+        source: fromHand ? "hand" : "deck",
         name: toAscii(cardName(bundle, defId, upgrades)),
         cost: costLabel,
         color: def?.color ?? "?",
@@ -1824,8 +1839,12 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       const o = view.overlay;
       if (!o) return "";
       if (o.kind === "confirmQuit") return "[y] quit  [n] keep playing";
-      if (o.kind === "potionMenu") return "[u] use  [d] discard  [Esc] cancel";
-      if (o.kind === "inspect") return "[j/k] next/prev card  [Esc] close";
+      if (o.kind === "potionMenu") return "[Enter/u] use  [d] discard  [Esc] cancel";
+      if (o.kind === "inspect") {
+        return o.source === "hand"
+          ? "[Enter] play  [j/k] next/prev card  [Esc] close"
+          : "[j/k] next/prev card  [Esc] close";
+      }
       if (o.kind === "log") return "[Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
       if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}  [Esc] close`;
@@ -1833,7 +1852,7 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       return `${paging.trim().length > 0 ? paging.trim() + "  " : ""}[Esc] close`;
     }
     case "combat":
-      return "[1-0] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck/relics/potions  [q] quit";
+      return "[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit";
     case "map":
       return "[1-9] travel  [j/k] scroll  [d/r/p] deck/relics/potions  [Esc] menu  [q] quit";
     case "neow":

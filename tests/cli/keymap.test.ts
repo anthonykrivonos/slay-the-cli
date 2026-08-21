@@ -245,8 +245,22 @@ describe("overlay mode", () => {
     const v = buildView(f.game, ui, bundle);
     const use = mapKey(ch("u"), v);
     expect(use).not.toBeNull();
+    // Enter drinks it, the same as u: that is what you opened this for
+    expect(mapKey(ENTER, v)).toEqual(use);
     expect(mapKey(ch("d"), v)).toEqual({ kind: "cmd", cmd: { cmd: "discardPotion", slot } });
     expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "closeOverlay" } });
+  });
+  test("inspect overlay: Enter plays a card from hand, but not one from the deck", () => {
+    const f = fxCombat();
+    const inHand = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });
+    const vHand = buildView(f.game, inHand, bundle);
+    expect(mapKey(ENTER, vHand)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 0 } });
+    expect(vHand.hint).toContain("[Enter] play");
+
+    const inDeck = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "deck", index: 0 } });
+    const vDeck = buildView(f.game, inDeck, bundle);
+    expect(mapKey(ENTER, vDeck)).toBeNull();
+    expect(vDeck.hint).not.toContain("[Enter] play");
   });
   test("confirm-quit: y/Enter/q quit, n/Esc keep playing", () => {
     const f = fxMapAct1();
@@ -332,18 +346,51 @@ describe("focus / selection cursor", () => {
     expect(mapKey(ENTER, v0)).toEqual({ kind: "ui", act: { type: "newRun" } });
   });
 
-  test("combat: hover is read-only (Enter does not play) and shows a card tooltip", () => {
+  test("combat: Enter plays the highlighted card, like its digit would", () => {
     const f = fxCombat();
     const v = viewOf(withFocus(f, "combat", 2));
     expect(v.tooltip?.chip).toBe("CARD");
     expect(v.tooltip?.name).toContain("Strike");
     expect(v.tooltip?.lines.join(" ")).toContain("Deal 6 damage.");
-    expect(mapKey(ENTER, v)).toBeNull();
-    // Tab past the hand lands on an enemy tooltip
-    const hand = v.screen.kind === "combat" ? v.screen.hand.length : 0;
+    // hand index 2 is a Strike: targeted, and this fight has two enemies, so
+    // both the digit and Enter open targeting
+    const viaDigit = mapKey({ kind: "char", ch: "3" }, v);
+    expect(mapKey(ENTER, v)).toEqual(viaDigit);
+    expect(mapKey(ENTER, v)).toEqual({
+      kind: "ui",
+      act: { type: "setTargeting", targeting: { kind: "card", handIdx: 2 } },
+    });
+  });
+
+  test("combat: Enter on an untargeted card plays it outright", () => {
+    const f = fxCombat();
+    const v = viewOf(withFocus(f, "combat", 0)); // Defend
+    expect(v.tooltip?.name).toContain("Defend");
+    expect(mapKey(ENTER, v)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 0 } });
+  });
+
+  test("combat: Enter on an enemy says how to aim, and Tab still shows its tooltip", () => {
+    const f = fxCombat();
+    const hand = viewOf(f).screen.kind === "combat" ? (viewOf(f).screen as { hand: unknown[] }).hand.length : 0;
     const vEnemy = viewOf(withFocus(f, "combat", hand));
     expect(vEnemy.tooltip?.chip).toBe("ENEMY");
     expect(vEnemy.tooltip?.lines.length).toBeGreaterThan(0);
+    expect(mapKey(ENTER, vEnemy)).toEqual({ kind: "ui", act: { type: "toast", text: "Pick a card to aim at it" } });
+  });
+
+  test("combat: Enter on a potion opens its use/discard menu", () => {
+    const f = fxCombat();
+    const v0 = viewOf(f);
+    if (v0.screen.kind !== "combat") throw new Error("expected combat");
+    const relics = v0.screen.relics.length;
+    const potionSlot = v0.screen.potions.findIndex((p) => p !== null);
+    const idx = v0.screen.hand.length + v0.screen.enemies.filter((e) => e.gone === null).length + relics;
+    const v = viewOf(withFocus(f, "combat", idx));
+    expect(v.tooltip?.chip).toBe("POTION");
+    expect(mapKey(ENTER, v)).toEqual({
+      kind: "ui",
+      act: { type: "openOverlay", overlay: { kind: "potionMenu", slot: potionSlot } },
+    });
   });
 
   test("targeting auto-focuses target 0; arrows retarget; Enter fires", () => {

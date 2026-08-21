@@ -21,4 +21,4 @@
                                                                                 
                                                                                 
                                                                                 
-[j/k] next/prev card  [Esc] close                                               
+[Enter] play  [j/k] next/prev card  [Esc] close                                 

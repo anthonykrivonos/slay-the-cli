@@ -2,7 +2,7 @@
 -- COMBAT - turn 1 -------------------------------------------------------------
  RELICS Cra The  POTIONS [.] [.] [.]                                     [l] log
                                                                                 
-[1] Cultist        HP  52/52  [######]       ^^                                 
+[1] Cultist        HP  52/52  [######]       ^ Ritual +3                        
                                                                                 
                                                                                 
                                                                                 

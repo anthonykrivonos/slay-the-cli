@@ -285,6 +285,8 @@ describe("enemy panels", () => {
     block: 5,
     intentGlyph: "/! 11",
     intentKind: "attack",
+    intentTotal: null,
+    intentParts: [],
     move: "Chomp",
     powers: [
       { name: "Strength", amount: 3, kind: "buff" },

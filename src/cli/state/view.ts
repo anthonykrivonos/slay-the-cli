@@ -8,7 +8,7 @@ import type { RoomState } from "../../engine/run/runState";
 import type { CardInstance } from "../../engine/combat/combatState";
 import type { ContentBundle } from "../../engine/content/defs";
 import type { PendingChoice } from "../../engine/core/actions";
-import { getIntents, type IntentInfo } from "../../engine/combat/intents";
+import { getIntents, type IntentInfo, type IntentPower } from "../../engine/combat/intents";
 import {
   titleCase,
   isCharacterId,
@@ -158,16 +158,28 @@ export interface PowerChipView {
   kind: "buff" | "debuff";
 }
 
+/** One spelled-out piece of an intent: "v Weak 2", "^ Str +3", "+2 Burn". */
+export interface IntentPartView {
+  text: string;
+  kind: "attack" | "block" | "buff" | "debuff" | "cards" | "other";
+}
+
 export interface IntentView {
   /** raw MonsterMoveDef intent category */
   kind: string;
   damage: number | null;
   hits: number;
   block: number;
-  /** e.g. "/! 11x2", "/! 9 [+5]", "[+5]", "^^", "vv", "zz", "**", "<<", "()", "??" */
+  /** damage x hits, when it hits more than once (null otherwise) */
+  total: number | null;
+  /** e.g. "/! 11 x2", "/! 9 [+5]", "[+5]", "^^", "vv", "zz", "**", "<<", "()", "??" */
   glyph: string;
   /** coloring bucket for renderers */
-  color: "attack" | "block" | "other";
+  color: "attack" | "block" | "buff" | "debuff" | "other";
+  /** what the move does besides its glyph: the buff, the debuff, the statuses */
+  parts: IntentPartView[];
+  /** the preview knows what the move does FIRST but not all of it */
+  partial: boolean;
 }
 
 export interface EnemyPanelView {
@@ -446,23 +458,99 @@ const INTENT_GLYPHS: Record<string, string> = {
   attack: "/! ?",
 };
 
-/** StS-style intent mark: `/! 11x2` attack, `[+5]` defend, `^^` buff... */
-function buildIntentView(info: IntentInfo | null): IntentView | null {
+/** Shortened power names, so an intent chip fits a narrow panel. */
+const SHORT_POWER: Record<string, string> = {
+  STRENGTH: "Str",
+  DEXTERITY: "Dex",
+  VULNERABLE: "Vuln",
+  ARTIFACT: "Artifact",
+  PLATED_ARMOR: "Plate",
+  DRAW_REDUCTION: "Draw",
+  METALLICIZE: "Metal",
+  REGENERATE: "Regen",
+  THORNS: "Thorns",
+  RITUAL: "Ritual",
+  CURL_UP: "Curl Up",
+  ANGRY: "Angry",
+};
+
+function shortPowerName(bundle: ContentBundle, id: string): string {
+  return SHORT_POWER[id] ?? bundle.powers.get(id)?.name ?? titleCase(id);
+}
+
+/** Signed amount, so a drained stat reads as the loss it is. */
+function signed(n: number): string {
+  return n > 0 ? `+${n}` : String(n);
+}
+
+/**
+ * The chips that spell out an intent beyond its glyph: what the buff is, which
+ * debuff is coming, how many statuses land in your deck. Ordered by how much
+ * they change your turn.
+ */
+function intentParts(bundle: ContentBundle, info: IntentInfo): IntentPartView[] {
+  const parts: IntentPartView[] = [];
+  for (const p of info.powers) {
+    const name = shortPowerName(bundle, p.powerId);
+    if (p.target === "you") {
+      // a debuff applied reads as its size; something taken away reads as a
+      // minus, whether that is a drained stat or cards off your draw
+      const drain = p.amount < 0 || p.powerId === "DRAW_REDUCTION";
+      parts.push({ text: `v ${name} ${drain ? `-${Math.abs(p.amount)}` : p.amount}`, kind: "debuff" });
+    } else if (p.target === "self") {
+      parts.push({ text: `^ ${name} ${signed(p.amount)}`, kind: "buff" });
+    } else {
+      parts.push({ text: `^ ally ${name} ${signed(p.amount)}`, kind: "buff" });
+    }
+  }
+  for (const c of info.cards) {
+    const name = toAscii(bundle.cards.get(c.defId)?.name ?? titleCase(c.defId));
+    parts.push({ text: `+${c.n} ${name}`, kind: "cards" });
+  }
+  if (info.hpLoss > 0) parts.push({ text: `-${info.hpLoss} HP`, kind: "debuff" });
+  if (info.allyBlock > 0) parts.push({ text: `ally [+${info.allyBlock}]`, kind: "block" });
+  if (info.heal > 0) parts.push({ text: `heals ${info.heal}`, kind: "buff" });
+  if (info.summons.length > 0) {
+    const names = info.summons.map((id) => toAscii(bundle.monsters.get(id)?.name ?? titleCase(id)));
+    parts.push({ text: `summons ${names.join(", ")}`, kind: "other" });
+  }
+  return parts;
+}
+
+/** StS-style intent mark: `/! 11 x2` attack, `[+5]` defend, `^^` buff... */
+function buildIntentView(bundle: ContentBundle, info: IntentInfo | null): IntentView | null {
   if (!info) return null;
+  const parts = intentParts(bundle, info);
   let glyph: string;
   let color: IntentView["color"];
   if (info.damage !== null) {
-    glyph = `/! ${info.damage}${info.hits > 1 ? `x${info.hits}` : ""}${info.block > 0 ? ` [+${info.block}]` : ""}`;
+    glyph = `/! ${info.damage}${info.hits > 1 ? ` x${info.hits}` : ""}${info.block > 0 ? ` [+${info.block}]` : ""}`;
     color = "attack";
   } else if (info.block > 0) {
     glyph = `[+${info.block}]`;
     color = "block";
+  } else if (parts.length > 0) {
+    // A move with nothing to hit or block for says what it does instead of
+    // wearing a category mark: "v Weak 2" beats "v" followed by "v Weak 2".
+    const lead = parts.shift()!;
+    glyph = lead.text;
+    color = lead.kind === "buff" ? "buff" : lead.kind === "block" ? "block" : lead.kind === "other" ? "other" : "debuff";
   } else {
     glyph = INTENT_GLYPHS[info.kind] ?? "??";
-    color = "block";
-    if (info.kind !== "defend" && info.kind !== "defendBuff" && info.kind !== "defendDebuff") color = "other";
+    color = info.kind.startsWith("defend") ? "block" : "other";
   }
-  return { kind: info.kind, damage: info.damage, hits: info.hits, block: info.block, glyph, color };
+  return {
+    kind: info.kind,
+    damage: info.damage,
+    hits: info.hits,
+    block: info.block,
+    // the number that actually matters when a move hits several times
+    total: info.damage !== null && info.hits > 1 ? info.damage * info.hits : null,
+    glyph,
+    color,
+    parts,
+    partial: info.partial,
+  };
 }
 
 const ORB_LETTERS: Record<string, string> = {
@@ -629,7 +717,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
       hp: m.hp,
       maxHp: m.maxHp,
       block: m.block,
-      intent: gone ? null : buildIntentView(info),
+      intent: gone ? null : buildIntentView(bundle, info),
       move: gone || !info ? null : toAscii(prettyMove(m.id, info.moveId)),
       powers: gone ? [] : powerChips(bundle, m.powers),
       gone,
@@ -1328,15 +1416,52 @@ const INTENT_SENTENCES: Record<string, string> = {
   defendDebuff: "intends to defend and debuff you",
 };
 
-function intentSentence(monsterId: string, info: IntentInfo | null): string {
+/** "a", "a and b", "a, b and c" */
+function listWords(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]!}`;
+}
+
+/** Full sentences for the INFO panel: everything the move is about to do. */
+function intentSentence(bundle: ContentBundle, monsterId: string, info: IntentInfo | null): string {
   if (!info) return "Intent unknown.";
   const move = prettyMove(monsterId, info.moveId);
+  const clauses: string[] = [];
   if (info.damage !== null) {
-    const dmg = `${info.damage}${info.hits > 1 ? ` x ${info.hits}` : ""}`;
-    return `${move}: intends to attack for ${dmg}${info.block > 0 ? ` and gain ${info.block} Block` : ""}.`;
+    clauses.push(
+      info.hits > 1
+        ? `attack for ${info.damage} x ${info.hits} (${info.damage * info.hits} in total)`
+        : `attack for ${info.damage}`,
+    );
   }
-  if (info.block > 0) return `${move}: intends to gain ${info.block} Block.`;
-  return `${move}: ${INTENT_SENTENCES[info.kind] ?? titleCase(info.kind)}.`;
+  // Group by what happens to whom and share the verb, so a triple debuff reads
+  // as one clause and Block joins whatever else the move gains.
+  const named = (p: IntentPower): string =>
+    `${Math.abs(p.amount)} ${bundle.powers.get(p.powerId)?.name ?? titleCase(p.powerId)}`;
+  const bucket = (pred: (p: IntentPower) => boolean): string[] => info.powers.filter(pred).map(named);
+  const apply = bucket((p) => p.target === "you" && p.amount > 0);
+  const drain = bucket((p) => p.target === "you" && p.amount < 0);
+  const gain = [...(info.block > 0 ? [`${info.block} Block`] : []), ...bucket((p) => p.target === "self" && p.amount > 0)];
+  const lose = bucket((p) => p.target === "self" && p.amount < 0);
+  const ally = [...(info.allyBlock > 0 ? [`${info.allyBlock} Block`] : []), ...bucket((p) => p.target === "ally")];
+  if (apply.length > 0) clauses.push(`apply ${listWords(apply)} to you`);
+  if (drain.length > 0) clauses.push(`drain ${listWords(drain)} from you`);
+  if (gain.length > 0) clauses.push(`gain ${listWords(gain)}`);
+  if (lose.length > 0) clauses.push(`lose ${listWords(lose)}`);
+  if (ally.length > 0) clauses.push(`give an ally ${listWords(ally)}`);
+  for (const c of info.cards) {
+    const name = bundle.cards.get(c.defId)?.name ?? titleCase(c.defId);
+    clauses.push(`put ${c.n} ${name} in your ${c.dest} pile`);
+  }
+  if (info.heal > 0) clauses.push(`heal ${info.heal} HP`);
+  if (info.hpLoss > 0) clauses.push(`take ${info.hpLoss} HP from you`);
+  if (info.summons.length > 0) {
+    const names = info.summons.map((id) => bundle.monsters.get(id)?.name ?? titleCase(id));
+    clauses.push(`summon ${names.join(" and ")}`);
+  }
+  if (clauses.length === 0) return `${move}: ${INTENT_SENTENCES[info.kind] ?? titleCase(info.kind)}.`;
+  // a preview that stopped early says so rather than pretending to be the lot
+  return `${move}: intends to ${listWords(clauses)}${info.partial ? ", and more it will not show" : ""}.`;
 }
 
 function tipEnemy(
@@ -1344,7 +1469,7 @@ function tipEnemy(
   m: { id: string; hp: number; maxHp: number; block: number; powers: { id: string; amount: number }[] },
   info: IntentInfo | null,
 ): TooltipView {
-  const lines = [intentSentence(m.id, info)];
+  const lines = [intentSentence(bundle, m.id, info)];
   for (const p of m.powers) {
     const name = bundle.powers.get(p.id)?.name ?? titleCase(p.id);
     const desc = powerText(p.id, p.amount);

@@ -3,7 +3,7 @@
  RELICS Cra The  POTIONS [.] [.] [.]                                                                                         [l] log
                                                                                                                                     
                                                                                      +--------------------------------------------+ 
-                                                                                     | ^^ Incantation                         [1] | 
+                                                                                     | ^ Ritual +3  Incantation               [1] | 
                                                                                      |              #            *                | 
                                                                                      |             ##            *                | 
                                                                                      |             *+*+-::     +*                 | 

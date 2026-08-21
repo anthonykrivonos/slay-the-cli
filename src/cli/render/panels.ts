@@ -22,9 +22,13 @@ export interface EnemyPanelData {
   hp: number;
   maxHp: number;
   block: number;
-  /** e.g. "/! 11x2", "/! 9 [+5]", "[+5]", "^^", "zz", "??" */
+  /** e.g. "/! 11 x2", "/! 9 [+5]", "[+5]", "v Weak 2", "zz", "??" */
   intentGlyph: string;
-  intentKind: "attack" | "block" | "other";
+  intentKind: "attack" | "block" | "buff" | "debuff" | "other";
+  /** total damage across the hits, when there are several */
+  intentTotal: number | null;
+  /** what the move does beyond its glyph: the buff, the debuff, the statuses */
+  intentParts: { text: string; kind: "attack" | "block" | "buff" | "debuff" | "cards" | "other" }[];
   /** dim move name shown next to the glyph when it fits */
   move: string | null;
   powers: PowerChipData[];
@@ -49,6 +53,15 @@ export function enemyPanelWidth(cols: number, m: number, withArt = false): numbe
 export function enemyPanelHeight(artH: number): number {
   return ENEMY_PANEL_H + artH;
 }
+
+/** What each kind of intent is worth worrying about, in color. */
+export const INTENT_COLORS: Record<"attack" | "block" | "buff" | "debuff" | "other", string> = {
+  attack: C.intent,
+  block: C.block,
+  buff: C.good,
+  debuff: C.bad,
+  other: C.gold,
+};
 
 function chipText(p: PowerChipData): string {
   return `${p.kind === "buff" ? "^" : "v"} ${p.name} ${p.amount}`;
@@ -101,22 +114,33 @@ export function enemyPanel(e: EnemyPanelData, w: number, theme: Theme): string[]
     return rows.map((r) => theme.dim(padClip(r, w)));
   }
 
-  // intent + target key
+  // Intent row, filled in the order that matters: the glyph and its numbers,
+  // the total for a multi-hit, then what else the move does, then the move's
+  // name if there is still room. The target key is always right-aligned.
   const key = e.key !== null ? `[${e.key}]` : "";
-  const glyph =
-    e.intentKind === "attack"
-      ? theme.bold(theme.fg(C.intent, e.intentGlyph))
-      : e.intentKind === "block"
-        ? theme.fg(C.block, e.intentGlyph)
-        : theme.fg(C.gold, e.intentGlyph);
+  const glyph = theme.bold(theme.fg(INTENT_COLORS[e.intentKind], e.intentGlyph));
+  const partColor = (kind: EnemyPanelData["intentParts"][number]["kind"]): string =>
+    kind === "debuff" || kind === "cards" ? C.bad : kind === "buff" ? C.good : kind === "block" ? C.block : C.gold;
+
   let leftLen = e.intentGlyph.length;
-  let move = "";
-  if (e.move !== null && leftLen + 1 + e.move.length + key.length + 1 <= iw) {
-    move = ` ${theme.dim(e.move)}`;
-    leftLen += 1 + e.move.length;
+  let extras = "";
+  const room = (n: number): boolean => leftLen + n + key.length + 1 <= iw;
+  if (e.intentTotal !== null && room(3 + String(e.intentTotal).length)) {
+    const txt = ` = ${e.intentTotal}`;
+    extras += theme.bold(theme.fg(C.intent, txt));
+    leftLen += txt.length;
+  }
+  for (const p of e.intentParts) {
+    if (!room(2 + p.text.length)) break;
+    extras += `  ${theme.fg(partColor(p.kind), p.text)}`;
+    leftLen += 2 + p.text.length;
+  }
+  if (e.move !== null && room(2 + e.move.length)) {
+    extras += `  ${theme.dim(e.move)}`;
+    leftLen += 2 + e.move.length;
   }
   const gap = Math.max(1, iw - leftLen - key.length);
-  const intentRow = `${glyph}${move}${" ".repeat(gap)}${theme.bold(key)}`;
+  const intentRow = `${glyph}${extras}${" ".repeat(gap)}${theme.bold(key)}`;
 
   const rows = [
     border,

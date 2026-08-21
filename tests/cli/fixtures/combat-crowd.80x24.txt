@@ -3,9 +3,9 @@
  RELICS Bur  POTIONS [F] [E] [B]                                         [l] log
                                                                                 
 [1] Red Louse      HP  13/13  [######]       /! 6       ^Curl Up 5              
-[2] Green Louse    HP  13/13  [######]       v          ^Curl Up 7              
+[2] Green Louse    HP  13/13  [######]       v Weak 2   ^Curl Up 7              
 [3] Red Louse      HP   9/13  [####..]       /! 6       ^Curl Up 5              
-[4] Green Louse    HP   5/13  [##....]       v          ^Curl Up 7              
+[4] Green Louse    HP   5/13  [##....]       v Weak 2   ^Curl Up 7              
 [5] Red Louse      HP   1/13  [......]       /! 6       ^Curl Up 5              
                                                                                 
                                                                                 

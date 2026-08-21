@@ -3,7 +3,7 @@
  RELICS Pur  POTIONS [D] [S] [D]                                                             [l] log
                                                                                                     
                                                                      +----------------------------+ 
-                                                                     | ^^ Incantation         [1] | 
+                                                                     | ^ Ritual +3            [1] | 
                                                                      | Cultist                    | 
                                                                      | 48/48 [##########]         | 
                                                                      |                            | 

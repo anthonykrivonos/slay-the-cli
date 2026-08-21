@@ -24,6 +24,7 @@ import {
   playerPanelHeight,
   playerPanelWidth,
   ENEMY_PANEL_H,
+  INTENT_COLORS,
   type EnemyPanelData,
   type PlayerPanelData,
 } from "./panels";
@@ -58,6 +59,8 @@ function enemyData(e: CombatView["enemies"][number], art: string[]): EnemyPanelD
     block: e.block,
     intentGlyph: e.intent?.glyph ?? "??",
     intentKind: e.intent?.color ?? "other",
+    intentTotal: e.intent?.total ?? null,
+    intentParts: e.intent?.parts ?? [],
     move: e.move,
     powers: e.powers,
     gone: e.gone,
@@ -130,19 +133,20 @@ function enemyLine(e: CombatView["enemies"][number], width: number, theme: Theme
   const hpBar = theme.fg(C.hp, bar(e.hp, e.maxHp, compact ? 6 : 10));
   const blk = e.block > 0 ? theme.fg(C.block, `B${e.block}`.padEnd(4)) : "    ";
   const glyph = e.intent?.glyph ?? "??";
-  const intentColored =
-    e.intent?.color === "attack"
-      ? theme.fg(C.intent, glyph)
-      : e.intent?.color === "block"
-        ? theme.fg(C.block, glyph)
-        : theme.fg(C.gold, glyph);
+  const intentColored = theme.fg(INTENT_COLORS[e.intent?.color ?? "other"], glyph);
   const intentPad = " ".repeat(Math.max(0, (compact ? 10 : 12) - glyph.length));
-  const move = e.move !== null && !compact ? theme.dim(`~${e.move}  `) : "";
+  // even on one line, say what the move actually does: the first chip fits
+  const first = e.intent?.parts[0];
+  const detail =
+    first !== undefined
+      ? theme.fg(first.kind === "buff" ? C.good : first.kind === "other" ? C.gold : C.bad, `${first.text}  `)
+      : "";
+  const move = e.move !== null && !compact && first === undefined ? theme.dim(`~${e.move}  `) : "";
   const powers =
     e.powers.length > 0
       ? theme.dim(e.powers.map((p) => `${p.kind === "buff" ? "^" : "v"}${p.name} ${p.amount}`).join(", "))
       : "";
-  return `${key} ${name} ${hp} ${hpBar}  ${blk} ${intentColored}${intentPad} ${move}${powers}`;
+  return `${key} ${name} ${hp} ${hpBar}  ${blk} ${intentColored}${intentPad} ${detail}${move}${powers}`;
 }
 
 function youLines(v: CombatView, width: number, theme: Theme): string[] {

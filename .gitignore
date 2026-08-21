@@ -38,3 +38,10 @@ references/
 
 # compiled CLI binary
 dist/
+
+# save data, in case the clone lands directly in ~/.slay-the-cli
+/save.json
+/save.json.bak
+/prefs.json
+/*.json.tmp
+/.ascend-nudge

@@ -1,5 +1,6 @@
-// File-backed persistence: ~/.slay/save.json (+ save.json.bak) and
-// ~/.slay/prefs.json. SLAY_DIR overrides the directory (tests use a tmp dir).
+// File-backed persistence: ~/.slay-the-cli/save.json (+ save.json.bak) and
+// ~/.slay-the-cli/prefs.json. SLAY_DIR overrides the directory (tests use a
+// tmp dir).
 // Writes are atomic (tmp + rename); reads fall back main -> .bak -> null via
 // the salvaged structural validator.
 
@@ -28,7 +29,7 @@ export interface SaveIo {
 export function defaultSaveDir(): string {
   const env = process.env.SLAY_DIR;
   if (env !== undefined && env.trim().length > 0) return env;
-  return join(homedir(), ".slay");
+  return join(homedir(), ".slay-the-cli");
 }
 
 function readJson(path: string): unknown {

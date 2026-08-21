@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="667" height="150" viewBox="0 0 667 150" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="15">
+<defs><linearGradient id="spire" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#e06a7a"/>
+<stop offset="25%" stop-color="#ffd75e"/>
+<stop offset="50%" stop-color="#6fce87"/>
+<stop offset="75%" stop-color="#9fb8e8"/>
+<stop offset="100%" stop-color="#b98ad6"/>
+</linearGradient></defs>
+<rect width="667" height="150" rx="10" fill="#12121b"/>
+<rect x="0.5" y="0.5" width="666" height="149" rx="10" fill="none" stroke="#2f2f42"/>
+<text x="14" y="25" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve"> #### #      ###  #   #       ##### #   # #####        #### #     #####</text>
+<text x="14" y="43" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve">#     #     #   #  # #          #   #   # #           #     #       #  </text>
+<text x="14" y="61" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve"> ###  #     #####   #           #   ##### ####        #     #       #  </text>
+<text x="14" y="79" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve">    # #     #   #   #           #   #   # #           #     #       #  </text>
+<text x="14" y="97" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve">####  ##### #   #   #           #   #   # #####        #### ##### #####</text>
+<text x="333.5" y="133" fill="#6f7a92" text-anchor="middle">The Spire awaits.</text>
+</svg>

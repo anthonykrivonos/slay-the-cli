@@ -58,12 +58,20 @@ function parseArgv(argv: string[]): AppOptions | { error: string } {
   return opts;
 }
 
+// How we were started, so --help quotes a command the reader can actually run.
+// A compiled binary reports argv[1] as /$bunfs/root/<name>; a script keeps .ts.
+function invokedAs(): string {
+  const p = process.argv[1] ?? "";
+  if (p.endsWith(".ts")) return "bun src/cli/main.ts";
+  return p.split(/[/\\]/).pop() || "slay";
+}
+
 const USAGE = `Slay the CLI - the whole Spire, played in a terminal
 
-usage: bun src/cli/main.ts [--seed FOO] [--character IRONCLAD] [--ascension 0] [--no-color]
+usage: ${invokedAs()} [--seed FOO] [--character IRONCLAD] [--ascension 0] [--no-color]
 
-Saves live in ~/.slay (override with SLAY_DIR). The run is saved after every
-action; Ctrl+C or q quits safely and "continue" resumes.`;
+Saves live in ~/.slay-the-cli (override with SLAY_DIR). The run is saved
+after every action; Ctrl+C or q quits safely and "continue" resumes.`;
 
 const parsed = parseArgv(process.argv.slice(2));
 if ("error" in parsed) {

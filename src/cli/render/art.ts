@@ -1,6 +1,7 @@
-// Small original ASCII scene art (all drawn for this project — nothing copied)
-// for the non-combat screens. Every piece is <= 8 rows, pure ASCII, and
-// normalized to a uniform width so renderers can center/place it as a block.
+// Original ASCII scene art (all drawn for this project — nothing copied) for
+// the non-combat screens, normalized to a uniform width so renderers can
+// center/place each piece as a block. The single-size pieces stay <= 8 rows;
+// Neow comes in tiers so wide terminals get more of his likeness.
 // Art is ALWAYS the first thing a degradation ladder drops.
 
 function norm(rows: string[]): { rows: string[]; w: number; h: number } {
@@ -25,16 +26,82 @@ export const ART_CAMPFIRE: Art = norm([
   "   //     \\\\",
 ]);
 
-/** Neow: the great glowing whale, regarding you. */
-export const ART_WHALE: Art = norm([
-  "          ______________",
-  "     .--~~              ~~--.",
-  "    /    (o)                 \\___",
-  "   |                          ___)==--",
-  "    \\        \\/          __--~",
-  "     ~~--____/\\____--~~ \\  \\",
-  "                         ~~~",
-]);
+// --- Neow ------------------------------------------------------------------------
+//
+// Neow, drawn from his in-game likeness: a blunt whale head facing LEFT, body
+// running off the right edge. The features are what make him recognizable, so
+// every tier keeps all of them in the same places —
+//   `( @ )`   the big dark eye, high on the brow, with a smaller eye up-right
+//             of it and a third, smaller still, below it
+//   `-X-`     the branching scar on his flank, right of centre
+//   `* * *`   the row of small glowing eyes just above the mouth
+//   `^^^`     the pale jagged tooth edge over a wide dark mouth (`===`)
+// Tinted per character by renderNeow, so the mouth, glow and teeth carry their
+// own colors instead of the whole block being one flat blue.
+
+/**
+ * Neow tiers, ascending width; the renderer takes the largest that fits. The
+ * two short tiers spend their rows on the mouth (his most distinctive feature)
+ * and leave the tooth edge to the tall ones.
+ */
+export const NEOW_TIERS: Art[] = [
+  norm([
+    "   .-~~~~~~~~~~~~~~~~",
+    "  /   .-.   o      `-.",
+    " |   ( @ )   \\       |",
+    " |   * * *  -X-      +-",
+    "  \\ ============   _/",
+    "   `-.__________..--~",
+  ]),
+  norm([
+    "     .-~~~~~~~~~~~~~~~",
+    "   .~     .-.   o     `-.",
+    "  /      ( @ )           \\",
+    " |         `-'      \\     |",
+    " |    *  *  *      -X-    +-",
+    "  \\  ================ \\  _/",
+    "   `-.______________..---~",
+  ]),
+  norm([
+    "        .--~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "     .-~                            `--.",
+    "   ./      .-.     o                    \\",
+    "  /       ( @ )                          |",
+    " |         `-'             \\             |",
+    " |          .            --X-            +--",
+    " |       *  *  *            |\\          /",
+    "  \\   ^^^^^^^^^^^^^^^^^               _/",
+    "   \\ ===========================    _/",
+    "    `-.._______________________..--~",
+  ]),
+  norm([
+    "            .---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "        .--~                                      `---.",
+    "     .-~        .-~~-.        ,-.                      `-.",
+    "   ./          (  @@  )      ( o )                        \\",
+    "  /             `-~~-'        `-'                          |",
+    " |                                          \\   ,          |",
+    " |                 .                       --X--           |",
+    " |                                          '   \\          +---",
+    " |         *    *    *                                    /",
+    "  \\                                                     _/",
+    "   \\    ^^^^^^^^^^^^^^^^^^^^^^^^^^^                  _/",
+    "    \\  ==================================        _.-~",
+    "     `-.._______________________________....---~~",
+  ]),
+];
+
+/** The small tier, for callers that just want one block of whale. */
+export const ART_WHALE: Art = NEOW_TIERS[0]!;
+
+/** Largest Neow tier that fits in maxW x maxH, else the smallest. */
+export function pickNeow(maxW: number, maxH: number): Art {
+  let best = NEOW_TIERS[0]!;
+  for (const t of NEOW_TIERS) {
+    if (t.w <= maxW && t.h <= maxH) best = t;
+  }
+  return best;
+}
 
 /** Treasure room: a banded chest, latch shut. */
 export const ART_CHEST: Art = norm([

@@ -11,6 +11,8 @@ import {
   ART_CHEST,
   ART_MERCHANT,
   ART_SPIRE,
+  NEOW_TIERS,
+  pickNeow,
   HERO_PORTRAITS,
   pickPortrait,
   type Art,
@@ -105,7 +107,7 @@ describe("bigfont", () => {
 describe("art", () => {
   const pieces: [string, Art][] = [
     ["campfire", ART_CAMPFIRE],
-    ["whale", ART_WHALE],
+    ["neow (compact tier)", ART_WHALE],
     ["chest", ART_CHEST],
     ["merchant", ART_MERCHANT],
     ["spire", ART_SPIRE],
@@ -142,6 +144,46 @@ describe("art", () => {
         }
       }
     }
+  });
+
+  test("neow: ascending tiers, uniform width, pure ASCII, every feature kept", () => {
+    expect(NEOW_TIERS.length).toBeGreaterThanOrEqual(3);
+    expect(ART_WHALE).toBe(NEOW_TIERS[0]!);
+    for (let t = 1; t < NEOW_TIERS.length; t++) {
+      expect(NEOW_TIERS[t]!.w).toBeGreaterThan(NEOW_TIERS[t - 1]!.w);
+      expect(NEOW_TIERS[t]!.h).toBeGreaterThan(NEOW_TIERS[t - 1]!.h);
+    }
+    for (const art of NEOW_TIERS) {
+      expect(art.rows.length).toBe(art.h);
+      for (const r of art.rows) {
+        expect(r.length).toBe(art.w);
+        for (let i = 0; i < r.length; i++) {
+          const code = r.charCodeAt(i);
+          expect(code).toBeGreaterThanOrEqual(0x20);
+          expect(code).toBeLessThan(0x80);
+        }
+      }
+      // what makes him Neow rather than any whale: the big eye, a smaller one,
+      // the scar, the row of glowing eyes and the wide mouth
+      const flat = art.rows.join("\n");
+      expect(flat).toContain("@"); // the big eye
+      expect(flat).toContain("o"); // the smaller one
+      expect(flat).toContain("X"); // the scar
+      expect(flat).toContain("*"); // the glowing eyes
+      expect(flat).toContain("==="); // the mouth
+      expect(art.rows.filter((r) => r.includes("*")).length).toBe(1); // one glow row
+    }
+    // the tall tiers add the pale tooth edge above the mouth
+    expect(NEOW_TIERS[NEOW_TIERS.length - 1]!.rows.some((r) => r.includes("^^^"))).toBe(true);
+  });
+
+  test("pickNeow returns the largest fitting tier, else the compact one", () => {
+    const last = NEOW_TIERS[NEOW_TIERS.length - 1]!;
+    expect(pickNeow(999, 999).w).toBe(last.w);
+    expect(pickNeow(last.w - 1, 999).w).toBe(NEOW_TIERS[NEOW_TIERS.length - 2]!.w);
+    expect(pickNeow(last.w, last.h - 1).w).toBe(NEOW_TIERS[NEOW_TIERS.length - 2]!.w);
+    expect(pickNeow(NEOW_TIERS[0]!.w, NEOW_TIERS[0]!.h)).toBe(NEOW_TIERS[0]!);
+    expect(pickNeow(1, 1)).toBe(NEOW_TIERS[0]!); // callers guard on height themselves
   });
 
   test("pickPortrait returns the largest fitting tier (or null)", () => {

@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/anthonykrivonos/slay-the-cli/actions/workflows/ci.yml"><img alt="ci" src="https://github.com/anthonykrivonos/slay-the-cli/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <img alt="runs on Bun" src="https://img.shields.io/badge/runs%20on-Bun-fbf0df?style=flat-square&logo=bun&logoColor=fbf0df&labelColor=12121b">
   <img alt="or Node 18+" src="https://img.shields.io/badge/or-Node%2018%2B-6fce87?style=flat-square&logo=nodedotjs&logoColor=6fce87&labelColor=12121b">
   <img alt="TypeScript, strict" src="https://img.shields.io/badge/TypeScript-strict-9fb8e8?style=flat-square&logo=typescript&logoColor=9fb8e8&labelColor=12121b">

@@ -33,4 +33,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
-[1-9] pick                                                                                                              
+[1-9] pick  [i] inspect                                                                                                 

@@ -14,7 +14,8 @@ Number keys select, letters act.
 | `Tab` / `Shift-Tab` | move the hover cursor forward and back |
 | arrows | move the hover cursor; on the map, scroll and change path |
 | `e` | end turn |
-| `i` | inspect cards up close; arrows step through them |
+| `i` | inspect what the cursor is on, in full |
+| `j` / `k` | while inspecting, step to the next and previous thing; arrows work too |
 | `l` | combat log |
 | `d` / `r` / `p` | deck, relics, potions |
 | `w` / `x` / `z` | draw, discard and exhaust piles |
@@ -31,6 +32,23 @@ reference rather than something to memorize.
 The hover cursor is read-only: moving it never commits anything. Whatever it
 points at is explained in the INFO panel at the bottom. On menus and lists the
 cursor doubles as the selection, so `Enter` activates it and `Esc` clears it.
+
+## Nothing is hidden from you
+
+`i` opens whatever the cursor is on at full size: any card, any relic, any
+potion, from any screen. The merchant's stock, a card in your draw pile, a
+reward you have not taken, a card the smith is about to upgrade, the relics you
+are already carrying. Card boxes are narrow and the INFO panel is short, so both
+cut long text; `i` is the copy that never does.
+
+![The Blue Candle inspected: full rules text plus what Unplayable and Exhaust mean](shots/inspect.svg)
+
+It also explains itself. Under the rules text, every keyword the item names gets
+a one-line definition, so you do not have to already know what Vulnerable,
+Plated Armor or Evoke do. `j` and `k` walk the rest of the collection without
+closing the box, and `Enter` still does the obvious thing: play the card, take
+the reward, buy the item, drink the potion. `Esc` puts you back exactly where
+you were, list and page intact.
 
 ## The layout is fluid
 

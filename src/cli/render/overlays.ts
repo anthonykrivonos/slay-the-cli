@@ -8,7 +8,6 @@ import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, center, boxLines, wrapPlain } from "./widgets";
 import { cardBox, type CardBoxData } from "./cardbox";
-import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 
 function plainListBody(list: ListView, theme: Theme, maxLines: number, accent: string): string[] {
   const out: string[] = [];
@@ -76,19 +75,28 @@ export function renderOverlay(
       ];
       break;
     case "inspect": {
-      // a big card box, centered, with the pager underneath
+      // a big box, centered, with the pager underneath. Cards, relics and
+      // potions all draw as one shape - a relic just has no cost corner.
       const w = Math.min(38, width - 4);
-      const rules = overlay.rules.flatMap((l) => wrapPlain(l, w - 4));
-      // keep the type row (h >= 6): borders + name + type + rules
-      const h = Math.max(6, Math.min(4 + Math.max(1, rules.length), height - 3));
+      // the whole point of this overlay is that nothing is cut, so the box
+      // grows to whatever the rules plus the glossary need and only the
+      // terminal's own height clamps it
+      const body = [...overlay.rules];
+      if (overlay.keywords.length > 0) {
+        body.push("");
+        for (const k of overlay.keywords) body.push(`${k.name}: ${k.text}`);
+      }
+      const wrapped = body.flatMap((l) => (l.length === 0 ? [""] : wrapPlain(l, w - 4)));
+      // keep the type row (h >= 6): borders + name + type + body
+      const h = Math.max(6, Math.min(4 + Math.max(1, wrapped.length), height - 3));
       const data: CardBoxData = {
         key: null,
         cost: overlay.cost,
         name: overlay.name,
-        color: CARD_COLOR_ACCENTS[overlay.color] ?? null,
-        type: `${overlay.type} - ${overlay.rarity}`,
+        color: overlay.color,
+        type: overlay.type,
         targeted: overlay.targeted,
-        rules: overlay.rules,
+        rules: body,
         dim: false,
       };
       const box = cardBox(data, w, h, theme);
@@ -96,9 +104,10 @@ export function renderOverlay(
       const out: string[] = [""];
       for (const r of box) out.push(pad + r);
       out.push("");
+      const what = overlay.chip.toLowerCase();
       out.push(
         center(
-          theme.dim(`${overlay.count > 1 ? `card ${overlay.index + 1}/${overlay.count} - ` : ""}[j/k] next/prev  [Esc] close`),
+          theme.dim(`${overlay.count > 1 ? `${what} ${overlay.index + 1}/${overlay.count} - ` : ""}[j/k] next/prev  [Esc] close`),
           width,
         ),
       );

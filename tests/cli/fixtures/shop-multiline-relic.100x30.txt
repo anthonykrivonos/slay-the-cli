@@ -11,9 +11,9 @@
  +----[1]-----++----[2]-----++----[3]-----++----[4]-----++----[5]-----++----[6]-----++----[7]-----+ 
       23G           48G           47G           68G           70G           90G        need 174G    
 -- RELICS / POTIONS --------------------------------------------------------------------------------
-> [8] Potion Belt          common     need 143G  Upon pickup, gain 2 Potion slots.                  
-  [9] Tiny Chest           common     need 157G  Every 4th ? room is a Treasure room.               
-  [0] Hand Drill           shop       need 156G  Whenever you break an enemy's Block, apply 2 Vulner
+  [8] Bottled Flame        common     need 143G  Upon pickup, choose an Attack card. At the start of
+  [9] Tiny House           common     need 157G  Upon pickup, obtain 1 Potion. Gain 50 Gold. Raise y
+  [0] Blue Candle          shop       need 156G  Unplayable Curse cards can now be played. Whenever 
   [.] Regen Potion         uncommon         78G  Gain 5 Regeneration.                               
   [.] Swift Potion         common           50G  Draw 3 cards.                                      
   [.] Power Potion         common           50G  Choose 1 of 3 random Power cards to add to your han
@@ -25,6 +25,6 @@
   [Enter] Leave the shop                                                                            
   page 1/2 - [n] next [p] prev - hotkeys act on this page                                           
 -- INFO --------------------------------------------------------------------------------------------
- RELIC  Potion Belt  Relic - common - 143G                                                          
-   Upon pickup, gain 2 Potion slots.                                                                
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
+                                                                                                    
 [1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [q] quit                                

@@ -91,10 +91,15 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
     typeRow = inner(card.dim ? content : theme.dim(content), w);
   }
 
-  // rules rows: wrap everything, keep the first rulesRows lines
+  // rules rows: wrap everything, keep the first rulesRows lines. An interior
+  // blank line is kept (the inspector uses one to separate the rules from the
+  // keyword glossary); leading blanks are not.
   const wrapped: string[] = [];
   for (const line of card.rules) {
-    if (line.length === 0) continue;
+    if (line.length === 0) {
+      if (wrapped.length > 0) wrapped.push("");
+      continue;
+    }
     wrapped.push(...wrapPlain(line, iw));
   }
   const shown = wrapped.slice(0, rulesRows);
@@ -104,7 +109,9 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
   // full card is one [i] away.
   if (wrapped.length > rulesRows && shown.length > 0) {
     const last = shown[shown.length - 1]!;
-    if (/[.!?]$/.test(last)) {
+    if (last.length === 0) {
+      shown[shown.length - 1] = "...";
+    } else if (/[.!?]$/.test(last)) {
       shown[shown.length - 1] = last.length + 2 <= iw ? `${last} +` : `${last.slice(0, iw - 2)} +`;
     } else if (last.length + 3 <= iw) {
       shown[shown.length - 1] = `${last}...`;

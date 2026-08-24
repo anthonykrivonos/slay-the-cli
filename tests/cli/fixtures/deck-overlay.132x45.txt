@@ -42,4 +42,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                              
                                                                                                                                     
                                                                                                                                     
-[1-0] select  [Esc] close                                                                                                           
+[1-0] select  [i] inspect  [Esc] close                                                                                              

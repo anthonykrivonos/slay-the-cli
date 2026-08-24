@@ -21,4 +21,4 @@
                                                                                 
                                                                                 
                                                                                 
-[1-9] pick                                                                      
+[1-9] pick  [i] inspect                                                         

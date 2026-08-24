@@ -63,9 +63,21 @@ function focusedItem(items: ListItemView[], view: View): ListItemView | null {
   return items.find((it) => it.i === view.focusIdx) ?? null;
 }
 
+/** [i] opens whatever the view says is under the cursor. buildView resolves
+ *  the target (state/view.ts inspectAt), so the keymap never indexes items
+ *  itself - that is what used to let [i] and the cursor disagree. Null means
+ *  there is nothing here to read, and the hint bar has already said so by
+ *  leaving [i] out. */
+function inspectKey(view: View): KeyAction | null {
+  if (!view.inspect) return null;
+  return ui({ type: "openOverlay", overlay: { kind: "inspect", ...view.inspect } });
+}
+
 /** Keys available on every non-overlay run screen. */
-function globalRunKeys(ch: string): KeyAction | null {
+function globalRunKeys(ch: string, view: View): KeyAction | null {
   switch (ch) {
+    case "i":
+      return inspectKey(view);
     case "q":
       return ui({ type: "openOverlay", overlay: { kind: "confirmQuit" } });
     case "d":
@@ -163,12 +175,11 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (o.kind === "inspect") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
         if (key.kind === "char" && key.ch === "i") return ui({ type: "closeOverlay" });
-        // a card you are looking at because it is on offer is a card you take
-        if (key.kind === "enter" && o.source === "reward" && o.takeIndex !== null) {
-          return cmd({ cmd: "takeReward", i: o.takeIndex });
-        }
+        // Enter does whatever the thing's own row does: take the reward, buy
+        // the shop item, open the potion menu
+        if (key.kind === "enter" && o.source.of !== "hand" && o.enter !== null) return o.enter;
         // a card you are looking at in your hand is a card you can play
-        if (key.kind === "enter" && o.source === "hand" && view.screen.kind === "combat") {
+        if (key.kind === "enter" && o.source.of === "hand" && view.screen.kind === "combat") {
           const h = view.screen.hand[o.index];
           if (!h) return null;
           if (!h.playable) {
@@ -198,6 +209,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (key.kind === "enter") return selectItem(focusedItem(o.list.items, view));
       if (key.kind === "esc") return ui({ type: "closeOverlay" });
       if (key.kind !== "char") return null;
+      if (key.ch === "i") return inspectKey(view);
       const paging = pageKeys(key.ch, o.list.pages, false);
       if (paging) return paging;
       const d = digitIndex(key.ch);
@@ -227,6 +239,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       const focus = focusKeys(key, view);
       if (focus) return focus;
       if (key.kind !== "char") return null;
+      if (key.ch === "i") return inspectKey(view);
       if (key.ch === "q") return ui({ type: "openOverlay", overlay: { kind: "confirmQuit" } });
       const paging = pageKeys(key.ch, o.list.pages, true);
       if (paging) return paging;
@@ -301,11 +314,10 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (d !== null) return playCard(d);
       if (ch === "e") return cmd({ cmd: "endTurn" });
       if (ch === "l") return ui({ type: "openOverlay", overlay: { kind: "log" } });
-      if (ch === "i") return ui({ type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });
       if (ch === "w") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "draw", page: 0 } });
       if (ch === "x") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "discard", page: 0 } });
       if (ch === "z") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "exhaust", page: 0 } });
-      return globalRunKeys(ch);
+      return globalRunKeys(ch, view);
     }
 
     case "map": {
@@ -346,7 +358,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         const pick = s.picks[d];
         return pick ? cmd({ cmd: "mapPick", x: pick.x, y: pick.y }) : null;
       }
-      return globalRunKeys(ch);
+      return globalRunKeys(ch, view);
     }
 
     case "neow":
@@ -379,24 +391,13 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       if (paging) return paging;
       const d = digitIndex(ch);
       if (d !== null) return selectItem(itemAt(s.list.items, d));
-      if (view.mode === "rewards" && ch === "i" && s.kind === "rewards") {
-        // reward card boxes are narrow, so [i] opens the offer full size,
-        // starting on whichever card the cursor is pointing at
-        const offers = s.rows.flatMap((r) => (r.type === "group" && r.kind === "card" ? r.items : []));
-        if (offers.length === 0) return ui({ type: "toast", text: "No card to inspect" });
-        const at = offers.findIndex((o) => o.i === view.focusIdx);
-        return ui({
-          type: "openOverlay",
-          overlay: { kind: "inspect", source: "reward", index: Math.max(0, at) },
-        });
-      }
       if (view.mode === "rewards" && ch === "c") return cmd({ cmd: "skipRewards" });
       if (view.mode === "shop" && ch === "c") return cmd({ cmd: "proceed" });
       if (view.mode === "gameOver") {
         if (ch === "n") return ui({ type: "rerun" });
         if (ch === "m") return ui({ type: "backToMenu" });
       }
-      return globalRunKeys(ch);
+      return globalRunKeys(ch, view);
     }
   }
 }

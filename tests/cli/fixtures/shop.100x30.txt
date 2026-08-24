@@ -27,4 +27,4 @@
 -- INFO --------------------------------------------------------------------------------------------
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
                                                                                                     
-[1-0] buy  [n/p] page  [Enter] leave  [d/r/p]  [q] quit                                             
+[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [q] quit                                

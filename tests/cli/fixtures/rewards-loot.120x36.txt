@@ -1,23 +1,23 @@
  HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                
--- COMBAT - turn 1 -----------------------------------------------------------------------------------------------------
-                                                                                                                        
-                                         +(1)---------------------------------+                                         
-                                         | Strike                             |                                         
-                                         | Attack - basic                   > |                                         
-                                         | Deal 6 damage.                     |                                         
-                                         |                                    |                                         
-                                         +------------------------------------+                                         
-                                                                                                                        
-                                        card 3/5 - [j/k] next/prev  [Esc] close                                         
+-- SPOILS OF BATTLE - enemy --------------------------------------------------------------------------------------------
                                                                                                                         
                                                                                                                         
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
+                        +----------------------------------------------------------------------+                        
+                        |   [1] ($) 15 Gold                                                    |                        
+                        | Choose one card:                                                     |                        
+                        |  +(0)-----------------++(1)-----------------++(2)-----------------+  |                        
+                        |  | Reckless Charge    || Shrug It Off       || Heavy Blade        |  |                        
+                        |  | Deal 7 damage.     || Gain 8 Block.      || Deal 14 damage.    |  |                        
+                        |  | Shuffle a Dazed    || Draw 1 card.       || Strength affects   |  |                        
+                        |  | into your draw...  ||                    || this card 3 times. |  |                        
+                        |  +--------[2]---------++--------[3]---------++--------[4]---------+  |                        
+                        |   [5] (*) Akabeko                                                    |                        
+                        |       Your first Attack each combat deals 8 additional damage        |                        
+                        |   [6] (!) Block Potion  (potion belt is full)                        |                        
+                        |       Gain 12 Block.                                                 |                        
+                        |                                                                      |                        
+                        |   [7] Continue                                                       |                        
+                        +----------------------------------------------------------------------+                        
                                                                                                                         
                                                                                                                         
                                                                                                                         
@@ -33,4 +33,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
-[Enter] play  [j/k] next/prev  [Esc] close                                                                              
+[1-9] take  [i] inspect  [Enter] continue  [d/r/p] deck  [q] quit                                                       

@@ -1,14 +1,14 @@
- HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                            
--- COMBAT - turn 1 -----------------------------------------------------------------------------------------------------------------
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | SPIRE                                              
+-- THE MERCHANT - you have 99G -----------------------------------------------------------------------------------------------------
                                                                                                                                     
                                                +(1)---------------------------------+                                               
-                                               | Strike                             |                                               
-                                               | Attack - basic                   > |                                               
-                                               | Deal 6 damage.                     |                                               
+                                               | Cleave                             |                                               
+                                               | Attack - common                    |                                               
+                                               | Deal 8 damage to ALL enemies.      |                                               
                                                |                                    |                                               
                                                +------------------------------------+                                               
                                                                                                                                     
-                                              card 3/5 - [j/k] next/prev  [Esc] close                                               
+                                              card 1/13 - [j/k] next/prev  [Esc] close                                              
                                                                                                                                     
                                                                                                                                     
                                                                                                                                     
@@ -42,4 +42,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                              
                                                                                                                                     
                                                                                                                                     
-[Enter] play  [j/k] next/prev  [Esc] close                                                                                          
+[Enter] buy  [j/k] next/prev  [Esc] close                                                                                           

@@ -7,7 +7,10 @@
 //   $Keyword          keyword highlight -> plain word
 //   @GE/@RE/@BE/@PE.. energy glyphs -> [E]
 
-export function resolveMarkup(text: string, upgraded: boolean): string {
+/** The wiki-link and upgrade-picker passes only, leaving $Keyword tokens
+ *  intact. Keyword extraction (text/keywords.ts) needs the upgrade branch
+ *  resolved - a keyword can be upgrade-only - but not the tokens erased. */
+export function pickUpgrade(text: string, upgraded: boolean): string {
   let s = text.replace(/<br\s*\/?>/gi, "\n");
   // [[A|B]] -> last segment; [[A]] -> A (must run before the upgrade picker)
   s = s.replace(/\[\[([^[\]]*)\]\]/g, (_m, inner: string) => {
@@ -15,9 +18,13 @@ export function resolveMarkup(text: string, upgraded: boolean): string {
     return parts[parts.length - 1] ?? inner;
   });
   // [base|upgraded] - no nesting of square brackets inside either side
-  s = s.replace(/\[([^[\]|]*)\|([^[\]]*)\]/g, (_m, base: string, up: string) =>
+  return s.replace(/\[([^[\]|]*)\|([^[\]]*)\]/g, (_m, base: string, up: string) =>
     upgraded ? up : base,
   );
+}
+
+export function resolveMarkup(text: string, upgraded: boolean): string {
+  let s = pickUpgrade(text, upgraded);
   // {{A|B|C}} -> last segment; {{A}} -> A
   s = s.replace(/\{\{([^{}]*)\}\}/g, (_m, inner: string) => {
     const parts = inner.split("|");

@@ -6,7 +6,7 @@
 import type { RewardsView, RewardRowView, ListItemView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
-import { padClip } from "./widgets";
+import { padClip, wrapPlain } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp, joinBlocks, rowWidth } from "./layout";
 import { cardBox, cardBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
@@ -17,6 +17,14 @@ function keyOf(items: ListItemView[], i: number): string {
 }
 
 type GroupRow = Extract<RewardRowView, { type: "group" }>;
+type SingleRow = Extract<RewardRowView, { type: "single" }>;
+
+/** Dim effect lines under a relic or potion reward. Gold and keys have no
+ *  text; a long relic gets two lines and the rest is one [i] away. */
+function singleSubs(row: SingleRow, inner: number): string[] {
+  if (row.text === null) return [];
+  return wrapPlain(row.text, Math.max(10, inner - 6)).slice(0, 2);
+}
 
 export function renderRewards(
   screen: RewardsView,
@@ -36,7 +44,7 @@ export function renderRewards(
     g.items.length > 0 && clamp(Math.floor(avail / g.items.length), 0, 22) >= 12;
   let bodyRows = 0;
   for (const row of screen.rows) {
-    if (row.type === "single") bodyRows += 1;
+    if (row.type === "single") bodyRows += 1 + singleSubs(row, inner).length;
     else bodyRows += 1 + (groupBoxes(row) ? cardH : row.items.length);
   }
   bodyRows += 2; // blank + continue
@@ -58,6 +66,7 @@ export function renderRewards(
       if (!row.enabled) body.push(theme.dim(plain));
       else if (focused) body.push(theme.bold(theme.fg(accent, plain)));
       else body.push(`${cursor}${theme.bold(key)} ${theme.fg(C.gold, row.icon)} ${row.label}${theme.dim(note)}`);
+      for (const line of singleSubs(row, inner)) body.push(theme.dim(`      ${line}`));
     } else {
       body.push(theme.dim(row.title));
       if (groupBoxes(row)) {

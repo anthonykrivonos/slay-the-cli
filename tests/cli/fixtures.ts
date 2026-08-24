@@ -263,7 +263,55 @@ export function fxCombatTooltip(): Fixture {
 /** Inspect overlay: the first Strike (hand idx 2) as a big card box. */
 export function fxInspectOverlay(): Fixture {
   const f = fxCombat();
-  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "inspect", source: "hand", index: 2 }] } };
+  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "inspect", source: { of: "hand" }, index: 2 }] } };
+}
+
+/** Inspecting a relic: Blue Candle, which is both keyword-heavy (Unplayable,
+ *  Exhaust -> the glossary block) and one of the five relics whose corpus
+ *  text carries a <br>, so the box has to wrap it as two rules lines. */
+export function fxInspectRelic(): Fixture {
+  const f = fxMapAct1();
+  const g = structuredClone(f.game!);
+  g.run.relics = [...g.run.relics, { defId: "BLUE_CANDLE", counter: 0 }];
+  return {
+    game: g,
+    ui: { ...f.ui, overlays: [{ kind: "relics", page: 0 }, { kind: "inspect", source: { of: "relics" }, index: 1 }] },
+  };
+}
+
+/** Inspecting from the shop: the merchant's card boxes are 12-22 columns, so
+ *  this is the frame that shows what they had to cut. */
+export function fxInspectShop(): Fixture {
+  const f = fxShop();
+  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "inspect", source: { of: "shop" }, index: 0 }] } };
+}
+
+/** Regression: a shop stocking relics whose corpus text contains <br>. The
+ *  relic row is one composed line, so a newline in the text used to make the
+ *  frame stop being exactly rows x cols. */
+export function fxShopMultilineRelic(): Fixture {
+  const f = fxShop();
+  const g = structuredClone(f.game!);
+  const room = g.run.room;
+  if (room?.kind !== "shop") throw new Error("fxShopMultilineRelic: expected shop");
+  const ids = ["BOTTLED_FLAME", "TINY_HOUSE", "BLUE_CANDLE"] as const;
+  room.shop.relics = room.shop.relics.map((slot, i) => ({ ...slot, id: ids[i] ?? slot.id }));
+  return { game: g, ui: f.ui };
+}
+
+/** Synthetic spoils carrying a relic and a potion, so the reward rows that
+ *  are not cards get their effect line and their [i]. */
+export function fxRewardsLoot(): Fixture {
+  const f = fxRewards();
+  const g = structuredClone(f.game!);
+  const room = g.run.room;
+  if (room?.kind !== "rewards") throw new Error("fxRewardsLoot: expected rewards");
+  room.entries = [
+    ...room.entries,
+    { kind: "relic", id: "AKABEKO", taken: false },
+    { kind: "potion", id: "BLOCK_POTION", taken: false },
+  ];
+  return { game: g, ui: f.ui };
 }
 
 /** Info panel: the first shop relic holds the selection cursor (item 7). */
@@ -334,6 +382,10 @@ export const FIXTURES: Record<string, () => Fixture> = {
   event: fxEvent,
   "deck-overlay": fxDeckOverlay,
   "inspect-overlay": fxInspectOverlay,
+  "inspect-relic": fxInspectRelic,
+  "inspect-shop": fxInspectShop,
+  "shop-multiline-relic": fxShopMultilineRelic,
+  "rewards-loot": fxRewardsLoot,
   "combat-crowd": fxCombatCrowd,
   "combat-tooltip": fxCombatTooltip,
   "shop-tooltip": fxShopTooltip,

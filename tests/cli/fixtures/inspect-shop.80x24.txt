@@ -1,17 +1,14 @@
  HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad |
 -- THE MERCHANT - you have 99G -------------------------------------------------
                                                                                 
-  [1] Card   Cleave (1)  23G                                                    
-  [2] Card   Sword Boomerang (1)  48G                                           
-  [3] Card   Flex (0)  47G                                                      
-  [4] Card   Intimidate (0)  68G                                                
-  [5] Card   Rupture (1)  70G                                                   
-  [6] Card   Madness (1)  90G                                                   
-  [7] Card   Secret Weapon (0)  174G  (need 174G)                               
-  [8] Relic  Potion Belt (common)  143G  (need 143G)                            
-  [9] Relic  Tiny Chest (common)  157G  (need 157G)                             
-  [0] Relic  Hand Drill (shop)  156G  (need 156G)                               
-page 1/2 - [n] next [p] prev                                                    
+                     +(1)---------------------------------+                     
+                     | Cleave                             |                     
+                     | Attack - common                    |                     
+                     | Deal 8 damage to ALL enemies.      |                     
+                     |                                    |                     
+                     +------------------------------------+                     
+                                                                                
+                    card 1/13 - [j/k] next/prev  [Esc] close                    
                                                                                 
                                                                                 
                                                                                 
@@ -21,4 +18,7 @@ page 1/2 - [n] next [p] prev
                                                                                 
                                                                                 
                                                                                 
-[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [q] quit            
+                                                                                
+                                                                                
+                                                                                
+[Enter] buy  [j/k] next/prev  [Esc] close                                       

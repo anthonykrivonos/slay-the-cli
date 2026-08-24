@@ -9,15 +9,27 @@ import type { PureUiAction } from "../input/actions";
 export type PileName = "draw" | "discard" | "exhaust";
 export type DeckOverlayMode = "view" | "smith" | "remove";
 
+/** A collection of inspectable things (cards, relics, potions), named rather
+ *  than captured: buildView resolves it against the live game state every
+ *  frame, so an inspect overlay can never hold a stale item. */
+export type InspectSource =
+  | { of: "hand" }
+  | { of: "deck" }
+  | { of: "pile"; pile: PileName }
+  | { of: "relics" }
+  | { of: "potions" }
+  | { of: "reward" }
+  | { of: "shop" }
+  | { of: "choice" };
+
 export type Overlay =
   | { kind: "deck"; mode: DeckOverlayMode; page: number }
   | { kind: "relics"; page: number }
   | { kind: "pile"; pile: PileName; page: number }
   | { kind: "potions" }
   | { kind: "potionMenu"; slot: number }
-  /** index is a position within the source: hand slot, deck slot, or which of
-   *  the offered reward cards */
-  | { kind: "inspect"; source: "hand" | "deck" | "reward"; index: number }
+  /** index is a position within the source, in the order the source lists it */
+  | { kind: "inspect"; source: InspectSource; index: number }
   | { kind: "log" }
   | { kind: "confirmQuit" };
 

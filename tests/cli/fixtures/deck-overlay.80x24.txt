@@ -21,4 +21,4 @@
                                                                                 
                                                                                 
                                                                                 
-[1-0] select  [Esc] close                                                       
+[1-0] select  [i] inspect  [Esc] close                                          

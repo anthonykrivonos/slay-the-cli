@@ -129,11 +129,22 @@ describe("frame invariants: state sweep", () => {
     }
   }
 
+  // every inspect source is in here so the resolver is exercised against real
+  // run state on every screen, including the ones where it resolves to
+  // nothing (inspecting a shop from the map, a reward mid-combat...)
   const OVERLAYS: Overlay[] = [
     { kind: "deck", mode: "view", page: 0 },
     { kind: "relics", page: 0 },
     { kind: "potions" },
     { kind: "confirmQuit" },
+    { kind: "inspect", source: { of: "hand" }, index: 0 },
+    { kind: "inspect", source: { of: "deck" }, index: 1 },
+    { kind: "inspect", source: { of: "pile", pile: "discard" }, index: 0 },
+    { kind: "inspect", source: { of: "relics" }, index: 0 },
+    { kind: "inspect", source: { of: "potions" }, index: 0 },
+    { kind: "inspect", source: { of: "reward" }, index: 0 },
+    { kind: "inspect", source: { of: "shop" }, index: 2 },
+    { kind: "inspect", source: { of: "choice" }, index: 0 },
   ];
 
   for (const ch of CHARS) {

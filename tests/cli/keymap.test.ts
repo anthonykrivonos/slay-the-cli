@@ -7,7 +7,9 @@ import { test, expect, describe } from "bun:test";
 import type { Key } from "../../src/cli/term/keys";
 import { mapKey } from "../../src/cli/input/keymap";
 import { buildView } from "../../src/cli/state/view";
-import { applyUiAction, initialUiState } from "../../src/cli/state/uiState";
+import { applyUiAction, initialUiState, type Overlay, type InspectSource, type UiState } from "../../src/cli/state/uiState";
+import { isAppAction, type KeyAction } from "../../src/cli/input/actions";
+import { advance } from "../../src/engine/game";
 import {
   bundle,
   fxMenu,
@@ -132,7 +134,7 @@ describe("combat mode", () => {
     expect(mapKey(ch("d"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "deck", mode: "view", page: 0 } } });
     expect(mapKey(ch("r"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "relics", page: 0 } } });
     expect(mapKey(ch("p"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "potions" } } });
-    expect(mapKey(ch("i"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } } });
+    expect(mapKey(ch("i"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "inspect", source: { of: "hand" }, index: 0 } } });
   });
 });
 
@@ -260,22 +262,22 @@ describe("overlay mode", () => {
     // no cursor: inspection starts on the first card on offer
     expect(mapKey(ch("i"), v)).toEqual({
       kind: "ui",
-      act: { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 0 } },
+      act: { type: "openOverlay", overlay: { kind: "inspect", source: { of: "reward" }, index: 0 } },
     });
     // with the cursor on the second card, inspection starts there
     const uiFocus = applyUiAction(f.ui, { type: "focusSet", scope: "rewards", idx: offers[1]!.i });
     const vFocus = buildView(f.game, uiFocus, bundle);
     expect(mapKey(ch("i"), vFocus)).toEqual({
       kind: "ui",
-      act: { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 1 } },
+      act: { type: "openOverlay", overlay: { kind: "inspect", source: { of: "reward" }, index: 1 } },
     });
 
     // inside the overlay the full rules text is there, and Enter takes it
-    const uiOpen = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "reward", index: 0 } });
+    const uiOpen = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: { of: "reward" }, index: 0 } });
     const vOpen = buildView(f.game, uiOpen, bundle);
     if (vOpen.overlay?.kind !== "inspect") throw new Error("expected inspect overlay");
     expect(vOpen.overlay.count).toBe(offers.length);
-    expect(vOpen.overlay.takeIndex).toBe(offers[0]!.i);
+    expect(vOpen.overlay.enter).toEqual({ kind: "cmd", cmd: { cmd: "takeReward", i: offers[0]!.i } });
     expect(vOpen.hint).toContain("[Enter] take");
     expect(mapKey(ENTER, vOpen)).toEqual({ kind: "cmd", cmd: { cmd: "takeReward", i: offers[0]!.i } });
     // and the box in the panel had to cut that text short
@@ -284,12 +286,12 @@ describe("overlay mode", () => {
 
   test("inspect overlay: Enter plays a card from hand, but not one from the deck", () => {
     const f = fxCombat();
-    const inHand = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "hand", index: 0 } });
+    const inHand = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: { of: "hand" }, index: 0 } });
     const vHand = buildView(f.game, inHand, bundle);
     expect(mapKey(ENTER, vHand)).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx: 0 } });
     expect(vHand.hint).toContain("[Enter] play");
 
-    const inDeck = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: "deck", index: 0 } });
+    const inDeck = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "inspect", source: { of: "deck" }, index: 0 } });
     const vDeck = buildView(f.game, inDeck, bundle);
     expect(mapKey(ENTER, vDeck)).toBeNull();
     expect(vDeck.hint).not.toContain("[Enter] play");
@@ -534,5 +536,149 @@ describe("uiState reducer details", () => {
   test("ctrl+c always maps to quit", () => {
     const v = viewOf(fxCombat());
     expect(mapKey({ kind: "ctrlC" }, v)).toEqual({ kind: "ui", act: { type: "quit" } });
+  });
+});
+
+// --- [i] --------------------------------------------------------------------------
+
+describe("[i] inspects whatever the cursor is on", () => {
+  const I = ch("i");
+  const opens = (source: InspectSource, index: number): KeyAction => ({
+    kind: "ui",
+    act: { type: "openOverlay", overlay: { kind: "inspect", source, index } },
+  });
+  /** the fixture with the cursor parked on one focusable of `scope` */
+  function withCursor(f: Fixture, scope: string, idx: number) {
+    return buildView(f.game, applyUiAction(f.ui, { type: "focusSet", scope, idx }), bundle);
+  }
+  function withOverlay(f: Fixture, overlay: Overlay) {
+    return buildView(f.game, applyUiAction(f.ui, { type: "openOverlay", overlay }), bundle);
+  }
+  /** apply a keymap result that must be a pure UI action */
+  function apply(ui: UiState, act: KeyAction | null): UiState {
+    if (act === null || act.kind !== "ui" || isAppAction(act.act)) throw new Error("expected a pure ui action");
+    return applyUiAction(ui, act.act);
+  }
+
+  test("shop: no cursor starts at the first thing, a cursor starts where it is", () => {
+    const f = fxShop();
+    // 7 cards then 3 relics then 3 potions, the order the cursor walks them
+    expect(mapKey(I, viewOf(f))).toEqual(opens({ of: "shop" }, 0));
+    expect(mapKey(I, withCursor(f, "shop", 7))).toEqual(opens({ of: "shop" }, 7));
+    expect(mapKey(I, withCursor(f, "shop", 10))).toEqual(opens({ of: "shop" }, 10));
+    // the removal button and Leave are not things you can read
+    const v = withCursor(f, "shop", 13);
+    if (v.screen.kind !== "shop") throw new Error("expected shop");
+    expect(v.inspect).toEqual({ source: { of: "shop" }, index: 0 });
+  });
+
+  test("the shop hint advertises it, and the inspector buys", () => {
+    const f = fxShop();
+    expect(viewOf(f).hint).toContain("[i] inspect");
+    const v = withOverlay(f, { kind: "inspect", source: { of: "shop" }, index: 0 });
+    if (v.overlay?.kind !== "inspect") throw new Error("expected inspect");
+    expect(v.overlay.chip).toBe("CARD");
+    expect(v.hint).toContain("[Enter] buy");
+    expect(mapKey(ENTER, v)).toEqual({ kind: "cmd", cmd: { cmd: "shopBuy", kind: "card", idx: 0 } });
+  });
+
+  test("a sold shop slot refuses from the inspector too", () => {
+    const f = fxShop();
+    const g = structuredClone(f.game!);
+    if (g.run.room?.kind !== "shop") throw new Error("expected shop");
+    g.run.room.shop.cards[0]!.sold = true;
+    const sold: Fixture = { game: g, ui: f.ui };
+    const v = withOverlay(sold, { kind: "inspect", source: { of: "shop" }, index: 0 });
+    if (v.overlay?.kind !== "inspect") throw new Error("expected inspect");
+    expect(mapKey(ENTER, v)).toEqual({ kind: "ui", act: { type: "toast", text: "sold" } });
+    // ...but you can still read what it was
+    expect(v.overlay.rules.join(" ").length).toBeGreaterThan(0);
+  });
+
+  test("relics and potions are inspectable, which they never were before", () => {
+    const f = fxShop(); // mid-run: has a relic and full potion slots
+    const relics = withOverlay(f, { kind: "relics", page: 0 });
+    expect(mapKey(I, relics)).toEqual(opens({ of: "relics" }, 0));
+    const potions = withOverlay(f, { kind: "potions" });
+    expect(mapKey(I, potions)).toEqual(opens({ of: "potions" }, 0));
+
+    const vr = withOverlay(f, { kind: "inspect", source: { of: "relics" }, index: 0 });
+    if (vr.overlay?.kind !== "inspect") throw new Error("expected inspect");
+    expect(vr.overlay.chip).toBe("RELIC");
+    expect(vr.overlay.cost).toBeNull();
+    expect(vr.overlay.type).toStartWith("Relic - ");
+    expect(vr.overlay.rules.join(" ").length).toBeGreaterThan(0);
+
+    const vp = withOverlay(f, { kind: "inspect", source: { of: "potions" }, index: 0 });
+    if (vp.overlay?.kind !== "inspect") throw new Error("expected inspect");
+    expect(vp.overlay.chip).toBe("POTION");
+    expect(vp.hint).toContain("[Enter] use");
+    expect(mapKey(ENTER, vp)).toEqual({
+      kind: "ui",
+      act: { type: "openOverlay", overlay: { kind: "potionMenu", slot: 0 } },
+    });
+  });
+
+  test("combat: the piles and the relic/potion strip, not just the hand", () => {
+    const f = fxCombat();
+    expect(mapKey(I, viewOf(f))).toEqual(opens({ of: "hand" }, 0));
+    const draw = withOverlay(f, { kind: "pile", pile: "draw", page: 0 });
+    expect(mapKey(I, draw)).toEqual(opens({ of: "pile", pile: "draw" }, 0));
+    // the combat cursor walks hand, then enemies, then relics
+    const v = viewOf(f);
+    if (v.screen.kind !== "combat") throw new Error("expected combat");
+    const relicIdx = v.screen.hand.length + v.screen.enemies.filter((e) => e.gone === null).length;
+    expect(mapKey(I, withCursor(f, "combat", relicIdx))).toEqual(opens({ of: "relics" }, 0));
+  });
+
+  test("a pending card choice is inspectable before you commit to it", () => {
+    const f = fxChoice(); // Neow's REMOVE_CARD picker over the starting deck
+    expect(mapKey(I, viewOf(f))).toEqual(opens({ of: "choice" }, 0));
+    expect(mapKey(I, withCursor(f, "choice", 3))).toEqual(opens({ of: "choice" }, 3));
+    expect(viewOf(f).hint).toContain("[i] inspect");
+  });
+
+  test("rewards: the cursor and [i] agree after a card has been taken", () => {
+    // the regression: the keymap used to count offers including taken ones
+    // while the overlay excluded them, so [i] opened the next card along
+    const f = fxRewards();
+    const cardIdx = f.game!.run.room!.kind === "rewards" ? 1 : -1;
+    const after = advance(f.game!, { cmd: "takeReward", i: cardIdx }, bundle);
+    const taken: Fixture = { game: after, ui: f.ui };
+    const v = withCursor(taken, "rewards", 2); // the second card on offer
+    if (v.screen.kind !== "rewards") throw new Error("expected rewards");
+    const focused = v.screen.rows.flatMap((r) => (r.type === "group" ? r.items : [])).find((it) => it.i === 2)!;
+    const opened = buildView(after, apply(taken.ui, mapKey(I, v)), bundle);
+    if (opened.overlay?.kind !== "inspect") throw new Error("expected inspect");
+    // the old code filtered taken entries out of the overlay but not out of
+    // the keymap's count, so this used to open a different card (and, once the
+    // whole group went with the pick, nothing at all)
+    expect(opened.overlay.name).toBe(focused.name);
+    // and Enter refuses exactly the way the row does, rather than firing
+    expect(opened.overlay.enter).toEqual({ kind: "ui", act: { type: "toast", text: "taken" } });
+    expect(mapKey(ENTER, opened)).toEqual({ kind: "ui", act: { type: "toast", text: "taken" } });
+  });
+
+  test("Esc pops the inspector off the list it was opened from", () => {
+    const f = fxMapAct1();
+    let ui = applyUiAction(f.ui, { type: "openOverlay", overlay: { kind: "deck", mode: "view", page: 3 } });
+    const list = buildView(f.game, ui, bundle);
+    expect(mapKey(I, list)).toEqual(opens({ of: "deck" }, 0));
+    ui = apply(ui, mapKey(I, list));
+    const inspecting = buildView(f.game, ui, bundle);
+    expect(inspecting.overlay?.kind).toBe("inspect");
+    expect(ui.overlays).toHaveLength(2); // pushed on top, the list is still there
+    ui = applyUiAction(ui, { type: "closeOverlay" });
+    const back = buildView(f.game, ui, bundle);
+    if (back.overlay?.kind !== "list") throw new Error("expected the deck list back");
+    expect(back.overlay.id).toBe("deck");
+    expect(ui.overlays).toEqual([{ kind: "deck", mode: "view", page: 3 }]); // untouched
+  });
+
+  test("where there is nothing to read, [i] does nothing and the hint says so", () => {
+    const v = viewOf(fxMapAct1());
+    expect(v.inspect).toBeNull();
+    expect(mapKey(I, v)).toBeNull();
+    expect(v.hint).not.toContain("[i]");
   });
 });

@@ -45,3 +45,28 @@ declare module "*/corpus/powers.json" {
   const powers: CorpusPowerEntry[];
   export default powers;
 }
+
+declare module "*/corpus/stances.json" {
+  export interface CorpusStanceEntry {
+    id: string;
+    name: string;
+    attackDamageDealtMultiplier: number;
+    attackDamageReceivedMultiplier: number;
+    onEnter?: string | null;
+    onExit?: string | null;
+    autoExit?: string | null;
+  }
+  const stances: { mantraThreshold: number; stances: CorpusStanceEntry[] };
+  export default stances;
+}
+
+declare module "*/corpus/orbs.json" {
+  export interface CorpusOrbEntry {
+    id: string;
+    name: string;
+    passive: { base: number | null; timing: string; text: string };
+    evoke: { base: number | null; text: string };
+  }
+  const orbs: CorpusOrbEntry[];
+  export default orbs;
+}

@@ -43,13 +43,14 @@ import {
   gameOverTitle,
   gameOverSubtitle,
 } from "../text/runlogic";
-import { cardRulesText } from "../text/cardtext";
-import { relicText } from "../text/relictext";
-import { potionText } from "../text/potiontext";
+import { cardRulesText, cardGlossary } from "../text/cardtext";
+import { relicText, relicLines, relicGlossary } from "../text/relictext";
+import { potionText, potionLines, potionGlossary } from "../text/potiontext";
 import { powerText } from "../text/powertext";
+import type { Keyword } from "../text/keywords";
 import { CARD_COLOR_ACCENTS } from "../text/runlogic";
 import { toAscii } from "../text/ascii";
-import type { UiState, Overlay, PileName } from "./uiState";
+import type { UiState, Overlay, PileName, InspectSource } from "./uiState";
 import { cmd, ui as uiAct, type KeyAction } from "../input/actions";
 
 // --- view types ----------------------------------------------------------------
@@ -295,7 +296,16 @@ export interface ShopView {
 }
 
 export type RewardRowView =
-  | { type: "single"; i: number; icon: string; label: string; enabled: boolean; note: string | null }
+  | {
+      type: "single";
+      i: number;
+      icon: string;
+      label: string;
+      /** corpus effect text for a relic/potion reward (null for gold/keys) */
+      text: string | null;
+      enabled: boolean;
+      note: string | null;
+    }
   | {
       type: "group";
       kind: "card" | "bossRelic";
@@ -341,18 +351,24 @@ export type OverlayView =
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
   | {
       kind: "inspect";
-      /** where it came from: a card in hand can be played from here, and a
-       *  card being offered as a reward can be taken */
-      source: "hand" | "deck" | "reward";
-      /** reward entry Enter should take (reward source only) */
-      takeIndex: number | null;
+      /** which collection is being paged through */
+      source: InspectSource;
+      chip: "CARD" | "RELIC" | "POTION";
       name: string;
-      cost: string;
+      /** printed energy cost; null for relics and potions (no cost corner) */
+      cost: string | null;
+      /** hex accent for the name */
       color: string;
+      /** "Attack - basic" / "Relic - boss" / "Potion - rare" */
       type: string;
-      rarity: string;
       targeted: boolean;
       rules: string[];
+      /** short definitions for the keywords the rules text names */
+      keywords: Keyword[];
+      /** what Enter does here: the thing's own list action (take the reward,
+       *  buy the shop item, open the potion menu). A card in hand is the one
+       *  exception - playing it needs the keymap's energy/targeting ladder. */
+      enter: KeyAction | null;
       index: number;
       count: number;
     }
@@ -392,6 +408,9 @@ export interface View {
   hint: string;
   /** info panel for the focused thing (null = default browse hint) */
   tooltip: TooltipView | null;
+  /** what [i] would open right now (null = nothing here to inspect). The
+   *  view resolves this so the keymap never has to index items itself. */
+  inspect: { source: InspectSource; index: number } | null;
   /** how many focusables the current mode exposes (for Tab/arrow cycling) */
   focusCount: number;
   /** resolved focus index within the current mode's focusables */
@@ -877,6 +896,12 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
         i: row.idx,
         icon: REWARD_ICONS[e.kind] ?? "( )",
         label: toAscii(rewardLabel(e, bundle)),
+        text:
+          e.kind === "relic"
+            ? relicText(e.id) || null
+            : e.kind === "potion"
+              ? potionText(e.id, sacredBark(g)) || null
+              : null,
         enabled: blocked === null,
         note: e.taken ? "taken" : blocked !== null ? toAscii(blocked) : null,
       };
@@ -981,7 +1006,7 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
       price: slot.price,
       sold: slot.sold,
       affordable: gold >= slot.price,
-      text: potionText(slot.id),
+      text: potionText(slot.id, sacredBark(g)),
     });
   });
   items.push({
@@ -1183,6 +1208,205 @@ function pileEntries(g: GameState, pile: PileName): { iid: number; card: CardIns
   return out;
 }
 
+// --- inspectables ---------------------------------------------------------------------
+//
+// One resolver for "every card, relic and potion this place is showing", in
+// the same order the cursor walks them. The focus code and the inspect
+// overlay both index into it, so the two can never disagree about which item
+// index 3 is - the class of bug that used to make [i] on the rewards screen
+// open the wrong card once one had been taken.
+
+/** Sacred Bark doubles potion potency, and the corpus writes potion text as
+ *  [base|doubled], so every potion string has to know whether it is held. */
+function sacredBark(g: GameState): boolean {
+  return g.run.relics.some((r) => r.defId === "SACRED_BARK");
+}
+
+interface InspectBase {
+  /** index within the source's own addressing (deck slot, reward entry,
+   *  potion slot, list index...) so callers can map a cursor onto a ref */
+  at: number;
+  /** what Enter does on this item, or null when there is nothing to do */
+  enter: KeyAction | null;
+}
+
+/** Enter in the inspector has to behave exactly like Enter on the thing's own
+ *  row, refusal included: a sold shop slot or a reward you cannot take says so
+ *  instead of firing the command. Mirrors selectItem in input/keymap.ts. */
+function enterOr(blocked: string | null, action: KeyAction): KeyAction {
+  return blocked === null ? action : uiAct({ type: "toast", text: toAscii(blocked) });
+}
+
+type InspectRef =
+  | (InspectBase & { kind: "card"; defId: string; upgrades: number; cost: string })
+  | (InspectBase & { kind: "relic"; defId: string })
+  | (InspectBase & { kind: "potion"; defId: string });
+
+function masterCard(bundle: ContentBundle, defId: string, upgrades: number, at: number): InspectRef {
+  const def = bundle.cards.get(defId);
+  return {
+    kind: "card",
+    at,
+    enter: null,
+    defId,
+    upgrades,
+    cost: def ? masterCostLabel(masterCardCost(def, upgrades)) : "?",
+  };
+}
+
+/** Everything inspectable in `source`, in cursor order. */
+function inspectables(g: GameState, source: InspectSource, bundle: ContentBundle): InspectRef[] {
+  switch (source.of) {
+    case "hand": {
+      const c = g.combat;
+      if (!c) return [];
+      return c.player.piles.hand.flatMap((iid, at) => {
+        const card = c.cards[iid];
+        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(card) }] : [];
+      });
+    }
+    case "deck":
+      return g.run.deck.map((mc, at) => masterCard(bundle, mc.defId, mc.upgrades, at));
+    case "pile":
+      return pileEntries(g, source.pile).map(({ card }, at) => ({
+        kind: "card" as const,
+        at,
+        enter: null,
+        defId: card.defId,
+        upgrades: card.upgrades,
+        cost: instCostLabel(card),
+      }));
+    case "relics":
+      return g.run.relics.map((r, at) => ({ kind: "relic" as const, at, enter: null, defId: r.defId }));
+    case "potions":
+      return g.run.potions.flatMap((id, slot) =>
+        id === null
+          ? []
+          : [
+              {
+                kind: "potion" as const,
+                at: slot,
+                enter: uiAct({ type: "openOverlay", overlay: { kind: "potionMenu", slot } }),
+                defId: id,
+              },
+            ],
+      );
+    case "reward": {
+      const room = g.run.room;
+      if (room?.kind !== "rewards") return [];
+      return room.entries.flatMap((e, at) => {
+        // same note the row shows, so the refusal reads the same either way
+        const blocked = e.taken ? "taken" : rewardBlocked(e, g.run);
+        const enter = enterOr(blocked, cmd({ cmd: "takeReward", i: at }));
+        if (e.kind === "card") {
+          const up = e.upgraded ? 1 : 0;
+          return [{ ...masterCard(bundle, e.id, up, at), enter }];
+        }
+        if (e.kind === "relic" || e.kind === "bossRelic") return [{ kind: "relic" as const, at, enter, defId: e.id }];
+        if (e.kind === "potion") return [{ kind: "potion" as const, at, enter, defId: e.id }];
+        return []; // gold and keys have nothing to read
+      });
+    }
+    case "shop": {
+      const room = g.run.room;
+      if (room?.kind !== "shop") return [];
+      const shop = room.shop;
+      // the same order buildShop pushes them, so `at` IS the list index
+      const out: InspectRef[] = [];
+      const buy = (kind: "card" | "relic" | "potion", idx: number, sold: boolean): KeyAction =>
+        enterOr(sold ? "sold" : null, cmd({ cmd: "shopBuy", kind, idx }));
+      shop.cards.forEach((slot, idx) => {
+        out.push({ ...masterCard(bundle, slot.id, 0, out.length), enter: buy("card", idx, slot.sold) });
+      });
+      shop.relics.forEach((slot, idx) => {
+        out.push({ kind: "relic", at: out.length, enter: buy("relic", idx, slot.sold), defId: slot.id });
+      });
+      shop.potions.forEach((slot, idx) => {
+        out.push({ kind: "potion", at: out.length, enter: buy("potion", idx, slot.sold), defId: slot.id });
+      });
+      return out;
+    }
+    case "choice": {
+      const req = g.pending?.request;
+      if (!req || req.kind === "option") return [];
+      const c = g.combat;
+      return req.iids.flatMap((iid, at) => {
+        if (!c) {
+          const mc = g.run.deck[iid];
+          return mc ? [masterCard(bundle, mc.defId, mc.upgrades, at)] : [];
+        }
+        const card = c.cards[iid];
+        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(card) }] : [];
+      });
+    }
+  }
+}
+
+/** The inspect target for a cursor sitting at `at` within `source`. Falls
+ *  back to the first item, which is what [i] with no cursor should open. */
+function inspectAt(g: GameState, source: InspectSource, bundle: ContentBundle, at: number | null): { source: InspectSource; index: number } | null {
+  const refs = inspectables(g, source, bundle);
+  if (refs.length === 0) return null;
+  const index = at === null ? 0 : refs.findIndex((r) => r.at === at);
+  return { source, index: index < 0 ? 0 : index };
+}
+
+/** One inspected item, rendered as the big box in render/overlays.ts. */
+function describeInspect(
+  g: GameState,
+  source: InspectSource,
+  ref: InspectRef,
+  index: number,
+  count: number,
+  bundle: ContentBundle,
+): OverlayView {
+  const common = { kind: "inspect" as const, source, enter: ref.enter, index, count };
+  if (ref.kind === "relic") {
+    const def = bundle.relics.get(ref.defId);
+    return {
+      ...common,
+      chip: "RELIC",
+      name: toAscii(relicName(bundle, ref.defId)),
+      cost: null,
+      color: TIP_COLOR.relic,
+      type: `Relic - ${def?.tier ?? "?"}`,
+      targeted: false,
+      rules: relicLines(ref.defId),
+      keywords: relicGlossary(ref.defId),
+    };
+  }
+  if (ref.kind === "potion") {
+    const def = bundle.potions.get(ref.defId);
+    const doubled = sacredBark(g);
+    return {
+      ...common,
+      chip: "POTION",
+      name: toAscii(potionName(bundle, ref.defId)),
+      cost: null,
+      color: TIP_COLOR.potion,
+      type: `Potion - ${def?.rarity ?? "?"}`,
+      targeted: def?.targeted ?? false,
+      rules: potionLines(ref.defId, doubled),
+      keywords: potionGlossary(ref.defId, doubled),
+    };
+  }
+  const def = bundle.cards.get(ref.defId);
+  return {
+    ...common,
+    chip: "CARD",
+    name: toAscii(cardName(bundle, ref.defId, ref.upgrades)),
+    cost: ref.cost,
+    color: CARD_COLOR_ACCENTS[def?.color ?? ""] ?? TIP_COLOR.card,
+    type: `${titleCase(def?.type ?? "?")} - ${def?.rarity ?? "?"}`,
+    targeted: def?.target === "enemy",
+    rules: cardRulesText(ref.defId, ref.upgrades)
+      .split("\n")
+      .filter((l) => l.trim().length > 0)
+      .map(toAscii),
+    keywords: cardGlossary(ref.defId, ref.upgrades),
+  };
+}
+
 function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | null, bundle: ContentBundle): OverlayView {
   switch (top.kind) {
     case "confirmQuit":
@@ -1214,7 +1438,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
               ? cmd({ cmd: "restOption", kind: "smith", deckIdx })
               : top.mode === "remove"
                 ? cmd({ cmd: "shopRemove", deckIdx })
-                : uiAct({ type: "openOverlay", overlay: { kind: "inspect", source: "deck", index: deckIdx } }),
+                : uiAct({ type: "openOverlay", overlay: { kind: "inspect", source: { of: "deck" }, index: deckIdx } }),
         };
       });
       return { kind: "list", id: "deck", title, list: makeList(items, top.page, focusI) };
@@ -1251,7 +1475,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         const def = id ? bundle.potions.get(id) : undefined;
         return {
           label: id ? potionName(bundle, id) + (def?.targeted ? "  (throws at a target)" : "") : "(empty slot)",
-          sub: id ? potionText(id) || null : null,
+          sub: id ? potionText(id, sacredBark(g)) || null : null,
           enabled: id !== null,
           action: id !== null ? uiAct({ type: "openOverlay", overlay: { kind: "potionMenu", slot } }) : null,
         };
@@ -1274,84 +1498,30 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       };
     }
     case "inspect": {
-      const empty = (what: string): OverlayView => ({
-        kind: "inspect",
-        source: what === "hand" ? "hand" : what === "reward" ? "reward" : "deck",
-        takeIndex: null,
-        name: `(empty ${what})`,
-        cost: "-",
-        color: "?",
-        type: "?",
-        rarity: "?",
-        targeted: false,
-        rules: [],
-        index: 0,
-        count: 0,
-      });
-      let defId: string;
-      let upgrades: number;
-      let costLabel: string;
-      let index: number;
-      let count: number;
-      /** the reward entry Enter should take, when inspecting an offer */
-      let takeIndex: number | null = null;
-      if (top.source === "reward") {
-        // the cards this reward screen is offering, in the order it shows them
-        const room = g.run.room;
-        const entries = room?.kind === "rewards" ? room.entries : [];
-        const offers = entries
-          .map((e, i) => ({ e, i }))
-          .filter(({ e }) => e.kind === "card" && !e.taken);
-        count = offers.length;
-        if (count === 0) return empty("reward");
-        index = Math.max(0, Math.min(count - 1, top.index));
-        const offer = offers[index]!;
-        const entry = offer.e as Extract<RewardEntry, { kind: "card" }>;
-        defId = entry.id;
-        upgrades = entry.upgraded ? 1 : 0;
-        const def = bundle.cards.get(defId);
-        costLabel = def ? masterCostLabel(masterCardCost(def, upgrades)) : "?";
-        takeIndex = offer.i;
-      } else if (top.source === "hand" && g.combat) {
-        const handIids = g.combat.player.piles.hand;
-        count = handIids.length;
-        index = Math.max(0, Math.min(count - 1, top.index));
-        const iid = handIids[index];
-        const card = iid !== undefined ? g.combat.cards[iid] : undefined;
-        if (!card) return empty("hand");
-        defId = card.defId;
-        upgrades = card.upgrades;
-        costLabel = instCostLabel(card);
-      } else {
-        const deck = g.run.deck;
-        count = deck.length;
-        index = Math.max(0, Math.min(count - 1, top.index));
-        const mc = deck[index];
-        if (!mc) return empty("deck");
-        defId = mc.defId;
-        upgrades = mc.upgrades;
-        const def = bundle.cards.get(mc.defId);
-        costLabel = def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?";
+      const refs = inspectables(g, top.source, bundle);
+      const count = refs.length;
+      const index = Math.max(0, Math.min(count - 1, top.index));
+      const ref = refs[index];
+      if (!ref) {
+        // the collection emptied under the overlay (last reward taken, last
+        // potion drunk); show an honest placeholder rather than crashing
+        return {
+          kind: "inspect",
+          source: top.source,
+          chip: "CARD",
+          name: "(nothing here)",
+          cost: null,
+          color: TIP_COLOR.card,
+          type: "",
+          targeted: false,
+          rules: [],
+          keywords: [],
+          enter: null,
+          index: 0,
+          count: 0,
+        };
       }
-      const def = bundle.cards.get(defId);
-      const fromHand = top.source === "hand" && g.combat !== null;
-      return {
-        kind: "inspect",
-        source: takeIndex !== null ? "reward" : fromHand ? "hand" : "deck",
-        takeIndex,
-        name: toAscii(cardName(bundle, defId, upgrades)),
-        cost: costLabel,
-        color: def?.color ?? "?",
-        type: titleCase(def?.type ?? "?"),
-        rarity: def?.rarity ?? "?",
-        targeted: def?.target === "enemy",
-        rules: cardRulesText(defId, upgrades)
-          .split("\n")
-          .filter((l) => l.trim().length > 0)
-          .map(toAscii),
-        index,
-        count,
-      };
+      return describeInspect(g, top.source, ref, index, count, bundle);
     }
   }
 }
@@ -1436,18 +1606,18 @@ function tipRelic(bundle: ContentBundle, defId: string, metaExtra = ""): Tooltip
     color: TIP_COLOR.relic,
     name: toAscii(relicName(bundle, defId)),
     meta: toAscii(`Relic - ${tier}${metaExtra}`),
-    lines: [relicText(defId)].filter((l) => l.length > 0),
+    lines: relicLines(defId),
   };
 }
 
-function tipPotion(bundle: ContentBundle, defId: string, metaExtra = ""): TooltipView {
+function tipPotion(bundle: ContentBundle, defId: string, doubled: boolean, metaExtra = ""): TooltipView {
   const def = bundle.potions.get(defId);
   return {
     chip: "POTION",
     color: TIP_COLOR.potion,
     name: toAscii(potionName(bundle, defId)),
     meta: toAscii(`Potion - ${def?.rarity ?? "?"}${def?.targeted ? " - throws at a target" : ""}${metaExtra}`),
-    lines: [potionText(defId)].filter((l) => l.length > 0),
+    lines: potionLines(defId, doubled),
   };
 }
 
@@ -1571,6 +1741,9 @@ interface FocusInfo {
   count: number;
   idx: number | null;
   tooltip: TooltipView | null;
+  /** what [i] opens from this cursor position; omitted when the focused
+   *  thing has no rules text of its own (an enemy, a map node, a button) */
+  inspect?: { source: InspectSource; index: number } | null;
 }
 
 const NO_FOCUS: FocusInfo = { count: 0, idx: null, tooltip: null };
@@ -1649,7 +1822,12 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle, accent: s
   const idx = k;
   if (k < hand.length) {
     const card = c.cards[hand[k]!]!;
-    return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)) };
+    return {
+      count,
+      idx,
+      tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)),
+      inspect: inspectAt(g, { of: "hand" }, bundle, k),
+    };
   }
   k -= hand.length;
   if (k < alive.length) {
@@ -1660,12 +1838,22 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle, accent: s
   k -= alive.length;
   if (k < relics.length) {
     const r = relics[k]!;
-    return { count, idx, tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : "") };
+    return {
+      count,
+      idx,
+      tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : ""),
+      inspect: inspectAt(g, { of: "relics" }, bundle, k),
+    };
   }
   k -= relics.length;
   if (k < potions.length) {
     const p = potions[k]!;
-    return { count, idx, tooltip: tipPotion(bundle, p.id!, ` - slot ${p.slot + 1}`) };
+    return {
+      count,
+      idx,
+      tooltip: tipPotion(bundle, p.id!, sacredBark(g), ` - slot ${p.slot + 1}`),
+      inspect: inspectAt(g, { of: "potions" }, bundle, p.slot),
+    };
   }
   k -= potions.length;
   if (k < orbs.length) {
@@ -1743,6 +1931,7 @@ function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView,
   }
   const iid = req.iids[idx];
   if (iid === undefined) return { count, idx, tooltip: null };
+  const inspect = inspectAt(g, { of: "choice" }, bundle, idx);
   if (!g.combat) {
     const mc = g.run.deck[iid];
     if (!mc) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
@@ -1751,11 +1940,12 @@ function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView,
       count,
       idx,
       tooltip: tipCard(bundle, mc.defId, mc.upgrades, def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"),
+      inspect,
     };
   }
   const card = g.combat.cards[iid];
   if (!card) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
-  return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)) };
+  return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)), inspect };
 }
 
 function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: ContentBundle, accent: string): FocusInfo {
@@ -1772,23 +1962,39 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
         count,
         idx,
         tooltip: tipCard(bundle, mc.defId, mc.upgrades, def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"),
+        inspect: inspectAt(g, { of: "deck" }, bundle, idx),
       };
     }
     case "relics": {
       const r = g.run.relics[idx];
       if (!r) return { count, idx, tooltip: null };
-      return { count, idx, tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : "") };
+      return {
+        count,
+        idx,
+        tooltip: tipRelic(bundle, r.defId, r.counter > 0 ? ` - counter ${r.counter}` : ""),
+        inspect: inspectAt(g, { of: "relics" }, bundle, idx),
+      };
     }
     case "pile": {
       const entries = pileEntries(g, top.pile);
       const e = entries[idx];
       if (!e) return { count, idx, tooltip: null };
-      return { count, idx, tooltip: tipCard(bundle, e.card.defId, e.card.upgrades, instCostLabel(e.card)) };
+      return {
+        count,
+        idx,
+        tooltip: tipCard(bundle, e.card.defId, e.card.upgrades, instCostLabel(e.card)),
+        inspect: inspectAt(g, { of: "pile", pile: top.pile }, bundle, idx),
+      };
     }
     case "potions": {
       const id = g.run.potions[idx];
       if (id == null) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
-      return { count, idx, tooltip: tipPotion(bundle, id) };
+      return {
+        count,
+        idx,
+        tooltip: tipPotion(bundle, id, sacredBark(g)),
+        inspect: inspectAt(g, { of: "potions" }, bundle, idx),
+      };
     }
     default:
       return NO_FOCUS;
@@ -1809,6 +2015,7 @@ function listScreenFocus(
   if (room.kind === "shop") {
     const shop = room.shop;
     let k = idx;
+    const inShop = inspectAt(g, { of: "shop" }, bundle, idx);
     if (k < shop.cards.length) {
       const slot = shop.cards[k]!;
       const def = bundle.cards.get(slot.id);
@@ -1816,23 +2023,25 @@ function listScreenFocus(
         count,
         idx,
         tooltip: tipCard(bundle, slot.id, 0, def ? masterCostLabel(def.cost) : "?", ` - ${slot.price}G`),
+        inspect: inShop,
       };
     }
     k -= shop.cards.length;
     if (k < shop.relics.length) {
       const slot = shop.relics[k]!;
-      return { count, idx, tooltip: tipRelic(bundle, slot.id, ` - ${slot.price}G`) };
+      return { count, idx, tooltip: tipRelic(bundle, slot.id, ` - ${slot.price}G`), inspect: inShop };
     }
     k -= shop.relics.length;
     if (k < shop.potions.length) {
       const slot = shop.potions[k]!;
-      return { count, idx, tooltip: tipPotion(bundle, slot.id, ` - ${slot.price}G`) };
+      return { count, idx, tooltip: tipPotion(bundle, slot.id, sacredBark(g), ` - ${slot.price}G`), inspect: inShop };
     }
     return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
   }
   if (room.kind === "rewards") {
     const e = room.entries[idx];
     if (e) {
+      const inReward = inspectAt(g, { of: "reward" }, bundle, idx);
       if (e.kind === "card") {
         const def = bundle.cards.get(e.id);
         const up = e.upgraded ? 1 : 0;
@@ -1840,19 +2049,51 @@ function listScreenFocus(
           count,
           idx,
           tooltip: tipCard(bundle, e.id, up, def ? masterCostLabel(masterCardCost(def, up)) : "?"),
+          inspect: inReward,
         };
       }
-      if (e.kind === "relic" || e.kind === "bossRelic") return { count, idx, tooltip: tipRelic(bundle, e.id) };
-      if (e.kind === "potion") return { count, idx, tooltip: tipPotion(bundle, e.id) };
+      if (e.kind === "relic" || e.kind === "bossRelic") {
+        return { count, idx, tooltip: tipRelic(bundle, e.id), inspect: inReward };
+      }
+      if (e.kind === "potion") return { count, idx, tooltip: tipPotion(bundle, e.id, sacredBark(g)), inspect: inReward };
     }
     return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
   }
   return { count, idx, tooltip: tipChoiceItem(screen.list, idx, accent) };
 }
 
+/** What [i] opens when no cursor is set: the first inspectable thing this
+ *  place is showing, which is how combat's [i] has always behaved. */
+function defaultInspect(g: GameState, mode: ViewMode, top: Overlay | undefined, bundle: ContentBundle): { source: InspectSource; index: number } | null {
+  let source: InspectSource | null = null;
+  if (mode === "overlay" && top) {
+    if (top.kind === "deck") source = { of: "deck" };
+    else if (top.kind === "relics") source = { of: "relics" };
+    else if (top.kind === "potions") source = { of: "potions" };
+    else if (top.kind === "pile") source = { of: "pile", pile: top.pile };
+  } else if (mode === "choice") source = { of: "choice" };
+  else if (mode === "combat") source = { of: "hand" };
+  else if (mode === "shop") source = { of: "shop" };
+  else if (mode === "rewards") source = { of: "reward" };
+  if (source === null) return null;
+  return inspectAt(g, source, bundle, null);
+}
+
 // --- hints ------------------------------------------------------------------------------
 
-function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayView | null }): string {
+/** The verb Enter carries in the inspector, per collection. */
+const INSPECT_CTA: Partial<Record<InspectSource["of"], string>> = {
+  hand: "play",
+  reward: "take",
+  shop: "buy",
+  potions: "use",
+};
+
+function hintFor(
+  mode: ViewMode,
+  view: { screen: ScreenView; overlay: OverlayView | null; inspect: { source: InspectSource } | null },
+): string {
+  const insp = view.inspect !== null ? "  [i] inspect" : "";
   switch (mode) {
     case "menu": {
       const m = view.screen as MenuView;
@@ -1866,8 +2107,8 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       const o = view.overlay;
       if (o?.kind !== "choice") return "";
       const paging = o.list.pages > 1 ? "  [n/p] page" : "";
-      if (o.single) return `[1-9] pick${paging}${o.canCancel ? "  [Esc] cancel" : ""}`;
-      return `[1-0] toggle  [Enter] confirm${paging}${o.canCancel ? "  [Esc] cancel" : ""}`;
+      if (o.single) return `[1-9] pick${paging}${insp}${o.canCancel ? "  [Esc] cancel" : ""}`;
+      return `[1-0] toggle  [Enter] confirm${paging}${insp}${o.canCancel ? "  [Esc] cancel" : ""}`;
     }
     case "overlay": {
       const o = view.overlay;
@@ -1875,14 +2116,15 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
       if (o.kind === "confirmQuit") return "[y] quit  [n] keep playing";
       if (o.kind === "potionMenu") return "[Enter/u] use  [d] discard  [Esc] cancel";
       if (o.kind === "inspect") {
-        const cta = o.source === "hand" ? "[Enter] play  " : o.source === "reward" ? "[Enter] take  " : "";
-        return `${cta}[j/k] next/prev card  [Esc] close`;
+        const verb = INSPECT_CTA[o.source.of];
+        const cta = verb !== undefined && (o.source.of === "hand" || o.enter !== null) ? `[Enter] ${verb}  ` : "";
+        return `${cta}[j/k] next/prev  [Esc] close`;
       }
       if (o.kind === "log") return "[Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
-      if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}  [Esc] close`;
-      if (o.kind === "list" && o.id === "potions") return `[1-9] potion${paging}  [Esc] close`;
-      return `${paging.trim().length > 0 ? paging.trim() + "  " : ""}[Esc] close`;
+      if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}${insp}  [Esc] close`;
+      if (o.kind === "list" && o.id === "potions") return `[1-9] potion${paging}${insp}  [Esc] close`;
+      return `${paging.trim().length > 0 ? paging.trim() + "  " : ""}${insp.trim().length > 0 ? insp.trim() + "  " : ""}[Esc] close`;
     }
     case "combat":
       return "[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit";
@@ -1895,7 +2137,7 @@ function hintFor(mode: ViewMode, view: { screen: ScreenView; overlay: OverlayVie
     case "shop": {
       const s = view.screen as ShopView;
       const paging = s.list.pages > 1 ? "  [n/p] page" : "";
-      return `[1-0] buy${paging}  [Enter] leave  [d/r/p]  [q] quit`;
+      return `[1-0] buy${paging}${insp}  [Enter] leave  [d/r/p]  [q] quit`;
     }
     case "rest":
     case "treasure":
@@ -1928,8 +2170,9 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
       targeting: null,
       toast: ui.toast != null ? toAscii(ui.toast) : null,
       log: [],
-      hint: hintFor(mode, { screen, overlay: null }),
+      hint: hintFor(mode, { screen, overlay: null, inspect: null }),
       tooltip: focus.tooltip,
+      inspect: null,
       focusCount: focus.count,
       focusIdx: focus.idx,
     };
@@ -2011,6 +2254,9 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     focus = NO_FOCUS;
   }
 
+  // the cursor's own target when it has one, else the first thing here
+  const inspect = focus.inspect ?? defaultInspect(game, mode, top, bundle);
+
   return {
     mode,
     accent: header.accent,
@@ -2020,8 +2266,9 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     targeting,
     toast: ui.toast != null ? toAscii(ui.toast) : null,
     log: ui.log.slice(-8).map(toAscii),
-    hint: hintFor(mode, { screen, overlay }),
+    hint: hintFor(mode, { screen, overlay, inspect }),
     tooltip: focus.tooltip,
+    inspect,
     focusCount: focus.count,
     focusIdx: focus.idx,
   };

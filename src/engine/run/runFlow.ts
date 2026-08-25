@@ -608,7 +608,9 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
       applyNeowDrawback(ctx, opt.drawback);
       const followUp = applyNeowBonus(ctx, opt.bonus);
       if (!followUp) {
-        run.room = { kind: "map" };
+        // an "Upon pickup" relic off the boss swap may have opened its own
+        // screen (Calling Bell, Tiny House): leave whatever it put up
+        if (run.room.kind === "neow") run.room = { kind: "map" };
       } else if (followUp.type === "cardReward") {
         run.room = { kind: "rewards", entries: cardGroupEntries(followUp.cards), source: "neow" };
       } else {

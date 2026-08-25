@@ -467,6 +467,10 @@ export function describeChoiceReason(reason: string): string {
       return "Choose cards to upgrade";
     case "neow:transform":
       return "Choose cards to transform";
+    case "relic:remove":
+      return "Choose cards to remove";
+    case "relic:transform":
+      return "Choose cards to transform, then upgrade";
     default:
       return reason;
   }

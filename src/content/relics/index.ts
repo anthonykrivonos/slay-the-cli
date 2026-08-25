@@ -6,7 +6,7 @@
 //   - contentEffects into bundle.effects (choice continuations; also registered
 //     lazily at request time so tests work off a raw merge)
 
-import type { RelicDef } from "../../engine/content/defs";
+import type { EffectFn, RelicDef } from "../../engine/content/defs";
 import { starterRelics } from "./starter";
 import { commonRelics } from "./common";
 import { uncommonRelics } from "./uncommon";
@@ -14,6 +14,8 @@ import { rareRelics } from "./rare";
 import { bossRelics } from "./boss";
 import { shopRelics } from "./shop";
 import { eventRelics } from "./event";
+import { contentEffects as libEffects } from "./lib";
+import { pickupEffects } from "./pickup";
 
 export const allRelics: RelicDef[] = [
   ...starterRelics,
@@ -26,4 +28,7 @@ export const allRelics: RelicDef[] = [
 ];
 
 export { relicSupportPowers } from "./supportPowers";
-export { contentEffects } from "./lib";
+
+/** Choice continuations merged into bundle.effects (also registered lazily at
+ *  request time, so tests working off a raw merge still resume). */
+export const contentEffects: ReadonlyArray<readonly [string, EffectFn]> = [...libEffects, ...pickupEffects];

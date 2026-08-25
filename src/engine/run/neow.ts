@@ -5,7 +5,7 @@
 
 import type { EffectCtx } from "../content/defs";
 import type { NeowBonus, NeowDrawback, NeowOptionState } from "./runState";
-import type { CardId, PotionId } from "../core/ids";
+import type { CardId, PotionId, RelicId } from "../core/ids";
 import type { Rng } from "../core/rng";
 import type { RolledCard } from "./rewards";
 import { classCardPool, colorlessCardPool, cursePool, returnRandomPotion, obtainRelicFromPool } from "./rewards";
@@ -169,6 +169,14 @@ export function applyNeowDrawback(ctx: EffectCtx, drawback: NeowDrawback): void 
   }
 }
 
+/** Obtain a relic Neow hands over: pushed, then equipped. onEquip is what
+ *  makes an "Upon pickup" relic do anything (Calling Bell and friends off the
+ *  boss swap), and it may open a screen or request a pick of its own. */
+function equipRelic(ctx: EffectCtx, id: RelicId): void {
+  ctx.run.relics.push({ defId: id, counter: 0 });
+  ctx.bundle.relics.get(id)?.onEquip?.(ctx);
+}
+
 /** Apply a bonus; returns a follow-up screen request when one is needed. */
 export function applyNeowBonus(ctx: EffectCtx, bonus: NeowBonus): NeowFollowUp {
   const run = ctx.run;
@@ -209,13 +217,13 @@ export function applyNeowBonus(ctx: EffectCtx, bonus: NeowBonus): NeowFollowUp {
       return null;
     }
     case "RANDOM_COMMON_RELIC":
-      run.relics.push({ defId: obtainRelicFromPool(run, "common"), counter: 0 });
+      equipRelic(ctx, obtainRelicFromPool(run, "common"));
       return null;
     case "ONE_RARE_RELIC":
-      run.relics.push({ defId: obtainRelicFromPool(run, "rare"), counter: 0 });
+      equipRelic(ctx, obtainRelicFromPool(run, "rare"));
       return null;
     case "BOSS_RELIC":
-      run.relics.push({ defId: obtainRelicFromPool(run, "boss"), counter: 0 });
+      equipRelic(ctx, obtainRelicFromPool(run, "boss"));
       return null;
     case "TEN_PERCENT_HP_BONUS":
       run.maxHp += Math.floor(run.maxHp * NEOW_BONUS_VALUES.TEN_PERCENT_HP_BONUS);

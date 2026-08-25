@@ -73,12 +73,31 @@ export const CHARACTER_COLORS: Record<string, string> = {
 };
 
 /** Accent color per card color (name highlights on card boxes). */
-export const CARD_COLOR_ACCENTS: Record<string, string> = {
-  red: "#c25454",
-  green: "#6fce87",
-  blue: "#5f9ad0",
-  purple: "#b98ad6",
-  colorless: "#f0e8d2",
+/**
+ * Card accents by TYPE, not by class color: red attacks, green skills, blue
+ * powers. The class color is the same for every card in your deck, so it never
+ * told you anything; the type is what you read a hand for.
+ */
+/**
+ * Map node accents by room kind, so a glance at the act reads as a route:
+ * green rest, blue shop, gold treasure, red elites (bolder than a plain enemy),
+ * purple unknown. Keyed by the node GLYPH the map view emits.
+ */
+export const MAP_NODE_ACCENTS: Record<string, string> = {
+  M: "#e88a8a", // enemy
+  E: "#e06a7a", // elite
+  $: "#5f9ad0", // merchant
+  R: "#6fce87", // rest
+  T: "#ffe9a0", // treasure
+  "?": "#b98ad6", // unknown
+  B: "#e06a7a", // boss
+};
+
+export const CARD_TYPE_ACCENTS: Record<string, string> = {
+  attack: "#c25454",
+  skill: "#6fce87",
+  power: "#5f9ad0",
+  status: "#8f9aad",
   curse: "#9a7ab8",
 };
 

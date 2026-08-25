@@ -191,6 +191,7 @@ function havocPlayTop(ctx: EffectCtx): void {
     purgeOnUse: false,
     exhaustOnUse: true, // "and Exhaust it" (powers still vanish per engine rules)
     autoplayed: true,
+    via: "HAVOC",
   });
 }
 

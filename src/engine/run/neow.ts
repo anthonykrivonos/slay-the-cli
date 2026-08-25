@@ -156,6 +156,7 @@ export function applyNeowDrawback(ctx: EffectCtx, drawback: NeowDrawback): void 
       if (curses.length > 0) {
         const id = curses[ctx.rng("cardRng").random(curses.length - 1)]!;
         run.deck.push({ defId: id, upgrades: 0, misc: 0, bottled: false });
+        ctx.emit("deckCardObtained", { defId: id, upgrades: 0 });
       }
       break;
     }
@@ -194,6 +195,8 @@ export function applyNeowBonus(ctx: EffectCtx, bonus: NeowBonus): NeowFollowUp {
       if (pool.length === 0) throw new Error("empty rare pool");
       const id = pool[ctx.rng("neowRng").random(pool.length - 1)]!;
       run.deck.push({ defId: id, upgrades: 0, misc: 0, bottled: false });
+      // the card lands with no screen of its own: the UI reads this to say which
+      ctx.emit("deckCardObtained", { defId: id, upgrades: 0 });
       return null;
     }
     case "REMOVE_CARD":

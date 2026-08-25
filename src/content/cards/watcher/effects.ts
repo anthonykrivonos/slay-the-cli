@@ -325,6 +325,7 @@ function omnisciencePlay(ctx: EffectCtx, iid: CardInstanceId): void {
     purgeOnUse: false,
     exhaustOnUse,
     autoplayed: true,
+    via: "OMNISCIENCE",
   });
   combat.cardQueue.unshift(mk(true)); // second play: "and Exhaust it"
   combat.cardQueue.unshift(mk(false)); // first play resolves first

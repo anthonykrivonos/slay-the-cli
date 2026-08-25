@@ -1,4 +1,4 @@
- HP 80/80 | G 99 | F2 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE                                            
+ HP 80/80 | G 99 | F2 A1 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE                                            
 -- BIG FISH ------------------------------------------------------------------------------------------------------------------------
                            +----------------------------------------------------------------------------+                           
                            | Three dangling baits offer a heal, max HP, or a cursed relic box; one must |                           

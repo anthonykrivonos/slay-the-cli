@@ -250,6 +250,7 @@ export const ironcladPowers: PowerDef[] = [
           purgeOnUse: false,
           exhaustOnUse: false,
           autoplayed: true,
+          via: "DOUBLE_TAP",
         });
         ctx.queue.addToBottom({ kind: "reducePower", target: ctx.owner, powerId: "DOUBLE_TAP", amount: 1 });
       },

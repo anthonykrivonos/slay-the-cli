@@ -1,4 +1,4 @@
- HP 80/80 | G 99 | F34 A3 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE           
+ HP 80/80 | G 99 | F34 A3 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE           
 -- VICTORY -----------------------------------------------------------------------------------------
                                                                                                     
                                                                                                     

@@ -11,7 +11,7 @@ import { padClip, center, rule } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp, joinBlocks, rowWidth } from "./layout";
 import { cardBox, cardBoxHeight, buttonBox, buttonBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
-import { CARD_COLOR_ACCENTS } from "../text/runlogic";
+import { CARD_TYPE_ACCENTS } from "../text/runlogic";
 import { ART_MERCHANT } from "./art";
 
 const QUOTE = '"Coins for goods. Goods for coins."';
@@ -99,7 +99,7 @@ export function renderShop(
       key: keyOf(screen.list.items, c.i),
       cost: c.cost,
       name: c.name,
-      color: CARD_COLOR_ACCENTS[c.color] ?? null,
+      color: CARD_TYPE_ACCENTS[c.cardType] ?? null,
       type: "",
       targeted: false,
       rules: c.rules,

@@ -152,7 +152,7 @@ describe("frame invariants: state sweep", () => {
       let s = createRun({ seed: `SWEEP${ch}`, bundle, character: ch });
       let ui: UiState = { ...initialUiState({ seed: `SWEEP${ch}` }), screen: "run" };
       for (let step = 0; step < 120; step++) {
-        ui = pushLog(ui, s.eventLog.map((ev) => formatEvent(ev, bundle)));
+        ui = pushLog(ui, s.eventLog, bundle);
         const view = buildView(s, ui, bundle);
         for (const { cols, rows } of INVARIANT_SIZES) {
           assertFrameInvariants(renderFrame(view, { cols, rows }, THEME_256), cols, rows, `${ch} step ${step}`);

@@ -78,6 +78,8 @@ export interface CardQueueItem {
   purgeOnUse: boolean; // remove from combat entirely after resolving
   exhaustOnUse: boolean;
   autoplayed: boolean; // duplicated/forced plays don't recount per-turn "cards played" triggers
+  /** what forced an autoplay (card/power/relic defId), for the combat log */
+  via?: string;
 }
 
 export interface CombatState {

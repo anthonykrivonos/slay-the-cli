@@ -135,6 +135,7 @@ export const eventRelics: RelicDef[] = [
           purgeOnUse: false,
           exhaustOnUse: false,
           autoplayed: true,
+          via: "NECRONOMICON",
         });
       },
     },

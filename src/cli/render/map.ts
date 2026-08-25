@@ -11,6 +11,7 @@ import type { MapView } from "../state/view";
 import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, bar } from "./widgets";
+import { MAP_NODE_ACCENTS } from "../text/runlogic";
 import { visibleWidth } from "../term/ansi";
 
 export const NODE_COL = (x: number): number => 5 + 6 * x;
@@ -64,11 +65,15 @@ class CharRow {
 }
 
 const dimStyle: Style = (s, t) => t.dim(s);
-const pickStyle: Style = (s, t) => t.bold(t.fg(C.pick, s));
 /** "@ you" wears the character accent, so the style is built per render. */
 const currentStyleFor = (accent: string): Style => (s, t) => t.bold(t.fg(accent, s));
 const burningStyle: Style = (s, t) => t.fg(C.burning, s);
-const bossStyle: Style = (s, t) => t.fg(C.bad, s);
+
+/** Room-kind color; bold when you can walk there from here, dim when you cannot. */
+const kindStyle = (glyph: string, reachable: boolean): Style => {
+  const hex = MAP_NODE_ACCENTS[glyph] ?? C.text;
+  return (s, t) => (reachable ? t.bold(t.fg(hex, s)) : t.dim(t.fg(hex, s)));
+};
 
 /** Every line of the full map, top (boss) first. Exported for unit tests. */
 export function buildMapLines(
@@ -90,7 +95,7 @@ export function buildMapLines(
     bossRow.put(
       screen.bossPickKey !== null ? BOSS_COL - 2 : BOSS_COL,
       label,
-      screen.bossPickKey !== null ? (bossFocused ? currentStyle : pickStyle) : bossStyle,
+      bossFocused && screen.bossPickKey !== null ? currentStyle : kindStyle("B", screen.bossPickKey !== null),
     );
     out.push(bossRow);
     // edge row: every top-row node climbs to the boss door
@@ -111,20 +116,15 @@ export function buildMapLines(
       const col = NODE_COL(node.x);
       const glyph = node.current ? "@" : node.glyph + (node.burning ? "*" : "");
       const focused = focus !== null && focus.x === node.x && focus.y === y;
-      const style: Style = focused
+      const reachable = node.pickKey !== null;
+      const style: Style = focused || node.current
         ? currentStyle
-        : node.current
-          ? currentStyle
-          : node.pickKey !== null
-            ? pickStyle
-            : node.burning
-              ? burningStyle
-              : node.glyph === "B"
-                ? bossStyle
-                : dimStyle;
-      if (node.pickKey !== null) {
+        : node.burning
+          ? burningStyle
+          : kindStyle(node.glyph, reachable);
+      if (reachable) {
         // the highlighted path points at itself: "1>M" rather than "1:M"
-        nodeRow.put(col - 2, `${node.pickKey}${focused ? ">" : ":"}`, focused ? currentStyle : pickStyle);
+        nodeRow.put(col - 2, `${node.pickKey}${focused ? ">" : ":"}`, focused ? currentStyle : kindStyle(node.glyph, true));
       }
       nodeRow.put(col, glyph, style);
     }
@@ -161,13 +161,16 @@ function actProgress(screen: MapView): { at: number; of: number } {
 
 function legendPanel(screen: MapView, theme: Theme, accent: string): string[] {
   const { at, of } = actProgress(screen);
+  // the legend wears the same colors as the nodes, so the key teaches the map
+  const g = (glyph: string, label: string): string =>
+    `${theme.fg(MAP_NODE_ACCENTS[glyph] ?? C.text, glyph)} ${theme.dim(label)}`;
   return [
     theme.bold("LEGEND"),
-    theme.dim("M enemy      E elite"),
-    theme.dim("$ merchant   R rest"),
-    theme.dim("T treasure   ? unknown"),
-    theme.dim("E* burning elite (+key)"),
-    theme.dim("@ you        B boss"),
+    `${g("M", "enemy")}      ${g("E", "elite")}`,
+    `${g("$", "merchant")}   ${g("R", "rest")}`,
+    `${g("T", "treasure")}   ${g("?", "unknown")}`,
+    `${theme.fg(C.burning, "E*")} ${theme.dim("burning elite (+key)")}`,
+    `${theme.fg(accent, "@")} ${theme.dim("you")}        ${g("B", "boss")}`,
     "",
     `BOSS  ${theme.fg(C.bad, screen.bossName)}`,
     `FLOOR ${screen.floor}  ${theme.fg(accent, bar(at, of, 8))} ${theme.dim(`${at}/${of}`)}`,
@@ -228,7 +231,8 @@ export function renderMap(
   const nextParts = screen.picks.map((p, k) => {
     const cursor = screen.focusPick === k ? ">" : "";
     const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}`;
-    return screen.focusPick === k ? theme.bold(theme.fg(accent, label)) : theme.bold(theme.fg(C.pick, label));
+    if (screen.focusPick === k) return theme.bold(theme.fg(accent, label));
+    return theme.bold(theme.fg(MAP_NODE_ACCENTS[p.y > screen.maxY ? "B" : p.glyph] ?? C.pick, label));
   });
   const scrollNote = clipped ? theme.dim("   [up/down] scroll") : "";
   out.push(`${pad}Next: ${nextParts.join("  ")}${scrollNote}`);

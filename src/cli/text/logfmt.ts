@@ -43,6 +43,17 @@ function monsterName(bundle: ContentBundle, id: unknown): string {
   return bundle.monsters.get(s)?.name ?? titleCase(s);
 }
 
+/** Name of whatever forced an autoplay: a card, a power, a relic or a potion. */
+function cardishName(bundle: ContentBundle, id: string): string {
+  return (
+    bundle.cards.get(id)?.name ??
+    bundle.powers.get(id)?.name ??
+    bundle.relics.get(id)?.name ??
+    bundle.potions.get(id)?.name ??
+    titleCase(id)
+  );
+}
+
 /** Fallback: `event + clipped payload JSON` (mirrors the web UI's pushEvents,
  *  with an ASCII ellipsis). */
 function rawFormat(ev: GameEvent): string {
@@ -103,6 +114,27 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
       break;
     case "artifactNegated":
       out = `Artifact negated ${powerName(bundle, p.powerId)} (${actorText(p.target)})`;
+      break;
+    case "combatStarted": {
+      const ids = Array.isArray(p.monsters) ? p.monsters : [];
+      const names = ids.map((m) => monsterName(bundle, m));
+      out = `== ${names.length > 0 ? names.join(", ") : titleCase(str(p.encounterId) ?? "combat")} ==`;
+      break;
+    }
+    case "cardPlayed": {
+      const defId = str(p.defId) ?? "?";
+      const name = cardName(bundle, defId, num(p.upgrades) ?? 0);
+      // an autoplay rolls a target even for untargeted cards, so only say where
+      // it went when the card actually aims (PlayTopCardAction parity)
+      const aims = bundle.cards.get(defId)?.target === "enemy";
+      const at = aims && num(p.target) !== null ? ` at Enemy ${(num(p.target) ?? 0) + 1}` : "";
+      const via = str(p.via);
+      // an autoplay says who forced it (Havoc, Mayhem, Double Tap...)
+      out = via !== null ? `${cardishName(bundle, via)} plays ${name}${at}` : `You play ${name}${at}`;
+      break;
+    }
+    case "deckCardObtained":
+      out = `${cardName(bundle, str(p.defId) ?? "?", num(p.upgrades) ?? 0)} joins your deck`;
       break;
     case "cardDrawn":
       out = "Drew a card";

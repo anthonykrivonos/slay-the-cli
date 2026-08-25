@@ -1,4 +1,4 @@
- HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad | UISMNKE            
+ HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE            
 -- COMBAT - turn 1 ---------------------------------------------------------------------------------
  RELICS Bur  POTIONS [F] [E] [B]                                                             [l] log
                                                                                                     
@@ -10,18 +10,18 @@
                                       +----------------------------+ +----------------------------+ 
                                                                                                     
                                                                                                     
-                                                                                                    
+                                  INCOMING 6    BLOCK 0    NET -6                                   
  +==( 3/3 )==================================+                                                      
  | Ironclad                                  |                                                      
  | HP 80/80 [#############]                  |                                                      
  +===========================================+                                                      
- Choose a target for Strike: >[1] Red Louse  [2] Green Louse                                        
+ Choose a target for Strike: >[1] Red Louse (6)  [2] Green Louse (6)                                
 -- HAND 5 ------------------------------------------------------------------------------------------
 +(1)--------------+ +(1)--------------+ +(1)--------------+ +(1)--------------+ +(1)--------------+ 
 | Defend          | | Defend          | | Strike          | | Strike          | | Strike          | 
 | Skill           | | Skill           | | Attack        > | | Attack        > | | Attack        > | 
 | Gain 5 Block.   | | Gain 5 Block.   | | Deal 6 damage.  | | Deal 6 damage.  | | Deal 6 damage.  | 
-|                 | |                 | |                 | |                 | |                 | 
+|           5 blk | |           5 blk | |           6 dmg | |           6 dmg | |           6 dmg | 
 +-------[1]-------+ +-------[2]-------+ +-------[3]-------+ +-------[4]-------+ +-------[5]-------+ 
  DRAW 5                                     [e] END TURN                       DISCARD 0  EXHAUST 0 
 -- INFO --------------------------------------------------------------------------------------------

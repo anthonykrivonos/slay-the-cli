@@ -9,6 +9,7 @@ import {
   rollPotionReward,
   returnRandomPotion,
   obtainRelicFromPool,
+  peekRelicFromPool,
 } from "../../src/engine/run/rewards";
 import { setupTreasureRoom, openChestContents, CHESTS } from "../../src/engine/run/treasure";
 import { generateShop, computeRemovalCost, SHOP } from "../../src/engine/run/shop";
@@ -285,6 +286,28 @@ describe("relic pools", () => {
     expect(obtainRelicFromPool(s.run, "common")).toBe("CIRCLET");
     s.run.pools.bossRelics = [];
     expect(obtainRelicFromPool(s.run, "boss")).toBe("RED_CIRCLET");
+  });
+
+  // the chest screen names the relic before you trade it for the key
+  test("peek returns what the take would hand over, and consumes nothing", () => {
+    const { s } = ctxFor("PEEK");
+    const sizes = () => s.run.pools.commonRelics.length + s.run.pools.uncommonRelics.length;
+    for (const tier of ["common", "uncommon", "rare", "shop", "boss"] as const) {
+      const before = sizes();
+      const peeked = peekRelicFromPool(s.run, tier);
+      expect(peekRelicFromPool(s.run, tier)).toBe(peeked); // idempotent
+      expect(sizes()).toBe(before);
+      expect(obtainRelicFromPool(s.run, tier)).toBe(peeked);
+    }
+    // the fallback chain matches too
+    s.run.pools.commonRelics = [];
+    s.run.pools.uncommonRelics = ["U1"];
+    expect(peekRelicFromPool(s.run, "common")).toBe("U1");
+    s.run.pools.uncommonRelics = [];
+    s.run.pools.rareRelics = [];
+    expect(peekRelicFromPool(s.run, "common")).toBe("CIRCLET");
+    s.run.pools.bossRelics = [];
+    expect(peekRelicFromPool(s.run, "boss")).toBe("RED_CIRCLET");
   });
 });
 

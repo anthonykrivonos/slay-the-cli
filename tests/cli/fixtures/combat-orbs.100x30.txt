@@ -1,4 +1,4 @@
- HP 75/75 | G 99 | F1 A1 | ASC0 | K:--- | POT 0/3 | DECK 10 | REL 2 | Defect | DFX0                 
+ HP 75/75 | G 99 | F1 A1 | ASC0 | K:--- | POT --- | DECK 10 | REL 2 | Defect | DFX0                 
 -- COMBAT - turn 1 ---------------------------------------------------------------------------------
  RELICS Cra The  POTIONS [.] [.] [.]                                                         [l] log
                                                                                                     
@@ -9,7 +9,7 @@
                                                                      |                            | 
                                                                      +----------------------------+ 
                                                                                                     
-                                                                                                    
+                                   INCOMING 0    BLOCK 0    NET 0                                   
  +==( 2/3 )==================================+                                                      
  | Defect                                    |                                                      
  | HP 75/75 [#############]                  |                                                      
@@ -21,7 +21,7 @@
     | Dualcast           | | Defend             | | Defend             | | Strike             |     
     | Skill              | | Skill              | | Skill              | | Attack           > |     
     | Evoke your next    | | Gain 5 Block.      | | Gain 5 Block.      | | Deal 6 damage.     |     
-    | Orb twice.         | |                    | |                    | |                    |     
+    | Orb twice.         | |              5 blk | |              5 blk | |              6 dmg |     
     +--------[1]---------+ +--------[2]---------+ +--------[3]---------+ +--------[4]---------+     
  DRAW 5                                     [e] END TURN                       DISCARD 1  EXHAUST 0 
 -- INFO --------------------------------------------------------------------------------------------

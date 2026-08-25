@@ -180,6 +180,7 @@ export const relicSupportPowers: PowerDef[] = [
           purgeOnUse: false,
           exhaustOnUse: false,
           autoplayed: true,
+          via: "DUPLICATION_POTION",
         });
       },
       // expires at the end of the turn it was drunk

@@ -29,7 +29,7 @@ import {
   type PlayerPanelData,
 } from "./panels";
 import { monsterPortrait, monsterTint, sharedMonsterTier, pickPortrait } from "./art";
-import { CARD_COLOR_ACCENTS, CHARACTER_COLORS } from "../text/runlogic";
+import { CARD_TYPE_ACCENTS, CHARACTER_COLORS } from "../text/runlogic";
 import { visibleWidth } from "../term/ansi";
 
 const TYPE_LETTER: Record<string, string> = {
@@ -112,10 +112,11 @@ function cardData(h: CombatView["hand"][number], typeRow: boolean): CardBoxData 
     key: h.key,
     cost: h.cost,
     name: h.name,
-    color: CARD_COLOR_ACCENTS[h.color] ?? null,
+    color: CARD_TYPE_ACCENTS[h.type] ?? null,
     type: typeRow ? (TYPE_WORD[h.type] ?? "?") : "",
     targeted: h.targeted,
     rules: h.rules,
+    preview: h.preview,
     dim: !h.playable,
   };
 }
@@ -178,11 +179,38 @@ function handLine(h: CombatView["hand"][number], focused: boolean, theme: Theme,
   const name = h.name.slice(0, 18).padEnd(18);
   const cost = `(${h.cost})`.padEnd(4);
   const t = `${TYPE_LETTER[h.type] ?? "?"}${h.targeted ? ">" : " "}`;
+  const num = (h.preview?.text ?? "").padEnd(12); // fixed column so rows line up
   const rules = h.rules[0] ?? "";
-  const line = `${cursor}${key} ${name} ${cost}${t} ${rules}`;
+  const line = `${cursor}${key} ${name} ${cost}${t} ${num}${rules}`;
   if (!h.playable) return theme.dim(line);
-  if (focused) return `${theme.bold(theme.fg(accent, `${cursor}${key}`))} ${name} ${theme.fg(C.energy, cost)}${t} ${theme.dim(rules)}`;
-  return `${cursor}${theme.bold(theme.fg(C.text, key))} ${name} ${theme.fg(C.energy, cost)}${t} ${theme.dim(rules)}`;
+  const numShown =
+    h.preview === null
+      ? num
+      : h.preview.tone === "up"
+        ? theme.bold(theme.fg(C.good, num))
+        : h.preview.tone === "down"
+          ? theme.bold(theme.fg(C.bad, num))
+          : theme.dim(num);
+  if (focused) return `${theme.bold(theme.fg(accent, `${cursor}${key}`))} ${name} ${theme.fg(C.energy, cost)}${t} ${numShown}${theme.dim(rules)}`;
+  return `${cursor}${theme.bold(theme.fg(C.text, key))} ${name} ${theme.fg(C.energy, cost)}${t} ${numShown}${theme.dim(rules)}`;
+}
+
+/**
+ * INCOMING vs BLOCK, centered between the enemy row and your panel: the two
+ * numbers a turn is decided by, printed next to each other rather than at
+ * opposite ends of the screen.
+ */
+function threatLine(v: CombatView, width: number, theme: Theme): string {
+  const { incoming, block } = v.threat;
+  const net = block - incoming;
+  const parts = [
+    `${theme.dim("INCOMING")} ${theme.bold(theme.fg(incoming > 0 ? C.bad : C.dim, String(incoming)))}`,
+    `${theme.dim("BLOCK")} ${theme.bold(theme.fg(block > 0 ? C.block : C.dim, String(block)))}`,
+    `${theme.dim("NET")} ${theme.bold(theme.fg(net < 0 ? C.bad : C.good, net > 0 ? `+${net}` : String(net)))}`,
+  ];
+  const plain = `INCOMING ${incoming}    BLOCK ${block}    NET ${net > 0 ? `+${net}` : net}`;
+  const pad = Math.max(0, Math.floor((width - plain.length) / 2));
+  return padClip(" ".repeat(pad) + parts.join("    "), width);
 }
 
 // --- strip + bottom bar ---------------------------------------------------------------
@@ -324,8 +352,11 @@ export function renderCombat(
     for (const e of screen.enemies) out.push(enemyLine(e, width, theme));
   }
 
-  // 3. flex gap (weight 3) + one fixed blank
-  for (let i = 0; i < 1 + gaps[0]!; i++) out.push("");
+  // 3. flex gap (weight 3), then the turn in two numbers: the threat line takes
+  // the fixed blank row that always sits above the player panel, so it costs
+  // nothing and lands mid-screen where both numbers are read together
+  for (let i = 0; i < gaps[0]!; i++) out.push("");
+  out.push(threatLine(screen, width, theme));
 
   // 4. player panel at column 1 (or the one-line floor)
   if (playerPanelOk) {
@@ -350,7 +381,7 @@ export function renderCombat(
   // 7. targeting strip (directly above the HAND rule)
   if (targeting !== null) {
     const targets = targeting.targets
-      .map((t, k) => `${k === targeting.focusIdx ? ">" : ""}[${t.key}] ${t.name}`)
+      .map((t, k) => `${k === targeting.focusIdx ? ">" : ""}[${t.key}] ${t.name}${t.damage !== null ? ` (${t.damage})` : ""}`)
       .join("  ");
     out.push(theme.inverse(padClip(` ${targeting.prompt}: ${targets} `, width)));
   }

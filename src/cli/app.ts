@@ -11,17 +11,17 @@ import { SYNC_START, SYNC_END, CURSOR_HOME, CLEAR_TO_EOL } from "./term/ansi";
 import { renderFrame } from "./render/frame";
 import { THEME_256, THEME_PLAIN, type Theme } from "./render/theme";
 import { buildView } from "./state/view";
-import { initialUiState, resetRunUi, pushLog, applyUiAction, type UiState } from "./state/uiState";
+import { initialUiState, resetRunUi, pushLog, pushLogLines, applyUiAction, type UiState } from "./state/uiState";
 import { mapKey } from "./input/keymap";
 import { isAppAction, type AppUiAction } from "./input/actions";
 import {
   bumpSeed,
+  cardName,
   chestLootSummary,
   clampAscension,
   isCharacterId,
   type UICharacterId,
 } from "./text/runlogic";
-import { formatEvent } from "./text/logfmt";
 import type { SaveIo } from "./io/saves";
 
 export interface AppOptions {
@@ -79,7 +79,16 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
   refreshMenuSave();
 
   const absorbEvents = (events: GameEvent[]): void => {
-    ui = pushLog(ui, events.map((ev) => formatEvent(ev, bundle)));
+    ui = pushLog(ui, events, bundle);
+    // a card that lands in the deck with no screen of its own (Neow's random
+    // rare, a Neow curse) is otherwise invisible: say so on the hint line
+    const gained: string[] = [];
+    for (const ev of events) {
+      if (ev.event !== "deckCardObtained") continue;
+      const p = (ev.payload ?? {}) as { defId?: string; upgrades?: number };
+      gained.push(cardName(bundle, p.defId ?? "?", p.upgrades ?? 0));
+    }
+    if (gained.length > 0) ui = { ...ui, toast: `Obtained ${gained.join(", ")}` };
   };
 
   const paint = (): void => {
@@ -152,7 +161,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
       character: isCharacterId(restored.run.character) ? restored.run.character : ui.character,
       ascension: clampAscension(restored.run.ascension),
     });
-    ui = pushLog(ui, ["(restored saved run)"]);
+    ui = pushLogLines(ui, ["(restored saved run)"]);
     try {
       // stale/incompatible saves from an older engine build blow up on first
       // render - probe once, discard and recover to the menu if so

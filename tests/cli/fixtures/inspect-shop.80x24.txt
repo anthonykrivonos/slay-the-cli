@@ -1,4 +1,4 @@
- HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT 3/3 | DECK 10 | REL 1 | Ironclad |
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad |
 -- THE MERCHANT - you have 99G -------------------------------------------------
                                                                                 
                      +(1)---------------------------------+                     

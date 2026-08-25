@@ -61,7 +61,20 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
     character: options.character ?? prefs.character,
     ascension: options.ascension ?? prefs.ascension,
     update: deps.update ?? null,
+    vimKeys: prefs.vimKeys ?? false,
   });
+
+  /** prefs.json is the menu's memory: whatever the next launch should come
+   *  back to. Written on a new run and whenever a setting is flipped. */
+  const savePrefs = (): void => {
+    saves.writePrefs({
+      seed: ui.seed,
+      character: ui.character,
+      ascension: ui.ascension,
+      color: theme !== THEME_PLAIN,
+      vimKeys: ui.vimKeys,
+    });
+  };
 
   const refreshMenuSave = (): void => {
     const saved = saves.readSave();
@@ -131,7 +144,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
   };
 
   const newRun = (): void => {
-    saves.writePrefs({ seed: ui.seed, character: ui.character, ascension: ui.ascension, color: theme !== THEME_PLAIN });
+    savePrefs();
     let created: GameState;
     try {
       created = createRun({ seed: ui.seed, bundle, character: ui.character, ascension: ui.ascension });
@@ -245,6 +258,9 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
           handleAppAction(action.act);
         } else {
           ui = applyUiAction(ui, action.act);
+          // the reducer stays pure, so the one setting-flipping action gets
+          // its write here rather than inside it
+          if (action.act.type === "toggleVimKeys") savePrefs();
         }
       }
       if (!done) paint();

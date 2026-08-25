@@ -122,7 +122,11 @@ export interface MenuView {
   continueDesc: string | null;
   /** one-line "a newer version exists" notice, or null when current */
   updateNotice: string | null;
-  /** focus cursor: 0-3 heroes, 4 NEW RUN, 5 CONTINUE; null = no cursor */
+  /** resolved focus index of the SETTINGS row (it moves with CONTINUE), so the
+   *  keymap and the renderer never recompute the ordinals themselves */
+  settingsIdx: number;
+  /** focus cursor: 0-3 heroes, 4 NEW RUN, then CONTINUE (when there is a save)
+   *  and SETTINGS at settingsIdx; null = no cursor */
   focusIdx: number | null;
 }
 
@@ -356,7 +360,7 @@ export type OverlayView =
       canCancel: boolean;
       single: boolean;
     }
-  | { kind: "list"; id: "deck" | "relics" | "pile" | "potions"; title: string; list: ListView }
+  | { kind: "list"; id: "deck" | "relics" | "pile" | "potions" | "settings"; title: string; list: ListView }
   | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
   | {
       kind: "inspect";
@@ -426,6 +430,9 @@ export interface View {
   focusCount: number;
   /** resolved focus index within the current mode's focusables */
   focusIdx: number | null;
+  /** hjkl are movement keys right now: the keymap translates them to arrows
+   *  before dispatch, and the hint bar prints whichever keys that leaves. */
+  vimKeys: boolean;
 }
 
 // --- small helpers --------------------------------------------------------------
@@ -709,9 +716,15 @@ function buildHeader(g: GameState, bundle: ContentBundle): HeaderView {
 
 // --- per-screen view builders ------------------------------------------------------
 
-/** Menu focusables: 4 heroes, then NEW RUN, then CONTINUE (when present). */
+/** Menu focusables: 4 heroes, NEW RUN, CONTINUE (when present), SETTINGS. */
 export function menuFocusCount(hasContinue: boolean): number {
-  return 5 + (hasContinue ? 1 : 0);
+  return 6 + (hasContinue ? 1 : 0);
+}
+
+/** Where the SETTINGS row sits. It goes last so the hero and NEW RUN ordinals
+ *  never move, and CONTINUE keeps index 5 whenever it is there. */
+export function menuSettingsIdx(hasContinue: boolean): number {
+  return hasContinue ? 6 : 5;
 }
 
 /** The update line, in the game's voice. null when current or unknown. */
@@ -736,6 +749,7 @@ function buildMenu(ui: UiState, bundle: ContentBundle, focusI: number | null): M
     }),
     continueDesc,
     updateNotice: updateNoticeText(ui.update),
+    settingsIdx: menuSettingsIdx(continueDesc !== null),
     focusIdx: focusI !== null ? Math.min(focusI, count - 1) : null,
   };
 }
@@ -1495,10 +1509,39 @@ function describeInspect(
   };
 }
 
+/** The settings overlay. It is the one overlay that opens without a run, so it
+ *  is built from UiState alone and both buildView branches can reach it. Rows
+ *  are ordinary list items, which is what makes the existing list renderer and
+ *  the keymap's paged-list tail work on it unchanged. */
+function buildSettingsOverlay(ui: UiState, focusI: number | null): Extract<OverlayView, { kind: "list" }> {
+  const items: RawItem[] = [
+    {
+      label: `Vim keys  ${ui.vimKeys ? "[x]" : "[ ]"}`,
+      sub: "hjkl move the cursor; the log moves to [L]",
+      action: uiAct({ type: "toggleVimKeys" }),
+    },
+  ];
+  // the cursor starts on the first row so Enter toggles straight away
+  return { kind: "list", id: "settings", title: "SETTINGS", list: makeList(items, 0, focusI ?? 0) };
+}
+
+/** Focus + tooltip for the settings overlay, without a GameState (overlayFocus
+ *  needs one, and the menu has none). */
+function settingsFocus(o: Extract<OverlayView, { kind: "list" }>, accent: string): FocusInfo {
+  const idx = o.list.focusI;
+  return {
+    count: o.list.total,
+    idx,
+    tooltip: idx !== null ? tipChoiceItem(o.list, idx, accent) : null,
+  };
+}
+
 function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | null, bundle: ContentBundle): OverlayView {
   switch (top.kind) {
     case "confirmQuit":
       return { kind: "confirmQuit" };
+    case "settings":
+      return buildSettingsOverlay(ui, focusI);
     case "log": {
       const shown = ui.log.slice(-100);
       return {
@@ -1887,6 +1930,19 @@ function menuFocus(ui: UiState, bundle: ContentBundle, screen: MenuView): FocusI
       },
     };
   }
+  if (idx === screen.settingsIdx) {
+    return {
+      count,
+      idx,
+      tooltip: {
+        chip: "CHOICE",
+        color: CHARACTER_COLORS[ui.character] ?? TIP_COLOR.choice,
+        name: "SETTINGS",
+        meta: "",
+        lines: ["Vim keys, and anything else worth remembering between runs."],
+      },
+    };
+  }
   return {
     count,
     idx,
@@ -2097,6 +2153,8 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
         inspect: inspectAt(g, { of: "potions" }, bundle, idx),
       };
     }
+    case "settings":
+      return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
     default:
       return NO_FOCUS;
   }
@@ -2192,7 +2250,12 @@ const INSPECT_CTA: Partial<Record<InspectSource["of"], string>> = {
 
 function hintFor(
   mode: ViewMode,
-  view: { screen: ScreenView; overlay: OverlayView | null; inspect: { source: InspectSource } | null },
+  view: {
+    screen: ScreenView;
+    overlay: OverlayView | null;
+    inspect: { source: InspectSource } | null;
+    vimKeys: boolean;
+  },
 ): string {
   const insp = view.inspect !== null ? "  [i] inspect" : "";
   switch (mode) {
@@ -2222,15 +2285,19 @@ function hintFor(
         return `${cta}[j/k] next/prev  [Esc] close`;
       }
       if (o.kind === "log") return "[Esc] close";
+      if (o.kind === "list" && o.id === "settings") return "[1/Enter] toggle  [Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
       if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}${insp}  [Esc] close`;
       if (o.kind === "list" && o.id === "potions") return `[1-9] potion${paging}${insp}  [Esc] close`;
       return `${paging.trim().length > 0 ? paging.trim() + "  " : ""}${insp.trim().length > 0 ? insp.trim() + "  " : ""}[Esc] close`;
     }
     case "combat":
-      return "[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit";
+      // [l] is a movement key under vim bindings, so the log wears [L] there
+      return `[1-0/Enter] play  [e] end turn  [i] inspect  [${view.vimKeys ? "L" : "l"}] log  [w/x/z] piles  [d/r/p] deck  [q] quit`;
     case "map":
-      return "[<-/->] path  [Enter] go  [up/dn] scroll  [1-9] travel  [d/r/p] deck  [q] quit";
+      return view.vimKeys
+        ? "[h/l] path  [Enter] go  [j/k] scroll  [1-9] travel  [d/r/p] deck  [q] quit"
+        : "[<-/->] path  [Enter] go  [up/dn] scroll  [1-9] travel  [d/r/p] deck  [q] quit";
     case "neow":
       return "[1-4] choose a blessing  [d] deck  [r] relics  [q] quit";
     case "rewards":
@@ -2258,24 +2325,35 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
   // menu (no game or explicitly on the menu screen)
   const room = game?.run.room ?? null;
   if (ui.screen === "menu" || !game || !room) {
-    const mode: ViewMode = ui.seedEdit ? "textInput" : "menu";
+    // settings is the one overlay that opens without a run. Every other kind
+    // needs a GameState, so the menu keeps ignoring them exactly as before.
+    const menuTop = ui.overlays[ui.overlays.length - 1];
+    const overlayRaw = ui.focus && ui.focus.scope === "overlay" ? ui.focus.idx : null;
+    const overlay = menuTop?.kind === "settings" ? buildSettingsOverlay(ui, overlayRaw) : null;
+    const mode: ViewMode = overlay ? "overlay" : ui.seedEdit ? "textInput" : "menu";
     const menuRaw = mode === "menu" && ui.focus && ui.focus.scope === "menu" ? ui.focus.idx : null;
     const screen = buildMenu(ui, bundle, menuRaw);
-    const focus = mode === "menu" ? menuFocus(ui, bundle, screen) : NO_FOCUS;
+    const accent = CHARACTER_COLORS[ui.character] ?? "#54689a";
+    const focus: FocusInfo = overlay
+      ? settingsFocus(overlay, accent)
+      : mode === "menu"
+        ? menuFocus(ui, bundle, screen)
+        : NO_FOCUS;
     return {
       mode,
-      accent: CHARACTER_COLORS[ui.character] ?? "#54689a",
+      accent,
       header: null,
       screen,
-      overlay: null,
+      overlay,
       targeting: null,
       toast: ui.toast != null ? toAscii(ui.toast) : null,
       log: [],
-      hint: hintFor(mode, { screen, overlay: null, inspect: null }),
+      hint: hintFor(mode, { screen, overlay, inspect: null, vimKeys: ui.vimKeys }),
       tooltip: focus.tooltip,
       inspect: null,
       focusCount: focus.count,
       focusIdx: focus.idx,
+      vimKeys: ui.vimKeys,
     };
   }
 
@@ -2367,10 +2445,11 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     targeting,
     toast: ui.toast != null ? toAscii(ui.toast) : null,
     log: ui.log.slice(-8).map((l) => toAscii(l.text)),
-    hint: hintFor(mode, { screen, overlay, inspect }),
+    hint: hintFor(mode, { screen, overlay, inspect, vimKeys: ui.vimKeys }),
     tooltip: focus.tooltip,
     inspect,
     focusCount: focus.count,
     focusIdx: focus.idx,
+    vimKeys: ui.vimKeys,
   };
 }

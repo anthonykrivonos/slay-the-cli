@@ -149,7 +149,7 @@ checkout in `app/`, and your saves at the root beside it.
   app/              the clone, with the compiled binary in app/dist/
   save.json         the run in progress, written after every action
   save.json.bak     the previous save, used if the main one is unreadable
-  prefs.json        last character, seed, ascension, color
+  prefs.json        last character, seed, ascension, color, vim keys
 ```
 
 Saves sit outside the checkout on purpose. Updating, rebuilding, or even a

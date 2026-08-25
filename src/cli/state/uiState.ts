@@ -34,6 +34,7 @@ export type Overlay =
   /** index is a position within the source, in the order the source lists it */
   | { kind: "inspect"; source: InspectSource; index: number }
   | { kind: "log" }
+  | { kind: "settings" }
   | { kind: "confirmQuit" };
 
 export type Targeting =
@@ -63,6 +64,9 @@ export interface UiState {
   /** how far behind origin/main the checkout is, from the startup update check
    *  (io/update.ts). null when repo-less, offline, or opted out. */
   update: { behind: number } | null;
+  /** hjkl move the cursor instead of typing (persisted in prefs.json). Off by
+   *  default; the settings overlay flips it. */
+  vimKeys: boolean;
   // run-screen UI
   overlays: Overlay[];
   targeting: Targeting | null;
@@ -91,6 +95,7 @@ export function initialUiState(opts: {
   character?: UICharacterId;
   ascension?: number;
   update?: { behind: number } | null;
+  vimKeys?: boolean;
 } = {}): UiState {
   return {
     screen: "menu",
@@ -100,6 +105,7 @@ export function initialUiState(opts: {
     seedEdit: null,
     menuSave: null,
     update: opts.update ?? null,
+    vimKeys: opts.vimKeys ?? false,
     overlays: [],
     targeting: null,
     focus: null,
@@ -222,6 +228,8 @@ export function applyUiAction(ui: UiState, act: PureUiAction): UiState {
       return isCharacterId(act.id) ? { ...ui, character: act.id } : ui;
     case "menuAsc":
       return { ...ui, ascension: Math.max(0, Math.min(MAX_ASCENSION, ui.ascension + act.delta)) };
+    case "toggleVimKeys":
+      return { ...ui, vimKeys: !ui.vimKeys };
     case "seedEditStart":
       return { ...ui, seedEdit: { value: ui.seed } };
     case "seedEditChar": {

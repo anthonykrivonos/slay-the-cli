@@ -308,6 +308,158 @@ describe("overlay mode", () => {
   });
 });
 
+describe("vim keys", () => {
+  const DOWN: Key = { kind: "down" };
+  const UP: Key = { kind: "up" };
+  const LEFT: Key = { kind: "left" };
+  const RIGHT: Key = { kind: "right" };
+
+  /** the same fixture with vim bindings on, and optionally a cursor */
+  function vim(f: Fixture, scope?: string, idx = 0): Fixture {
+    const focus = scope !== undefined ? { scope, idx } : f.ui.focus;
+    return { ...f, ui: { ...f.ui, vimKeys: true, focus } };
+  }
+
+  test("hjkl are the arrow keys, on every screen that has a cursor", () => {
+    for (const [f, scope] of [
+      [fxRest(), "rest"],
+      [fxRewards(), "rewards"],
+      [fxMenu(), "menu"],
+    ] as const) {
+      const v = viewOf(vim(f, scope, 0));
+      expect(mapKey(ch("j"), v)).toEqual(mapKey(DOWN, v));
+      expect(mapKey(ch("k"), v)).toEqual(mapKey(UP, v));
+      expect(mapKey(ch("l"), v)).toEqual(mapKey(RIGHT, v));
+      expect(mapKey(ch("h"), v)).toEqual(mapKey(LEFT, v));
+      // and they actually move: down from 0 lands on 1
+      expect(mapKey(ch("j"), v)).toEqual({ kind: "ui", act: { type: "focusSet", scope, idx: 1 } });
+    }
+  });
+
+  test("on the map, h/l pick the path and j/k scroll (unchanged meanings)", () => {
+    const plain = viewOf(fxMapAct1());
+    const v = viewOf(vim(fxMapAct1()));
+    // j/k already scrolled before vim mode; they still do
+    expect(mapKey(ch("j"), v)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: 1 } });
+    expect(mapKey(ch("k"), v)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: -1 } });
+    expect(mapKey(ch("j"), plain)).toEqual(mapKey(ch("j"), v));
+    // h/l were unbound/unused here and now choose between the paths
+    expect(mapKey(ch("l"), v)).toEqual(mapKey(RIGHT, v));
+    expect(mapKey(ch("h"), v)).toEqual(mapKey(LEFT, v));
+  });
+
+  test("in the inspect overlay j/k still step, because that was already vim", () => {
+    const f = fxCombat();
+    const open: Overlay = { kind: "inspect", source: { of: "hand" } as InspectSource, index: 0 };
+    const withOverlay = { ...f, ui: { ...f.ui, overlays: [open] } };
+    const plain = viewOf(withOverlay);
+    const v = viewOf({ ...withOverlay, ui: { ...withOverlay.ui, vimKeys: true } });
+    expect(mapKey(ch("j"), plain)).toEqual({ kind: "ui", act: { type: "inspectMove", delta: 1, count: expect.any(Number) } });
+    expect(mapKey(ch("j"), v)).toEqual(mapKey(ch("j"), plain));
+    expect(mapKey(ch("k"), v)).toEqual(mapKey(ch("k"), plain));
+  });
+
+  test("the combat log is displaced from [l] to [L]", () => {
+    const openLog: KeyAction = { kind: "ui", act: { type: "openOverlay", overlay: { kind: "log" } } };
+    const plain = viewOf(fxCombat());
+    // vim off: both keys reach the log
+    expect(mapKey(ch("l"), plain)).toEqual(openLog);
+    expect(mapKey(ch("L"), plain)).toEqual(openLog);
+    // vim on: [l] is movement, [L] is the log
+    const v = viewOf(vim(fxCombat()));
+    expect(mapKey(ch("L"), v)).toEqual(openLog);
+    expect(mapKey(ch("l"), v)).not.toEqual(openLog);
+    expect(mapKey(ch("l"), v)).toEqual(mapKey(RIGHT, v));
+  });
+
+  test("[L] closes the log overlay too", () => {
+    const f = fxCombat();
+    const withLog = { ...f, ui: { ...f.ui, vimKeys: true, overlays: [{ kind: "log" } as Overlay] } };
+    expect(mapKey(ch("L"), viewOf(withLog))).toEqual({ kind: "ui", act: { type: "closeOverlay" } });
+  });
+
+  test("seed entry still spells hjkl (chars stay literal in text input)", () => {
+    const editing = { ...fxMenu(), ui: { ...fxMenu().ui, vimKeys: true, seedEdit: { value: "" } } };
+    const v = viewOf(editing);
+    expect(v.mode).toBe("textInput");
+    for (const c of ["h", "j", "k", "l"]) {
+      expect(mapKey(ch(c), v)).toEqual({ kind: "ui", act: { type: "seedEditChar", ch: c } });
+    }
+  });
+
+  test("the hint bar prints the keys that are actually live", () => {
+    expect(viewOf(fxCombat()).hint).toContain("[l] log");
+    expect(viewOf(vim(fxCombat())).hint).toContain("[L] log");
+    expect(viewOf(fxMapAct1()).hint).toContain("[up/dn] scroll");
+    expect(viewOf(vim(fxMapAct1())).hint).toContain("[j/k] scroll");
+  });
+});
+
+describe("settings", () => {
+  const openSettings: KeyAction = { kind: "ui", act: { type: "openOverlay", overlay: { kind: "settings" } } };
+
+  test("[S] opens it from the menu and from any run screen", () => {
+    expect(mapKey(ch("S"), viewOf(fxMenu()))).toEqual(openSettings);
+    expect(mapKey(ch("S"), viewOf(fxCombat()))).toEqual(openSettings);
+    expect(mapKey(ch("S"), viewOf(fxMapAct1()))).toEqual(openSettings);
+    expect(mapKey(ch("S"), viewOf(fxRest()))).toEqual(openSettings);
+  });
+
+  test("the menu SETTINGS row sits last and Enter opens it", () => {
+    const f = fxMenu();
+    const m = viewOf(f).screen;
+    if (m.kind !== "menu") throw new Error("expected the menu");
+    // with a save present: 4 heroes, NEW RUN, CONTINUE, SETTINGS
+    expect(m.settingsIdx).toBe(6);
+    expect(viewOf(f).focusCount).toBe(7);
+    const onSettings = { ...f, ui: { ...f.ui, focus: { scope: "menu", idx: m.settingsIdx } } };
+    expect(mapKey(ENTER, viewOf(onSettings))).toEqual(openSettings);
+  });
+
+  test("without a save the row moves up, and NEW RUN keeps index 4", () => {
+    const f = fxMenu();
+    const noSave = { ...f, ui: { ...f.ui, menuSave: null } };
+    const m = viewOf(noSave).screen;
+    if (m.kind !== "menu") throw new Error("expected the menu");
+    expect(m.settingsIdx).toBe(5);
+    expect(viewOf(noSave).focusCount).toBe(6);
+    const onNewRun = { ...noSave, ui: { ...noSave.ui, focus: { scope: "menu", idx: 4 } } };
+    expect(mapKey(ENTER, viewOf(onNewRun))).toEqual({ kind: "ui", act: { type: "newRun" } });
+  });
+
+  test("the overlay opens over the menu, which has no run behind it", () => {
+    const f = fxMenu();
+    const open = { ...f, ui: { ...f.ui, overlays: [{ kind: "settings" } as Overlay] } };
+    const v = viewOf(open);
+    expect(v.mode).toBe("overlay");
+    expect(v.overlay?.kind).toBe("list");
+    expect(v.focusCount).toBe(1);
+  });
+
+  test("Enter and [1] both toggle, and Esc closes", () => {
+    const f = fxMenu();
+    const open = { ...f, ui: { ...f.ui, overlays: [{ kind: "settings" } as Overlay] } };
+    const v = viewOf(open);
+    const toggle: KeyAction = { kind: "ui", act: { type: "toggleVimKeys" } };
+    expect(mapKey(ENTER, v)).toEqual(toggle);
+    expect(mapKey(ch("1"), v)).toEqual(toggle);
+    expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "closeOverlay" } });
+  });
+
+  test("toggling flips the flag, and the row redraws to match", () => {
+    const f = fxMenu();
+    const open: UiState = { ...f.ui, overlays: [{ kind: "settings" }] };
+    expect(viewOf({ game: null, ui: open }).overlay).toMatchObject({
+      list: { items: [{ label: "Vim keys  [ ]" }] },
+    });
+    const flipped = applyUiAction(open, { type: "toggleVimKeys" });
+    expect(flipped.vimKeys).toBe(true);
+    expect(viewOf({ game: null, ui: flipped }).overlay).toMatchObject({
+      list: { items: [{ label: "Vim keys  [x]" }] },
+    });
+  });
+});
+
 describe("focus / selection cursor", () => {
   const TAB: Key = { kind: "tab" };
   const DOWN: Key = { kind: "down" };

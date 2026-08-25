@@ -86,14 +86,36 @@ function globalRunKeys(ch: string, view: View): KeyAction | null {
       return ui({ type: "openOverlay", overlay: { kind: "relics", page: 0 } });
     case "p":
       return ui({ type: "openOverlay", overlay: { kind: "potions" } });
+    case "S":
+      return ui({ type: "openOverlay", overlay: { kind: "settings" } });
     default:
       return null;
   }
 }
 
+/** Under vim bindings hjkl ARE the arrow keys, so they are translated once,
+ *  here, and every screen's own arrow handling then applies unchanged. j/k
+ *  already meant down/up in the inspect overlay and on the map, so only [l]
+ *  is displaced: the combat log answers to [L] instead (in both modes). */
+const VIM_ARROWS: Record<string, Key> = {
+  h: { kind: "left" },
+  j: { kind: "down" },
+  k: { kind: "up" },
+  l: { kind: "right" },
+};
+
+function vimKey(key: Key, view: View): Key {
+  // never in text input, where a char is literal text and a seed may spell hjkl
+  if (!view.vimKeys || key.kind !== "char" || view.mode === "textInput") return key;
+  return VIM_ARROWS[key.ch] ?? key;
+}
+
 export function mapKey(key: Key, view: View): KeyAction | null {
   if (key.kind === "ctrlC") return ui({ type: "quit" });
+  return dispatch(vimKey(key, view), view);
+}
 
+function dispatch(key: Key, view: View): KeyAction | null {
   switch (view.mode) {
     case "textInput": {
       if (key.kind === "char") return ui({ type: "seedEditChar", ch: key.ch });
@@ -113,6 +135,9 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         const m = view.screen;
         if (f !== null && m.kind === "menu") {
           if (f <= 4) return ui({ type: "newRun" });
+          if (f === m.settingsIdx) {
+            return ui({ type: "openOverlay", overlay: { kind: "settings" } });
+          }
           return m.continueDesc !== null ? ui({ type: "continueRun" }) : null;
         }
         return ui({ type: "newRun" });
@@ -138,6 +163,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
         if (m.kind === "menu" && m.continueDesc !== null) return ui({ type: "continueRun" });
         return null;
       }
+      if (ch === "S") return ui({ type: "openOverlay", overlay: { kind: "settings" } });
       if (ch === "q") return ui({ type: "quit" });
       return null;
     }
@@ -169,7 +195,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       }
       if (o.kind === "log") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
-        if (key.kind === "char" && key.ch === "l") return ui({ type: "closeOverlay" });
+        if (key.kind === "char" && (key.ch === "l" || key.ch === "L")) return ui({ type: "closeOverlay" });
         return null;
       }
       if (o.kind === "inspect") {
@@ -313,7 +339,7 @@ export function mapKey(key: Key, view: View): KeyAction | null {
       const d = digitIndex(ch);
       if (d !== null) return playCard(d);
       if (ch === "e") return cmd({ cmd: "endTurn" });
-      if (ch === "l") return ui({ type: "openOverlay", overlay: { kind: "log" } });
+      if (ch === "l" || ch === "L") return ui({ type: "openOverlay", overlay: { kind: "log" } });
       if (ch === "w") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "draw", page: 0 } });
       if (ch === "x") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "discard", page: 0 } });
       if (ch === "z") return ui({ type: "openOverlay", overlay: { kind: "pile", pile: "exhaust", page: 0 } });

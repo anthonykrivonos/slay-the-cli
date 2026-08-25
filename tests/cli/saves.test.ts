@@ -98,10 +98,13 @@ describe("saves", () => {
     const dir = tempDir();
     const io = makeSaveIo(dir);
     expect(io.readPrefs()).toEqual({});
-    io.writePrefs({ seed: "MYSEED", character: "WATCHER", ascension: 12, color: false });
-    expect(io.readPrefs()).toEqual({ seed: "MYSEED", character: "WATCHER", ascension: 12, color: false });
+    io.writePrefs({ seed: "MYSEED", character: "WATCHER", ascension: 12, color: false, vimKeys: true });
+    expect(io.readPrefs()).toEqual({ seed: "MYSEED", character: "WATCHER", ascension: 12, color: false, vimKeys: true });
     writeFileSync(join(dir, "prefs.json"), JSON.stringify({ seed: "OK", character: "NOPE", ascension: 99 }));
     expect(io.readPrefs()).toEqual({ seed: "OK", ascension: 20 });
+    // a non-boolean vimKeys is dropped like any other bad field
+    writeFileSync(join(dir, "prefs.json"), JSON.stringify({ seed: "OK", vimKeys: "yes" }));
+    expect(io.readPrefs()).toEqual({ seed: "OK" });
     writeFileSync(join(dir, "prefs.json"), "garbage");
     expect(io.readPrefs()).toEqual({});
     rmSync(dir, { recursive: true, force: true });

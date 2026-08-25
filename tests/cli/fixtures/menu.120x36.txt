@@ -17,6 +17,7 @@
                           Seed: SPIRE                                               [s] edit                            
                                                                                                                         
                             [n] NEW RUN     [c] CONTINUE - Ironclad A0 - Floor 3 - Act 1                                
+                            [S] SETTINGS                                                                                
                                                                                                                         
                                               --------- IRONCLAD ---------                                              
                                                                -==                                                      
@@ -27,7 +28,6 @@
                                                            +*#%  %##                                                    
                                                             *      **#                                                  
                                                            ##       #%                                                  
-                                                                                                                        
                                                                                                                         
 -- INFO ----------------------------------------------------------------------------------------------------------------
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  

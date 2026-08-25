@@ -23,6 +23,7 @@ Number keys select, letters act.
 | `n` / `c` | new run, continue (on the menu) |
 | `a` / `A` | ascension up and down (on the menu); `+` and `-` also work |
 | `s` | edit the seed (on the menu) |
+| `S` | settings, from the menu or from anywhere in a run |
 | `q` | quit: instant on the menu, `[y]`/`[n]` confirmation mid-run |
 | `Ctrl+C` | quit immediately from anywhere, still safely |
 
@@ -32,6 +33,26 @@ reference rather than something to memorize.
 The hover cursor is read-only: moving it never commits anything. Whatever it
 points at is explained in the INFO panel at the bottom. On menus and lists the
 cursor doubles as the selection, so `Enter` activates it and `Esc` clears it.
+
+## Vim keys
+
+Off by default. `S` opens settings from the menu or from anywhere in a run, and
+`Enter` or `[1]` flips them. The answer is kept in `prefs.json`, so it survives
+quitting.
+
+With them on, `h` `j` `k` `l` are the arrow keys on every screen: they move the
+hover cursor, choose between paths on the map, and step through an inspected
+collection. Exactly one thing has to move out of the way, the combat log, which
+answers to `L` instead. Every other letter keeps its job: `e` end turn, `i`
+inspect, `d` `r` `p` deck, relics and potions, `w` `x` `z` piles.
+
+Two things deliberately do not change. `j` and `k` already stepped through
+inspected cards and scrolled the map, so they mean the same thing either way.
+And typing a seed is still typing, so `s` then `hjkl` spells HJKL.
+
+Whichever way the setting sits, the hint line along the bottom prints the keys
+that are actually live, so a fight reads `[L] log` under vim bindings and
+`[l] log` without them.
 
 ## Nothing is hidden from you
 
@@ -117,8 +138,8 @@ quitting is always safe: `q` and Ctrl+C both exit cleanly, and `c` on the menu
 resumes exactly where you left off. There is no save slot to manage and no
 confirmation to sit through.
 
-`prefs.json` beside it remembers your last character, seed, ascension and color
-setting, so the menu comes back the way you left it.
+`prefs.json` beside it remembers your last character, seed, ascension, color
+setting and whether vim keys are on, so the menu comes back the way you left it.
 
 `SLAY_DIR` moves both files elsewhere. See
 [INSTALL.md](INSTALL.md#where-things-live) for the full layout, and its

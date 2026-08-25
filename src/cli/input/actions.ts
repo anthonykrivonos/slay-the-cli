@@ -20,6 +20,8 @@ export type PureUiAction =
   | { type: "focusClear" }
   | { type: "menuChar"; id: string }
   | { type: "menuAsc"; delta: 1 | -1 }
+  /** flip the vim-keys setting (app.ts persists it to prefs.json) */
+  | { type: "toggleVimKeys" }
   | { type: "seedEditStart" }
   | { type: "seedEditChar"; ch: string }
   | { type: "seedEditBackspace" }

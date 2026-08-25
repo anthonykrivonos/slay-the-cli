@@ -50,7 +50,7 @@ painted to SVG by `tools/gen-readme-shots.ts`, so it cannot drift from the game.
 
 **Pick your survivor.** Four characters, Ascension 0 to 20, one seed box.
 
-![The menu: four character cards, ascension and seed controls, and an ASCII Ironclad](docs/shots/menu.svg)
+![The menu: four character cards, ascension and seed controls, a settings row, and an ASCII Ironclad](docs/shots/menu.svg)
 
 **Fight.** Intents up top, your hand as card-shaped boxes, the combat log
 between them. Every creature is drawn in the average color of its own sprite.

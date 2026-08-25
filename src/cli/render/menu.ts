@@ -135,6 +135,8 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   } else {
     block.push(`${ctrlPad}${newRunStyled}`);
   }
+  // subordinate to the two run actions, so it reads as a side door
+  block.push(`${ctrlPad}${styleAction("[S] SETTINGS", screen.settingsIdx, C.dim)}`);
 
   if (screen.updateNotice !== null) {
     block.push("");
@@ -214,6 +216,12 @@ function renderMenuFallback(screen: MenuView, width: number, height: number, the
     const cont = `${screen.focusIdx === 5 ? ">" : " "} [c] CONTINUE - ${screen.continueDesc}`;
     out.push(screen.focusIdx === 5 ? ` ${theme.bold(theme.fg(accentFb, cont))}` : `  ${theme.fg(C.text, cont.slice(2))}`);
   }
+  const settings = `${screen.focusIdx === screen.settingsIdx ? ">" : " "} [S] SETTINGS`;
+  out.push(
+    screen.focusIdx === screen.settingsIdx
+      ? ` ${theme.bold(theme.fg(accentFb, settings))}`
+      : `  ${theme.fg(C.dim, settings.slice(2))}`,
+  );
   if (screen.updateNotice !== null) {
     out.push(`  ${theme.fg(C.current, screen.updateNotice)}`);
   }

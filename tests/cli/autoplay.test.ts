@@ -57,6 +57,33 @@ describe("headless autoplay", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
+  test("settings toggle survives a relaunch, and vim keys then drive the menu", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "slay-settings-"));
+    const saves = makeSaveIo(dir);
+
+    // S opens settings, Enter toggles vim keys, Esc closes, q quits the menu
+    const first = fakeTerminal({ cols: 100, rows: 30, script: ["S", "\r", "\x1b", "q"] });
+    const a = await runApp({ term: first, saves, options: { seed: "UISMOKE", noColor: true } });
+    expect(a.ui.vimKeys).toBe(true);
+    expect(saves.readPrefs().vimKeys).toBe(true);
+
+    // a fresh launch reads it back, and j now moves the menu cursor
+    const second = fakeTerminal({ cols: 100, rows: 30, script: ["j", "q"] });
+    const b = await runApp({ term: second, saves, options: { seed: "UISMOKE", noColor: true } });
+    expect(b.ui.vimKeys).toBe(true);
+    expect(b.ui.focus).toEqual({ scope: "menu", idx: 0 });
+    // the cursor IS the hero selection on the menu, so j picked the first hero
+    expect(b.ui.character).toBe("IRONCLAD");
+
+    // and it can be turned back off, which is written straight through
+    const third = fakeTerminal({ cols: 100, rows: 30, script: ["S", "1", "\x1b", "q"] });
+    const c = await runApp({ term: third, saves, options: { seed: "UISMOKE", noColor: true } });
+    expect(c.ui.vimKeys).toBe(false);
+    expect(saves.readPrefs().vimKeys).toBe(false);
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
   test("continue resumes the saved run", async () => {
     const dir = mkdtempSync(join(tmpdir(), "slay-continue-"));
     const saves = makeSaveIo(dir);

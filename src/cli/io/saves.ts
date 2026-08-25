@@ -15,6 +15,7 @@ export interface Prefs {
   character?: UICharacterId;
   ascension?: number;
   color?: boolean;
+  vimKeys?: boolean;
 }
 
 export interface SaveIo {
@@ -86,6 +87,7 @@ export function makeSaveIo(dir: string = defaultSaveDir()): SaveIo {
       if (isCharacterId(p.character)) out.character = p.character;
       if (p.ascension !== undefined) out.ascension = clampAscension(p.ascension);
       if (typeof p.color === "boolean") out.color = p.color;
+      if (typeof p.vimKeys === "boolean") out.vimKeys = p.vimKeys;
       return out;
     },
     writePrefs(p: Prefs): void {

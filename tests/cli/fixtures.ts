@@ -120,6 +120,39 @@ export function fxMenu(): Fixture {
   return { game: null, ui: { ...ui, menuSave: { desc: "Ironclad A0 - Floor 3 - Act 1" } } };
 }
 
+/** The settings overlay over the menu: the one overlay that opens without a
+ *  run. Cursor on the only row, vim keys off (the default). */
+export function fxSettings(): Fixture {
+  const ui = initialUiState({ seed: "SPIRE" });
+  return {
+    game: null,
+    ui: {
+      ...ui,
+      menuSave: { desc: "Ironclad A0 - Floor 3 - Act 1" },
+      overlays: [{ kind: "settings" }],
+    },
+  };
+}
+
+/** The same overlay with vim keys on, so the snapshot shows the [x] state. */
+export function fxSettingsVim(): Fixture {
+  const ui = initialUiState({ seed: "SPIRE", vimKeys: true });
+  return {
+    game: null,
+    ui: {
+      ...ui,
+      menuSave: { desc: "Ironclad A0 - Floor 3 - Act 1" },
+      overlays: [{ kind: "settings" }],
+    },
+  };
+}
+
+/** The settings overlay reached mid-combat, over a live fight. */
+export function fxSettingsInRun(): Fixture {
+  const f = fxCombat();
+  return { game: f.game, ui: { ...f.ui, vimKeys: true, overlays: [{ kind: "settings" }] } };
+}
+
 /** Menu with the startup update check reporting a newer version upstream. */
 export function fxMenuUpdate(): Fixture {
   const ui = initialUiState({ seed: "SPIRE" });
@@ -374,6 +407,9 @@ export function fxMapAct4(): Fixture {
 export const FIXTURES: Record<string, () => Fixture> = {
   menu: fxMenu,
   "menu-update": fxMenuUpdate,
+  settings: fxSettings,
+  "settings-vim": fxSettingsVim,
+  "settings-in-run": fxSettingsInRun,
   neow: fxNeow,
   "map-act1": fxMapAct1,
   "map-act4": fxMapAct4,

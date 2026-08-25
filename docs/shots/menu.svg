@@ -21,15 +21,16 @@
 <text y="325" xml:space="preserve"><tspan x="14" textLength="342" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0">                          Ascension 0 </tspan><tspan x="356" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">- The standard climb</tspan><tspan x="689" textLength="153" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">[a] up / [A] down</tspan></text>
 <text y="343" xml:space="preserve"><tspan x="248" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">Seed:</tspan><tspan x="302" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#f0e8d2" font-weight="bold">SPIRE</tspan><tspan x="770" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">[s] edit</tspan></text>
 <text y="379" xml:space="preserve"><tspan x="266" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#6fce87" font-weight="bold">[n] NEW RUN</tspan><tspan x="410" textLength="396" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" font-weight="bold">[c] CONTINUE - Ironclad A0 - Floor 3 - Act 1</tspan></text>
-<text y="415" xml:space="preserve"><tspan x="428" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">---------</tspan><tspan x="509" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#c25454" font-weight="bold"> IRONCLAD </tspan><tspan x="599" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">---------</tspan></text>
-<text y="433" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">             -==    </tspan></text>
-<text y="451" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">            +**++   </tspan></text>
-<text y="469" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">++++++++++++*##**   </tspan></text>
-<text y="487" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">            ##%#*   </tspan></text>
-<text y="505" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">           ######   </tspan></text>
-<text y="523" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">         +*#%  %##  </tspan></text>
-<text y="541" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">          *      **#</tspan></text>
-<text y="559" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">         ##       #%</tspan></text>
+<text y="397" xml:space="preserve"><tspan x="266" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#6f7a92" font-weight="bold">[S] SETTINGS</tspan></text>
+<text y="433" xml:space="preserve"><tspan x="428" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">---------</tspan><tspan x="509" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#c25454" font-weight="bold"> IRONCLAD </tspan><tspan x="599" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">---------</tspan></text>
+<text y="451" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">             -==    </tspan></text>
+<text y="469" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">            +**++   </tspan></text>
+<text y="487" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">++++++++++++*##**   </tspan></text>
+<text y="505" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">            ##%#*   </tspan></text>
+<text y="523" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">           ######   </tspan></text>
+<text y="541" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">         +*#%  %##  </tspan></text>
+<text y="559" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">          *      **#</tspan></text>
+<text y="577" xml:space="preserve"><tspan x="464" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c25454">         ##       #%</tspan></text>
 <text y="613" xml:space="preserve"><tspan x="14" textLength="1080" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">-- INFO ----------------------------------------------------------------------------------------------------------------</tspan></text>
 <text y="631" xml:space="preserve"><tspan x="14" textLength="630" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55"> Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly</tspan></text>
 <text y="685" xml:space="preserve"><tspan x="14" textLength="1080" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">[1-4] hero  [a/A] ascension  [s] seed  [n] new run  [c] continue  [q] quit                                              </tspan></text>

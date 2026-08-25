@@ -276,6 +276,7 @@ function mayhemPlayTop(ctx: EffectCtx): void {
     purgeOnUse: false,
     exhaustOnUse: false,
     autoplayed: true,
+    via: "MAYHEM",
   });
 }
 

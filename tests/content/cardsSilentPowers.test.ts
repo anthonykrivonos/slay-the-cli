@@ -56,6 +56,18 @@ describe("POISON end-to-end", () => {
     expect(s.eventLog.some((e) => e.event === "combatEnded" && e.payload === "victory")).toBe(true);
   });
 
+  // MonsterGroup::doMonsterTurn re-checks isDeadOrEscaped before takeTurn, so a
+  // monster that dies to its own start-of-turn tick never gets its move off.
+  test("a monster killed by its own poison tick does not attack", () => {
+    let s = fight({ deck: ["DEADLY_POISON", ...strikes(4)], monsters: ["T_TANK", "T_GUARD"] });
+    s = play(s, "DEADLY_POISON", 0);
+    s.combat!.monsters[0]!.hp = 3; // 5 poison vs 3 HP
+    const hp0 = s.run.hp;
+    s = endTurn(s);
+    expect(s.combat!.monsters[0]!.isDead).toBe(true);
+    expect(s.run.hp).toBe(hp0); // the tank's 10-damage Attack never happened
+  });
+
   test("wakes Lagavulin (wasHPLost) through its 8 block", () => {
     let s = fight({ deck: ["DEADLY_POISON", ...strikes(4)], monsters: ["LAGAVULIN"] });
     const m = s.combat!.monsters[0]!;

@@ -45,10 +45,8 @@ export const silentPowers: PowerDef[] = [
         // SYNCHRONOUS loseHp (bypasses block; fires wasHPLost - wakes Lagavulin,
         // triggers Corpse Explosion/Mode Shift) so the HP loss lands before the
         // owner's move queues its damage. THEN stacks -1 (removed at 0).
-        // ENGINE-GAP: executeMonsterMove checks isDead only on entry, before
-        // this hook fires - a monster killed by its own start-of-turn poison
-        // still executes its already-rolled move this turn (the real game
-        // re-checks isDeadOrEscaped before takeTurn). Its next-move roll also
+        // A monster killed here does not act: executeMonsterMove re-checks
+        // isDead after this hook. ENGINE-GAP (still open): its next-move roll
         // happens before queued wake effects resolve (see the Lagavulin test).
         executeAction(ctx, { kind: "loseHp", target: ctx.owner, amount: amt });
         reducePower(ctx, ctx.owner, "POISON", 1);
@@ -228,6 +226,7 @@ export const silentPowers: PowerDef[] = [
           purgeOnUse: false,
           exhaustOnUse: false,
           autoplayed: true,
+          via: "BURST",
         });
         ctx.queue.addToBottom({ kind: "reducePower", target: ctx.owner, powerId: "BURST", amount: 1 });
       },

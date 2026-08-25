@@ -8,6 +8,7 @@ import { PLAYER } from "../../src/engine/core/ids";
 import { makeTestBundle } from "../helpers/testBundle";
 import { corePowers } from "../../src/content/powers/core";
 import { ironcladBasics } from "../../src/content/cards/ironclad/basics";
+import { statusCards } from "../../src/content/cards/ironclad/index";
 import { allRelics, relicSupportPowers } from "../../src/content/relics";
 import { allPotions } from "../../src/content/potions";
 
@@ -68,7 +69,7 @@ function makeBundle(): ContentBundle {
   for (const p of relicSupportPowers) b.powers.set(p.id, p);
   for (const r of allRelics) b.relics.set(r.id, r);
   for (const p of allPotions) b.potions.set(p.id, p);
-  for (const c of [...extraCards, ...ironcladBasics]) b.cards.set(c.id, c);
+  for (const c of [...extraCards, ...ironcladBasics, ...statusCards]) b.cards.set(c.id, c);
   b.monsters.set(tElite.id, tElite);
   b.monsters.set(tBoss.id, tBoss);
   for (const s of stances) b.stances.set(s.id, s);
@@ -351,6 +352,18 @@ describe("turn-structure relics", () => {
     let s = game({ deck: strikes(12), relics: ["RUNIC_PYRAMID"] });
     s = advance(s, { cmd: "endTurn" }, B);
     expect(s.combat!.player.piles.hand.length).toBe(10); // 5 kept + 5 drawn
+  });
+
+  // BattleContext::discardAtEndOfTurn skips the DISCARD for Runic Pyramid, then
+  // runs its ethereal loop anyway: a kept hand still burns its Ethereal cards.
+  test("Runic Pyramid keeps the hand but Ethereal cards still exhaust", () => {
+    // a 5-card deck lands entirely in the opening hand, Dazed included
+    let s = game({ deck: [...strikes(4), { defId: "DAZED" }], relics: ["RUNIC_PYRAMID"] });
+    expect(handNames(s)).toContain("DAZED");
+    s = advance(s, { cmd: "endTurn" }, B);
+    expect(handNames(s)).not.toContain("DAZED"); // ethereal burns out of a kept hand
+    expect(s.combat!.player.piles.exhaust.length).toBe(1);
+    expect(handNames(s)).toEqual(["T_STRIKE", "T_STRIKE", "T_STRIKE", "T_STRIKE"]); // the rest stayed
   });
 
   test("Snecko Eye: draw 7 and start Confused (costs land in 0..3)", () => {

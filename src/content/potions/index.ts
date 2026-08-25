@@ -214,6 +214,7 @@ export const allPotions: PotionDef[] = [
           purgeOnUse: false,
           exhaustOnUse: false,
           autoplayed: true,
+          via: "DISTILLED_CHAOS",
         });
       }
     },

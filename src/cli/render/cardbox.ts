@@ -30,6 +30,9 @@ export interface CardBoxData {
   targeted: boolean;
   /** rules text lines (unwrapped; wrapped to fit here) */
   rules: string[];
+  /** the card's live numbers, right-aligned on the last inner row: "9 dmg".
+   *  tone says whether a power raised it (up) or Weak/Frail cut it (down). */
+  preview?: { text: string; tone: "up" | "down" | "flat" } | null;
   /** whole box dim (unplayable / unaffordable / sold / taken) */
   dim: boolean;
 }
@@ -66,11 +69,31 @@ function inner(content: string, w: number): string {
   return `| ${padClip(content, w - 4)} |`;
 }
 
+/** Right-aligned live numbers: green when a power raised them, red when Weak or
+ *  Frail cut them, dim when the card is doing exactly what it says. */
+function previewRow(
+  preview: NonNullable<CardBoxData["preview"]>,
+  iw: number,
+  theme: Theme,
+  dim: boolean,
+): string {
+  const text = preview.text.length >= iw ? preview.text.slice(0, iw) : preview.text.padStart(iw);
+  if (dim) return text;
+  if (preview.tone === "up") return theme.bold(theme.fg(C.good, text));
+  if (preview.tone === "down") return theme.bold(theme.fg(C.bad, text));
+  return theme.dim(text);
+}
+
 /** Render one card box: exactly h rows of exactly w visible columns. */
 export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): string[] {
   const iw = w - 4;
   const hasTypeRow = h >= 6 && card.type.length > 0;
-  const rulesRows = Math.max(0, h - (hasTypeRow ? 4 : 3));
+  // the live numbers own the last inner row, so the rules wrap one row shorter
+  // (the truncation marker below already says when text was cut). A box too
+  // short to hold both keeps the rules.
+  const previewFits = h >= (hasTypeRow ? 5 : 4);
+  const preview = (previewFits ? card.preview : null) ?? null;
+  const rulesRows = Math.max(0, h - (hasTypeRow ? 4 : 3) - (preview !== null ? 1 : 0));
   const mark = card.targeted ? ">" : "";
 
   // name row ('>' joins the name when the type row is dropped)
@@ -129,6 +152,7 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
   rows.push(nameRow);
   if (typeRow !== null) rows.push(typeRow);
   for (const r of shown) rows.push(inner(card.dim ? r : theme.dim(r), w));
+  if (preview !== null) rows.push(inner(previewRow(preview, iw, theme, card.dim), w));
   rows.push(bottomBorder(card.key, w, theme, card.dim));
 
   const out = rows.slice(0, h).map((r) => padClip(r, w));

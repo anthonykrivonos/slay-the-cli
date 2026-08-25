@@ -1,4 +1,4 @@
- HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT 0/3 | DECK 10 | REL 1 | Ironclad |
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT --- | DECK 10 | REL 1 | Ironclad |
 -- NEOW'S BLESSING - choose one ------------------------------------------------
     +-[1]------------------------------------------------------------------+    
     | Obtain a random rare card                                            |    

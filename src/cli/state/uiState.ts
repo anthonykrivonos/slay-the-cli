@@ -5,6 +5,9 @@
 import type { UICharacterId } from "../text/runlogic";
 import { clampAscension, MAX_ASCENSION, isCharacterId, CHARACTER_IDS } from "../text/runlogic";
 import type { PureUiAction } from "../input/actions";
+import type { GameEvent } from "../../engine/game";
+import type { ContentBundle } from "../../engine/content/defs";
+import { formatEvent } from "../text/logfmt";
 
 export type PileName = "draw" | "discard" | "exhaust";
 export type DeckOverlayMode = "view" | "smith" | "remove";
@@ -39,6 +42,14 @@ export type Targeting =
 
 export const LOG_LIMIT = 200;
 
+/** One log line, stamped with the combat it belongs to: era 0 is everything
+ *  before the first fight, and every combatStarted bumps it. The UI reads it to
+ *  keep the fight you are in separate from the ones behind you. */
+export interface LogLine {
+  text: string;
+  era: number;
+}
+
 export interface UiState {
   screen: "menu" | "run";
   // menu selections (persisted in prefs.json by the app)
@@ -67,7 +78,9 @@ export interface UiState {
   /** map viewport offset in node rows, relative to the auto-follow anchor */
   mapScroll: number;
   /** rolling formatted engine-event log (ring of LOG_LIMIT) */
-  log: string[];
+  log: LogLine[];
+  /** current combat counter; log lines are stamped with it */
+  logEra: number;
   toast: string | null;
   /** treasure-room open result (display only) */
   lastLoot: string | null;
@@ -95,6 +108,7 @@ export function initialUiState(opts: {
     choicePage: 0,
     mapScroll: 0,
     log: [],
+    logEra: 0,
     toast: null,
     lastLoot: null,
   };
@@ -117,11 +131,31 @@ export function resetRunUi(ui: UiState): UiState {
   };
 }
 
-export function pushLog(ui: UiState, lines: string[]): UiState {
+/** Append already-formatted lines to the current era (synthetic UI notes). */
+export function pushLogLines(ui: UiState, lines: string[]): UiState {
   if (lines.length === 0) return ui;
-  const log = [...ui.log, ...lines];
+  const log = [...ui.log, ...lines.map((text) => ({ text, era: ui.logEra }))];
   if (log.length > LOG_LIMIT) log.splice(0, log.length - LOG_LIMIT);
   return { ...ui, log };
+}
+
+/** Format and append an engine event batch. The era bump lives here so every
+ *  caller (app, fixtures, tests) splits combats the same way. */
+export function pushLog(ui: UiState, events: GameEvent[], bundle: ContentBundle): UiState {
+  let next = ui;
+  for (const ev of events) {
+    if (ev.event === "combatStarted") next = { ...next, logEra: next.logEra + 1 };
+    next = pushLogLines(next, [formatEvent(ev, bundle)]);
+  }
+  return next;
+}
+
+/** Index of the first line of the current era (where the log overlay stops
+ *  dimming). log.length when the current era has no lines yet. */
+export function currentEraStart(ui: UiState): number {
+  let i = ui.log.length;
+  while (i > 0 && ui.log[i - 1]!.era === ui.logEra) i--;
+  return i;
 }
 
 /** Pure reducer over the UI-only actions (engine commands and app-effectful

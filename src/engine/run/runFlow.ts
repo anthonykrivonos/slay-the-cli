@@ -498,6 +498,7 @@ function addRelic(ctx: EffectCtx, id: string): void {
 function addCardToDeck(ctx: EffectCtx, defId: string, upgraded: boolean): void {
   if (!vetoHook(ctx, PLAYER, "onObtainCard", defId)) return; // Omamori-style veto
   ctx.run.deck.push({ defId, upgrades: upgraded ? 1 : 0, misc: 0, bottled: false });
+  ctx.emit("deckCardObtained", { defId, upgrades: upgraded ? 1 : 0 });
 }
 
 function gainGold(ctx: EffectCtx, amount: number): void {

@@ -5,10 +5,12 @@
 
 import type { GameState, Command } from "../../engine/game";
 import type { RoomState, RewardEntry } from "../../engine/run/runState";
-import type { CardInstance } from "../../engine/combat/combatState";
-import type { ContentBundle } from "../../engine/content/defs";
+import type { CardInstance, CombatState } from "../../engine/combat/combatState";
+import type { CardDef, ContentBundle } from "../../engine/content/defs";
 import type { PendingChoice } from "../../engine/core/actions";
 import { getIntents, type IntentInfo, type IntentPower } from "../../engine/combat/intents";
+import { peekRelicFromPool } from "../../engine/run/rewards";
+import { getCardPreviews, previewCardAt, type CardPreview } from "../../engine/combat/preview";
 import {
   titleCase,
   isCharacterId,
@@ -48,9 +50,10 @@ import { relicText, relicLines, relicGlossary } from "../text/relictext";
 import { potionText, potionLines, potionGlossary } from "../text/potiontext";
 import { powerText } from "../text/powertext";
 import type { Keyword } from "../text/keywords";
-import { CARD_COLOR_ACCENTS } from "../text/runlogic";
+import { CARD_TYPE_ACCENTS } from "../text/runlogic";
 import { toAscii } from "../text/ascii";
 import type { UiState, Overlay, PileName, InspectSource } from "./uiState";
+import { currentEraStart } from "./uiState";
 import { cmd, ui as uiAct, type KeyAction } from "../input/actions";
 
 // --- view types ----------------------------------------------------------------
@@ -81,8 +84,8 @@ export interface HeaderView {
   act: number;
   ascension: number;
   keys: { emerald: boolean; ruby: boolean; sapphire: boolean };
-  potionCount: number;
-  potionSlots: number;
+  /** one entry per potion slot, in slot order; null = empty */
+  potions: ({ name: string; letter: string } | null)[];
   deckCount: number;
   relicCount: number;
   seed: string;
@@ -231,14 +234,19 @@ export interface CombatView {
     key: string | null;
     name: string;
     cost: string;
+    /** card type: keys CARD_TYPE_ACCENTS and the A/S/P letter */
     type: string;
     rarity: string;
-    color: string;
     targeted: boolean;
     playable: boolean;
     /** full rules text, split into lines */
     rules: string[];
+    /** what the card would really do right now ("9 dmg", "3 blk"), with the
+     *  tone saying whether powers pushed it up or down. null = nothing to show */
+    preview: { text: string; tone: "up" | "down" | "flat" } | null;
   }[];
+  /** the two numbers that decide a turn, for the readout above your panel */
+  threat: { incoming: number; block: number };
   piles: { draw: number; discard: number; exhaust: number };
   relics: { name: string; abbrev: string; counter: number }[];
   potions: ({ name: string; letter: string } | null)[];
@@ -264,7 +272,8 @@ export interface ShopCardView {
   i: number;
   name: string;
   cost: string;
-  color: string;
+  /** card type, keying CARD_TYPE_ACCENTS */
+  cardType: string;
   rules: string[];
   price: number;
   sold: boolean;
@@ -310,7 +319,7 @@ export type RewardRowView =
       type: "group";
       kind: "card" | "bossRelic";
       title: string;
-      items: { i: number; name: string; cost: string; color: string; rules: string[]; enabled: boolean; note: string | null }[];
+      items: { i: number; name: string; cost: string; cardType: string; rules: string[]; enabled: boolean; note: string | null }[];
     };
 
 export interface RewardsView {
@@ -372,12 +381,14 @@ export type OverlayView =
       index: number;
       count: number;
     }
-  | { kind: "log"; title: string; lines: string[] }
+  | { kind: "log"; title: string; lines: string[]; currentFrom: number }
   | { kind: "confirmQuit" };
 
 export interface TargetingView {
   prompt: string;
-  targets: { key: string; name: string; action: KeyAction }[];
+  /** damage: what the card would deal to THAT target (Vulnerable lives on the
+   *  target, so this is the number you are choosing between) */
+  targets: { key: string; name: string; damage: number | null; action: KeyAction }[];
   /** auto-focused candidate target (always set while targeting) */
   focusIdx: number;
 }
@@ -581,6 +592,60 @@ function buildIntentView(bundle: ContentBundle, info: IntentInfo | null): Intent
   };
 }
 
+/**
+ * The card's real numbers as one short line ("9 dmg", "9 dmg x2", "3 blk",
+ * "9 dmg / 5 blk"), with the tone set by comparing against the printed value:
+ * up when a power raised it, down when Weak or Frail cut it.
+ */
+function handPreview(
+  def: CardDef | undefined,
+  upgrades: number,
+  pv: CardPreview | null,
+): { text: string; tone: "up" | "down" | "flat" } | null {
+  if (!pv) return null;
+  const printed = (k: "damage" | "block"): number | undefined =>
+    upgrades > 0 && def?.upgradeValues[k] !== undefined ? def.upgradeValues[k] : def?.values[k];
+  const parts: string[] = [];
+  let tone: "up" | "down" | "flat" = "flat";
+  const compare = (got: number, base: number | undefined): void => {
+    if (base === undefined || tone !== "flat") return;
+    tone = got > base ? "up" : got < base ? "down" : "flat";
+  };
+  if (pv.damage !== null) {
+    parts.push(`${pv.damage} dmg${pv.hits > 1 ? ` x${pv.hits}` : ""}`);
+    compare(pv.damage, printed("damage"));
+  }
+  if (pv.block > 0) {
+    parts.push(`${pv.block} blk`);
+    compare(pv.block, printed("block"));
+  }
+  if (parts.length === 0) return null;
+  return { text: parts.join(" / "), tone };
+}
+
+/** The enemy the hover cursor points at, if it points at one. The combat
+ *  focus order is hand -> living enemies -> relics -> potions (see below). */
+function cursorEnemyIdx(c: CombatState, handCount: number, screenFocus: number | null): number | null {
+  if (screenFocus === null) return null;
+  const alive: number[] = [];
+  c.monsters.forEach((m, idx) => {
+    if (!m.isDead && !m.isEscaped) alive.push(idx);
+  });
+  const k = screenFocus - handCount;
+  return k >= 0 && k < alive.length ? (alive[k] ?? null) : null;
+}
+
+/** Total damage aimed at you this turn, over every living attacker. */
+function incomingDamage(intents: (IntentInfo | null)[], monsters: { isDead: boolean; isEscaped: boolean }[]): number {
+  let total = 0;
+  intents.forEach((info, idx) => {
+    const m = monsters[idx];
+    if (!info || !m || m.isDead || m.isEscaped || info.damage === null) return;
+    total += info.damage * Math.max(1, info.hits);
+  });
+  return total;
+}
+
 const ORB_LETTERS: Record<string, string> = {
   LIGHTNING: "L",
   FROST: "F",
@@ -617,6 +682,12 @@ function firstRulesLine(defId: string, upgrades: number): string {
 
 // --- header ---------------------------------------------------------------------
 
+/** Potion slot label shared by the header cell and the combat strip. */
+function potionSlotView(bundle: ContentBundle, id: string): { name: string; letter: string } {
+  const name = potionName(bundle, id);
+  return { name: toAscii(name), letter: name.slice(0, 1).toUpperCase() };
+}
+
 function buildHeader(g: GameState, bundle: ContentBundle): HeaderView {
   const run = g.run;
   return {
@@ -629,8 +700,7 @@ function buildHeader(g: GameState, bundle: ContentBundle): HeaderView {
     act: run.act,
     ascension: run.ascension,
     keys: { ...run.keys },
-    potionCount: run.potions.filter((p) => p !== null).length,
-    potionSlots: run.potions.length,
+    potions: run.potions.map((id) => (id === null ? null : potionSlotView(bundle, id))),
     deckCount: run.deck.length,
     relicCount: run.relics.length,
     seed: g.seed,
@@ -780,6 +850,12 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
       }
     }
   }
+  // previews aim at the enemy under the cursor when there is one, else at the
+  // first living target - the same monster a click would hit by default
+  const firstAlive = c.monsters.findIndex((m) => !m.isDead && !m.isEscaped);
+  const cursorEnemy = cursorEnemyIdx(c, c.player.piles.hand.length, screenFocus);
+  const previewTarget = cursorEnemy ?? (firstAlive === -1 ? 0 : firstAlive);
+  const previews = getCardPreviews(g, bundle, previewTarget);
   const hand = c.player.piles.hand.map((iid, i) => {
     const card = c.cards[iid]!;
     const def = bundle.cards.get(card.defId);
@@ -789,13 +865,13 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
       cost: instCostLabel(card),
       type: def?.type ?? "?",
       rarity: def?.rarity ?? "?",
-      color: def?.color ?? "?",
       targeted: def?.target === "enemy",
       playable: isPlayable(card, p.energy),
       rules: cardRulesText(card.defId, card.upgrades)
         .split("\n")
         .filter((l) => l.trim().length > 0)
         .map(toAscii),
+      preview: handPreview(def, card.upgrades, previews[i] ?? null),
     };
   });
 
@@ -827,6 +903,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     kind: "combat",
     turn: c.turn,
     enemies,
+    threat: { incoming: incomingDamage(intents, c.monsters), block: p.block },
     you: {
       id: g.run.character,
       name: toAscii(bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character)),
@@ -851,10 +928,9 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
       const name = toAscii(relicName(bundle, r.defId));
       return { name, abbrev: relicAbbrev(name), counter: r.counter };
     }),
-    potions: g.run.potions.map((id) =>
-      id === null ? null : { name: toAscii(potionName(bundle, id)), letter: potionName(bundle, id).slice(0, 1).toUpperCase() },
-    ),
-    log: ui.log.slice(-8).map(toAscii),
+    potions: g.run.potions.map((id) => (id === null ? null : potionSlotView(bundle, id))),
+    // only the fight you are in: the era stamp keeps the previous combat out
+    log: ui.log.filter((l) => l.era === ui.logEra).slice(-8).map((l) => toAscii(l.text)),
     focusHand,
     focusEnemy,
     focusPotionSlot,
@@ -918,7 +994,7 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
           i: idx,
           name: toAscii(rewardLabel(entry, bundle)),
           cost: entry.kind === "card" && def ? masterCostLabel(masterCardCost(def, up)) : "",
-          color: entry.kind === "card" ? (def?.color ?? "?") : "relic",
+          cardType: entry.kind === "card" ? (def?.type ?? "?") : "relic",
           rules:
             entry.kind === "card"
               ? cardRulesText(entry.id, up)
@@ -965,7 +1041,7 @@ function buildShop(g: GameState, room: Extract<RoomState, { kind: "shop" }>, pag
       i: items.length - 1,
       name: toAscii(def?.name ?? titleCase(slot.id)),
       cost: def ? masterCostLabel(def.cost) : "?",
-      color: def?.color ?? "?",
+      cardType: def?.type ?? "?",
       rules: cardRulesText(slot.id, 0)
         .split("\n")
         .filter((l) => l.trim().length > 0)
@@ -1073,16 +1149,28 @@ function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, pag
   return { kind: "rest", title: "REST SITE", intro, list: makeList(items, page, focusI) };
 }
 
-function buildTreasure(room: Extract<RoomState, { kind: "treasure" }>, ui: UiState, page: number, focusI: number | null): SimpleListScreen {
+function buildTreasure(
+  g: GameState,
+  room: Extract<RoomState, { kind: "treasure" }>,
+  ui: UiState,
+  page: number,
+  focusI: number | null,
+  bundle: ContentBundle,
+): SimpleListScreen {
   const chest = room.chest;
-  const intro = [chest.opened ? (ui.lastLoot ?? "Chest opened.") : "Something glints inside..."];
+  // The relic is decided at setup (the pools are shuffled at run start), so the
+  // chest can show what is in it before you trade it for the key. DEVIATION:
+  // the real game reveals on opening, one click later; the information is the
+  // same, and choosing the key blind was worse.
+  const relic = chest.opened ? null : toAscii(relicName(bundle, peekRelicFromPool(g.run, chest.relicTier)));
+  const intro = [chest.opened ? (ui.lastLoot ?? "Chest opened.") : `Inside: ${relic}`];
   const items: RawItem[] = [];
   if (!chest.opened) {
     items.push({ label: "Open the chest", action: cmd({ cmd: "openChest" }) });
     if (chest.sapphireKeyAvailable) {
       items.push({
         label: "Take the Sapphire Key",
-        sub: "Forfeits the relic inside",
+        sub: `Forfeits ${relic}`,
         action: cmd({ cmd: "takeSapphireKey" }),
       });
     }
@@ -1396,7 +1484,7 @@ function describeInspect(
     chip: "CARD",
     name: toAscii(cardName(bundle, ref.defId, ref.upgrades)),
     cost: ref.cost,
-    color: CARD_COLOR_ACCENTS[def?.color ?? ""] ?? TIP_COLOR.card,
+    color: CARD_TYPE_ACCENTS[def?.type ?? ""] ?? TIP_COLOR.card,
     type: `${titleCase(def?.type ?? "?")} - ${def?.rarity ?? "?"}`,
     targeted: def?.target === "enemy",
     rules: cardRulesText(ref.defId, ref.upgrades)
@@ -1411,12 +1499,16 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
   switch (top.kind) {
     case "confirmQuit":
       return { kind: "confirmQuit" };
-    case "log":
+    case "log": {
+      const shown = ui.log.slice(-100);
       return {
         kind: "log",
         title: `Combat log - ${ui.log.length} entr${ui.log.length === 1 ? "y" : "ies"}`,
-        lines: ui.log.slice(-100).map(toAscii),
+        lines: shown.map((l) => toAscii(l.text)),
+        // everything above this belongs to an earlier fight (rendered dim)
+        currentFrom: Math.max(0, currentEraStart(ui) - (ui.log.length - shown.length)),
       };
+    }
     case "deck": {
       const deck = g.run.deck;
       const shopRoom = g.run.room?.kind === "shop" ? g.run.room : null;
@@ -1541,12 +1633,21 @@ function buildTargeting(g: GameState, ui: UiState, bundle: ContentBundle): Targe
     what = id ? potionName(bundle, id) : "the potion";
   }
   let no = 0;
+  // the card is aimed but not yet committed: price every candidate, so Vulnerable
+  // and Weak are visible in the choice itself
+  const iid = t.kind === "card" ? g.combat.player.piles.hand[t.handIdx] : undefined;
+  const damageAt = (idx: number): number | null => {
+    if (iid === undefined) return null;
+    const pv = previewCardAt(g, bundle, iid, idx);
+    return pv?.damage ?? null;
+  };
   const targets = g.combat.monsters
     .map((m, idx) => ({ m, idx }))
     .filter(({ m }) => !m.isDead && !m.isEscaped)
     .map(({ m, idx }) => ({
       key: keyFor(no++) ?? "?",
       name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
+      damage: damageAt(idx),
       action:
         t.kind === "card"
           ? cmd({ cmd: "playCard", handIdx: t.handIdx, target: idx })
@@ -1590,7 +1691,7 @@ function tipCard(bundle: ContentBundle, defId: string, upgrades: number, costLab
   if (missing.length > 0) lines.push(missing.map((k) => `${k}.`).join(" "));
   return {
     chip: "CARD",
-    color: CARD_COLOR_ACCENTS[def?.color ?? ""] ?? TIP_COLOR.card,
+    color: CARD_TYPE_ACCENTS[def?.type ?? ""] ?? TIP_COLOR.card,
     name: toAscii(`${cardName(bundle, defId, upgrades)} (${costLabel})`),
     meta: toAscii(
       `${titleCase(def?.type ?? "?")} - ${def?.rarity ?? "?"}${def?.target === "enemy" ? " - targets an enemy" : ""}${metaExtra}`,
@@ -2219,7 +2320,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
       screen = buildRest(game, room, ui.page, screenFocus, bundle);
       break;
     case "treasure":
-      screen = buildTreasure(room, ui, ui.page, screenFocus);
+      screen = buildTreasure(game, room, ui, ui.page, screenFocus, bundle);
       break;
     case "event":
       screen = buildEvent(game, room, ui.page, screenFocus, bundle);
@@ -2265,7 +2366,7 @@ export function buildView(game: GameState | null, ui: UiState, bundle: ContentBu
     overlay,
     targeting,
     toast: ui.toast != null ? toAscii(ui.toast) : null,
-    log: ui.log.slice(-8).map(toAscii),
+    log: ui.log.slice(-8).map((l) => toAscii(l.text)),
     hint: hintFor(mode, { screen, overlay, inspect }),
     tooltip: focus.tooltip,
     inspect,

@@ -470,6 +470,15 @@ function resolveCardPlay(ctx: EffectCtx, item: CardQueueItem): void {
     combat.combatFlags.powersPlayedThisCombat++;
   }
 
+  ctx.emit("cardPlayed", {
+    iid: item.iid,
+    defId: c.defId,
+    upgrades: c.upgrades,
+    target: item.target,
+    autoplayed: item.autoplayed,
+    via: item.via,
+  });
+
   // 1. card's own effects enqueue
   const cctx = cardCtx(ctx, c, item.target, item.energyOnUse);
   if (def.primitives) executePrimitives(cctx, def);
@@ -657,9 +666,16 @@ function onTurnEnding(ctx: EffectCtx): void {
   ctx.queue.addToBottom({ kind: "monsterTurn" });
 }
 
+/**
+ * End-of-turn hand pass (BattleContext::discardAtEndOfTurn). Retain wins over
+ * everything, then ETHEREAL exhausts - and it exhausts even while the hand is
+ * being kept: retainsHand (Runic Pyramid, Equilibrium) skips only the discard,
+ * exactly like the reference, whose ethereal loop runs after the Runic Pyramid
+ * check.
+ */
 function endOfTurnDiscard(ctx: EffectCtx): void {
   const combat = ctx.combat!;
-  if (anyHook(ctx, PLAYER, "retainsHand")) return; // Runic Pyramid
+  const keepsHand = anyHook(ctx, PLAYER, "retainsHand");
   for (const iid of [...combat.player.piles.hand]) {
     const c = combat.cards[iid]!;
     const def = ctx.bundle.cards.get(c.defId)!;
@@ -673,7 +689,7 @@ function endOfTurnDiscard(ctx: EffectCtx): void {
       exhaustCard(ctx, iid);
       continue;
     }
-    discardCard(ctx, iid, false);
+    if (!keepsHand) discardCard(ctx, iid, false);
   }
 }
 
@@ -709,6 +725,11 @@ function executeMonsterMove(ctx: EffectCtx, idx: number): void {
   if (getPowerAmount(ctx, monster(idx), "BARRICADE") === 0) m.block = 0;
 
   fireHook(ctx, monster(idx), "atStartOfTurn");
+  // A start-of-turn power can kill its owner (Poison loses HP synchronously).
+  // The reference applies those powers in a separate pre-turn action and
+  // re-checks isDeadOrEscaped before takeTurn (MonsterGroup::doMonsterTurn),
+  // so a monster that dies here does not act.
+  if (m.isDead || m.isEscaped) return;
   if (m.move) {
     const move = def.moves[m.move];
     if (!move) throw new Error(`unknown move ${m.move} on ${m.id}`);

@@ -24,7 +24,7 @@ import { PLAYER } from "../../engine/core/ids";
  * modifyCreatedCardUpgrades (Master Reality), which the game would not apply
  * to a duplicated play.
  */
-function duplicateCardPlay(ctx: EffectCtx, card: CardInstance, target: number | null, item: CardQueueItem): void {
+function duplicateCardPlay(ctx: EffectCtx, card: CardInstance, target: number | null, item: CardQueueItem, via: string): void {
   const combat = ctx.combat!;
   const def = ctx.bundle.cards.get(card.defId);
   if (!def) return;
@@ -40,6 +40,7 @@ function duplicateCardPlay(ctx: EffectCtx, card: CardInstance, target: number | 
       purgeOnUse: true,
       exhaustOnUse: false,
       autoplayed: true,
+      via,
     });
     return;
   }
@@ -52,6 +53,7 @@ function duplicateCardPlay(ctx: EffectCtx, card: CardInstance, target: number | 
     purgeOnUse: false,
     exhaustOnUse: false,
     autoplayed: true,
+    via,
   });
 }
 
@@ -73,7 +75,7 @@ export const defectPowers: PowerDef[] = [
         const used = (ctx.power!.data?.used as number | undefined) ?? 0;
         if (used >= ctx.power!.amount) return;
         ctx.power!.data = { used: used + 1 };
-        duplicateCardPlay(ctx, card, target, item);
+        duplicateCardPlay(ctx, card, target, item, "ECHO_FORM");
       },
     },
   },
@@ -90,7 +92,7 @@ export const defectPowers: PowerDef[] = [
         if (ctx.bundle.cards.get(card.defId)?.type !== "power") return;
         const item = ctx.rt.currentItem;
         if (!item || item.autoplayed || item.purgeOnUse) return;
-        duplicateCardPlay(ctx, card, target, item);
+        duplicateCardPlay(ctx, card, target, item, "AMPLIFY");
         ctx.queue.addToBottom({ kind: "reducePower", target: ctx.owner, powerId: "AMPLIFY", amount: 1 });
       },
       atEndOfTurn: (ctx, isPlayerTurn) => {
@@ -228,9 +230,8 @@ export const defectPowers: PowerDef[] = [
   },
   {
     // "Retain your hand for X turns." (duration ticks at end of round)
-    // ENGINE-NOTE: the engine's retainsHand skips the entire end-of-turn hand
-    // pass, so ethereal cards are kept too (game exhausts them); pre-existing
-    // Runic Pyramid behavior shared by this hook.
+    // retainsHand skips the end-of-turn DISCARD only: ethereal cards still
+    // exhaust out of a kept hand (interpreter endOfTurnDiscard).
     id: "EQUILIBRIUM",
     name: "Equilibrium",
     kind: "buff",

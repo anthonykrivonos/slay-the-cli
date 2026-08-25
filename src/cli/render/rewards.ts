@@ -10,7 +10,7 @@ import { padClip, wrapPlain } from "./widgets";
 import { renderListScreen } from "./listScreen";
 import { clamp, joinBlocks, rowWidth } from "./layout";
 import { cardBox, cardBoxHeight, tintFocus, type CardBoxData } from "./cardbox";
-import { CARD_COLOR_ACCENTS } from "../text/runlogic";
+import { CARD_TYPE_ACCENTS } from "../text/runlogic";
 
 function keyOf(items: ListItemView[], i: number): string {
   return items.find((it) => it.i === i)?.key ?? ".";
@@ -77,7 +77,7 @@ export function renderRewards(
             key: keyOf(screen.list.items, it.i),
             cost: it.cost.length > 0 ? it.cost : null,
             name: it.name,
-            color: CARD_COLOR_ACCENTS[it.color] ?? null,
+            color: CARD_TYPE_ACCENTS[it.cardType] ?? null,
             type: "",
             targeted: false,
             rules: it.rules,

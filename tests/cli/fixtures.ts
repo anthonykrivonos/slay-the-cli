@@ -29,7 +29,7 @@ function freshUi(): UiState {
 }
 
 function absorb(w: Walk): void {
-  w.ui = pushLog(w.ui, w.s.eventLog.map((ev) => formatEvent(ev, bundle)));
+  w.ui = pushLog(w.ui, w.s.eventLog, bundle);
 }
 
 function step(w: Walk, cmd: Command): void {
@@ -260,6 +260,13 @@ export function fxCombatTooltip(): Fixture {
   return { game: f.game, ui: { ...f.ui, focus: { scope: "combat", idx: 2 } } };
 }
 
+/** Log overlay after a fight has ended: the finished combat reads dim above the
+ *  banner that opens the one you are in now. */
+export function fxLogOverlay(): Fixture {
+  const f = fxTreasure(); // floor 9: a finished fight sits above the current one
+  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "log" }] } };
+}
+
 /** Inspect overlay: the first Strike (hand idx 2) as a big card box. */
 export function fxInspectOverlay(): Fixture {
   const f = fxCombat();
@@ -381,6 +388,7 @@ export const FIXTURES: Record<string, () => Fixture> = {
   treasure: fxTreasure,
   event: fxEvent,
   "deck-overlay": fxDeckOverlay,
+  "log-overlay": fxLogOverlay,
   "inspect-overlay": fxInspectOverlay,
   "inspect-relic": fxInspectRelic,
   "inspect-shop": fxInspectShop,

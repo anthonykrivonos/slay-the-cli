@@ -115,8 +115,10 @@ export function renderOverlay(
     }
     case "log": {
       title = overlay.title;
-      // show the TAIL of the log (most recent events at the bottom)
-      body = overlay.lines.slice(-bodyMax).map((l) => theme.dim(l));
+      // show the TAIL of the log (most recent events at the bottom). Lines from
+      // earlier fights read dimmer than the one you are in.
+      const from = overlay.lines.length - Math.min(bodyMax, overlay.lines.length);
+      body = overlay.lines.slice(from).map((l, i) => (from + i >= overlay.currentFrom ? theme.fg(C.text, l) : theme.dim(l)));
       if (body.length === 0) body = [theme.dim("(nothing has happened yet)")];
       break;
     }

@@ -40,6 +40,13 @@ function tooSmall(size: FrameSize): string[] {
   return lines.map((l) => padClip(l, cols));
 }
 
+/** One character per potion slot: the potion's initial, or a dash when the slot
+ *  is empty (the same "-" the key cell uses). Same width as the old "n/m"
+ *  count, so nothing else in the header shifts. */
+function potionCell(h: NonNullable<View["header"]>, theme: Theme): string {
+  return h.potions.map((p) => (p === null ? theme.dim("-") : theme.fg(C.good, p.letter))).join("");
+}
+
 function headerLine(view: View, cols: number, theme: Theme): string {
   const h = view.header;
   if (!h) return ""; // the menu body carries its own banner
@@ -50,7 +57,7 @@ function headerLine(view: View, cols: number, theme: Theme): string {
     `F${h.floor} A${h.act}`,
     `ASC${h.ascension}`,
     `K:${keys}`,
-    `POT ${h.potionCount}/${h.potionSlots}`,
+    `POT ${potionCell(h, theme)}`,
     `DECK ${h.deckCount}`,
     `REL ${h.relicCount}`,
     theme.fg(h.accent, h.name),

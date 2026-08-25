@@ -102,6 +102,7 @@ export function buildCombatState(
 /** Roll HP, fire pre-battle hooks, place innate cards, roll first moves, start turn 1. */
 export function initializeCombat(ctx: EffectCtx): void {
   const combat = ctx.combat!;
+  ctx.emit("combatStarted", { encounterId: combat.combatFlags.encounterId, monsters: combat.monsters.map((m) => m.id) });
 
   // monster HP rolls (monsterHpRng, in slot order)
   for (const m of combat.monsters) {

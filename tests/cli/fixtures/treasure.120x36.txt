@@ -1,4 +1,4 @@
- HP 51/80 | G 64 | F9 A1 | ASC0 | K:--- | POT 0/3 | DECK 9 | REL 3 | Ironclad | FXTREASURE8                             
+ HP 51/80 | G 64 | F9 A1 | ASC0 | K:--- | POT --- | DECK 9 | REL 3 | Ironclad | FXTREASURE8                             
 -- SMALL CHEST ---------------------------------------------------------------------------------------------------------
                                                                                                                         
                                                                                                                         
@@ -9,11 +9,11 @@
                                                     |       ||       |                                                  
                                                     '----------------'                                                  
                                                                                                                         
-                                               Something glints inside...                                               
+                                                   Inside: Pantograph                                                   
                                                                                                                         
                    +-[1]----------------------------------+  +-[2]----------------------------------+                   
                    | Open the chest                       |  | Take the Sapphire Key                |                   
-                   |                                      |  | Forfeits the relic inside            |                   
+                   |                                      |  | Forfeits Pantograph                  |                   
                    +--------------------------------------+  +--------------------------------------+                   
                                                                                                                         
                                                                                                                         

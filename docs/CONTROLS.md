@@ -76,6 +76,28 @@ Resizing mid-run is fine. The frame is recomputed from the terminal's current
 size on every repaint, and the layout math is clamped at every size, so there is
 no size that breaks it.
 
+## Reading a fight
+
+Cards print what they will really do, not what they were printed with. The last
+row of every card box carries the live number: `9 dmg` on a Strike under
+Strength 3, `3 blk` on a Defend under Frail, `5 dmg x2` on Twin Strike. It goes
+green when a power raised it and red when Weak or Frail cut it, so a bad turn is
+visible before you commit to it. Aiming a card prices every enemy in the
+targeting strip (`[1] Cultist (9)`), which is where Vulnerable shows up.
+
+Between the enemies and your panel, one line says how the turn ends:
+
+```
+INCOMING 16    BLOCK 5    NET -11
+```
+
+That is every living attacker's damage added up against the block you are
+holding, in one place, because they used to sit at opposite ends of the screen.
+
+The header carries a potion slot per character, always: `POT F-B` is a Fire
+Potion, an empty slot and a Block Potion. The log names the card that was
+played, including the ones you did not choose: `Havoc plays Immolate`.
+
 ## Screens
 
 **The map** scrolls, remembers where you have been, and carries a legend for
@@ -108,3 +130,9 @@ gone missing.
 Color is on by default and uses xterm-256. `--no-color` or `NO_COLOR=1` gives
 plain output, which is also what you get when the output is not a terminal.
 Every frame is pure ASCII underneath, so the game is readable either way.
+
+Color carries meaning rather than decoration. Map nodes wear their room: green
+rest, blue merchant, gold treasure, red elite, purple unknown, and bold for the
+rooms you can actually walk to. Cards wear their type: red attacks, green
+skills, blue powers. Nothing depends on it, and the legend spells out every
+glyph anyway.

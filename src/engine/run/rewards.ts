@@ -112,21 +112,35 @@ const TIER_POOL_KEY: Record<RelicPoolTier, keyof RunState["pools"]> = {
   boss: "bossRelics",
 };
 
-/** Consume the front of a shuffled tier pool with the game's exhaustion
- *  fallbacks: common -> uncommon -> rare -> CIRCLET; shop -> uncommon;
+/** Pool search order per tier, with the game's exhaustion fallbacks:
+ *  common -> uncommon -> rare -> CIRCLET; shop -> uncommon;
  *  boss -> RED_CIRCLET (meta.relicTierRolls.poolExhaustionFallbacks). */
+function tierChain(tier: RelicPoolTier): RelicPoolTier[] {
+  return tier === "common"
+    ? ["common", "uncommon", "rare"]
+    : tier === "uncommon"
+      ? ["uncommon", "rare"]
+      : tier === "rare"
+        ? ["rare"]
+        : tier === "shop"
+          ? ["shop", "uncommon", "rare"]
+          : ["boss"];
+}
+
+/** What obtainRelicFromPool would hand over, WITHOUT consuming it. The pools
+ *  are shuffled at run start, so this is exact (the chest UI reads it to name
+ *  the relic before you commit to the sapphire key). */
+export function peekRelicFromPool(run: RunState, tier: RelicPoolTier): RelicId {
+  for (const t of tierChain(tier)) {
+    const id = (run.pools[TIER_POOL_KEY[t]] as RelicId[])[0];
+    if (id !== undefined) return id;
+  }
+  return tier === "boss" ? "RED_CIRCLET" : "CIRCLET";
+}
+
+/** Consume the front of a shuffled tier pool (see tierChain for fallbacks). */
 export function obtainRelicFromPool(run: RunState, tier: RelicPoolTier): RelicId {
-  const chain: RelicPoolTier[] =
-    tier === "common"
-      ? ["common", "uncommon", "rare"]
-      : tier === "uncommon"
-        ? ["uncommon", "rare"]
-        : tier === "rare"
-          ? ["rare"]
-          : tier === "shop"
-            ? ["shop", "uncommon", "rare"]
-            : ["boss"];
-  for (const t of chain) {
+  for (const t of tierChain(tier)) {
     const pool = run.pools[TIER_POOL_KEY[t]] as RelicId[];
     const id = pool.shift();
     if (id !== undefined) return id;

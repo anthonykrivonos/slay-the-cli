@@ -54,6 +54,8 @@ Whichever way the setting sits, the hint line along the bottom prints the keys
 that are actually live, so a fight reads `[L] log` under vim bindings and
 `[l] log` without them.
 
+![The settings overlay with vim keys switched on](shots/settings.svg)
+
 ## Nothing is hidden from you
 
 `i` opens whatever the cursor is on at full size: any card, any relic, any

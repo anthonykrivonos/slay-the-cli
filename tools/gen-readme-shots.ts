@@ -34,6 +34,9 @@ const SHOTS: Shot[] = [
   { fixture: "shop", file: "shop", title: "slay - the merchant", cols: 120, rows: 36 },
   { fixture: "inspect-relic", file: "inspect", title: "slay - inspect", cols: 120, rows: 36 },
   { fixture: "combat", file: "combat-80x24", title: "slay - 80x24", cols: 80, rows: 24 },
+  // the settings overlay is a small box in a big frame, like every list
+  // overlay, so it is shot at the 80x24 floor where it wastes the least room
+  { fixture: "settings-vim", file: "settings", title: "slay - settings", cols: 80, rows: 24 },
 ];
 
 // ------------------------------------------------------------- svg geometry

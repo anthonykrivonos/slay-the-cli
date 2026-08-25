@@ -262,7 +262,7 @@ export const commonRelics: RelicDef[] = [
     },
   },
   {
-    // "Negate the next 2 Curses you obtain." RUN-LAYER: onEquip/onObtainCard not fired yet.
+    // "Negate the next 2 Curses you obtain."
     id: "OMAMORI",
     name: "Omamori",
     tier: "common",
@@ -330,7 +330,7 @@ export const commonRelics: RelicDef[] = [
     },
   },
   {
-    // "Upon pickup, gain 2 Potion slots." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, gain 2 Potion slots."
     id: "POTION_BELT",
     name: "Potion Belt",
     tier: "common",
@@ -417,7 +417,7 @@ export const commonRelics: RelicDef[] = [
     },
   },
   {
-    // "Upon pickup, raise your Max HP by 7." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, raise your Max HP by 7."
     id: "STRAWBERRY",
     name: "Strawberry",
     tier: "common",
@@ -471,7 +471,7 @@ export const commonRelics: RelicDef[] = [
     },
   },
   {
-    // "Upon pick up, Upgrade 2 random Skills." RUN-LAYER: onEquip not fired yet.
+    // "Upon pick up, Upgrade 2 random Skills."
     // miscRng per the game's WarPaint implementation.
     id: "WAR_PAINT",
     name: "War Paint",
@@ -481,7 +481,7 @@ export const commonRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, Upgrade 2 random Attacks." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, Upgrade 2 random Attacks."
     id: "WHETSTONE",
     name: "Whetstone",
     tier: "common",

@@ -13,15 +13,17 @@ import type { RelicDef } from "../../engine/content/defs";
 import { f32add } from "../../engine/core/math";
 import { PLAYER, monster } from "../../engine/core/ids";
 import { cnt, healPlayer } from "./lib";
+import { astrolabePickup, callingBellPickup, emptyCagePickup, pandorasBoxPickup, tinyHousePickup } from "./pickup";
+import { removeRelic } from "../events/lib";
 
 export const bossRelics: RelicDef[] = [
   {
     // "Replaces Burning Blood. At the end of combat, heal 12 HP."
-    // (Starter replacement on pickup is RUN-LAYER.)
     id: "BLACK_BLOOD",
     name: "Black Blood",
     tier: "boss",
     pool: "red",
+    onEquip: (ctx) => removeRelic(ctx, "BURNING_BLOOD"),
     hooks: { onVictory: (ctx) => healPlayer(ctx, 12) },
   },
   {
@@ -68,6 +70,7 @@ export const bossRelics: RelicDef[] = [
     name: "Frozen Core",
     tier: "boss",
     pool: "blue",
+    onEquip: (ctx) => removeRelic(ctx, "CRACKED_CORE"),
     hooks: {
       atEndOfTurnPreEndOfTurnCards: (ctx) => {
         const p = ctx.combat!.player;
@@ -91,6 +94,7 @@ export const bossRelics: RelicDef[] = [
     name: "Holy Water",
     tier: "boss",
     pool: "purple",
+    onEquip: (ctx) => removeRelic(ctx, "PURE_WATER"),
     hooks: {
       atBattleStart: (ctx) => {
         if (ctx.bundle.cards.has("MIRACLE")) {
@@ -187,6 +191,7 @@ export const bossRelics: RelicDef[] = [
     name: "Ring of the Serpent",
     tier: "boss",
     pool: "green",
+    onEquip: (ctx) => removeRelic(ctx, "RING_OF_THE_SNAKE"),
     hooks: { modifyDrawPerTurn: (_ctx, n) => n + 1 },
   },
   {
@@ -302,11 +307,12 @@ export const bossRelics: RelicDef[] = [
     },
   },
   {
-    // "Upon pickup, Transform 3 cards, then Upgrade them." RUN-LAYER (transform flow).
+    // "Upon pickup, Transform 3 cards, then Upgrade them." (src/content/relics/pickup.ts)
     id: "ASTROLABE",
     name: "Astrolabe",
     tier: "boss",
     pool: "shared",
+    onEquip: astrolabePickup,
     hooks: {},
   },
   {
@@ -318,35 +324,40 @@ export const bossRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, obtain a unique Curse and 3 relics." RUN-LAYER.
+    // "Upon pickup, obtain a unique Curse and 3 relics." (src/content/relics/pickup.ts)
     id: "CALLING_BELL",
     name: "Calling Bell",
     tier: "boss",
     pool: "shared",
+    onEquip: callingBellPickup,
     hooks: {},
   },
   {
-    // "Upon pickup, remove 2 cards from your deck." RUN-LAYER (removal choice).
+    // "Upon pickup, remove 2 cards from your deck." (src/content/relics/pickup.ts)
     id: "EMPTY_CAGE",
     name: "Empty Cage",
     tier: "boss",
     pool: "shared",
+    onEquip: emptyCagePickup,
     hooks: {},
   },
   {
-    // "Upon pickup, Transform all Strike and Defend cards." RUN-LAYER.
+    // "Upon pickup, Transform all Strike and Defend cards." (src/content/relics/pickup.ts)
     id: "PANDORAS_BOX",
     name: "Pandora's Box",
     tier: "boss",
     pool: "shared",
+    onEquip: pandorasBoxPickup,
     hooks: {},
   },
   {
-    // "Upon pickup, obtain 1 Potion, 50 Gold, +5 Max HP, 1 card, upgrade 1 random card." RUN-LAYER.
+    // "Upon pickup, obtain 1 Potion, 50 Gold, +5 Max HP, 1 card, upgrade 1 random card."
+    // (src/content/relics/pickup.ts)
     id: "TINY_HOUSE",
     name: "Tiny House",
     tier: "boss",
     pool: "shared",
+    onEquip: tinyHousePickup,
     hooks: {},
   },
 ];

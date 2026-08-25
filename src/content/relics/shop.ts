@@ -213,7 +213,7 @@ export const shopRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, raise your Max HP by 7 and heal all of your HP." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, raise your Max HP by 7 and heal all of your HP."
     id: "LEES_WAFFLE",
     name: "Lee's Waffle",
     tier: "shop",

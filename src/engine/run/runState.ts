@@ -144,7 +144,7 @@ export interface ChestState {
   opened: boolean;
 }
 
-export type RewardsSource = "monster" | "elite" | "boss" | "neow" | "event";
+export type RewardsSource = "monster" | "elite" | "boss" | "neow" | "event" | "relic";
 
 /** Event-room scratch: setup rolls, screen-chain state, repeat counters. Plain JSON. */
 export type EventRoomData = Record<string, unknown>;

@@ -107,7 +107,7 @@ export const eventRelics: RelicDef[] = [
   {
     // "The first Attack played each turn that costs 2 or more is played twice.
     // Upon pickup, obtain a special Curse." Curse obtain guarded (DEPENDS:
-    // NECRONOMICURSE card def); RUN-LAYER: onEquip not fired yet.
+    // NECRONOMICURSE card def).
     id: "NECRONOMICON",
     name: "Necronomicon",
     tier: "event",

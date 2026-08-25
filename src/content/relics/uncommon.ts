@@ -417,7 +417,7 @@ export const uncommonRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, raise your Max HP by 10." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, raise your Max HP by 10."
     id: "PEAR",
     name: "Pear",
     tier: "uncommon",

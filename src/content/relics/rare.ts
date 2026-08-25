@@ -238,7 +238,7 @@ export const rareRelics: RelicDef[] = [
     hooks: { onHeal: (ctx, amount) => (ctx.combat ? f32mul(amount, 1.5) : amount) },
   },
   {
-    // "Upon pickup, raise your Max HP by 14." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, raise your Max HP by 14."
     id: "MANGO",
     name: "Mango",
     tier: "rare",
@@ -250,7 +250,7 @@ export const rareRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, gain 300 Gold." RUN-LAYER: onEquip not fired yet.
+    // "Upon pickup, gain 300 Gold."
     id: "OLD_COIN",
     name: "Old Coin",
     tier: "rare",

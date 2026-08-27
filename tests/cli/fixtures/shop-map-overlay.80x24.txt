@@ -1,0 +1,24 @@
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad |
+-- THE MERCHANT - you have 99G -------------------------------------------------
+                =============[ BOSS: THE GUARDIAN ]=============                
+                     $                       R     ?     M     :                
+                        \                       \  |  /  |     :                
+                           T                       T     T     :                
+                        /     \                 /  |     |     :                
+                     M           M           R     ?     M     :                
+                     |              \     /     /  |  /        :                
+                     R                 M     ?     M           :                
+                     |                 |  \  |     |  \        #                
+                     E                 E*    R     E     E     #                
+                     |                    \  |  \  |     |     #                
+                     $                       ?     M     ?     #                
+                     |                    /  |        \  |     #                
+                   1:M                 M     M           M     #                
+                        \              |     |        /  |     #                
+                           @           ?     M     M     ?     #                
+                              \           \     \     \  |     #                
+                                 M           M     M     ?     #                
+                              /           /        |  /        #                
+                           M           M           M           #                
+                Next: 1:M   [up/down] scroll                                    
+[up/dn] scroll  [Esc/m] close                                                   

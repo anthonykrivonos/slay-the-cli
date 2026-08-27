@@ -8,6 +8,7 @@ import type { Theme } from "./theme";
 import { C } from "./theme";
 import { padClip, center, boxLines, wrapPlain } from "./widgets";
 import { cardBox, type CardBoxData } from "./cardbox";
+import { renderMap } from "./map";
 
 function plainListBody(
   list: ListView,
@@ -138,6 +139,13 @@ export function renderOverlay(
           width,
         ),
       );
+      return out.slice(0, height).map((l) => padClip(l, width));
+    }
+    case "map": {
+      // the whole map, exactly as the map screen draws it, minus the ability
+      // to go anywhere. The frame's own hint row says how to get back, so the
+      // overlay spends every line it has on the map.
+      const out = renderMap(overlay.map, width, height, theme, accent);
       return out.slice(0, height).map((l) => padClip(l, width));
     }
     case "log": {

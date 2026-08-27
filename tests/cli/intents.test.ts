@@ -171,3 +171,37 @@ describe("intent sentences in the INFO panel", () => {
     expect(intentTip("LAGAVULIN", "LAGAVULIN_SLEEP")).toContain("sleep");
   });
 });
+
+// Issue #12: Runic Dome says "You can no longer see enemy intents", but the
+// panel, the move name and the INCOMING total are three reads of the same
+// thing - hiding one and printing the others hides nothing.
+describe("Runic Dome", () => {
+  const domed = (): GameState => {
+    const s = fight("JAW_WORM", "DOME");
+    s.run.relics.push({ defId: "RUNIC_DOME", counter: 0 });
+    return s;
+  };
+
+  test("the intent, the move name and the incoming total all go dark", () => {
+    const withDome = buildView(domed(), runUi(), bundle);
+    expect(withDome.screen.kind).toBe("combat");
+    if (withDome.screen.kind !== "combat") return;
+    for (const e of withDome.screen.enemies) {
+      expect(e.intent).toBeNull();
+      expect(e.move).toBeNull();
+    }
+    expect(withDome.screen.threat.incoming).toBeNull();
+
+    const frame = renderFrame(withDome, { cols: 120, rows: 36 }, THEME_PLAIN).join("\n");
+    expect(frame).toContain("INCOMING ??");
+    expect(frame).not.toContain("NET");
+  });
+
+  test("without it the same fight shows everything", () => {
+    const plain = buildView(fight("JAW_WORM", "DOME"), runUi(), bundle);
+    if (plain.screen.kind !== "combat") throw new Error("expected combat");
+    expect(plain.screen.enemies[0]!.intent).not.toBeNull();
+    expect(plain.screen.enemies[0]!.move).not.toBeNull();
+    expect(plain.screen.threat.incoming).not.toBeNull();
+  });
+});

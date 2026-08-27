@@ -17,6 +17,7 @@ Number keys select, letters act.
 | `i` | inspect what the cursor is on, in full |
 | `j` / `k` | while inspecting, step to the next and previous thing; arrows work too |
 | `l` | combat log |
+| `m` | the act map, read-only, from anywhere in a run |
 | `d` / `r` / `p` | deck, relics, potions |
 | `w` / `x` / `z` | draw, discard and exhaust piles |
 | `n` / `p` | next and previous page, on any list that has more than one |
@@ -55,6 +56,11 @@ that are actually live, so a fight reads `[L] log` under vim bindings and
 `[l] log` without them.
 
 ![The settings overlay with vim keys switched on](shots/settings.svg)
+
+`m` opens the act map over whatever room you are standing in: a shop, a
+campfire, a fight. It is read-only, so it answers "what is coming" without
+letting you leave the room you are in. `up`/`down` scroll it, `Esc` or `m`
+again puts it away.
 
 ## Nothing is hidden from you
 

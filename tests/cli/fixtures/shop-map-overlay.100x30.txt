@@ -1,0 +1,30 @@
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad | SPIRE              
+-- THE MERCHANT - you have 99G ---------------------------------------------------------------------
+             =============[ BOSS: THE GUARDIAN ]=============                                       
+                  |                    \  |  \  |           :  LEGEND                               
+                  R                       M     R           :  M enemy      E elite                 
+                  |                       |  \     \        :  $ merchant   R rest                  
+                  $                       R     ?     M     :  T treasure   ? unknown               
+                     \                       \  |  /  |     :  E* burning elite (+key)              
+                        T                       T     T     :  @ you        B boss                  
+                     /     \                 /  |     |     #                                       
+                  M           M           R     ?     M     #  BOSS  The Guardian                   
+                  |              \     /     /  |  /        #  FLOOR 3  [##......] 3/16             
+                  R                 M     ?     M           #  KEYS  ---                            
+                  |                 |  \  |     |  \        #  DECK  10   RELICS 1                  
+                  E                 E*    R     E     E     #  seed SPIRE                           
+                  |                    \  |  \  |     |     #                                       
+                  $                       ?     M     ?     #                                       
+                  |                    /  |        \  |     #                                       
+                1:M                 M     M           M     #                                       
+                     \              |     |        /  |     #                                       
+                        @           ?     M     M     ?     #                                       
+                           \           \     \     \  |     #                                       
+                              M           M     M     ?     #                                       
+                           /           /        |  /        #                                       
+                        M           M           M           #                                       
+             Next: 1:M   [up/down] scroll                                                           
+-- INFO --------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
+                                                                                                    
+[up/dn] scroll  [Esc/m] close                                                                       

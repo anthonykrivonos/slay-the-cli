@@ -380,6 +380,70 @@ describe("rooms: rest / treasure / shop / event stubs", () => {
     expect(s.run.room!.kind).toBe("map");
   });
 
+  // Issue #7: the option list was hardcoded, so five relics that change what a
+  // campfire offers did nothing. Availability follows the reference's bitset.
+  describe("relics that change the campfire", () => {
+    const atRest = (seed: string, relics: string[]): GameState => {
+      const s = forceRoom(seed, (ctx) => {
+        ctx.run.room = { kind: "rest", used: false };
+      });
+      for (const defId of relics) s.run.relics.push({ defId, counter: 0 });
+      return s;
+    };
+
+    test("Coffee Dripper removes Rest; Fusion Hammer removes Smith", () => {
+      const dripper = atRest("DRIP", ["COFFEE_DRIPPER"]);
+      expect(() => advance(dripper, { cmd: "restOption", kind: "rest" }, bundle)).toThrow("not available");
+      // smithing still works for it
+      expect(advance(dripper, { cmd: "restOption", kind: "smith", deckIdx: 0 }, bundle).run.deck[0]!.upgrades).toBe(1);
+
+      const hammer = atRest("HAMMER", ["FUSION_HAMMER"]);
+      expect(() => advance(hammer, { cmd: "restOption", kind: "smith", deckIdx: 0 }, bundle)).toThrow("not available");
+      expect(advance(hammer, { cmd: "restOption", kind: "rest" }, bundle).run.room).toEqual({ kind: "rest", used: true });
+    });
+
+    test("Girya banks a lift, three times and no more", () => {
+      let s = atRest("GIRYA1", ["GIRYA"]);
+      const girya = () => s.run.relics.find((r) => r.defId === "GIRYA")!;
+      for (let i = 1; i <= 3; i++) {
+        s = advance(s, { cmd: "restOption", kind: "lift" }, bundle);
+        expect(girya().counter).toBe(i);
+        s.run.room = { kind: "rest", used: false }; // next campfire
+      }
+      expect(() => advance(s, { cmd: "restOption", kind: "lift" }, bundle)).toThrow("not available");
+      expect(girya().counter).toBe(3);
+    });
+
+    test("Shovel digs up a relic from the pool", () => {
+      const s = atRest("DIG", ["SHOVEL"]);
+      const before = s.run.relics.length;
+      const out = advance(s, { cmd: "restOption", kind: "dig" }, bundle);
+      expect(out.run.relics.length).toBe(before + 1);
+      expect(out.run.room).toEqual({ kind: "rest", used: true });
+    });
+
+    test("Peace Pipe removes the chosen card and spends the site", () => {
+      const s = atRest("TOKE", ["PEACE_PIPE"]);
+      const size = s.run.deck.length;
+      const removed = s.run.deck[1]!.defId;
+      let out = advance(s, { cmd: "restOption", kind: "toke" }, bundle);
+      expect(out.pending).not.toBeNull(); // it asks which card
+      out = advance(out, { cmd: "choose", indices: [1] }, bundle);
+      expect(out.run.deck.length).toBe(size - 1);
+      expect(out.run.deck.filter((c) => c.defId === removed).length).toBeLessThan(
+        s.run.deck.filter((c) => c.defId === removed).length,
+      );
+      expect(out.run.room).toEqual({ kind: "rest", used: true });
+    });
+
+    test("without the relics none of the extra options exist", () => {
+      const s = atRest("PLAIN", []);
+      for (const kind of ["lift", "toke", "dig"] as const) {
+        expect(() => advance(s, { cmd: "restOption", kind }, bundle)).toThrow("not available");
+      }
+    });
+  });
+
   test("smith upgrades a card; upgraded cards cannot smith again", () => {
     let s = forceRoom("SMITH", (ctx) => {
       ctx.run.room = { kind: "rest", used: false };

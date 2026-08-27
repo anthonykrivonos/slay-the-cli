@@ -88,6 +88,10 @@ function globalRunKeys(ch: string, view: View): KeyAction | null {
       return ui({ type: "openOverlay", overlay: { kind: "potions" } });
     case "S":
       return ui({ type: "openOverlay", overlay: { kind: "settings" } });
+    case "m":
+      // the map screen is already the map; everywhere else in a run this is
+      // how you check the road ahead without leaving the room (issue #8)
+      return view.mode === "map" ? null : ui({ type: "openOverlay", overlay: { kind: "map" } });
     default:
       return null;
   }
@@ -196,6 +200,18 @@ function dispatch(key: Key, view: View): KeyAction | null {
       if (o.kind === "log") {
         if (key.kind === "esc") return ui({ type: "closeOverlay" });
         if (key.kind === "char" && (key.ch === "l" || key.ch === "L")) return ui({ type: "closeOverlay" });
+        return null;
+      }
+      if (o.kind === "map") {
+        // read-only: scroll and close, never travel
+        if (key.kind === "esc") return ui({ type: "closeOverlay" });
+        if (key.kind === "char" && key.ch === "m") return ui({ type: "closeOverlay" });
+        if (key.kind === "down" || (key.kind === "char" && key.ch === "j")) {
+          return ui({ type: "mapScroll", delta: 1 });
+        }
+        if (key.kind === "up" || (key.kind === "char" && key.ch === "k")) {
+          return ui({ type: "mapScroll", delta: -1 });
+        }
         return null;
       }
       if (o.kind === "inspect") {

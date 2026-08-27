@@ -26,8 +26,10 @@ import {
   cardGroupEntries,
   classCardPool,
   classColor,
+  combatRelicTier,
   hasRelic,
   nextRewardGroup,
+  obtainRelicFromPool,
 } from "./rewards";
 import { generateShop, repriceAfterRelic } from "./shop";
 import { setupTreasureRoom, openChestContents } from "./treasure";
@@ -529,6 +531,42 @@ function leaveRewards(state: GameState, ctx: EffectCtx, registry: RngRegistry): 
   else state.run.room = { kind: "map" };
 }
 
+export type RestOptionKind = "rest" | "smith" | "recall" | "lift" | "toke" | "dig";
+
+/**
+ * Which campfire options exist right now (GameAction.cpp campfire bitset):
+ * REST unless Coffee Dripper, SMITH unless Fusion Hammer and something is
+ * upgradeable, RECALL until the Ruby Key is taken, and LIFT / TOKE / DIG only
+ * with Girya (under 3 lifts) / Peace Pipe / Shovel.
+ */
+export function restOptionAvailable(ctx: EffectCtx, kind: RestOptionKind): boolean {
+  const run = ctx.run;
+  switch (kind) {
+    case "rest":
+      return !hasRelic(run, "COFFEE_DRIPPER");
+    case "smith":
+      return !hasRelic(run, "FUSION_HAMMER") && run.deck.some((_, i) => canSmith(ctx, i));
+    case "recall":
+      return !run.keys.ruby;
+    case "lift":
+      return hasRelic(run, "GIRYA") && (run.relics.find((r) => r.defId === "GIRYA")?.counter ?? 0) < 3;
+    case "toke":
+      return hasRelic(run, "PEACE_PIPE") && run.deck.length > 0;
+    case "dig":
+      return hasRelic(run, "SHOVEL");
+  }
+}
+
+/** Registered as effect "__restToke": Peace Pipe's card removal. */
+export function restTokeResume(ctx: EffectCtx, args: unknown): void {
+  const { chosen } = args as { chosen: number[] };
+  const run = ctx.run;
+  for (const i of [...new Set(chosen)].sort((a, b) => b - a)) {
+    if (!run.deck[i]) throw new Error(`invalid deck index ${i}`);
+    run.deck.splice(i, 1);
+  }
+}
+
 /** Registered as effect "__runDeckChoice": resumes Neow deck selections. */
 export function runDeckChoiceResume(ctx: EffectCtx, args: unknown): void {
   const { action, chosen } = args as { action: "remove" | "upgrade" | "transform"; chosen: number[] };
@@ -774,13 +812,39 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
     case "restOption": {
       if (room.kind !== "rest") throw new Error("not at a rest site");
       if (room.used) throw new Error("rest site already used");
+      if (!restOptionAvailable(ctx, cmd.kind)) throw new Error(`${cmd.kind} is not available here`);
       if (cmd.kind === "rest") {
         applyRest(ctx);
         fireHook(ctx, PLAYER, "onRest");
       } else if (cmd.kind === "recall") {
         // Recall: take the ruby key instead of resting (once per run)
-        if (run.keys.ruby) throw new Error("ruby key already taken");
         run.keys.ruby = true;
+      } else if (cmd.kind === "lift") {
+        // Girya: the campfire only banks a charge; the Strength itself is
+        // applied at battle start from the counter (relics/rare.ts GIRYA)
+        const g = run.relics.find((r) => r.defId === "GIRYA");
+        if (g) g.counter += 1;
+      } else if (cmd.kind === "dig") {
+        // Shovel: returnRandomRelic(returnRandomRelicTier(relicRng, act))
+        addRelic(ctx, obtainRelicFromPool(run, combatRelicTier(ctx)));
+      } else if (cmd.kind === "toke") {
+        // Peace Pipe: one card off the deck, through the same picker Neow uses
+        const indices = run.deck.map((_, i) => i);
+        if (indices.length === 0) throw new Error("nothing to remove");
+        room.used = true; // the site is spent whichever card is picked
+        ctx.requestChoice({
+          request: {
+            kind: "cards",
+            pile: "custom",
+            iids: indices,
+            min: 1,
+            max: 1,
+            canCancel: false,
+            reason: "rest:toke",
+          },
+          resume: "__restToke",
+        });
+        break;
       } else {
         if (cmd.deckIdx === undefined) throw new Error("smith requires deckIdx");
         applySmith(ctx, cmd.deckIdx);

@@ -202,6 +202,17 @@ function handLine(h: CombatView["hand"][number], focused: boolean, theme: Theme,
  */
 function threatLine(v: CombatView, width: number, theme: Theme): string {
   const { incoming, block } = v.threat;
+  // Runic Dome: the total is a read of the intents, so it is hidden with them.
+  // Block still shows - that is yours to know - and there is no net to compute.
+  if (incoming === null) {
+    const hidden = [
+      `${theme.dim("INCOMING")} ${theme.bold(theme.dim("??"))}`,
+      `${theme.dim("BLOCK")} ${theme.bold(theme.fg(block > 0 ? C.block : C.dim, String(block)))}`,
+    ];
+    const plainHidden = `INCOMING ??    BLOCK ${block}`;
+    const padHidden = Math.max(0, Math.floor((width - plainHidden.length) / 2));
+    return padClip(" ".repeat(padHidden) + hidden.join("    "), width);
+  }
   const net = block - incoming;
   const parts = [
     `${theme.dim("INCOMING")} ${theme.bold(theme.fg(incoming > 0 ? C.bad : C.dim, String(incoming)))}`,

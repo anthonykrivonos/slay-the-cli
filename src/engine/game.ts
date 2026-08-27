@@ -19,7 +19,7 @@ import { buildCombatState, initializeCombat } from "./combat/setup";
 import { runPrimitives } from "./content/primitives";
 import { fireHook, vetoHook } from "./core/hooks";
 import { PLAYER } from "./core/ids";
-import { initRunState, handleRunCommand, handleCombatVictory, handleCombatEscape, runDeckChoiceResume } from "./run/runFlow";
+import { initRunState, handleRunCommand, handleCombatVictory, handleCombatEscape, runDeckChoiceResume, restTokeResume } from "./run/runFlow";
 import { hasRelic } from "./run/rewards";
 
 export interface GameEvent {
@@ -47,7 +47,7 @@ export type RunCommand =
   | { cmd: "skipRewards" }
   | { cmd: "shopBuy"; kind: "card" | "relic" | "potion"; idx: number }
   | { cmd: "shopRemove"; deckIdx: number }
-  | { cmd: "restOption"; kind: "rest" | "smith" | "recall"; deckIdx?: number }
+  | { cmd: "restOption"; kind: "rest" | "smith" | "recall" | "lift" | "toke" | "dig"; deckIdx?: number }
   | { cmd: "openChest" }
   | { cmd: "takeSapphireKey" }
   | { cmd: "eventOption"; i: number }
@@ -67,6 +67,7 @@ export function registerEngineEffects(bundle: ContentBundle): void {
   bundle.effects.set("__afterCardUsed", afterCardUsed);
   bundle.effects.set("__scryResolve", scryResolve);
   bundle.effects.set("__runDeckChoice", runDeckChoiceResume);
+  bundle.effects.set("__restToke", restTokeResume);
 }
 
 interface CtxBox {

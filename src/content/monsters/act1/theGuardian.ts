@@ -81,11 +81,6 @@ export const theGuardian: MonsterDef = {
   getMove: (_ctx, self) => {
     // ENGINE-GAP: the reference consumes no aiRng.random(99) after turn 1;
     // this engine's rollMove consumes one per turn (value unused).
-    if (self.data.pendingModeShift) {
-      // mode shift during the Guardian's own turn (thorns)
-      delete self.data.pendingModeShift;
-      return "THE_GUARDIAN_DEFENSIVE_MODE";
-    }
     if (firstTurn(self)) return "THE_GUARDIAN_CHARGING_UP";
     switch (lastMove(self)) {
       case "THE_GUARDIAN_CHARGING_UP":

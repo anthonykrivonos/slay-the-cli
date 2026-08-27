@@ -85,7 +85,8 @@ describe("recall / ruby key", () => {
     expect(s.run.room).toEqual({ kind: "rest", used: true });
     // second recall at another site is rejected
     s.run.room = { kind: "rest", used: false };
-    expect(() => adv(s, { cmd: "restOption", kind: "recall" })).toThrow("ruby key already taken");
+    // the campfire availability table now refuses it centrally
+    expect(() => adv(s, { cmd: "restOption", kind: "recall" })).toThrow("not available here");
   });
 });
 

@@ -79,13 +79,12 @@ export const act1MonsterPowers: PowerDef[] = [
         // gainBlock lands after the removal (both addToTop, last-in-first-out)
         ctx.queue.addToTop({ kind: "gainBlock", target: ctx.owner, amount: 20, fromCard: false });
         ctx.queue.addToTop({ kind: "removePower", target: ctx.owner, powerId: "MODE_SHIFT" });
-        if (ctx.combat!.playerTurn) {
-          replaceIntent(m, "THE_GUARDIAN_DEFENSIVE_MODE");
-        } else {
-          // shift during the Guardian's own turn (thorns): rollMove runs after
-          // the move - getMove consumes this flag and returns DEFENSIVE_MODE.
-          m.data.pendingModeShift = true;
-        }
+        // "the current intent is immediately replaced with DEFENSIVE_MODE"
+        // (monsters-act1 ai.spec) - unconditionally, whoever's turn it is.
+        // A shift in the group's pre-turn phase (poison) therefore replaces
+        // the move BEFORE it executes, so the Guardian shifts instead of
+        // getting its attack off.
+        replaceIntent(m, "THE_GUARDIAN_DEFENSIVE_MODE");
       },
     },
   },

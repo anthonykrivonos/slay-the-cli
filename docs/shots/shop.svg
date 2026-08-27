@@ -39,5 +39,5 @@
 <text y="595" xml:space="preserve"><tspan x="14" textLength="513" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">  page 1/2 - [n] next [p] prev - hotkeys act on this page</tspan></text>
 <text y="613" xml:space="preserve"><tspan x="14" textLength="1080" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">-- INFO ----------------------------------------------------------------------------------------------------------------</tspan></text>
 <text y="631" xml:space="preserve"><tspan x="14" textLength="630" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55"> Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly</tspan></text>
-<text y="685" xml:space="preserve"><tspan x="14" textLength="1080" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [q] quit                                                    </tspan></text>
+<text y="685" xml:space="preserve"><tspan x="14" textLength="1080" lengthAdjust="spacingAndGlyphs" fill="#c9d0e0" opacity="0.55">[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [m] map  [q] quit                                           </tspan></text>
 </svg>

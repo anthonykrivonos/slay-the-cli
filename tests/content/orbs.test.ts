@@ -269,3 +269,29 @@ describe("CRACKED_CORE", () => {
 function monsterPowerAmount(s: ReturnType<typeof fight>, id: string, i = 0): number | undefined {
   return s.combat!.monsters[i]!.powers.find((p) => p.id === id)?.amount;
 }
+
+// Issue #10: Frozen Core channelled its Frost through the action queue, so it
+// landed after triggerEndOfTurnOrbs and the block only arrived next turn. The
+// reference channels it synchronously in the relic phase
+// (BattleContext::callEndOfTurnActions), ahead of the queued orb trigger.
+describe("Frozen Core", () => {
+  test("the Frost it channels blocks on the same turn", () => {
+    const deck = Array(10).fill("STRIKE_BLUE");
+    const withCore = endTurn(fight({ deck, relics: ["FROZEN_CORE"], seed: "FZCORE" }));
+    const without = endTurn(fight({ deck, seed: "FZCORE" }));
+    // T_TANK hits for a flat 10 every turn, so the gap is the orb's block
+    expect(withCore.run.hp - without.run.hp).toBe(2);
+    expect(orbIds(withCore)).toEqual(["FROST"]);
+  });
+
+  test("it does not channel when the orb row is already full", () => {
+    const deck = Array(10).fill("STRIKE_BLUE");
+    const s = fight({ deck, relics: ["FROZEN_CORE"], seed: "FZFULL" });
+    s.combat!.player.orbs = [
+      { id: "FROST", amount: 0 },
+      { id: "FROST", amount: 0 },
+      { id: "FROST", amount: 0 },
+    ];
+    expect(orbIds(endTurn(s)).length).toBe(3);
+  });
+});

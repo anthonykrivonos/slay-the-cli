@@ -13,6 +13,7 @@ import { makeTestBundle } from "../helpers/testBundle";
 import { corePowers } from "../../src/content/powers/core";
 import { relicSupportPowers } from "../../src/content/relics/supportPowers";
 import { starterRelics } from "../../src/content/relics/starter";
+import { bossRelics } from "../../src/content/relics/boss";
 import { statusCards } from "../../src/content/cards/statuses";
 import { curseCards } from "../../src/content/cards/curses";
 import { defectCards, defectPowers, defectEffects, allOrbs } from "../../src/content/cards/defect";
@@ -75,6 +76,7 @@ export function defectBundle(): ContentBundle {
   for (const [k, v] of defectEffects) b.effects.set(k, v);
   for (const o of allOrbs) b.orbs.set(o.id, o);
   for (const r of starterRelics) b.relics.set(r.id, r); // CRACKED_CORE
+  for (const r of bossRelics) b.relics.set(r.id, r); // FROZEN_CORE and friends
   for (const m of [tank, guard, frail]) b.monsters.set(m.id, m);
   b.characters.set("DEFECT", {
     id: "DEFECT",

@@ -15,6 +15,7 @@ import { PLAYER, monster } from "../../engine/core/ids";
 import { cnt, healPlayer } from "./lib";
 import { astrolabePickup, callingBellPickup, emptyCagePickup, pandorasBoxPickup, tinyHousePickup } from "./pickup";
 import { removeRelic } from "../events/lib";
+import { channelOrb } from "../../engine/combat/orbRuntime";
 
 export const bossRelics: RelicDef[] = [
   {
@@ -72,9 +73,13 @@ export const bossRelics: RelicDef[] = [
     pool: "blue",
     onEquip: (ctx) => removeRelic(ctx, "CRACKED_CORE"),
     hooks: {
+      // Channelled SYNCHRONOUSLY, matching the reference's relic phase in
+      // BattleContext::callEndOfTurnActions: the orb trigger is queued after
+      // it, so the fresh Frost pays out its block on this turn rather than
+      // the next one.
       atEndOfTurnPreEndOfTurnCards: (ctx) => {
         const p = ctx.combat!.player;
-        if (p.orbs.length < p.orbSlots) ctx.queue.addToBottom({ kind: "channelOrb", orbId: "FROST" });
+        if (p.orbs.length < p.orbSlots) channelOrb(ctx, "FROST");
       },
     },
   },

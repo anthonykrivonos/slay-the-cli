@@ -27,4 +27,4 @@
 -- INFO --------------------------------------------------------------------------------------------
  CARD  Strike (1)  Attack - basic - targets an enemy                                                
    Deal 6 damage.                                                                                   
-[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit         
+[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [m] map  [q] quit

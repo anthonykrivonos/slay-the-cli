@@ -1,19 +1,19 @@
- HP 63/80 | G 199 | F6 A1 | ASC0 | K:--- | POT WPL | DECK 10 | REL 1 | Ironclad | FXREST0           
+ HP 63/80 | G 199 | F6 A1 | ASC0 | K:--- | POT WPL | DECK 10 | REL 4 | Ironclad | FXREST0           
 -- REST SITE ---------------------------------------------------------------------------------------
                                                                                                     
-                                                                                                    
-                                                (   (                                               
-                                               )  )  )                                              
-                                              ( ( ( (                                               
-                                               \ \|/ /                                              
-                                                \\|//                                               
-                                             ===--o--===                                            
-                                              //     \\                                             
-                                                                                                    
-+-[1]------------------+ +-[2]------------------+ +-[3]------------------+ +-[4]------------------+ 
-| REST                 | | SMITH                | | RECALL               | | LEAVE                | 
-| Heal 17 HP           | | Upgrade a card       | | Take the Ruby Key    | |                      | 
-+----------------------+ +----------------------+ +----------------------+ +----------------------+ 
+  [1] Rest                                                                                          
+        Heal 17 HP                                                                                  
+  [2] Smith                                                                                         
+        Upgrade a card                                                                              
+  [3] Recall                                                                                        
+        Take the Ruby Key                                                                           
+  [4] Lift                                                                                          
+        Gain 1 Strength                                                                             
+  [5] Toke                                                                                          
+        Remove a card                                                                               
+  [6] Dig                                                                                           
+        Obtain a relic                                                                              
+  [7] Leave                                                                                         
                                                                                                     
                                                                                                     
                                                                                                     

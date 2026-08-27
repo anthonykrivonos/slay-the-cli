@@ -27,4 +27,4 @@
 -- INFO --------------------------------------------------------------------------------------------
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
                                                                                                     
-[1-9] choose  [d/r/p] deck/relics/potions  [q] quit                                                 
+[1-9] choose  [d/r/p] deck/relics/potions  [m] map  [q] quit                                        

@@ -1,0 +1,36 @@
+ HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad | SPIRE                                  
+-- THE MERCHANT - you have 99G -----------------------------------------------------------------------------------------
+                       =============[ BOSS: THE GUARDIAN ]=============                                                 
+                            E     ?           M     M                 :  LEGEND                                         
+                            |     |  \        |        \              :  M enemy      E elite                           
+                            ?     M     ?     M           ?           :  $ merchant   R rest                            
+                            |  /           \     \        |           #  T treasure   ? unknown                         
+                            M                 R     M     ?           #  E* burning elite (+key)                        
+                            |                    \  |  \  |           #  @ you        B boss                            
+                            R                       M     R           #                                                 
+                            |                       |  \     \        #  BOSS  The Guardian                             
+                            $                       R     ?     M     #  FLOOR 3  [##......] 3/16                       
+                               \                       \  |  /  |     #  KEYS  ---                                      
+                                  T                       T     T     #  DECK  10   RELICS 1                            
+                               /     \                 /  |     |     #  seed SPIRE                                     
+                            M           M           R     ?     M     #                                                 
+                            |              \     /     /  |  /        #                                                 
+                            R                 M     ?     M           #                                                 
+                            |                 |  \  |     |  \        #                                                 
+                            E                 E*    R     E     E     #                                                 
+                            |                    \  |  \  |     |     #                                                 
+                            $                       ?     M     ?     #                                                 
+                            |                    /  |        \  |     #                                                 
+                          1:M                 M     M           M     #                                                 
+                               \              |     |        /  |     #                                                 
+                                  @           ?     M     M     ?     #                                                 
+                                     \           \     \     \  |     #                                                 
+                                        M           M     M     ?     #                                                 
+                                     /           /        |  /        #                                                 
+                                  M           M           M           #                                                 
+                       Next: 1:M   [up/down] scroll                                                                     
+-- INFO ----------------------------------------------------------------------------------------------------------------
+ Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
+                                                                                                                        
+                                                                                                                        
+[up/dn] scroll  [Esc/m] close                                                                                           

@@ -1117,6 +1117,37 @@ describe("The Guardian", () => {
     expect(monPower(fight(["THE_GUARDIAN"], { asc: 19 }), 0, "MODE_SHIFT")?.amount).toBe(40);
   });
 
+  // Issue #9: the shift used to branch on playerTurn, so one triggered in the
+  // group's pre-turn phase (poison) set a "next roll" flag and let the already
+  // rolled attack through. The corpus says the current intent is replaced
+  // immediately, whoever's turn it is.
+  test("Mode Shift broken by poison replaces the intent before the Guardian acts", () => {
+    let s = fight(["THE_GUARDIAN"], { seed: "GDPOISON" });
+    const m = mon(s);
+    monPower(s, 0, "MODE_SHIFT")!.amount = 3;
+    m.powers.push({ id: "POISON", amount: 9, justApplied: false, data: null });
+    const hp0 = s.run.hp;
+    s = endTurn(s);
+    expect(s.run.hp).toBe(hp0); // it shifted instead of attacking
+    expect(monPower(s, 0, "MODE_SHIFT")).toBeUndefined();
+    expect(mon(s).block).toBe(20);
+    expect(mon(s).move).toBe("THE_GUARDIAN_ROLL_ATTACK"); // defensive loop follows
+  });
+
+  test("Mode Shift broken by Thorns during its own turn still flips the intent", () => {
+    let s = fight(["THE_GUARDIAN"], { seed: "GDTHORNS" });
+    s.combat!.player.powers.push({ id: "THORNS", amount: 99, justApplied: false, data: null });
+    const m = mon(s);
+    m.move = "THE_GUARDIAN_FIERCE_BASH"; // an attack, so Thorns fires back
+    m.moveHistory = ["THE_GUARDIAN_CHARGING_UP"];
+    monPower(s, 0, "MODE_SHIFT")!.amount = 1;
+    s = endTurn(s);
+    // the shift lands after rollMove, so the rolled move is overwritten
+    expect(mon(s).move).toBe("THE_GUARDIAN_DEFENSIVE_MODE");
+    expect(monPower(s, 0, "MODE_SHIFT")).toBeUndefined();
+    expect(mon(s).block).toBe(20);
+  });
+
   test("offensive loop + exact damage: Charge Up (block 9), Fierce Bash 32, Vent Steam, Whirlwind 5x4", () => {
     let s = fight(["THE_GUARDIAN"], { seed: "GRD" });
     expect(mon(s).move).toBe("THE_GUARDIAN_CHARGING_UP");

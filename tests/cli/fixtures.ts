@@ -182,6 +182,29 @@ export function fxCombat(): Fixture {
   return { game: w.s, ui: w.ui };
 }
 
+/** A campfire with every relic-granted option unlocked (issue #7). */
+export function fxRestAllOptions(): Fixture {
+  const f = fxRest();
+  const g = structuredClone(f.game!);
+  for (const defId of ["GIRYA", "PEACE_PIPE", "SHOVEL"]) g.run.relics.push({ defId, counter: 0 });
+  return { game: g, ui: f.ui };
+}
+
+/** The map overlay opened from a shop: check the road ahead without leaving
+ *  the room (issue #8). */
+export function fxShopMapOverlay(): Fixture {
+  const f = fxShop();
+  return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "map" }] } };
+}
+
+/** Runic Dome: every read of enemy intent goes dark (issue #12). */
+export function fxCombatRunicDome(): Fixture {
+  const f = fxCombat();
+  const g = structuredClone(f.game!);
+  g.run.relics.push({ defId: "RUNIC_DOME", counter: 0 });
+  return { game: g, ui: f.ui };
+}
+
 export function fxCombatTargeting(): Fixture {
   const f = fxCombat();
   const c = f.game!.combat!;
@@ -444,6 +467,9 @@ export const FIXTURES: Record<string, () => Fixture> = {
   "shop-multiline-relic": fxShopMultilineRelic,
   "rewards-loot": fxRewardsLoot,
   "combat-crowd": fxCombatCrowd,
+  "combat-runic-dome": fxCombatRunicDome,
+  "shop-map-overlay": fxShopMapOverlay,
+  "rest-all-options": fxRestAllOptions,
   "combat-crowd-targeting": fxCombatCrowdTargeting,
   "combat-tooltip": fxCombatTooltip,
   "shop-tooltip": fxShopTooltip,

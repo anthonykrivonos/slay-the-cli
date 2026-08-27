@@ -27,4 +27,4 @@
 -- INFO --------------------------------------------------------------------------------------------
  RELIC  Potion Belt  Relic - common - 143G                                                          
    Upon pickup, gain 2 Potion slots.                                                                
-[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [q] quit                                
+[1-0] buy  [n/p] page  [i] inspect  [Enter] leave  [d/r/p]  [m] map  [q] quit                       

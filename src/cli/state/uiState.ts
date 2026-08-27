@@ -34,6 +34,8 @@ export type Overlay =
   /** index is a position within the source, in the order the source lists it */
   | { kind: "inspect"; source: InspectSource; index: number }
   | { kind: "log" }
+  /** the act map as a read-only overlay (no travel) */
+  | { kind: "map" }
   | { kind: "settings" }
   | { kind: "confirmQuit" };
 

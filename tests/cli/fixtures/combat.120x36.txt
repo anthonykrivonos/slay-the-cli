@@ -33,4 +33,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
-[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit                             
+[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [m] map  [q] quit                    

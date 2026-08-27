@@ -1,0 +1,24 @@
+ HP 63/80 | G 199 | F6 A1 | ASC0 | K:--- | POT WPL | DECK 10 | REL 4 | Ironclad 
+-- REST SITE -------------------------------------------------------------------
+                                                                                
+  [1] Rest                                                                      
+        Heal 17 HP                                                              
+  [2] Smith                                                                     
+        Upgrade a card                                                          
+  [3] Recall                                                                    
+        Take the Ruby Key                                                       
+  [4] Lift                                                                      
+        Gain 1 Strength                                                         
+  [5] Toke                                                                      
+        Remove a card                                                           
+  [6] Dig                                                                       
+        Obtain a relic                                                          
+  [7] Leave                                                                     
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+[1-9] choose  [d/r/p] deck/relics/potions  [m] map  [q] quit                    

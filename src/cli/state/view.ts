@@ -250,8 +250,9 @@ export interface CombatView {
      *  tone saying whether powers pushed it up or down. null = nothing to show */
     preview: { text: string; tone: "up" | "down" | "flat" } | null;
   }[];
-  /** the two numbers that decide a turn, for the readout above your panel */
-  threat: { incoming: number; block: number };
+  /** the two numbers that decide a turn, for the readout above your panel.
+   *  incoming is null under Runic Dome, which hides what the enemies intend */
+  threat: { incoming: number | null; block: number };
   piles: { draw: number; discard: number; exhaust: number };
   relics: { name: string; abbrev: string; counter: number }[];
   potions: ({ name: string; letter: string } | null)[];
@@ -387,6 +388,8 @@ export type OverlayView =
       count: number;
     }
   | { kind: "log"; title: string; lines: string[]; currentFrom: number }
+  /** the act map, read-only: check the road ahead from a shop or a campfire */
+  | { kind: "map"; map: MapView }
   | { kind: "confirmQuit" };
 
 export interface TargetingView {
@@ -834,10 +837,14 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
   let targetNo = 0;
   // GAP entries are slot padding (the Slime Boss leaves one behind when it
   // splits), not creatures - they must never draw a panel
+  // Runic Dome: "You can no longer see enemy intents." The intent, the move
+  // name beside it and the incoming total are all reads of the same thing, so
+  // all three go dark or the relic hides nothing.
+  const blindIntents = g.run.relics.some((r) => r.defId === "RUNIC_DOME");
   const enemies: EnemyPanelView[] = c.monsters.flatMap((m, idx) => {
     if (m.id === "GAP") return [];
     const gone = m.isDead ? ("dead" as const) : m.isEscaped ? ("escaped" as const) : null;
-    const info = intents[idx] ?? null;
+    const info = blindIntents || gone ? null : (intents[idx] ?? null);
     return [{
       key: gone ? null : (keyFor(targetNo++) ?? null),
       id: m.id,
@@ -925,7 +932,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     kind: "combat",
     turn: c.turn,
     enemies,
-    threat: { incoming: incomingDamage(intents, c.monsters), block: p.block },
+    threat: { incoming: blindIntents ? null : incomingDamage(intents, c.monsters), block: p.block },
     you: {
       id: g.run.character,
       name: toAscii(bundle.characters.get(g.run.character)?.name ?? titleCase(g.run.character)),
@@ -1147,23 +1154,56 @@ function buildRest(g: GameState, room: Extract<RoomState, { kind: "rest" }>, pag
     const smithable = smithableDeckIndices(g.run, bundle);
     // the game names these in one word, with the detail underneath
     // subs stay short: at 80 columns a button box has 13 usable characters
-    items.push({
-      label: "Rest",
-      sub: `Heal ${heal} HP`,
-      action: cmd({ cmd: "restOption", kind: "rest" }),
-    });
-    items.push({
-      label: "Smith",
-      sub: "Upgrade a card",
-      enabled: smithable.length > 0,
-      note: smithable.length === 0 ? "nothing to upgrade" : null,
-      action: uiAct({ type: "openOverlay", overlay: { kind: "deck", mode: "smith", page: 0 } }),
-    });
+    // which options exist is a relic question (Coffee Dripper, Fusion Hammer,
+    // Girya, Peace Pipe, Shovel) - the engine owns the table
+    const has = (id: string): boolean => g.run.relics.some((r) => r.defId === id);
+    if (!has("COFFEE_DRIPPER")) {
+      items.push({
+        label: "Rest",
+        sub: `Heal ${heal} HP`,
+        action: cmd({ cmd: "restOption", kind: "rest" }),
+      });
+    }
+    if (!has("FUSION_HAMMER")) {
+      items.push({
+        label: "Smith",
+        sub: "Upgrade a card",
+        enabled: smithable.length > 0,
+        note: smithable.length === 0 ? "nothing to upgrade" : null,
+        action: uiAct({ type: "openOverlay", overlay: { kind: "deck", mode: "smith", page: 0 } }),
+      });
+    }
     if (canRecall(g.run, room.used)) {
       items.push({
         label: "Recall",
         sub: "Take the Ruby Key",
         action: cmd({ cmd: "restOption", kind: "recall" }),
+      });
+    }
+    const lifts = g.run.relics.find((r) => r.defId === "GIRYA")?.counter ?? 0;
+    if (has("GIRYA")) {
+      items.push({
+        label: "Lift",
+        sub: "Gain 1 Strength",
+        enabled: lifts < 3,
+        note: lifts >= 3 ? "no lifts left" : null,
+        action: cmd({ cmd: "restOption", kind: "lift" }),
+      });
+    }
+    if (has("PEACE_PIPE")) {
+      items.push({
+        label: "Toke",
+        sub: "Remove a card",
+        enabled: g.run.deck.length > 0,
+        note: g.run.deck.length === 0 ? "deck is empty" : null,
+        action: cmd({ cmd: "restOption", kind: "toke" }),
+      });
+    }
+    if (has("SHOVEL")) {
+      items.push({
+        label: "Dig",
+        sub: "Obtain a relic",
+        action: cmd({ cmd: "restOption", kind: "dig" }),
       });
     }
     items.push({ label: "Leave", action: cmd({ cmd: "proceed" }) });
@@ -1550,6 +1590,10 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       return { kind: "confirmQuit" };
     case "settings":
       return buildSettingsOverlay(ui, focusI);
+    // read-only: buildMap already answers "what is ahead", and the overlay
+    // simply never wires its picks to travel
+    case "map":
+      return { kind: "map", map: buildMap(g, ui, bundle) };
     case "log": {
       const shown = ui.log.slice(-100);
       return {
@@ -2304,6 +2348,7 @@ function hintFor(
         return `${cta}[j/k] next/prev  [Esc] close`;
       }
       if (o.kind === "log") return "[Esc] close";
+      if (o.kind === "map") return "[up/dn] scroll  [Esc/m] close";
       if (o.kind === "list" && o.id === "settings") return "[1/Enter] toggle  [Esc] close";
       const paging = o.kind === "list" && o.list.pages > 1 ? "  [n/p] page" : "";
       if (o.kind === "list" && o.id === "deck") return `[1-0] select${paging}${insp}  [Esc] close`;
@@ -2312,7 +2357,7 @@ function hintFor(
     }
     case "combat":
       // [l] is a movement key under vim bindings, so the log wears [L] there
-      return `[1-0/Enter] play  [e] end turn  [i] inspect  [${view.vimKeys ? "L" : "l"}] log  [w/x/z] piles  [d/r/p] deck  [q] quit`;
+      return `[1-0/Enter] play  [e] end turn  [i] inspect  [${view.vimKeys ? "L" : "l"}] log  [w/x/z] piles  [d/r/p] deck  [m] map  [q] quit`;
     case "map":
       return view.vimKeys
         ? "[h/l] path  [Enter] go  [j/k] scroll  [1-9] travel  [d/r/p] deck  [q] quit"
@@ -2320,18 +2365,18 @@ function hintFor(
     case "neow":
       return "[1-4] choose a blessing  [d] deck  [r] relics  [q] quit";
     case "rewards":
-      return "[1-9] take  [i] inspect  [Enter] continue  [d/r/p] deck  [q] quit";
+      return "[1-9] take  [i] inspect  [Enter] continue  [d/r/p] deck  [m] map  [q] quit";
     case "shop": {
       const s = view.screen as ShopView;
       const paging = s.list.pages > 1 ? "  [n/p] page" : "";
-      return `[1-0] buy${paging}${insp}  [Enter] leave  [d/r/p]  [q] quit`;
+      return `[1-0] buy${paging}${insp}  [Enter] leave  [d/r/p]  [m] map  [q] quit`;
     }
     case "rest":
     case "treasure":
     case "event": {
       const s = view.screen as SimpleListScreen;
       const paging = s.list.pages > 1 ? "  [n/p] page" : "";
-      return `[1-9] choose${paging}  [d/r/p] deck/relics/potions  [q] quit`;
+      return `[1-9] choose${paging}  [d/r/p] deck/relics/potions  [m] map  [q] quit`;
     }
     case "gameOver":
       return "[1] new run  [2] menu  [q] quit";

@@ -113,6 +113,8 @@ For more information, read the Bun API docs in `node_modules/bun-types/docs/**.m
 ## This project (Slay the CLI)
 
 Mechanically exact Slay the Spire clone, adapted to the terminal: `bun src/cli/main.ts`.
+- AGENTS.md at the repo root is the full rulebook for agents: ground truth, the standing decisions, and when to bump the version. Read it before changing anything.
+- `package.json` `version` is the only version. `src/cli/version.ts` is its single reader; the title screen and README banner print it, so a bump regenerates fixtures and shots. Bump rules in AGENTS.md.
 - `src/engine`: pure deterministic core. No DOM/Bun APIs/randomness outside the seeded RNG (enforced by tests/architecture).
 - `src/content`: the forkable content bundle; corpus-audited against `data/corpus/*.json` (ground truth; imported by tests/tools ONLY).
 - `src/cli`: TUI. `render/ input/ state/ text/` are pure (no process/Bun./node:, enforced); only `term/ io/ app.ts main.ts` touch the OS. Frames are snapshot-tested; keep output ASCII-only.

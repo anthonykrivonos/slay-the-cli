@@ -75,6 +75,15 @@ describe("cli purity", () => {
     expect(offenders.map((f) => f.replace(CLI_ROOT, "src/cli"))).toEqual([]);
   });
 
+  test("version.ts is the only file in src/ that reads package.json", () => {
+    // package.json is ground truth for the version (AGENTS.md, "When to bump"),
+    // so a second reader is a second source of truth waiting to drift
+    const all = walk(join(CLI_ROOT, ".."));
+    const re = /from\s+["'][^"']*package\.json["']/;
+    const offenders = all.filter((f) => re.test(readFileSync(f, "utf8")));
+    expect(offenders.map((f) => f.replace(join(CLI_ROOT, ".."), "src"))).toEqual(["src/cli/version.ts"]);
+  });
+
   test("cli never imports the legacy web UI", () => {
     const all = walk(CLI_ROOT);
     const re = /from\s+["'][^"']*\/ui\//;

@@ -12,6 +12,7 @@ import { CHARACTER_COLORS, CHARACTER_IDS } from "../../src/cli/text/runlogic";
 import { HERO_PORTRAITS } from "../../src/cli/render/art";
 import { stripAnsi } from "../../src/cli/term/ansi";
 import { bundle, fxCombatStance, fxRest, fxMapAct1 } from "./fixtures";
+import pkg from "../../package.json";
 
 function menuUi(selectedIdx: number | null): UiState {
   let ui = initialUiState({ seed: "SPIRE" });
@@ -156,6 +157,36 @@ describe("menu ladder", () => {
         for (const r of rows) expect(stripAnsi(r).length).toBe(w);
       }
     }
+  });
+});
+
+describe("the version under the title", () => {
+  const label = `v${(pkg as { version: string }).version}`;
+
+  test("every size prints it, and the old tagline is gone", () => {
+    for (const [w, h] of [[80, 24], [100, 30], [120, 36], [132, 45]] as const) {
+      const plain = stripAnsi(frame(menuUi(null), w, h).join("\n"));
+      expect(plain).toContain(label);
+      expect(plain).not.toContain("The Spire awaits");
+    }
+  });
+
+  test("the compact fallback prints it too", () => {
+    // renderFrame refuses under 80x24, so the ladder floor is reached directly
+    const screen = buildView(null, menuUi(null), bundle).screen;
+    if (screen.kind !== "menu") throw new Error("expected the menu screen");
+    const plain = renderMenu(screen, 100, 13, THEME_PLAIN).map(stripAnsi);
+    expect(plain.some((l) => l.includes("+=[1]"))).toBe(false); // the fallback
+    expect(plain.join("\n")).toContain(label);
+  });
+
+  test("it is dim, and centered on its own row", () => {
+    const rows = frame(menuUi(null), 120, 36, THEME_PLAIN);
+    const row = rows.find((r) => r.includes(label));
+    expect(row).toBeDefined();
+    expect(row!.trim()).toBe(label);
+    const colored = frame(menuUi(null), 120, 36).find((r) => r.includes(label));
+    expect(colored).toContain("\u001b[2m");
   });
 });
 

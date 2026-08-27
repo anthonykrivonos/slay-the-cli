@@ -13,6 +13,7 @@ import { FIXTURES, bundle } from "../tests/cli/fixtures";
 import { buildView } from "../src/cli/state/view";
 import { renderFrame } from "../src/cli/render/frame";
 import { bigWord } from "../src/cli/render/bigfont";
+import { VERSION_LABEL } from "../src/cli/version";
 import type { Theme } from "../src/cli/render/theme";
 
 // ---------------------------------------------------------------- the shots
@@ -192,7 +193,8 @@ function toSvg(lines: string[], shot: Shot): string {
 function bannerSvg(): string {
   const rows = bigWord("SLAY THE CLI");
   if (!rows) throw new Error("bigfont is missing a glyph for the title");
-  const tagline = "The Spire awaits.";
+  // the menu prints the version under the title; the banner says the same
+  const tagline = VERSION_LABEL;
   const cols = rows[0]!.length;
   const w = cols * CHAR_W + PAD_X * 2;
   const h = (rows.length + 2) * LINE_H + PAD_Y * 2;

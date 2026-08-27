@@ -350,8 +350,9 @@ function dispatch(key: Key, view: View): KeyAction | null {
       const s = view.screen;
       if (s.kind !== "map") return null;
       if (key.kind === "esc") {
-        if (view.focusIdx !== null) return ui({ type: "focusClear" });
-        return ui({ type: "backToMenu" });
+        // Esc never leaves a run: it clears the cursor and nothing else.
+        // q is the way out (and confirms mid-run).
+        return view.focusIdx !== null ? ui({ type: "focusClear" }) : null;
       }
       const travel = (pick: { x: number; y: number } | undefined): KeyAction | null =>
         pick ? cmd({ cmd: "mapPick", x: pick.x, y: pick.y }) : null;
@@ -398,7 +399,9 @@ function dispatch(key: Key, view: View): KeyAction | null {
       if (s.kind === "menu" || s.kind === "map" || s.kind === "combat") return null;
       if (key.kind === "esc") {
         if (view.focusIdx !== null) return ui({ type: "focusClear" });
-        return ui({ type: "backToMenu" });
+        // the run is already over on the game-over screen, so Esc may leave;
+        // everywhere else Esc must not drop the player out of a live run
+        return s.kind === "gameOver" ? ui({ type: "backToMenu" }) : null;
       }
       if (key.kind === "enter") {
         // Enter activates the focus cursor; without one it keeps its

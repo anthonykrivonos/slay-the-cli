@@ -102,7 +102,7 @@ describe("portraits in combat", () => {
     expect(artRows.length).toBeGreaterThan(2);
     // the hero panel grew to hold his portrait: the energy-orb border, then
     // rows carrying both portrait ink and his stats
-    const orbRow = lines.findIndex((l) => l.includes("( 3/3 )"));
+    const orbRow = lines.findIndex((l) => l.includes("( E 3/3 )"));
     expect(orbRow).toBeGreaterThan(0);
     const heroName = lines[orbRow + 1]!;
     expect(heroName).toContain("Ironclad");
@@ -137,5 +137,42 @@ describe("portraits in combat", () => {
     const joined = frame(fxCombat, 132, 45, THEME_256).join("");
     expect(joined).toContain(`38;5;${hexToAnsi256(monsterTint("RED_LOUSE"))}`);
     expect(joined).toContain(`38;5;${hexToAnsi256(monsterTint("GREEN_LOUSE"))}`);
+  });
+});
+
+describe("empty slots", () => {
+  // The Slime Boss leaves a GAP placeholder behind when it splits (slot
+  // padding, isEscaped, no monster def). It is not a creature and must never
+  // draw a panel titled "Gap" reading "x escaped x".
+  test("a GAP slot draws no enemy panel", () => {
+    const f = fxCombat();
+    const g = structuredClone(f.game!);
+    const c = g.combat!;
+    const real = c.monsters.length;
+    c.monsters.splice(1, 0, {
+      id: "GAP",
+      idx: 1,
+      hp: 0,
+      maxHp: 0,
+      block: 0,
+      powers: [],
+      move: null,
+      moveHistory: [],
+      isDead: false,
+      isEscaped: true,
+      halfDead: false,
+      data: {},
+    });
+    c.monsters.forEach((m, i) => (m.idx = i));
+
+    const view = buildView(g, f.ui, bundle);
+    expect(view.screen.kind).toBe("combat");
+    if (view.screen.kind !== "combat") return;
+    expect(view.screen.enemies.length).toBe(real);
+    expect(view.screen.enemies.some((e) => e.id === "GAP")).toBe(false);
+
+    const frame = renderFrame(view, { cols: 120, rows: 36 }, THEME_PLAIN).join("\n");
+    expect(frame).not.toContain("Gap");
+    expect(frame).not.toContain("x escaped x");
   });
 });

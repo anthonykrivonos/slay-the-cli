@@ -16,7 +16,6 @@
   +-----------------------+ +-----------------------+ +-----------------------+ +-----------------------+ +-----------------------+ 
                                                                                                                                     
                                                                                                                                     
-                                                                                                                                    
                                                  INCOMING 18    BLOCK 0    NET -18                                                  
  +==( E 3/3 )=======================================+                                                                               
  |          -==     Ironclad                        |                                                                               
@@ -29,6 +28,7 @@
  > Drew a card                                                                                                                      
  > Drew a card                                                                                                                      
  > -- Turn 1 --                                                                                                                     
+ Choose a target for Strike: >[1] Red Louse (6)  [2] Green Louse (6)  [3] Red Louse (6)  [4] Green Louse (6)  [5] Red Louse (6)     
 -- HAND 5 --------------------------------------------------------------------------------------------------------------------------
          +(1)-----------------+ +(1)-----------------+ +(1)-----------------+ +(1)-----------------+ +(1)-----------------+         
          | Defend             | | Defend             | | Strike             | | Strike             | | Strike             |         
@@ -39,7 +39,7 @@
          +--------[1]---------+ +--------[2]---------+ +--------[3]---------+ +--------[4]---------+ +--------[5]---------+         
  DRAW 5                                                     [e] END TURN                                       DISCARD 0  EXHAUST 0 
 -- INFO ----------------------------------------------------------------------------------------------------------------------------
- Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                              
-                                                                                                                                    
-                                                                                                                                    
-[1-0/Enter] play  [e] end turn  [i] inspect  [l] log  [w/x/z] piles  [d/r/p] deck  [q] quit                                         
+ ENEMY  Red Louse  HP 13/13                                                                                                         
+   Bite: intends to attack for 6.                                                                                                   
+   Curl Up 5: Gains 5 Block upon first receiving attack damage.                                                                     
+[1-9] choose a target  [Esc] cancel                                                                                                 

@@ -91,8 +91,15 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
   };
   refreshMenuSave();
 
-  const absorbEvents = (events: GameEvent[]): void => {
-    ui = pushLog(ui, events, bundle);
+  /** Monster roster by slot, so the log names creatures instead of "Enemy 1".
+   *  The killing blow clears the combat, so the pre-advance state is the
+   *  fallback - otherwise the last line of every fight loses its name. */
+  const rosterOf = (from: GameState | null): string[] =>
+    (from?.combat?.monsters ?? []).map((m) => bundle.monsters.get(m.id)?.name ?? m.id);
+
+  const absorbEvents = (events: GameEvent[], was: GameState | null = null): void => {
+    const live = rosterOf(game);
+    ui = pushLog(ui, events, bundle, live.length > 0 ? live : rosterOf(was));
     // a card that lands in the deck with no screen of its own (Neow's random
     // rare, a Neow curse) is otherwise invisible: say so on the hint line
     const gained: string[] = [];
@@ -123,7 +130,7 @@ export function runApp(deps: AppDeps): Promise<AppResult> {
       // overlays are the means of picking a command - a successful advance
       // closes them (the web UI closed its menus before advancing too)
       ui = { ...ui, choiceSel: [], choicePage: 0, overlays: [] };
-      absorbEvents(next.eventLog);
+      absorbEvents(next.eventLog, prev);
       if (cmd.cmd === "openChest" || cmd.cmd === "takeSapphireKey") {
         ui = { ...ui, lastLoot: chestLootSummary(prev, next, bundle) };
       } else if (cmd.cmd === "proceed" || cmd.cmd === "mapPick") {

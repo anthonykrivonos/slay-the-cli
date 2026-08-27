@@ -511,6 +511,17 @@ function markGroupTaken(entries: RewardEntry[], group: number): void {
   }
 }
 
+/**
+ * Smoke Bomb: the player walks out of a non-boss fight. The room is spent (it
+ * is not fought again) but nothing is earned - no rewards screen, no gold, and
+ * the combat/elite tallies stay put because nothing was actually killed.
+ */
+export function handleCombatEscape(state: GameState, ctx: EffectCtx): void {
+  state.combat = null;
+  ctx.combat = null;
+  if (state.run.room?.kind === "combat") state.run.room = { kind: "map" };
+}
+
 function leaveRewards(state: GameState, ctx: EffectCtx, registry: RngRegistry): void {
   const room = state.run.room;
   if (room?.kind !== "rewards") throw new Error("not on a rewards screen");

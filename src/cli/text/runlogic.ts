@@ -415,6 +415,13 @@ export function rewardBlocked(e: RewardEntry, run: RunState): string | null {
   return null;
 }
 
+/** Advisory shown beside a reward that is takeable but will not do anything -
+ *  Ectoplasm zeroes every gold gain, so the row would otherwise just vanish. */
+export function rewardAdvisory(e: RewardEntry, run: RunState): string | null {
+  if (e.kind === "gold" && run.relics.some((r) => r.defId === "ECTOPLASM")) return "no gold - Ectoplasm";
+  return null;
+}
+
 /** Rewards flow layout: singles in order, card/bossRelic entries grouped. */
 export type RewardRow =
   | { type: "single"; idx: number; entry: RewardEntry }

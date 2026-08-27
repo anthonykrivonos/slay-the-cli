@@ -19,7 +19,7 @@ import { buildCombatState, initializeCombat } from "./combat/setup";
 import { runPrimitives } from "./content/primitives";
 import { fireHook, vetoHook } from "./core/hooks";
 import { PLAYER } from "./core/ids";
-import { initRunState, handleRunCommand, handleCombatVictory, runDeckChoiceResume } from "./run/runFlow";
+import { initRunState, handleRunCommand, handleCombatVictory, handleCombatEscape, runDeckChoiceResume } from "./run/runFlow";
 import { hasRelic } from "./run/rewards";
 
 export interface GameEvent {
@@ -78,7 +78,7 @@ interface CtxBox {
 function makeCtx(state: GameState, bundle: ContentBundle): CtxBox {
   const registry = RngRegistry.fromState(state.rng);
   const queue = new ActionQueue();
-  const rt = { pending: null as PendingChoice | null, currentItem: null, combatOver: null as "victory" | "defeat" | null };
+  const rt = { pending: null as PendingChoice | null, currentItem: null, combatOver: null as "victory" | "defeat" | "escape" | null };
   const ctx: EffectCtx = {
     run: state.run,
     combat: state.combat,
@@ -107,6 +107,10 @@ function finish(box: CtxBox): GameState {
     state.eventLog.push({ event: "combatEnded", payload: "victory" });
     // in a full run, victory rolls the rewards screen (or the act transition)
     if (state.run.room?.kind === "combat") handleCombatVictory(state, ctx, registry);
+  } else if (ctx.rt.combatOver === "escape") {
+    state.outcome = null; // the run continues, just without spoils
+    state.eventLog.push({ event: "combatEnded", payload: "escape" });
+    handleCombatEscape(state, ctx);
   } else if (ctx.rt.combatOver === "defeat") {
     state.outcome = { kind: "death" };
     if (state.run.room) state.run.room = { kind: "gameOver", victory: false };
@@ -304,6 +308,8 @@ export function advance(prev: GameState, cmd: Command, bundle: ContentBundle): G
         const t = state.combat.monsters[cmd.target];
         if (!t || t.isDead || t.isEscaped) throw new Error("invalid target");
       }
+      // refused, not spent: the slot keeps the potion
+      if (def.canUse && !def.canUse(ctx)) throw new Error(`${def.name} cannot be used here`);
       run.potions[cmd.slot] = null;
       let potency = def.potency;
       if (def.sacredBarkDoubles && hasRelic(run, "SACRED_BARK")) potency *= 2;

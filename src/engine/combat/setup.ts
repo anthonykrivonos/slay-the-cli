@@ -131,9 +131,10 @@ export function initializeCombat(ctx: EffectCtx): void {
 
   fireHook(ctx, PLAYER, "atBattleStartPreDraw");
 
-  for (const m of combat.monsters) {
-    const def = ctx.bundle.monsters.get(m.id)!;
-    def.preBattle?.(ctx, m);
+  // snapshot: a preBattle may pad the row with empty slots (the Collector
+  // moves herself to slot 2), and those placeholders have no monster def
+  for (const m of [...combat.monsters]) {
+    ctx.bundle.monsters.get(m.id)?.preBattle?.(ctx, m);
   }
 
   // first moves

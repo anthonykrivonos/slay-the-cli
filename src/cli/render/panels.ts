@@ -203,8 +203,9 @@ export function playerPanel(p: PlayerPanelData, w: number, theme: Theme): string
   const aw = artColumn(p);
   const iw = w - 4 - aw;
 
-  // energy orb lives in the top border: +==( 3/3 )======+
-  const orb = `( ${p.energy}/${p.energyMax} )`;
+  // energy orb lives in the top border: +==( E 3/3 )======+ - the E label
+  // keeps it from reading as the orb row that sits directly underneath
+  const orb = `( E ${p.energy}/${p.energyMax} )`;
   const rest = Math.max(0, w - 4 - orb.length);
   const top = `+==${theme.bold(theme.fg(C.energy, orb))}${"=".repeat(rest)}+`;
   const bottom = `+${"=".repeat(w - 2)}+`;

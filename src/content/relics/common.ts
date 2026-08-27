@@ -265,6 +265,7 @@ export const commonRelics: RelicDef[] = [
     // "Negate the next 2 Curses you obtain."
     id: "OMAMORI",
     name: "Omamori",
+    countsDown: true,
     tier: "common",
     pool: "shared",
     onEquip: (ctx) => {

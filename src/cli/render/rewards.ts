@@ -82,6 +82,7 @@ export function renderRewards(
             targeted: false,
             rules: it.rules,
             dim: !it.enabled,
+            note: it.note,
           };
           const box = cardBox(data, w, cardH, theme);
           return focusI === it.i ? tintFocus(box, theme, accent) : box;

@@ -29,7 +29,7 @@ function freshUi(): UiState {
 }
 
 function absorb(w: Walk): void {
-  w.ui = pushLog(w.ui, w.s.eventLog, bundle);
+  w.ui = pushLog(w.ui, w.s.eventLog, bundle, (w.s.combat?.monsters ?? []).map((m) => bundle.monsters.get(m.id)?.name ?? m.id));
 }
 
 function step(w: Walk, cmd: Command): void {
@@ -287,6 +287,19 @@ export function fxCombatCrowd(): Fixture {
   return { game: g, ui: f.ui };
 }
 
+/** A crowded room WITH a card aimed: the targeting strip has to name five
+ *  candidates on its single row. */
+export function fxCombatCrowdTargeting(): Fixture {
+  const f = fxCombatCrowd();
+  const c = f.game!.combat!;
+  const handIdx = c.player.piles.hand.findIndex((iid) => {
+    const card = c.cards[iid]!;
+    return bundle.cards.get(card.defId)?.target === "enemy";
+  });
+  if (handIdx < 0) throw new Error("fxCombatCrowdTargeting: no targeted card in hand");
+  return { game: f.game, ui: { ...f.ui, targeting: { kind: "card", handIdx } } };
+}
+
 /** Info panel: a hand card holds the hover focus (first Strike, idx 2). */
 export function fxCombatTooltip(): Fixture {
   const f = fxCombat();
@@ -431,6 +444,7 @@ export const FIXTURES: Record<string, () => Fixture> = {
   "shop-multiline-relic": fxShopMultilineRelic,
   "rewards-loot": fxRewardsLoot,
   "combat-crowd": fxCombatCrowd,
+  "combat-crowd-targeting": fxCombatCrowdTargeting,
   "combat-tooltip": fxCombatTooltip,
   "shop-tooltip": fxShopTooltip,
   "gameover-defeat": fxGameOverDefeat,

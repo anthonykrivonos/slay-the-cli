@@ -341,6 +341,7 @@ export const watcherPowers: PowerDef[] = [
     // the watcher's own Blasphemy avoids this via data.skipDivinity.
     id: "MANTRA_GAINED",
     name: "Mantra Gained",
+    hidden: true, // engine bookkeeping, never shown
     kind: "buff",
     stacking: "intensity",
     turnBased: false,

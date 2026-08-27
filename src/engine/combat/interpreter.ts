@@ -134,6 +134,9 @@ export function executeAction(ctx: EffectCtx, a: GameAction): void {
     case "monsterTurn":
       monsterTurn(ctx);
       break;
+    case "monsterStep":
+      monsterStep(ctx, a.remaining);
+      break;
     case "endRound":
       endRound(ctx);
       break;
@@ -707,11 +710,39 @@ function monsterTurn(ctx: EffectCtx): void {
     ctx.queue.addToBottom({ kind: "endRound" });
     return;
   }
+  // Pre-turn phase for the whole group BEFORE anyone acts
+  // (MonsterGroup::applyPreTurnLogic via Actions::MonsterStartTurnAction):
+  // block loss and start-of-turn powers land on every monster up front, so
+  // block an ally hands out during this round (Centurion's Defend, Shield
+  // Gremlin's Protect) is not wiped when that ally's own turn comes round.
   for (const m of combat.monsters) {
-    if (m.isDead || m.isEscaped || m.halfDead) continue;
-    ctx.queue.addToBottom({ kind: "monsterMove", idx: m.idx });
+    if (m.isDead || m.isEscaped) continue;
+    if (getPowerAmount(ctx, monster(m.idx), "BARRICADE") === 0) m.block = 0;
+    fireHook(ctx, monster(m.idx), "atStartOfTurn");
   }
-  ctx.queue.addToBottom({ kind: "endRound" });
+  // The acting set is snapshotted here, so monsters spawned mid-round (slime
+  // splits, summons) do not act this round - matching the reference.
+  const remaining = combat.monsters.filter((m) => !m.isDead && !m.isEscaped && !m.halfDead).map((m) => m.idx);
+  ctx.queue.addToBottom({ kind: "monsterStep", remaining });
+}
+
+/**
+ * Walk the snapshotted acting set one monster at a time. Each step re-queues
+ * the rest AFTER executing its move, so anything the move queued (a hook's
+ * addToBottom - Static Discharge, thorns, status cards) resolves before the
+ * next monster acts and, crucially, before endRound and the next
+ * startPlayerTurn. Queueing every move plus endRound up front used to let
+ * those land after the turn had already flipped, paying out a round late and
+ * surviving startPlayerTurn's block reset.
+ */
+function monsterStep(ctx: EffectCtx, remaining: number[]): void {
+  const [idx, ...rest] = remaining;
+  if (idx === undefined) {
+    ctx.queue.addToBottom({ kind: "endRound" });
+    return;
+  }
+  executeMonsterMove(ctx, idx);
+  ctx.queue.addToBottom({ kind: "monsterStep", remaining: rest });
 }
 
 function executeMonsterMove(ctx: EffectCtx, idx: number): void {
@@ -721,14 +752,11 @@ function executeMonsterMove(ctx: EffectCtx, idx: number): void {
   const def = ctx.bundle.monsters.get(m.id);
   if (!def) throw new Error(`unknown monster ${m.id}`);
 
-  // monsters lose block at the start of their own turn (Barricade-like powers keep it)
-  if (getPowerAmount(ctx, monster(idx), "BARRICADE") === 0) m.block = 0;
-
-  fireHook(ctx, monster(idx), "atStartOfTurn");
-  // A start-of-turn power can kill its owner (Poison loses HP synchronously).
-  // The reference applies those powers in a separate pre-turn action and
-  // re-checks isDeadOrEscaped before takeTurn (MonsterGroup::doMonsterTurn),
-  // so a monster that dies here does not act.
+  // Block loss and start-of-turn powers already ran for the whole group in
+  // monsterTurn (MonsterGroup::applyPreTurnLogic). A start-of-turn power can
+  // kill its owner (Poison loses HP synchronously), and the reference
+  // re-checks isDeadOrEscaped here before takeTurn (MonsterGroup::doMonsterTurn),
+  // so a monster that died in that phase does not act.
   if (m.isDead || m.isEscaped) return;
   if (m.move) {
     const move = def.moves[m.move];

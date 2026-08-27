@@ -145,13 +145,30 @@ export function pushLogLines(ui: UiState, lines: string[]): UiState {
   return { ...ui, log };
 }
 
+/** Power events about engine bookkeeping (Channel Tally and friends) are noise. */
+const POWER_EVENTS = new Set(["powerApplied", "powerRemoved", "powerVetoed", "artifactNegated"]);
+
+function isHiddenPowerEvent(ev: GameEvent, bundle: ContentBundle): boolean {
+  if (!POWER_EVENTS.has(ev.event)) return false;
+  const p = ev.payload as { powerId?: unknown } | null | undefined;
+  const id = typeof p?.powerId === "string" ? p.powerId : null;
+  return id !== null && bundle.powers.get(id)?.hidden === true;
+}
+
 /** Format and append an engine event batch. The era bump lives here so every
- *  caller (app, fixtures, tests) splits combats the same way. */
-export function pushLog(ui: UiState, events: GameEvent[], bundle: ContentBundle): UiState {
+ *  caller (app, fixtures, tests) splits combats the same way. `names` is the
+ *  monster roster by slot, so the log can say "Spike Slime (S)" not "Enemy 1". */
+export function pushLog(
+  ui: UiState,
+  events: GameEvent[],
+  bundle: ContentBundle,
+  names: readonly string[] = [],
+): UiState {
   let next = ui;
   for (const ev of events) {
     if (ev.event === "combatStarted") next = { ...next, logEra: next.logEra + 1 };
-    next = pushLogLines(next, [formatEvent(ev, bundle)]);
+    if (isHiddenPowerEvent(ev, bundle)) continue;
+    next = pushLogLines(next, [formatEvent(ev, bundle, names)]);
   }
   return next;
 }

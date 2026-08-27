@@ -111,7 +111,7 @@ describe("nodes, picks, boss", () => {
       hasBossDoor: true,
       bossPickKey: "1",
       bossReachable: true,
-      picks: [{ x: 3, y: 15, key: "1", glyph: "B" }],
+      picks: [{ x: 3, y: 15, key: "1", glyph: "B", burning: false }],
       position: [3, 0],
     });
     const { lines } = buildMapLines(v, THEME_PLAIN);
@@ -132,7 +132,7 @@ describe("viewport", () => {
       nodeRows: rows,
       maxY: 14,
       hasBossDoor: true,
-      picks: [{ x: 3, y: 0, key: "1", glyph: "M" }],
+      picks: [{ x: 3, y: 0, key: "1", glyph: "M", burning: false }],
     });
   }
 
@@ -232,7 +232,7 @@ describe("act 4 column", () => {
       hasBossDoor: false,
       bossName: "The Heart",
       position: [3, 0],
-      picks: [{ x: 3, y: 1, key: "1", glyph: "$" }],
+      picks: [{ x: 3, y: 1, key: "1", glyph: "$", burning: false }],
     });
     const { lines } = buildMapLines(v, THEME_PLAIN);
     expect(lines.length).toBe(7); // 4 node rows + 3 edge rows

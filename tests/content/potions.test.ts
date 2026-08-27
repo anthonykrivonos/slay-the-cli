@@ -413,9 +413,37 @@ describe("potency plumbing", () => {
     expect(allPotions.length).toBe(42);
     let s = game({});
     // RUN-LAYER / ENGINE-GAP potions must not crash or corrupt state
-    for (const id of ["ENTROPIC_BREW", "SMOKE_BOMB", "FAIRY_POTION"]) {
+    for (const id of ["ENTROPIC_BREW", "FAIRY_POTION"]) {
       s = usePotion(s, id);
       expect(s.pending).toBeNull();
     }
+  });
+
+  describe("Smoke Bomb", () => {
+    const combatRoom = (roomKind: "monster" | "elite" | "boss") =>
+      ({ kind: "combat", roomKind, encounterId: "T_ENC", burningElite: false }) as GameState["run"]["room"];
+
+    test("walks out of a non-boss fight: combat ends, back to the map, no rewards", () => {
+      const s0 = game({});
+      s0.run.potions[0] = "SMOKE_BOMB";
+      s0.run.room = combatRoom("elite");
+      const gold = s0.run.gold;
+      const s = advance(s0, { cmd: "usePotion", slot: 0 }, B);
+      expect(s.combat).toBeNull();
+      expect(s.run.room!.kind).toBe("map"); // not a rewards screen
+      expect(s.run.gold).toBe(gold);
+      expect(s.run.potions[0]).toBeNull();
+      expect(s.outcome).toBeNull();
+      expect(s.eventLog.some((e) => e.event === "combatEnded" && e.payload === "escape")).toBe(true);
+    });
+
+    test("refuses a boss fight without burning the potion", () => {
+      const s0 = game({});
+      s0.run.potions[0] = "SMOKE_BOMB";
+      s0.run.room = combatRoom("boss");
+      expect(() => advance(s0, { cmd: "usePotion", slot: 0 }, B)).toThrow("cannot be used");
+      expect(s0.run.potions[0]).toBe("SMOKE_BOMB"); // still in the belt
+      expect(s0.combat).not.toBeNull();
+    });
   });
 });

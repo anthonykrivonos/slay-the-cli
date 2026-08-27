@@ -25,11 +25,17 @@ function str(v: unknown): string | null {
   return typeof v === "string" ? v : null;
 }
 
-/** "You" / "Enemy N" from an ActorRef payload field. */
-function actorText(v: unknown): string {
+/** The monster's own name when the roster is known, else "Enemy N". Slot
+ *  numbers are what the panels key off, so they stay the fallback. */
+function enemyLabel(names: readonly string[], idx: number): string {
+  return names[idx] ?? `Enemy ${idx + 1}`;
+}
+
+/** "You" / the monster's name from an ActorRef payload field. */
+function actorText(v: unknown, names: readonly string[] = []): string {
   const a = v as ActorRefish;
   if (isObj(v) && a.kind === "player") return "You";
-  if (isObj(v) && a.kind === "monster" && typeof a.idx === "number") return `Enemy ${a.idx + 1}`;
+  if (isObj(v) && a.kind === "monster" && typeof a.idx === "number") return enemyLabel(names, a.idx);
   return "Someone";
 }
 
@@ -72,7 +78,7 @@ function rawFormat(ev: GameEvent): string {
 }
 
 /** One readable sentence per engine event. */
-export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
+export function formatEvent(ev: GameEvent, bundle: ContentBundle, names: readonly string[] = []): string {
   const p = isObj(ev.payload) ? ev.payload : {};
   let out: string | null = null;
   switch (ev.event) {
@@ -80,7 +86,7 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
       out = `-- Turn ${num(p.turn) ?? "?"} --`;
       break;
     case "damaged": {
-      const who = actorText(p.target);
+      const who = actorText(p.target, names);
       const n = num(p.amount) ?? 0;
       out = who === "You" ? `You take ${n} damage` : `${who} takes ${n} damage`;
       break;
@@ -95,25 +101,25 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
       out = ev.payload === "victory" ? "Combat won" : `Combat ended (${String(ev.payload)})`;
       break;
     case "monsterDeath":
-      out = `Enemy ${(num(p.idx) ?? 0) + 1} dies`;
+      out = `${enemyLabel(names, num(p.idx) ?? 0)} dies`;
       break;
     case "monsterEscaped":
-      out = `Enemy ${(num(p.idx) ?? 0) + 1} escapes`;
+      out = `${enemyLabel(names, num(p.idx) ?? 0)} escapes`;
       break;
     case "monsterSpawned":
       out = `${monsterName(bundle, p.monsterId)} appears`;
       break;
     case "powerApplied":
-      out = `${powerName(bundle, p.powerId)} ${num(p.amount) ?? ""} on ${actorText(p.target).toLowerCase() === "you" ? "you" : actorText(p.target)}`;
+      out = `${powerName(bundle, p.powerId)} ${num(p.amount) ?? ""} on ${actorText(p.target, names).toLowerCase() === "you" ? "you" : actorText(p.target, names)}`;
       break;
     case "powerRemoved":
-      out = `${powerName(bundle, p.powerId)} wears off (${actorText(p.target)})`;
+      out = `${powerName(bundle, p.powerId)} wears off (${actorText(p.target, names)})`;
       break;
     case "powerVetoed":
       out = `${powerName(bundle, p.powerId)} was prevented`;
       break;
     case "artifactNegated":
-      out = `Artifact negated ${powerName(bundle, p.powerId)} (${actorText(p.target)})`;
+      out = `Artifact negated ${powerName(bundle, p.powerId)} (${actorText(p.target, names)})`;
       break;
     case "combatStarted": {
       const ids = Array.isArray(p.monsters) ? p.monsters : [];
@@ -127,7 +133,7 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
       // an autoplay rolls a target even for untargeted cards, so only say where
       // it went when the card actually aims (PlayTopCardAction parity)
       const aims = bundle.cards.get(defId)?.target === "enemy";
-      const at = aims && num(p.target) !== null ? ` at Enemy ${(num(p.target) ?? 0) + 1}` : "";
+      const at = aims && num(p.target) !== null ? ` at ${enemyLabel(names, num(p.target) ?? 0)}` : "";
       const via = str(p.via);
       // an autoplay says who forced it (Havoc, Mayhem, Double Tap...)
       out = via !== null ? `${cardishName(bundle, via)} plays ${name}${at}` : `You play ${name}${at}`;
@@ -181,13 +187,13 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle): string {
       out = `Dark orb grew to ${num(p.amount) ?? "?"}`;
       break;
     case "goldStolen":
-      out = `Enemy ${(num(p.idx) ?? 0) + 1} stole ${num(p.amount) ?? "?"} gold`;
+      out = `${enemyLabel(names, num(p.idx) ?? 0)} stole ${num(p.amount) ?? "?"} gold`;
       break;
     case "potionObtained":
       out = `Obtained potion: ${potionName(bundle, str(p.id) ?? "?")}`;
       break;
     case "stasisCardStolen":
-      out = `Enemy ${(num(p.idx) ?? 0) + 1} trapped a card in Stasis`;
+      out = `${enemyLabel(names, num(p.idx) ?? 0)} trapped a card in Stasis`;
       break;
     case "stasisCardReturned":
       out = "A card returns from Stasis";

@@ -93,8 +93,11 @@ export function listLines(
     withSubs.push(main);
     noSubs.push(main);
     if (item.sub !== null) {
-      const sub = theme.dim(`        ${item.sub}`);
-      withSubs.push(sub);
+      // wrap instead of letting the box clip mid-sentence (relic rules are
+      // longer than the overlay is wide)
+      for (const line of wrapPlain(item.sub, Math.max(10, width - 12))) {
+        withSubs.push(theme.dim(`        ${line}`));
+      }
     }
   }
   const pageLine =

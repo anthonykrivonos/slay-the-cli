@@ -393,7 +393,7 @@ describe("player panel", () => {
       expect(widths(rows)).toEqual(new Array(6).fill(40));
     }
     const plain = playerPanel(player, 40, THEME_PLAIN);
-    expect(stripAnsi(plain[0]!)).toBe(`+==( 3/3 )${"=".repeat(29)}+`);
+    expect(stripAnsi(plain[0]!)).toBe(`+==( E 3/3 )${"=".repeat(27)}+`);
     expect(stripAnsi(plain[1]!)).toContain("[WRATH]");
     expect(stripAnsi(plain[2]!)).toContain("HP 61/72");
     expect(stripAnsi(plain[3]!)).toContain("Mantra 6/10");

@@ -81,12 +81,12 @@ describe("POISON end-to-end", () => {
     expect(monsterPower(s, "POISON")).toBe(4);
     expect(monsterPower(s, "ASLEEP")).toBeUndefined();
     expect(monsterPower(s, "METALLICIZE")).toBeUndefined();
-    // ENGINE-NOTE: the next-move roll happens inside the same monsterMove
-    // action, before the queued wake resolves - the SLEEP intent lingers one
-    // extra turn vs the real game (documented in powers/silent.ts POISON).
-    expect(s.combat!.monsters[0]!.move).toBe("LAGAVULIN_SLEEP");
+    // The wake resolves in the group's pre-turn phase, before this monster
+    // rolls its next move, so the awake cycle starts immediately: the queued
+    // SLEEP still executed this turn and ATTACK follows (monsters-act1 ai.spec).
+    expect(s.combat!.monsters[0]!.move).toBe("LAGAVULIN_ATTACK");
     s = endTurn(s);
-    expect(s.combat!.monsters[0]!.move).toBe("LAGAVULIN_ATTACK"); // awake cycle begins
+    expect(s.combat!.monsters[0]!.move).toBe("LAGAVULIN_ATTACK"); // awake cycle continues
   });
 
   test("player-side poison ticks at the start of the player's turn", () => {

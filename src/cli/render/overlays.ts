@@ -9,17 +9,39 @@ import { C } from "./theme";
 import { padClip, center, boxLines, wrapPlain } from "./widgets";
 import { cardBox, type CardBoxData } from "./cardbox";
 
-function plainListBody(list: ListView, theme: Theme, maxLines: number, accent: string): string[] {
+function plainListBody(
+  list: ListView,
+  theme: Theme,
+  maxLines: number,
+  accent: string,
+  width: number,
+): string[] {
   const out: string[] = [];
+  const push = (line: string, enabled: boolean, focused: boolean) => {
+    if (!enabled) out.push(theme.dim(line));
+    else out.push(focused ? theme.bold(theme.fg(accent, line)) : line);
+  };
   for (const item of list.items) {
     const focused = list.focusI !== null && item.i === list.focusI;
     const cursor = focused ? "> " : "  ";
     const keyPart = item.key !== null && item.action !== null ? `[${item.key}] ` : item.key !== null ? `    ` : "    ";
     const notePart = item.note !== null ? `  (${item.note})` : "";
-    let line = `${cursor}${keyPart}${item.label}${notePart}`;
-    if (item.sub !== null) line += `  - ${item.sub}`;
-    if (!item.enabled) out.push(theme.dim(line));
-    else out.push(focused ? theme.bold(theme.fg(accent, line)) : line);
+    const head = `${cursor}${keyPart}${item.label}${notePart}`;
+    if (item.sub === null) {
+      push(head, item.enabled, focused);
+      continue;
+    }
+    // one line while it fits, otherwise the detail wraps underneath instead of
+    // being clipped mid-sentence by the box
+    const oneLine = `${head}  - ${item.sub}`;
+    if (oneLine.length <= width) {
+      push(oneLine, item.enabled, focused);
+      continue;
+    }
+    push(head, item.enabled, focused);
+    for (const line of wrapPlain(item.sub, Math.max(10, width - 8))) {
+      out.push(theme.dim(`        ${line}`));
+    }
   }
   if (list.pages > 1) out.push(theme.dim(`page ${list.page + 1}/${list.pages} - [n] next [p] prev`));
   return out.slice(0, maxLines);
@@ -66,14 +88,19 @@ export function renderOverlay(
         `${theme.bold("[y]")} quit    ${theme.bold("[n]")} keep playing`,
       ];
       break;
-    case "potionMenu":
+    case "potionMenu": {
       title = overlay.name;
+      const w = Math.min(width - 2, 76) - 4;
       body = [
+        // what it does, not just when it can be drunk
+        ...(overlay.text !== null ? wrapPlain(overlay.text, w) : []),
         overlay.targeted ? theme.dim("Throws at a target (needs combat).") : theme.dim("Drink at any time."),
+        ...(overlay.blocked !== null ? [theme.dim(`(${overlay.blocked})`)] : []),
         "",
         `${theme.bold("[u]")} use    ${theme.bold("[d]")} discard    ${theme.bold("[Esc]")} cancel`,
       ];
       break;
+    }
     case "inspect": {
       // a big box, centered, with the pager underneath. Cards, relics and
       // potions all draw as one shape - a relic just has no cost corner.
@@ -128,7 +155,7 @@ export function renderOverlay(
       break;
     case "list":
       title = overlay.title;
-      body = plainListBody(overlay.list, theme, bodyMax, accent);
+      body = plainListBody(overlay.list, theme, bodyMax, accent, boxW - 4);
       break;
   }
   const box = boxLines(title, body.slice(0, bodyMax), boxW, theme);

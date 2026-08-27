@@ -415,6 +415,7 @@ export const silentPowers: PowerDef[] = [
     // real game counts from combat start via AbstractPlayer.wasHPLost).
     id: "MASTERFUL_STAB",
     name: "Masterful Stab",
+    hidden: true, // engine bookkeeping, never shown
     kind: "buff",
     stacking: "none",
     turnBased: false,

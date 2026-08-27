@@ -27,8 +27,9 @@ import type { Hooks } from "../core/hooks";
 export interface RuntimeSlot {
   pending: PendingChoice | null;
   currentItem: import("../combat/combatState").CardQueueItem | null;
-  /** combat outcome flag set by the interpreter */
-  combatOver: "victory" | "defeat" | null;
+  /** combat outcome flag set by the interpreter. "escape" = the player
+   *  bailed (Smoke Bomb): combat ends, no victory, no rewards. */
+  combatOver: "victory" | "defeat" | "escape" | null;
 }
 
 /** Execution context handed to every content effect and hook. */
@@ -114,6 +115,8 @@ export interface PowerDef {
   /** ticks down at end of round */
   turnBased: boolean;
   canGoNegative?: boolean; // Strength/Dexterity/Focus
+  /** engine bookkeeping, not a real power: never shown as a buff chip or logged */
+  hidden?: boolean;
   priority?: number; // rare explicit ordering overrides
   hooks: Hooks;
   onApply?: (ctx: EffectCtx, target: ActorRef, amount: number) => void;
@@ -128,6 +131,8 @@ export interface RelicDef {
   hooks: Hooks;
   onEquip?: EffectFn;
   onUnequip?: EffectFn;
+  /** charges tick down to zero and the relic is spent (the reference's usedUp) */
+  countsDown?: boolean;
   /** flat energy-per-turn delta while owned (boss energy relics) */
   energyBonus?: number;
   /** restrict energyBonus to elite/boss fights (Slaver's Collar) */
@@ -143,6 +148,10 @@ export interface PotionDef {
   /** base potency; Sacred Bark doubles where sacredBarkDoubles */
   potency: number;
   sacredBarkDoubles: boolean;
+  /** Refuse the potion instead of burning it (Smoke Bomb outside a non-boss
+   *  fight). Deliberately a structural subset of EffectCtx so the pure CLI
+   *  view can ask the same question without building a context. */
+  canUse?: (ctx: { run: RunState; combat: CombatState | null }) => boolean;
   onUse: (ctx: EffectCtx, target: number | null, potency: number) => void;
 }
 

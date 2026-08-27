@@ -526,7 +526,6 @@ export const allPotions: PotionDef[] = [
   },
   {
     // "Escape from a non-boss combat. Receive no rewards."
-    // RUN-LAYER/ENGINE-GAP: player escape has no combat-end path yet.
     id: "SMOKE_BOMB",
     name: "Smoke Bomb",
     rarity: "rare",
@@ -534,7 +533,11 @@ export const allPotions: PotionDef[] = [
     targeted: false,
     potency: 0,
     sacredBarkDoubles: false,
-    onUse: () => {},
+    // bosses cannot be walked out on; event combats can
+    canUse: (ctx) => ctx.combat !== null && !(ctx.run.room?.kind === "combat" && ctx.run.room.roomKind === "boss"),
+    onUse: (ctx) => {
+      ctx.rt.combatOver = "escape";
+    },
   },
   {
     // "Draw [5|10] cards. Randomize the cost of cards in your hand."

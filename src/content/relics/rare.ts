@@ -437,6 +437,7 @@ export const rareRelics: RelicDef[] = [
     // RUN-LAYER: map traversal; counter initialized on pickup.
     id: "WING_BOOTS",
     name: "Wing Boots",
+    countsDown: true,
     tier: "rare",
     pool: "shared",
     onEquip: (ctx) => {

@@ -32,10 +32,9 @@ export function selfPower(ctx: EffectCtx, self: MonsterState, powerId: string, a
 
 /**
  * Apply a power to the player SYNCHRONOUSLY (source = this monster, so duration
- * debuffs get justApplied). The reference applies these inline in takeTurn; a
- * queued application would land after this round's endRound tick (monsterTurn
- * queues endRound ahead of the move's addToBottom actions), stretching every
- * turn-based debuff by a full extra round.
+ * debuffs get justApplied), exactly as the reference applies these inline in
+ * takeTurn. A queued application would still resolve this round, but only after
+ * the move returns - inline keeps the ordering identical to the reference.
  */
 export function playerPower(ctx: EffectCtx, self: MonsterState, powerId: string, amount: number): void {
   applyPower(ctx, monster(self.idx), PLAYER, powerId, amount);

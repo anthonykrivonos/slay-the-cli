@@ -10,12 +10,12 @@
                       | -- Turn 5 --                                                             |                      
                       | You play Defend                                                          |                      
                       | You play Defend                                                          |                      
-                      | You play Strike at Enemy 2                                               |                      
-                      | Enemy 2 takes 4 damage                                                   |                      
+                      | You play Strike at Acid Slime (M)                                        |                      
+                      | Acid Slime (M) takes 4 damage                                            |                      
                       | A card was discarded                                                     |                      
                       | A card was discarded                                                     |                      
-                      | Weak wears off (You)                                                     |                      
                       | You take 0 damage                                                        |                      
+                      | Weak wears off (You)                                                     |                      
                       | Drew a card                                                              |                      
                       | Drew a card                                                              |                      
                       | Drew a card                                                              |                      

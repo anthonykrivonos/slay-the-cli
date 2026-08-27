@@ -47,7 +47,22 @@ export const theCollector: MonsterDef = {
   name: "The Collector",
   category: "boss",
   hp: (asc) => (asc >= 9 ? [300, 300] : [282, 282]),
-  preBattle: (_ctx, self) => prePower(self, "MINION_LEADER", 1),
+  // Reference layout: the Collector occupies slot 2 and the Torch Heads spawn
+  // into slots 0 and 1, so the heads act BEFORE her every round - a Buff she
+  // casts only reaches them the following round. Combat setup drops her at
+  // slot 0, so move her down before anything targets or acts.
+  preBattle: (ctx, self) => {
+    prePower(self, "MINION_LEADER", 1);
+    padMonsterSlots(ctx, 3);
+    const ms = ctx.combat!.monsters;
+    const gap = ms[2];
+    if (self.idx === 0 && gap && gap.id === "GAP") {
+      ms[2] = self;
+      ms[0] = gap;
+      self.idx = 2;
+      gap.idx = 0;
+    }
+  },
   onDeath: (ctx, _self) => escapeMinions(ctx),
   moves: {
     THE_COLLECTOR_SPAWN: {

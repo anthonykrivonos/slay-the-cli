@@ -156,6 +156,7 @@ export const eventRelics: RelicDef[] = [
     // "Enemies in your first 3 combats will have 1 HP." counter set on pickup.
     id: "NEOWS_LAMENT",
     name: "Neow's Lament",
+    countsDown: true,
     tier: "event",
     pool: "shared",
     onEquip: (ctx) => {

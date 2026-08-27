@@ -31,6 +31,7 @@ import {
   canRecall,
   rewardLabel,
   rewardBlocked,
+  rewardAdvisory,
   rewardRows,
   chestTitle,
   describeChoiceReason,
@@ -152,7 +153,7 @@ export interface MapView {
   nodeRows: (MapNodeView | null)[][];
   maxY: number;
   position: [number, number] | null;
-  picks: { x: number; y: number; key: string; glyph: string }[];
+  picks: { x: number; y: number; key: string; glyph: string; burning: boolean }[];
   scroll: number;
   keysOwned: string;
   deckCount: number;
@@ -361,7 +362,7 @@ export type OverlayView =
       single: boolean;
     }
   | { kind: "list"; id: "deck" | "relics" | "pile" | "potions" | "settings"; title: string; list: ListView }
-  | { kind: "potionMenu"; slot: number; name: string; targeted: boolean }
+  | { kind: "potionMenu"; slot: number; name: string; targeted: boolean; text: string | null; blocked: string | null }
   | {
       kind: "inspect";
       /** which collection is being paged through */
@@ -661,11 +662,15 @@ const ORB_LETTERS: Record<string, string> = {
 };
 
 function powerChips(bundle: ContentBundle, powers: { id: string; amount: number }[]): PowerChipView[] {
-  return powers.map((p) => ({
-    name: toAscii(bundle.powers.get(p.id)?.name ?? titleCase(p.id)),
-    amount: p.amount,
-    kind: bundle.powers.get(p.id)?.kind ?? "buff",
-  }));
+  // hidden powers are engine bookkeeping (Channel Tally, Claw Buff...): showing
+  // them would also push real debuffs out of the row's chip budget
+  return powers
+    .filter((p) => bundle.powers.get(p.id)?.hidden !== true)
+    .map((p) => ({
+      name: toAscii(bundle.powers.get(p.id)?.name ?? titleCase(p.id)),
+      amount: p.amount,
+      kind: bundle.powers.get(p.id)?.kind ?? "buff",
+    }));
 }
 
 /** Alphabetic 3-letter tag for the relic strip. */
@@ -776,7 +781,7 @@ function buildMap(g: GameState, ui: UiState, bundle: ContentBundle): MapView {
   const bossName = map ? (bundle.monsters.get(map.bossId)?.name ?? titleCase(map.bossId)) : "?";
   const picks = picksRaw.map((p, i) => {
     const node = map?.rows[p.y]?.[p.x];
-    return { x: p.x, y: p.y, key: keyFor(i) ?? "?", glyph: node ? mapGlyph(node.kind) : "B" };
+    return { x: p.x, y: p.y, key: keyFor(i) ?? "?", glyph: node ? mapGlyph(node.kind) : "B", burning: node?.burningElite === true };
   });
   const pickAt = new Map(picks.map((p) => [`${p.x},${p.y}`, p.key]));
   const bossPick = picks.find((p) => p.y >= (map?.rows.length ?? 15));
@@ -827,10 +832,13 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
   const c = g.combat!;
   const intents = getIntents(g, bundle);
   let targetNo = 0;
-  const enemies: EnemyPanelView[] = c.monsters.map((m, idx) => {
+  // GAP entries are slot padding (the Slime Boss leaves one behind when it
+  // splits), not creatures - they must never draw a panel
+  const enemies: EnemyPanelView[] = c.monsters.flatMap((m, idx) => {
+    if (m.id === "GAP") return [];
     const gone = m.isDead ? ("dead" as const) : m.isEscaped ? ("escaped" as const) : null;
     const info = intents[idx] ?? null;
-    return {
+    return [{
       key: gone ? null : (keyFor(targetNo++) ?? null),
       id: m.id,
       name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
@@ -841,7 +849,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
       move: gone || !info ? null : toAscii(prettyMove(m.id, info.moveId)),
       powers: gone ? [] : powerChips(bundle, m.powers),
       gone,
-    };
+    }];
   });
 
   const p = c.player;
@@ -968,7 +976,7 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
       label: rewardLabel(e, bundle),
       sub: isCard && !e.taken ? firstRulesLine(e.id, e.upgraded ? 1 : 0) : null,
       enabled: blocked === null,
-      note: e.taken ? "taken" : blocked,
+      note: e.taken ? "taken" : (blocked ?? rewardAdvisory(e, g.run)),
       action: cmd({ cmd: "takeReward", i }),
     };
   });
@@ -993,7 +1001,7 @@ function buildRewards(g: GameState, room: Extract<RoomState, { kind: "rewards" }
               ? potionText(e.id, sacredBark(g)) || null
               : null,
         enabled: blocked === null,
-        note: e.taken ? "taken" : blocked !== null ? toAscii(blocked) : null,
+        note: e.taken ? "taken" : blocked !== null ? toAscii(blocked) : rewardAdvisory(e, g.run),
       };
     }
     return {
@@ -1580,7 +1588,15 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
     }
     case "relics": {
       const items: RawItem[] = g.run.relics.map((r) => ({
-        label: relicName(bundle, r.defId) + (r.counter > 0 ? `  (${r.counter})` : ""),
+        // charges left, or "spent" once a countdown relic has run out - it
+        // stays in the row doing nothing, so say so
+        label:
+          relicName(bundle, r.defId) +
+          (r.counter > 0
+            ? `  (${r.counter})`
+            : bundle.relics.get(r.defId)?.countsDown === true
+              ? "  (spent)"
+              : ""),
         sub: relicText(r.defId) || null,
         action: null,
       }));
@@ -1630,6 +1646,9 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         slot: top.slot,
         name: id ? toAscii(potionName(bundle, id)) : "(empty)",
         targeted: def?.targeted ?? false,
+        text: id ? toAscii(potionText(id, sacredBark(g))) || null : null,
+        // Smoke Bomb outside a non-boss fight is refused rather than burned
+        blocked: def?.canUse && !def.canUse({ run: g.run, combat: g.combat }) ? "cannot be used here" : null,
       };
     }
     case "inspect": {

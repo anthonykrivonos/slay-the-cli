@@ -89,10 +89,10 @@ describe("map mode", () => {
     if (a?.kind === "cmd") expect(a.cmd.cmd).toBe("mapPick");
     expect(mapKey(ch("9"), v)).toBeNull(); // only 3 picks on this map
   });
-  test("j/k scroll, Esc backs out to the menu, q asks to quit", () => {
+  test("j/k scroll, Esc does not leave the run, q asks to quit", () => {
     expect(mapKey(ch("j"), v)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: 1 } });
     expect(mapKey(ch("k"), v)).toEqual({ kind: "ui", act: { type: "mapScroll", delta: -1 } });
-    expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "backToMenu" } });
+    expect(mapKey(ESC, v)).toBeNull(); // q is the only way out of a run
     expect(mapKey(ch("q"), v)).toEqual({ kind: "ui", act: { type: "openOverlay", overlay: { kind: "confirmQuit" } } });
   });
 });
@@ -508,7 +508,7 @@ describe("focus / selection cursor", () => {
     expect(a).toEqual({ kind: "cmd", cmd: { cmd: "restOption", kind: "rest" } });
     expect(mapKey(ESC, v)).toEqual({ kind: "ui", act: { type: "focusClear" } });
     const cleared = viewOf(f);
-    expect(mapKey(ESC, cleared)).toEqual({ kind: "ui", act: { type: "backToMenu" } });
+    expect(mapKey(ESC, cleared)).toBeNull(); // with no cursor Esc stays put
   });
 
   test("Enter on a focused disabled item toasts its note", () => {

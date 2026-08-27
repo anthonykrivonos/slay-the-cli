@@ -316,6 +316,7 @@ export const defectPowers: PowerDef[] = [
     // from any source afterwards. See content/orbs.ts ensureChannelTally.
     id: "CHANNEL_TALLY",
     name: "Channel Tally",
+    hidden: true, // engine bookkeeping, never shown
     kind: "buff",
     stacking: "none",
     turnBased: false,
@@ -333,6 +334,7 @@ export const defectPowers: PowerDef[] = [
     // to copies created later too, matching the game).
     id: "CLAW_BUFF",
     name: "Claw Buff",
+    hidden: true, // engine bookkeeping, never shown
     kind: "buff",
     stacking: "intensity",
     turnBased: false,

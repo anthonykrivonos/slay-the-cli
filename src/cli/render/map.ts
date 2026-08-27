@@ -230,7 +230,8 @@ export function renderMap(
 
   const nextParts = screen.picks.map((p, k) => {
     const cursor = screen.focusPick === k ? ">" : "";
-    const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}`;
+    // keep the burning-elite star: "E" and "E*" are different fights
+    const label = p.y > screen.maxY ? `${cursor}${p.key}:BOSS` : `${cursor}${p.key}:${p.glyph}${p.burning ? "*" : ""}`;
     if (screen.focusPick === k) return theme.bold(theme.fg(accent, label));
     return theme.bold(theme.fg(MAP_NODE_ACCENTS[p.y > screen.maxY ? "B" : p.glyph] ?? C.pick, label));
   });

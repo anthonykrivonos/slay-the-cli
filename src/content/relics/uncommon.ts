@@ -300,9 +300,8 @@ export const uncommonRelics: RelicDef[] = [
     hooks: {
       wasHPLost: (ctx, _info, amount) => {
         if (amount > 0) {
-          // addToTop: monster-turn damage resolves after endRound is queued, so a
-          // bottom-queued apply would land behind next turn's startPlayerTurn and
-          // pay out one turn late.
+          // addToTop so the block is banked the instant the hit lands, ahead of
+          // anything else the monster's move queued.
           ctx.queue.addToTop({
             kind: "applyPower",
             source: PLAYER,
@@ -400,6 +399,7 @@ export const uncommonRelics: RelicDef[] = [
     // generation lives in the treasure layer; counter initialized on pickup.
     id: "MATRYOSHKA",
     name: "Matryoshka",
+    countsDown: true,
     tier: "uncommon",
     pool: "shared",
     onEquip: (ctx) => {

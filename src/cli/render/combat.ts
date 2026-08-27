@@ -378,12 +378,25 @@ export function renderCombat(
     }
   }
 
-  // 7. targeting strip (directly above the HAND rule)
+  // 7. targeting strip (directly above the HAND rule). The layout budget is
+  // exactly one row, so a crowded room (five slimes) drops detail rather than
+  // letting the last target fall off the end: every candidate must stay
+  // readable, because its key is the only way to aim.
   if (targeting !== null) {
-    const targets = targeting.targets
-      .map((t, k) => `${k === targeting.focusIdx ? ">" : ""}[${t.key}] ${t.name}${t.damage !== null ? ` (${t.damage})` : ""}`)
-      .join("  ");
-    out.push(theme.inverse(padClip(` ${targeting.prompt}: ${targets} `, width)));
+    const t = targeting;
+    const cur = (k: number) => (k === t.focusIdx ? ">" : "");
+    const dmg = (d: number | null) => (d !== null ? ` (${d})` : "");
+    const join = (parts: string[], gap: string) => parts.join(gap);
+    const forms: (() => string)[] = [
+      () => `${t.prompt}: ${join(t.targets.map((x, k) => `${cur(k)}[${x.key}] ${x.name}${dmg(x.damage)}`), "  ")}`,
+      () => `${t.prompt}: ${join(t.targets.map((x, k) => `${cur(k)}[${x.key}] ${x.name}${dmg(x.damage)}`), " ")}`,
+      () => `Target: ${join(t.targets.map((x, k) => `${cur(k)}[${x.key}] ${x.name}${dmg(x.damage)}`), " ")}`,
+      () => `Target: ${join(t.targets.map((x, k) => `${cur(k)}[${x.key}]${dmg(x.damage)}`), " ")}`,
+      () => `Target: ${join(t.targets.map((x, k) => `${cur(k)}[${x.key}]`), "")}`,
+    ];
+    const budget = Math.max(0, width - 2); // one pad column each side
+    const line = forms.map((f) => f()).find((s) => s.length <= budget) ?? forms[forms.length - 1]!();
+    out.push(theme.inverse(padClip(` ${line} `, width)));
   }
 
   // 8. HAND rule + cards

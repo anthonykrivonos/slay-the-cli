@@ -126,10 +126,16 @@ export function renderFrame(view: View, size: FrameSize, theme: Theme): string[]
   const screenH = bodyH - tip;
   const body = renderBody(view, cols, screenH, theme);
   for (let i = 0; i < screenH; i++) lines.push(body[i] ?? "");
-  if (tip > 0) lines.push(...renderTooltip(view.tooltip, cols, tip, theme));
+  // With an INFO panel the toast goes up there and the key hints keep the
+  // bottom row. Without one (80x24) the bottom row is all there is, so the
+  // toast still takes it.
+  const toastInPanel = tip > 0 ? view.toast : null;
+  if (tip > 0) lines.push(...renderTooltip(view.tooltip, cols, tip, theme, toastInPanel));
 
   const bottom =
-    view.toast !== null ? theme.inverse(padClip(` ${view.toast}`, cols)) : theme.dim(padClip(view.hint, cols));
+    view.toast !== null && toastInPanel === null
+      ? theme.inverse(padClip(` ${view.toast}`, cols))
+      : theme.dim(padClip(view.hint, cols));
   lines.push(bottom);
 
   return lines.map((l) => padClip(l, cols));

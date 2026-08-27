@@ -35,6 +35,9 @@ export interface CardBoxData {
   preview?: { text: string; tone: "up" | "down" | "flat" } | null;
   /** whole box dim (unplayable / unaffordable / sold / taken) */
   dim: boolean;
+  /** state word on the last inner row ("taken"); survives --no-color, where
+   *  dim is a no-op and would otherwise be the only signal */
+  note?: string | null;
 }
 
 /** Box width for n cards across `cols` columns. <12 = boxes don't fit. */
@@ -92,8 +95,11 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
   // (the truncation marker below already says when text was cut). A box too
   // short to hold both keeps the rules.
   const previewFits = h >= (hasTypeRow ? 5 : 4);
-  const preview = (previewFits ? card.preview : null) ?? null;
-  const rulesRows = Math.max(0, h - (hasTypeRow ? 4 : 3) - (preview !== null ? 1 : 0));
+  // the note owns the slot when both want it: "taken" beats live numbers
+  const note = (previewFits ? (card.note ?? null) : null) ?? null;
+  const preview = (previewFits && note === null ? card.preview : null) ?? null;
+  const lastRow = note !== null || preview !== null;
+  const rulesRows = Math.max(0, h - (hasTypeRow ? 4 : 3) - (lastRow ? 1 : 0));
   const mark = card.targeted ? ">" : "";
 
   // name row ('>' joins the name when the type row is dropped)
@@ -152,7 +158,8 @@ export function cardBox(card: CardBoxData, w: number, h: number, theme: Theme): 
   rows.push(nameRow);
   if (typeRow !== null) rows.push(typeRow);
   for (const r of shown) rows.push(inner(card.dim ? r : theme.dim(r), w));
-  if (preview !== null) rows.push(inner(previewRow(preview, iw, theme, card.dim), w));
+  if (note !== null) rows.push(inner(card.dim ? `(${note})` : theme.dim(`(${note})`), w));
+  else if (preview !== null) rows.push(inner(previewRow(preview, iw, theme, card.dim), w));
   rows.push(bottomBorder(card.key, w, theme, card.dim));
 
   const out = rows.slice(0, h).map((r) => padClip(r, w));

@@ -86,7 +86,8 @@ const countInPile = (s: GameState, pile: "draw" | "hand" | "discard" | "exhaust"
 
 function expectHpRange(monsterId: string, asc: number, lo: number, hi: number): void {
   for (const seed of SEEDS.slice(0, 6)) {
-    const m = mon(fight([monsterId], { seed, asc }));
+    // by id, not slot: some encounters seat their boss away from slot 0
+    const m = fight([monsterId], { seed, asc }).combat!.monsters.find((x) => x.id === monsterId)!;
     expect(m.maxHp).toBeGreaterThanOrEqual(lo);
     expect(m.maxHp).toBeLessThanOrEqual(hi);
   }
@@ -775,7 +776,10 @@ describe("Book of Stabbing", () => {
         expect(stabCount).toBe(multisSeen + 1); // Nth multi stab hits N+1 times
         expect(hp0 - s.run.hp).toBe(6 * stabCount);
         expect(countCards(s, "WOUND") - wounds0).toBe(stabCount);
-        expect(countInPile(s, "discard", "WOUND")).toBeGreaterThanOrEqual(stabCount);
+        // Painful Stabs makes them in the discard pile during the monster's
+        // turn, so by the time the player draws they may already have been
+        // shuffled back into draw (or drawn into hand) - never exhausted.
+        expect(countInPile(s, "exhaust", "WOUND")).toBe(0);
       } else {
         expect(hp0 - s.run.hp).toBe(21);
         expect(countCards(s, "WOUND") - wounds0).toBe(1);
@@ -1219,16 +1223,19 @@ describe("Bronze Automaton", () => {
 // ------------------------------------------------------------------------------
 
 describe("The Collector", () => {
+  // Reference layout: heads take slots 0-1, the Collector slot 2 (she acts last).
+  const COL = 2;
+  const HEADS = [0, 1];
   test("HP: 282 A0, 300 A9; turn 1 spawns 2 Torch Heads with preset Tackle", () => {
     expectHpRange("THE_COLLECTOR", 0, 282, 282);
     expectHpRange("THE_COLLECTOR", 9, 300, 300);
     let s = fight(["THE_COLLECTOR"], { seed: "COLL" });
-    expect(mon(s).move).toBe("THE_COLLECTOR_SPAWN");
+    expect(mon(s, COL).move).toBe("THE_COLLECTOR_SPAWN");
     const hp0 = s.run.hp;
     s = endTurn(s);
     expect(s.run.hp).toBe(hp0); // fresh heads act the round after spawning
     expect(s.combat!.monsters.length).toBe(3);
-    for (const idx of [1, 2]) {
+    for (const idx of HEADS) {
       const head = mon(s, idx);
       expect(head.id).toBe("TORCH_HEAD");
       expect(head.move).toBe("TORCH_HEAD_TACKLE");
@@ -1242,7 +1249,7 @@ describe("The Collector", () => {
     for (const seed of SEEDS.slice(0, 6)) {
       let s = fight(["THE_COLLECTOR"], { seed });
       for (let t = 1; t < 4; t++) s = endTurn(s);
-      expect(mon(s).move).toBe("THE_COLLECTOR_MEGA_DEBUFF");
+      expect(mon(s, COL).move).toBe("THE_COLLECTOR_MEGA_DEBUFF");
       const weak0 = playerPower(s, "WEAK")?.amount ?? 0;
       const frail0 = playerPower(s, "FRAIL")?.amount ?? 0;
       s = endTurn(s);
@@ -1264,8 +1271,8 @@ describe("The Collector", () => {
       let s = fight(["THE_COLLECTOR"], { seed });
       s = endTurn(s); // spawn
       for (let turn = 2; turn <= 3; turn++) {
-        const move = mon(s).move!;
-        const colStr = monPower(s, 0, "STRENGTH")?.amount ?? 0;
+        const move = mon(s, COL).move!;
+        const colStr = monPower(s, COL, "STRENGTH")?.amount ?? 0;
         const heads = s.combat!.monsters.filter((m) => m.id === "TORCH_HEAD" && !m.isDead && !m.isEscaped);
         const headDmg = heads.reduce(
           (sum, h) => sum + 7 + (h.powers.find((p) => p.id === "STRENGTH")?.amount ?? 0),
@@ -1279,9 +1286,9 @@ describe("The Collector", () => {
         }
         if (move === "THE_COLLECTOR_BUFF" && !sawBuff) {
           expect(hp0 - s.run.hp).toBe(headDmg);
-          expect(monPower(s, 0, "STRENGTH")?.amount).toBe(colStr + 3);
-          expect(mon(s).block).toBe(15);
-          for (const h of [1, 2]) expect(monPower(s, h, "STRENGTH")?.amount).toBe(3);
+          expect(monPower(s, COL, "STRENGTH")?.amount).toBe(colStr + 3);
+          expect(mon(s, COL).block).toBe(15);
+          for (const h of HEADS) expect(monPower(s, h, "STRENGTH")?.amount).toBe(3);
           sawBuff = true;
         }
       }
@@ -1303,7 +1310,7 @@ describe("The Collector", () => {
       if (!mon(s, 1).isDead) continue;
       let prevMove: string | null = null;
       for (let t = 0; t < 15; t++) {
-        const move = mon(s, 0).move!;
+        const move = mon(s, COL).move!;
         if (move === "THE_COLLECTOR_SPAWN") {
           expect(prevMove).not.toBe("THE_COLLECTOR_SPAWN");
           const aliveBefore = s.combat!.monsters.filter((m) => !m.isDead && !m.isEscaped).length;

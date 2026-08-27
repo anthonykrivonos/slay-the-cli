@@ -307,6 +307,7 @@ export const ironcladPowers: PowerDef[] = [
     // (the real game counts from combat start via AbstractPlayer.wasHPLost).
     id: "BLOOD_FOR_BLOOD",
     name: "Blood for Blood",
+    hidden: true, // engine bookkeeping, never shown
     kind: "buff",
     stacking: "none",
     turnBased: false,
@@ -328,6 +329,7 @@ export const ironcladPowers: PowerDef[] = [
     // Normality power icon while the curse is in hand, so the visual matches.
     id: "NORMALITY",
     name: "Normality",
+    hidden: true, // engine bookkeeping, never shown
     kind: "debuff",
     stacking: "none",
     turnBased: false,
@@ -354,6 +356,7 @@ export const ironcladPowers: PowerDef[] = [
     // LoseHPAction (each is a separate Rupture trigger).
     id: "PAIN",
     name: "Pain",
+    hidden: true, // engine bookkeeping, never shown
     kind: "debuff",
     stacking: "none",
     turnBased: false,

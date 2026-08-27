@@ -16,9 +16,9 @@ import { bigWord, bigWordWidth, BIG_ROWS } from "./bigfont";
 import { clamp, joinBlocks, rowWidth } from "./layout";
 import { ART_SPIRE, pickPortrait } from "./art";
 import { visibleWidth } from "../term/ansi";
+import { VERSION_LABEL } from "../version";
 
 const TITLE = "SLAY THE CLI";
-const CAPTION = "The Spire awaits.";
 
 function accentOf(id: string): string {
   return CHARACTER_COLORS[id] ?? "#54689a";
@@ -151,7 +151,7 @@ export function renderMenu(screen: MenuView, width: number, height: number, them
   } else {
     head.push(center(theme.bold(theme.fg(C.bright, TITLE)), width));
   }
-  head.push(center(theme.dim(CAPTION), width));
+  head.push(center(theme.dim(VERSION_LABEL), width));
   head.push("");
 
   if (boxRowW > width || head.length + block.length > height) {
@@ -190,7 +190,7 @@ function renderMenuFallback(screen: MenuView, width: number, height: number, the
   const out: string[] = [];
   out.push("");
   out.push(center(theme.bold(theme.fg(C.bright, TITLE)), width));
-  out.push(center(theme.dim(CAPTION), width));
+  out.push(center(theme.dim(VERSION_LABEL), width));
   out.push("");
   screen.characters.forEach((ch, i) => {
     const accent = accentOf(ch.id);

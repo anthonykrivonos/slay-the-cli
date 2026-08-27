@@ -3,6 +3,9 @@
 Bug reports and fixes are welcome. The bar is high in one specific direction:
 this is a clone, so "matches the original" beats "reads nicer" every time.
 
+Working through a coding agent? [`AGENTS.md`](../AGENTS.md) at the repo root is
+written for one, and it carries the standing decisions this file does not repeat.
+
 ## Setup
 
 ```sh
@@ -66,6 +69,19 @@ bun run fixtures   #                regenerate the UI snapshots
 bun run shots      #                regenerate the README screenshots
 bun run dev:bun    # npm run dev    watch mode
 ```
+
+## Releases
+
+`package.json`'s `version` is the only version in the repo. The title screen
+prints it and the README banner says the same, so **bump it in the pull request
+that earned the bump**, then run `bun run fixtures && bun run shots` and commit
+the result. Patch for a fix, minor for new player-visible behavior, major for
+anything that breaks existing saves or flags, nothing for a docs-only change.
+The full table is in [`AGENTS.md`](../AGENTS.md#9-when-to-bump-the-version).
+
+On merge, a workflow tags `v<version>` and cuts a GitHub release with notes
+generated from the squashed commit titles. If the version did not change, it
+does nothing, which is the normal case.
 
 ## Layout
 

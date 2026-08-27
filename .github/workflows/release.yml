@@ -1,0 +1,76 @@
+# Turns a version bump on main into a tag and a GitHub release.
+#
+# package.json's version is ground truth (see AGENTS.md, "When to bump"): the
+# title screen renders it, so the bump arrives in the PR that earned it. This
+# job only publishes what the merge already decided. It never writes to main,
+# which is protected and would refuse the bot anyway.
+#
+# It does not wait for ci: the same commit already passed the three required
+# checks on its PR, and protection keeps PRs up to date with main, so a merge
+# is a commit CI has already seen.
+name: release
+
+on:
+  push:
+    branches: [main]
+
+# never abort a half-published release
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: tag and release
+    runs-on: ubuntu-latest
+    steps:
+      # tags and full history, so the tag check and the generated notes are honest
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read the version
+        id: v
+        run: |
+          version=$(jq -r '.version // empty' package.json)
+          case "$version" in
+            "") echo "::error::package.json has no version field"; exit 1 ;;
+          esac
+          if ! printf '%s' "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "::error::version '$version' is not semver"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Already released?
+        id: check
+        run: |
+          if git rev-parse -q --verify "refs/tags/${{ steps.v.outputs.tag }}" >/dev/null; then
+            echo "::notice::${{ steps.v.outputs.tag }} exists already, nothing to release"
+            echo "fresh=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tag it
+        if: steps.check.outputs.fresh == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.v.outputs.tag }}" -m "Slay the CLI ${{ steps.v.outputs.tag }}"
+          git push origin "${{ steps.v.outputs.tag }}"
+
+      # main is squash-merged PR titles, so the generated notes read as a changelog
+      - name: Cut the release
+        if: steps.check.outputs.fresh == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.v.outputs.tag }}" \
+            --title "${{ steps.v.outputs.tag }}" \
+            --generate-notes \
+            --verify-tag

@@ -7,6 +7,7 @@ import { f32add } from "../../engine/core/math";
 import { PLAYER } from "../../engine/core/ids";
 import { moveCard } from "../../engine/combat/piles";
 import { cnt, effectiveKeywords, healPlayer, relicDamageAll } from "./lib";
+import { bottlePickup } from "./pickup";
 
 /** Shared "every 3 <type>s in a single turn" counter (Kunai/Shuriken/Fan/Letter Opener). */
 function everyThree(ctx: HookCtx, card: CardInstance, cardType: "attack" | "skill", fire: () => void): void {
@@ -45,12 +46,13 @@ export const uncommonRelics: RelicDef[] = [
   },
   {
     // "Upon pickup, choose an Attack card. At the start of each combat, this
-    // card will be in your hand." RUN-LAYER: pickup choice sets MasterCard.bottled;
-    // combat side implemented here.
+    // card will be in your hand." The pick sets MasterCard.bottled (pickup.ts);
+    // the combat side is here.
     id: "BOTTLED_FLAME",
     name: "Bottled Flame",
     tier: "uncommon",
     pool: "shared",
+    onEquip: (ctx) => bottlePickup(ctx, "BOTTLED_FLAME", "attack"),
     hooks: { atBattleStartPreDraw: (ctx) => bottledToTop(ctx, "attack") },
   },
   {
@@ -58,6 +60,7 @@ export const uncommonRelics: RelicDef[] = [
     name: "Bottled Lightning",
     tier: "uncommon",
     pool: "shared",
+    onEquip: (ctx) => bottlePickup(ctx, "BOTTLED_LIGHTNING", "skill"),
     hooks: { atBattleStartPreDraw: (ctx) => bottledToTop(ctx, "skill") },
   },
   {
@@ -65,6 +68,7 @@ export const uncommonRelics: RelicDef[] = [
     name: "Bottled Tornado",
     tier: "uncommon",
     pool: "shared",
+    onEquip: (ctx) => bottlePickup(ctx, "BOTTLED_TORNADO", "power"),
     hooks: { atBattleStartPreDraw: (ctx) => bottledToTop(ctx, "power") },
   },
   {

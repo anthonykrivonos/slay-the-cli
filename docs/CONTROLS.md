@@ -72,6 +72,11 @@ cut long text; `i` is the copy that never does.
 
 ![The Blue Candle inspected: full rules text plus what Unplayable and Exhaust mean](shots/inspect.svg)
 
+A card shows both of its states side by side, captioned: unupgraded on the left,
+upgraded on the right, the one you are actually holding in full color and the
+other dim. So the smith, the merchant and every card reward answer "what does
+the `+` buy me" before you spend anything.
+
 It also explains itself. Under the rules text, every keyword the item names gets
 a one-line definition, so you do not have to already know what Vulnerable,
 Plated Armor or Evoke do. `j` and `k` walk the rest of the collection without

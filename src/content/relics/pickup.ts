@@ -1,10 +1,10 @@
-// "Upon pickup" run-layer relic effects: the boss relics that do something the
+// "Upon pickup" run-layer relic effects: the relics that do something the
 // moment they are obtained (sts_lightspeed GameContext::obtainRelic,
 // GameContext.cpp:1286-1467). onEquip fires from every obtain site in the run
 // layer - the boss reward screen, Neow's boss swap, events, shops - so these
 // run wherever the relic lands.
 //
-// Two of them pause for a card pick and three hand out rewards. Rewards are
+// Five of them pause for a card pick and three hand out rewards. Rewards are
 // appended to the screen the pickup happened on when there is one: the
 // reference calls openCombatRewardScreen over the CURRENT room's reward list,
 // so a boss-relic pickup keeps the boss screen (and its act transition on
@@ -18,6 +18,7 @@ import { canSmith } from "../../engine/run/rest";
 import { classCardPool, createCardReward, nextRewardGroup, potionPool } from "../../engine/run/rewards";
 import {
   UNREMOVABLE_CURSES,
+  deckIndicesOfType,
   gainMaxHp,
   obtainCard,
   removeDeckCards,
@@ -101,10 +102,19 @@ function requestPickupChoice(
   });
 }
 
+const BOTTLES: ReadonlySet<string> = new Set(["BOTTLED_FLAME", "BOTTLED_LIGHTNING", "BOTTLED_TORNADO"]);
+
 const relicPickupChoice: EffectFn = (ctx, args) => {
   const { relicId, indices, chosen } = args as { relicId: RelicId; indices: number[]; chosen: number[] };
   const picked = (chosen ?? []).map((i) => indices[i]).filter((i): i is number => i !== undefined);
   if (picked.length === 0) return;
+  // a bottle keeps the card: it flags the master card and takes nothing out
+  // (Deck::bottleCard). The combat half lives in relics/uncommon.ts.
+  if (BOTTLES.has(relicId)) {
+    const mc = ctx.run.deck[picked[0]!];
+    if (mc) mc.bottled = true;
+    return;
+  }
   removeDeckCards(ctx, picked);
   // Astrolabe transforms what it removed, upgraded (chooseSelectCardScreenOption,
   // TRANSFORM_UPGRADE); Empty Cage just removes.
@@ -135,6 +145,15 @@ export function astrolabePickup(ctx: EffectCtx): void {
     count: 3,
     reason: "relic:transform",
   });
+}
+
+/** "Upon pickup, choose a card of this bottle's type. At the start of each
+ *  combat, this card will be in your hand." obtainBottleHelper: every deck
+ *  card of that type, already-bottled ones included (the reference keys its
+ *  bottleIdxs by card type, so a card can only ever sit in one bottle), and
+ *  no screen at all when the deck holds none of that type. */
+export function bottlePickup(ctx: EffectCtx, relicId: RelicId, type: "attack" | "skill" | "power"): void {
+  requestPickupChoice(ctx, { relicId, indices: deckIndicesOfType(ctx, type), count: 1, reason: `relic:bottle:${type}` });
 }
 
 /** "Upon pickup, obtain a unique Curse and 3 relics." */

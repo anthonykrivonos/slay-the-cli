@@ -68,6 +68,109 @@ function choiceBody(o: Extract<OverlayView, { kind: "choice" }>, theme: Theme, m
   return out.slice(0, maxLines);
 }
 
+// --- inspect ------------------------------------------------------------------
+//
+// A big box, centered, with the pager underneath. Cards, relics and potions
+// all draw as one shape - a relic just has no cost corner. A card that has a
+// second printed state draws BOTH, base on the left and upgraded on the
+// right, the one you are holding in full color and the other dim:
+//
+//        current                   upgraded
+//   +(1)------------+         +(1)------------+
+//   | Strike        |         | Strike+       |
+//
+// The captions are what survives --no-color, where dim is a no-op.
+
+const INSPECT_MAX_W = 38;
+/** Narrower than this and the pair is unreadable, so only the current card
+ *  is drawn. Two of these plus the gap fit the 80-column minimum. */
+const INSPECT_MIN_PAIR_W = 24;
+const INSPECT_GAP = 2;
+
+interface InspectColumn {
+  data: CardBoxData;
+  caption: string;
+}
+
+/** Rules plus the keyword glossary, the blank line between them included. */
+function inspectBody(rules: string[], keywords: { name: string; text: string }[]): string[] {
+  const body = [...rules];
+  if (keywords.length > 0) {
+    body.push("");
+    for (const k of keywords) body.push(`${k.name}: ${k.text}`);
+  }
+  return body;
+}
+
+function inspectRows(
+  overlay: Extract<OverlayView, { kind: "inspect" }>,
+  width: number,
+  height: number,
+  theme: Theme,
+): string[] {
+  const alt = overlay.alt;
+  const pairW = Math.min(INSPECT_MAX_W, Math.floor((width - 4 - INSPECT_GAP) / 2));
+  const paired = alt !== null && pairW >= INSPECT_MIN_PAIR_W;
+  const w = paired ? pairW : Math.min(INSPECT_MAX_W, width - 4);
+
+  const current: InspectColumn = {
+    caption: "current",
+    data: {
+      key: null,
+      cost: overlay.cost,
+      name: overlay.name,
+      color: overlay.color,
+      type: overlay.type,
+      targeted: overlay.targeted,
+      rules: inspectBody(overlay.rules, overlay.keywords),
+      dim: false,
+    },
+  };
+  const cols: InspectColumn[] = [current];
+  if (paired && alt !== null) {
+    const other: InspectColumn = {
+      caption: alt.side === "right" ? "upgraded" : "unupgraded",
+      data: {
+        ...current.data,
+        cost: alt.cost,
+        name: alt.name,
+        rules: inspectBody(alt.rules, alt.keywords),
+        dim: true,
+      },
+    };
+    cols.splice(alt.side === "right" ? 1 : 0, 0, other);
+  }
+
+  // the whole point of this overlay is that nothing is cut, so the boxes grow
+  // to whatever the tallest column needs and only the terminal clamps them
+  const tallest = cols.reduce(
+    (m, c) => Math.max(m, c.data.rules.flatMap((l) => (l.length === 0 ? [""] : wrapPlain(l, w - 4))).length),
+    0,
+  );
+  // keep the type row (h >= 6): borders + name + type + body
+  const h = Math.max(6, Math.min(4 + Math.max(1, tallest), height - (paired ? 4 : 3)));
+
+  const boxes = cols.map((c) => cardBox(c.data, w, h, theme));
+  const total = w * cols.length + INSPECT_GAP * (cols.length - 1);
+  const pad = " ".repeat(Math.max(0, Math.floor((width - total) / 2)));
+  const gap = " ".repeat(INSPECT_GAP);
+
+  const out: string[] = [""];
+  // padded to the full box width: center() only pads on the left, and the
+  // second caption has to keep its column
+  if (paired) out.push(pad + cols.map((c) => theme.dim(padClip(center(c.caption, w), w))).join(gap));
+  for (let r = 0; r < h; r++) out.push(pad + boxes.map((b) => b[r] ?? "").join(gap));
+  out.push("");
+  const what = overlay.chip.toLowerCase();
+  out.push(
+    center(
+      theme.dim(`${overlay.count > 1 ? `${what} ${overlay.index + 1}/${overlay.count} - ` : ""}[j/k] next/prev  [Esc] close`),
+      width,
+    ),
+  );
+  return out.slice(0, height).map((l) => padClip(l, width));
+}
+
 export function renderOverlay(
   overlay: OverlayView,
   width: number,
@@ -102,45 +205,8 @@ export function renderOverlay(
       ];
       break;
     }
-    case "inspect": {
-      // a big box, centered, with the pager underneath. Cards, relics and
-      // potions all draw as one shape - a relic just has no cost corner.
-      const w = Math.min(38, width - 4);
-      // the whole point of this overlay is that nothing is cut, so the box
-      // grows to whatever the rules plus the glossary need and only the
-      // terminal's own height clamps it
-      const body = [...overlay.rules];
-      if (overlay.keywords.length > 0) {
-        body.push("");
-        for (const k of overlay.keywords) body.push(`${k.name}: ${k.text}`);
-      }
-      const wrapped = body.flatMap((l) => (l.length === 0 ? [""] : wrapPlain(l, w - 4)));
-      // keep the type row (h >= 6): borders + name + type + body
-      const h = Math.max(6, Math.min(4 + Math.max(1, wrapped.length), height - 3));
-      const data: CardBoxData = {
-        key: null,
-        cost: overlay.cost,
-        name: overlay.name,
-        color: overlay.color,
-        type: overlay.type,
-        targeted: overlay.targeted,
-        rules: body,
-        dim: false,
-      };
-      const box = cardBox(data, w, h, theme);
-      const pad = " ".repeat(Math.max(0, Math.floor((width - w) / 2)));
-      const out: string[] = [""];
-      for (const r of box) out.push(pad + r);
-      out.push("");
-      const what = overlay.chip.toLowerCase();
-      out.push(
-        center(
-          theme.dim(`${overlay.count > 1 ? `${what} ${overlay.index + 1}/${overlay.count} - ` : ""}[j/k] next/prev  [Esc] close`),
-          width,
-        ),
-      );
-      return out.slice(0, height).map((l) => padClip(l, width));
-    }
+    case "inspect":
+      return inspectRows(overlay, width, height, theme);
     case "map": {
       // the whole map, exactly as the map screen draws it, minus the ability
       // to go anywhere. The frame's own hint row says how to get back, so the

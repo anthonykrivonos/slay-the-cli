@@ -499,6 +499,10 @@ describe("rooms: rest / treasure / shop / event stubs", () => {
     const shopRoom = s.run.room!;
     if (shopRoom.kind !== "shop") throw new Error("not shop");
     expect(shopRoom.shop.removalCost).toBe(75);
+    // a bottled card is not purgeable: a REMOVE screen never lists one
+    s.run.deck[0]!.bottled = true;
+    expect(() => advance(s, { cmd: "shopRemove", deckIdx: 0 }, bundle)).toThrow("bottled");
+    s.run.deck[0]!.bottled = false;
     s = advance(s, { cmd: "shopRemove", deckIdx: 0 }, bundle);
     expect(s.run.history.cardRemovesPurchased).toBe(1);
     expect(() => advance(s, { cmd: "shopRemove", deckIdx: 0 }, bundle)).toThrow("already used");

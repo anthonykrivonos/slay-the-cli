@@ -380,6 +380,12 @@ export type OverlayView =
       rules: string[];
       /** short definitions for the keywords the rules text names */
       keywords: Keyword[];
+      /** the card's OTHER printed state, drawn dim beside the current one so
+       *  an upgrade can be read before it is paid for. `side` is where it
+       *  goes: "right" = the alt is the upgrade, "left" = the alt is the base
+       *  card and the current one is already upgraded. null for relics,
+       *  potions, and cards that cannot be upgraded at all. */
+      alt: { name: string; cost: string | null; rules: string[]; keywords: Keyword[]; side: "left" | "right" } | null;
       /** what Enter does here: the thing's own list action (take the reward,
        *  buy the shop item, open the potion menu). A card in hand is the one
        *  exception - playing it needs the keymap's energy/targeting ladder. */
@@ -1523,6 +1529,7 @@ function describeInspect(
       targeted: false,
       rules: relicLines(ref.defId),
       keywords: relicGlossary(ref.defId),
+      alt: null,
     };
   }
   if (ref.kind === "potion") {
@@ -1538,9 +1545,16 @@ function describeInspect(
       targeted: def?.targeted ?? false,
       rules: potionLines(ref.defId, doubled),
       keywords: potionGlossary(ref.defId, doubled),
+      alt: null,
     };
   }
   const def = bundle.cards.get(ref.defId);
+  // github.com/anthonykrivonos/slay-the-cli/issues/17: a card reads as both of
+  // its printed states. The corpus writes card text as [base|upgraded], so
+  // those two ARE the states; a Searing Blow at +3 sits in the upgraded one.
+  // Curses and statuses have no second state (canSmith).
+  const twoStates = def !== undefined && def.type !== "curse" && def.type !== "status";
+  const altUp = ref.upgrades > 0 ? 0 : 1;
   return {
     ...common,
     chip: "CARD",
@@ -1549,12 +1563,29 @@ function describeInspect(
     color: CARD_TYPE_ACCENTS[def?.type ?? ""] ?? TIP_COLOR.card,
     type: `${titleCase(def?.type ?? "?")} - ${def?.rarity ?? "?"}`,
     targeted: def?.target === "enemy",
-    rules: cardRulesText(ref.defId, ref.upgrades)
-      .split("\n")
-      .filter((l) => l.trim().length > 0)
-      .map(toAscii),
+    rules: cardRules(ref.defId, ref.upgrades),
     keywords: cardGlossary(ref.defId, ref.upgrades),
+    alt: twoStates
+      ? {
+          name: toAscii(cardName(bundle, ref.defId, altUp)),
+          // the PRINTED cost of the other state: a live discount (Snecko Eye,
+          // Setup) belongs to the instance in front of you, not to the
+          // hypothetical beside it
+          cost: masterCostLabel(masterCardCost(def, altUp)),
+          rules: cardRules(ref.defId, altUp),
+          keywords: cardGlossary(ref.defId, altUp),
+          side: ref.upgrades > 0 ? "left" : "right",
+        }
+      : null,
   };
+}
+
+/** Card rules as display lines: blank lines dropped, ASCII enforced. */
+function cardRules(defId: string, upgrades: number): string[] {
+  return cardRulesText(defId, upgrades)
+    .split("\n")
+    .filter((l) => l.trim().length > 0)
+    .map(toAscii);
 }
 
 /** The settings overlay. It is the one overlay that opens without a run, so it
@@ -1616,10 +1647,18 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
       const items: RawItem[] = deck.map((mc, deckIdx) => {
         const def = bundle.cards.get(mc.defId);
         const smithOk = top.mode !== "smith" || canSmithMaster(bundle, mc);
+        // a REMOVE screen never offers a bottled card (the merchant's purge is
+        // one; the engine refuses it too). ENGINE-GAP: it should also drop
+        // Ascender's Bane and the other unremovable curses, but that list
+        // lives in the content bundle and the shop path never consults it.
+        const removeOk = top.mode !== "remove" || !mc.bottled;
         return {
-          label: `${cardName(bundle, mc.defId, mc.upgrades)} (${def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"}) [${def?.type ?? "?"}]`,
-          enabled: smithOk,
-          note: smithOk ? null : "can't upgrade",
+          // the bottle tag is the only place a bottled card announces itself
+          label:
+            `${cardName(bundle, mc.defId, mc.upgrades)} (${def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"}) [${def?.type ?? "?"}]` +
+            (mc.bottled ? " [bottled]" : ""),
+          enabled: smithOk && removeOk,
+          note: !smithOk ? "can't upgrade" : !removeOk ? "bottled" : null,
           action:
             top.mode === "smith"
               ? cmd({ cmd: "restOption", kind: "smith", deckIdx })
@@ -1714,6 +1753,7 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
           targeted: false,
           rules: [],
           keywords: [],
+          alt: null,
           enter: null,
           index: 0,
           count: 0,

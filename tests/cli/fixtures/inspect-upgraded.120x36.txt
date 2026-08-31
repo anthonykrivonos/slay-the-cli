@@ -1,18 +1,18 @@
- HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad | SPIRE                                  
--- THE MERCHANT - you have 99G -----------------------------------------------------------------------------------------
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE                                
+-- MAP - act 1 ---------------------------------------------------------------------------------------------------------
                                                                                                                         
-                                    current                                 upgraded                                    
-                     +(1)---------------------------------+  +(1)---------------------------------+                     
-                     | Cleave                             |  | Cleave+                            |                     
-                     | Attack - common                    |  | Attack - common                    |                     
-                     | Deal 8 damage to ALL enemies.      |  | Deal 11 damage to ALL enemies.     |                     
+                                   unupgraded                               current                                     
+                     +(2)---------------------------------+  +(2)---------------------------------+                     
+                     | Bash                               |  | Bash+                              |                     
+                     | Attack - basic                   > |  | Attack - basic                   > |                     
+                     | Deal 8 damage.                     |  | Deal 10 damage.                    |                     
+                     | Apply 2 Vulnerable.                |  | Apply 3 Vulnerable.                |                     
                      |                                    |  |                                    |                     
+                     | Vulnerable: Receive 50% more       |  | Vulnerable: Receive 50% more       |                     
+                     | damage from Attacks for 2 turns.   |  | damage from Attacks for 3 turns.   |                     
                      +------------------------------------+  +------------------------------------+                     
                                                                                                                         
-                                        card 1/13 - [j/k] next/prev  [Esc] close                                        
-                                                                                                                        
-                                                                                                                        
-                                                                                                                        
+                                       card 10/10 - [j/k] next/prev  [Esc] close                                        
                                                                                                                         
                                                                                                                         
                                                                                                                         
@@ -33,4 +33,4 @@
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                                                  
                                                                                                                         
                                                                                                                         
-[Enter] buy  [j/k] next/prev  [Esc] close                                                                               
+[j/k] next/prev  [Esc] close                                                                                            

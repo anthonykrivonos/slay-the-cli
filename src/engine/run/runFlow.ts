@@ -801,7 +801,11 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
       const shop = room.shop;
       if (shop.removalUsed) throw new Error("removal already used this visit");
       if (run.gold < shop.removalCost) throw new Error("not enough gold");
-      if (!run.deck[cmd.deckIdx]) throw new Error(`invalid deck index ${cmd.deckIdx}`);
+      const purge = run.deck[cmd.deckIdx];
+      if (!purge) throw new Error(`invalid deck index ${cmd.deckIdx}`);
+      // a REMOVE screen never lists a bottled card (openCardSelectScreen,
+      // GameContext.cpp:3802 - canTransform() && !isCardBottled)
+      if (purge.bottled) throw new Error("a bottled card cannot be removed");
       run.gold -= shop.removalCost;
       run.deck.splice(cmd.deckIdx, 1);
       run.history.cardRemovesPurchased++;

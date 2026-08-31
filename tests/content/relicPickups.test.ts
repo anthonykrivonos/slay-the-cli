@@ -193,6 +193,78 @@ describe("Tiny House", () => {
   });
 });
 
+describe("the bottles", () => {
+  // github.com/anthonykrivonos/slay-the-cli/issues/16: a bottle picked up off
+  // an elite screen did nothing at all - no pick, so nothing was ever bottled.
+
+  /** Take an ordinary relic off an elite's reward screen. */
+  function takeRelicReward(seed: string, id: string, mutate?: (s: GameState) => void): GameState {
+    const s = createRun({ seed, bundle, character: "IRONCLAD" });
+    mutate?.(s);
+    s.run.room = { kind: "rewards", entries: [{ kind: "relic", id, taken: false }], source: "elite" };
+    return advance(s, { cmd: "takeReward", i: 0 }, bundle);
+  }
+
+  const bottledIdxs = (s: GameState): number[] => s.run.deck.flatMap((c, i) => (c.bottled ? [i] : []));
+
+  test("Bottled Lightning offers every Skill and bottles the one picked", () => {
+    let s = takeRelicReward("BOT1", "BOTTLED_LIGHTNING");
+    const req = s.pending!.request;
+    expect(req.kind).toBe("cards");
+    if (req.kind !== "cards") throw new Error("unreachable");
+    expect(req.min).toBe(1);
+    expect(req.max).toBe(1);
+    expect(req.canCancel).toBe(false);
+    expect(req.iids).toEqual([5, 6, 7, 8]); // the 4 Defends; Strikes and Bash are attacks
+
+    s = advance(s, { cmd: "choose", indices: [1] }, bundle); // the second Defend offered
+    expect(s.pending).toBeNull();
+    expect(s.run.deck.length).toBe(10); // a bottle keeps the card
+    expect(bottledIdxs(s)).toEqual([6]);
+  });
+
+  test("Bottled Flame offers the Attacks", () => {
+    let s = takeRelicReward("BOT2", "BOTTLED_FLAME");
+    const req = s.pending!.request;
+    if (req.kind !== "cards") throw new Error("unreachable");
+    expect(req.iids).toEqual([0, 1, 2, 3, 4, 9]); // 5 Strikes + Bash
+    s = advance(s, { cmd: "choose", indices: [5] }, bundle); // Bash
+    expect(bottledIdxs(s)).toEqual([9]);
+    expect(deckIds(s)[9]).toBe("BASH");
+  });
+
+  test("Bottled Tornado with no Power in the deck is a silent no-op", () => {
+    const s = takeRelicReward("BOT3", "BOTTLED_TORNADO");
+    expect(s.pending).toBeNull();
+    expect(s.run.relics.map((r) => r.defId)).toContain("BOTTLED_TORNADO");
+    expect(bottledIdxs(s)).toEqual([]);
+  });
+
+  test("Bottled Tornado offers only the Powers", () => {
+    let s = takeRelicReward("BOT4", "BOTTLED_TORNADO", (g) => {
+      g.run.deck.push({ defId: "INFLAME", upgrades: 0, misc: 0, bottled: false });
+    });
+    const req = s.pending!.request;
+    if (req.kind !== "cards") throw new Error("unreachable");
+    expect(req.iids).toEqual([10]);
+    s = advance(s, { cmd: "choose", indices: [0] }, bundle);
+    expect(bottledIdxs(s)).toEqual([10]);
+  });
+
+  test("a bottled card is still what a removal screen refuses to touch", () => {
+    let s = takeRelicReward("BOT5", "BOTTLED_FLAME");
+    s = advance(s, { cmd: "choose", indices: [0] }, bundle); // the first Strike
+    expect(bottledIdxs(s)).toEqual([0]);
+
+    // Empty Cage offers the other nine (events/lib.ts removableIndices)
+    s.run.room = { kind: "rewards", entries: [{ kind: "bossRelic", group: 0, id: "EMPTY_CAGE", taken: false }], source: "boss" };
+    s = advance(s, { cmd: "takeReward", i: 0 }, bundle);
+    const req = s.pending!.request;
+    if (req.kind !== "cards") throw new Error("unreachable");
+    expect(req.iids).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  });
+});
+
 describe("boss relics that replace a starter", () => {
   const cases = [
     ["BLACK_BLOOD", "BURNING_BLOOD", "IRONCLAD"],

@@ -1,18 +1,18 @@
- HP 80/80 | G 99 | F1 A1 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE            
--- COMBAT - turn 1 ---------------------------------------------------------------------------------
+ HP 80/80 | G 99 | F0 A1 | ASC0 | K:--- | POT FEB | DECK 10 | REL 1 | Ironclad | UISMNKE            
+-- MAP - act 1 -------------------------------------------------------------------------------------
                                                                                                     
-                          current                                 upgraded                          
-           +(1)---------------------------------+  +(1)---------------------------------+           
-           | Strike                             |  | Strike+                            |           
+                         unupgraded                               current                           
+           +(2)---------------------------------+  +(2)---------------------------------+           
+           | Bash                               |  | Bash+                              |           
            | Attack - basic                   > |  | Attack - basic                   > |           
-           | Deal 6 damage.                     |  | Deal 9 damage.                     |           
+           | Deal 8 damage.                     |  | Deal 10 damage.                    |           
+           | Apply 2 Vulnerable.                |  | Apply 3 Vulnerable.                |           
            |                                    |  |                                    |           
+           | Vulnerable: Receive 50% more       |  | Vulnerable: Receive 50% more       |           
+           | damage from Attacks for 2 turns.   |  | damage from Attacks for 3 turns.   |           
            +------------------------------------+  +------------------------------------+           
                                                                                                     
-                              card 3/5 - [j/k] next/prev  [Esc] close                               
-                                                                                                    
-                                                                                                    
-                                                                                                    
+                             card 10/10 - [j/k] next/prev  [Esc] close                              
                                                                                                     
                                                                                                     
                                                                                                     
@@ -27,4 +27,4 @@
 -- INFO --------------------------------------------------------------------------------------------
  Tab/arrows browse - Enter selects - Esc clears - hotkeys act directly                              
                                                                                                     
-[Enter] play  [j/k] next/prev  [Esc] close                                                          
+[j/k] next/prev  [Esc] close                                                                        

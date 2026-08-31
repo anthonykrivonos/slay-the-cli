@@ -342,6 +342,24 @@ export function fxInspectOverlay(): Fixture {
   return { game: f.game, ui: { ...f.ui, overlays: [{ kind: "inspect", source: { of: "hand" }, index: 2 }] } };
 }
 
+/** Inspecting a card that is ALREADY upgraded: the pair flips, so the current
+ *  box sits on the right and the base card is the dim one. */
+export function fxInspectUpgraded(): Fixture {
+  const f = fxMapAct1();
+  const g = structuredClone(f.game!);
+  g.run.deck[9]!.upgrades = 1; // Bash+
+  return {
+    game: g,
+    ui: {
+      ...f.ui,
+      overlays: [
+        { kind: "deck", mode: "view", page: 0 },
+        { kind: "inspect", source: { of: "deck" }, index: 9 },
+      ],
+    },
+  };
+}
+
 /** Inspecting a relic: Blue Candle, which is both keyword-heavy (Unplayable,
  *  Exhaust -> the glossary block) and one of the five relics whose corpus
  *  text carries a <br>, so the box has to wrap it as two rules lines. */
@@ -462,6 +480,7 @@ export const FIXTURES: Record<string, () => Fixture> = {
   "deck-overlay": fxDeckOverlay,
   "log-overlay": fxLogOverlay,
   "inspect-overlay": fxInspectOverlay,
+  "inspect-upgraded": fxInspectUpgraded,
   "inspect-relic": fxInspectRelic,
   "inspect-shop": fxInspectShop,
   "shop-multiline-relic": fxShopMultilineRelic,

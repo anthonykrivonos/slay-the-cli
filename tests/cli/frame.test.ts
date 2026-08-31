@@ -18,6 +18,7 @@ import { FIXTURES, bundle } from "./fixtures";
 import { FIXTURE_DIR, SNAPSHOT_SIZES, renderFixture } from "./gen-fixtures";
 import { buildView } from "../../src/cli/state/view";
 import { renderFrame } from "../../src/cli/render/frame";
+import { renderOverlay } from "../../src/cli/render/overlays";
 import { THEME_PLAIN, THEME_256 } from "../../src/cli/render/theme";
 import { stripAnsi } from "../../src/cli/term/ansi";
 import { initialUiState, pushLog, type UiState, type Overlay } from "../../src/cli/state/uiState";
@@ -42,6 +43,74 @@ describe("frame snapshots", () => {
   }
   test("too small @ 79x24", () => {
     expect(renderFixture("map-act1", 79, 24)).toBe(readFixture("too-small.79x24.txt"));
+  });
+});
+
+// --- the inspect upgrade preview ------------------------------------------------
+//
+// github.com/anthonykrivonos/slay-the-cli/issues/17: a card reads as both of
+// its printed states, current beside the other one.
+
+describe("inspect: both upgrade states", () => {
+  /** The inspect overlay for one deck card, with an optional deck edit first. */
+  function inspectDeck(index: number, mutate?: (g: GameState) => void) {
+    const { game, ui } = FIXTURES["map-act1"]!();
+    const g = structuredClone(game!);
+    mutate?.(g);
+    const overlays: Overlay[] = [{ kind: "inspect", source: { of: "deck" }, index }];
+    const overlay = buildView(g, { ...ui, overlays }, bundle).overlay;
+    if (overlay?.kind !== "inspect") throw new Error("expected an inspect overlay");
+    return overlay;
+  }
+
+  test("an un-upgraded card puts the upgrade on the right", () => {
+    const o = inspectDeck(9); // Bash
+    expect(o.name).toBe("Bash");
+    expect(o.rules.join(" ")).toContain("Deal 8 damage.");
+    expect(o.alt?.side).toBe("right");
+    expect(o.alt?.name).toBe("Bash+");
+    expect(o.alt?.rules.join(" ")).toContain("Deal 10 damage.");
+  });
+
+  test("an upgraded card is the right-hand box, and the base card the left", () => {
+    const o = inspectDeck(9, (g) => (g.run.deck[9]!.upgrades = 1));
+    expect(o.name).toBe("Bash+");
+    expect(o.alt?.side).toBe("left");
+    expect(o.alt?.name).toBe("Bash");
+    expect(o.alt?.rules.join(" ")).toContain("Deal 8 damage.");
+  });
+
+  test("the alt carries the other state's printed cost", () => {
+    // Body Slam upgrades 1 -> 0
+    const o = inspectDeck(10, (g) => g.run.deck.push({ defId: "BODY_SLAM", upgrades: 0, misc: 0, bottled: false }));
+    expect(o.cost).toBe("1");
+    expect(o.alt?.cost).toBe("0");
+  });
+
+  test("the glossary follows the upgrade too", () => {
+    const o = inspectDeck(9);
+    expect(o.keywords.find((k) => k.name === "Vulnerable")?.text).toContain("2 turns");
+    expect(o.alt?.keywords.find((k) => k.name === "Vulnerable")?.text).toContain("3 turns");
+  });
+
+  test("a curse has no second state, and neither does a relic", () => {
+    const curse = inspectDeck(10, (g) => g.run.deck.push({ defId: "REGRET", upgrades: 0, misc: 0, bottled: false }));
+    expect(curse.alt).toBeNull();
+
+    const { game, ui } = FIXTURES["inspect-relic"]!();
+    const relic = buildView(game!, ui, bundle).overlay;
+    expect(relic?.kind === "inspect" && relic.alt).toBeNull();
+  });
+
+  test("both boxes fit 80 columns; a narrow one keeps the current card alone", () => {
+    const o = inspectDeck(9);
+    const at = (cols: number) => renderOverlay(o, cols, 24, THEME_PLAIN).join("\n");
+    expect(at(80)).toContain("Bash+");
+    expect(at(80)).toContain("current");
+    // below the pair threshold only the card you are holding is drawn
+    expect(at(52)).toContain("Bash");
+    expect(at(52)).not.toContain("Bash+");
+    expect(at(52)).not.toContain("current");
   });
 });
 

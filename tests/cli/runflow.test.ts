@@ -61,6 +61,9 @@ describe("pure helpers", () => {
     expect(neowDrawbackText("NO_GOLD")).toBe("Lose all of your gold");
     expect(neowDrawbackText("NONE")).toBe("");
     expect(describeChoiceReason("neow:remove")).toBe("Choose cards to remove");
+    expect(describeChoiceReason("relic:bottle:attack")).toBe("Choose an Attack card");
+    expect(describeChoiceReason("relic:bottle:skill")).toBe("Choose a Skill card");
+    expect(describeChoiceReason("relic:bottle:power")).toBe("Choose a Power card");
     expect(describeChoiceReason("Warcry")).toBe("Warcry"); // combat reasons pass through
   });
 

@@ -11,7 +11,10 @@ for (const c of cardsCorpus) {
   if (typeof c.text === "string" && c.text.length > 0) textById.set(c.id, c.text);
 }
 
-/** Display rules text for a card def at an upgrade level ("" if unknown id). */
+/** Display rules text for a card def at an upgrade level ("" if unknown id).
+ *  TEXT-GAP: the corpus writes every card as [base|upgraded], so a card past
+ *  +1 reads as its +1 text. Searing Blow is the only one (multiUpgrade): the
+ *  engine deals n*(n+7)/2+12, the box still says 16. */
 export function cardRulesText(defId: string, upgrades: number): string {
   const raw = textById.get(defId);
   if (raw === undefined) return "";

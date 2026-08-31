@@ -13,5 +13,5 @@
 <text x="14" y="61" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve"> ###  #     #####   #           #   ##### ####        #     #       #  </text>
 <text x="14" y="79" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve">    # #     #   #   #           #   #   # #           #     #       #  </text>
 <text x="14" y="97" textLength="639" lengthAdjust="spacingAndGlyphs" fill="url(#spire)" font-weight="bold" xml:space="preserve">####  ##### #   #   #           #   #   # #####        #### ##### #####</text>
-<text x="333.5" y="133" fill="#6f7a92" text-anchor="middle">v0.2.0</text>
+<text x="333.5" y="133" fill="#6f7a92" text-anchor="middle">v0.3.0</text>
 </svg>

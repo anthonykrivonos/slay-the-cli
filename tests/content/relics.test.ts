@@ -485,6 +485,29 @@ describe("attack/skill pity counters", () => {
     expect(s.combat!.player.piles.hand.length).toBe(hand0); // -1 played +1 drawn
     expect(relicCounter(s, "INK_BOTTLE")).toBe(0);
   });
+
+  // github.com/anthonykrivonos/slay-the-cli/issues/16: the pickup half of the
+  // bottles never ran, so this hook had nothing flagged to find.
+  for (const [relic, type, card] of [
+    ["BOTTLED_FLAME", "attack", "T_JAB"],
+    ["BOTTLED_LIGHTNING", "skill", "T_CANTRIP"],
+    ["BOTTLED_TORNADO", "power", "T_POWER"],
+  ] as const) {
+    test(`${relic}: the bottled ${type} opens the fight in hand`, () => {
+      const deck = [...jabs(11), { defId: card, bottled: true }];
+      const s = game({ seed: "BOTTLE", deck, relics: [relic] });
+      expect(handNames(s)).toContain(card);
+    });
+  }
+
+  test("a bottle only reaches for its own card type", () => {
+    // both are flagged, only the Power is Bottled Tornado's, and the Skill is
+    // left to the shuffle (this seed leaves it in the draw pile)
+    const deck = [...jabs(10), { defId: "T_CANTRIP", bottled: true }, { defId: "T_POWER", bottled: true }];
+    const s = game({ seed: "B1", deck, relics: ["BOTTLED_TORNADO"] });
+    expect(handNames(s)).toContain("T_POWER");
+    expect(handNames(s)).not.toContain("T_CANTRIP");
+  });
 });
 
 describe("damage-pipeline relics", () => {

@@ -1,15 +1,15 @@
  HP 65/80 | G 99 | F3 A1 | ASC0 | K:--- | POT SSL | DECK 10 | REL 1 | Ironclad |
 -- THE MERCHANT - you have 99G -------------------------------------------------
                                                                                 
-                     +(1)---------------------------------+                     
-                     | Cleave                             |                     
-                     | Attack - common                    |                     
-                     | Deal 8 damage to ALL enemies.      |                     
-                     |                                    |                     
-                     +------------------------------------+                     
+                 current                               upgraded                 
+  +(1)--------------------------------+  +(1)--------------------------------+  
+  | Cleave                            |  | Cleave+                           |  
+  | Attack - common                   |  | Attack - common                   |  
+  | Deal 8 damage to ALL enemies.     |  | Deal 11 damage to ALL enemies.    |  
+  |                                   |  |                                   |  
+  +-----------------------------------+  +-----------------------------------+  
                                                                                 
                     card 1/13 - [j/k] next/prev  [Esc] close                    
-                                                                                
                                                                                 
                                                                                 
                                                                                 

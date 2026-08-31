@@ -153,7 +153,7 @@ export function createCombatGame(opts: {
   bundle: ContentBundle;
   character: CharacterId;
   ascension?: number;
-  deck: { defId: string; upgrades?: number }[];
+  deck: { defId: string; upgrades?: number; bottled?: boolean }[];
   relics?: string[];
   monsters: MonsterId[];
   encounterId?: string;
@@ -176,7 +176,7 @@ export function createCombatGame(opts: {
     hp: opts.hp ?? character.maxHp,
     maxHp: opts.maxHp ?? character.maxHp,
     gold: 99,
-    deck: opts.deck.map((d) => ({ defId: d.defId, upgrades: d.upgrades ?? 0, misc: 0, bottled: false })),
+    deck: opts.deck.map((d) => ({ defId: d.defId, upgrades: d.upgrades ?? 0, misc: 0, bottled: d.bottled ?? false })),
     relics: (opts.relics ?? []).map((defId) => ({ defId, counter: 0 })),
     potions: [null, null, null],
     potionSlots: 3,

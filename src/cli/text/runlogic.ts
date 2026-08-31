@@ -497,6 +497,13 @@ export function describeChoiceReason(reason: string): string {
       return "Choose cards to remove";
     case "relic:transform":
       return "Choose cards to transform, then upgrade";
+    // the bottles, in the relic's own words ("choose an Attack card")
+    case "relic:bottle:attack":
+      return "Choose an Attack card";
+    case "relic:bottle:skill":
+      return "Choose a Skill card";
+    case "relic:bottle:power":
+      return "Choose a Power card";
     default:
       return reason;
   }

@@ -229,10 +229,7 @@ function dispatch(key: Key, view: View): KeyAction | null {
           }
           if (h.targeted) {
             const alive = view.screen.enemies.filter((e) => e.gone === null);
-            if (alive.length === 1) {
-              const idx = view.screen.enemies.findIndex((e) => e.gone === null);
-              return cmd({ cmd: "playCard", handIdx: o.index, target: idx });
-            }
+            if (alive.length === 1) return cmd({ cmd: "playCard", handIdx: o.index, target: alive[0]!.slot });
             return ui({ type: "setTargeting", targeting: { kind: "card", handIdx: o.index } });
           }
           return cmd({ cmd: "playCard", handIdx: o.index });
@@ -331,10 +328,7 @@ function dispatch(key: Key, view: View): KeyAction | null {
         if (h.targeted) {
           // exactly one alive enemy: auto-target; otherwise enter targeting
           const alive = s.enemies.filter((e) => e.gone === null);
-          if (alive.length === 1) {
-            const idx = s.enemies.findIndex((e) => e.gone === null);
-            return cmd({ cmd: "playCard", handIdx, target: idx });
-          }
+          if (alive.length === 1) return cmd({ cmd: "playCard", handIdx, target: alive[0]!.slot });
           return ui({ type: "setTargeting", targeting: { kind: "card", handIdx } });
         }
         return cmd({ cmd: "playCard", handIdx });

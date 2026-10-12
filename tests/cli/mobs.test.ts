@@ -13,6 +13,8 @@ import {
 } from "../../src/cli/render/art";
 import { renderFrame } from "../../src/cli/render/frame";
 import { buildView } from "../../src/cli/state/view";
+import { mapKey } from "../../src/cli/input/keymap";
+import { advance } from "../../src/engine/game";
 import { THEME_256, THEME_PLAIN, hexToAnsi256 } from "../../src/cli/render/theme";
 import { stripAnsi } from "../../src/cli/term/ansi";
 import { CHARACTER_IDS } from "../../src/cli/text/runlogic";
@@ -174,5 +176,66 @@ describe("empty slots", () => {
     const frame = renderFrame(view, { cols: 120, rows: 36 }, THEME_PLAIN).join("\n");
     expect(frame).not.toContain("Gap");
     expect(frame).not.toContain("x escaped x");
+  });
+
+  // Issue #19: after the Slime Boss split, GAP padding sat ahead of the live
+  // slime, so panel index and engine slot disagreed. Auto-targeting the one
+  // live enemy sent the panel index, which named a dead slot: "invalid target".
+  test("auto-target aims at the engine slot, not the panel index", () => {
+    const f = fxCombat();
+    const g = structuredClone(f.game!);
+    const c = g.combat!;
+    c.monsters.unshift({
+      id: "GAP",
+      idx: 0,
+      hp: 0,
+      maxHp: 0,
+      block: 0,
+      powers: [],
+      move: null,
+      moveHistory: [],
+      isDead: false,
+      isEscaped: true,
+      halfDead: false,
+      data: {},
+    });
+    c.monsters.forEach((m, i) => (m.idx = i));
+    c.monsters[1]!.isDead = true;
+    c.monsters[1]!.hp = 0;
+    const live = c.monsters.findIndex((m) => m.id !== "GAP" && !m.isDead);
+
+    const view = buildView(g, f.ui, bundle);
+    if (view.screen.kind !== "combat") throw new Error("not combat");
+    const handIdx = view.screen.hand.findIndex((h) => h.targeted && h.playable);
+    expect(handIdx).toBeGreaterThanOrEqual(0);
+    const act = mapKey({ kind: "char", ch: String(handIdx + 1) }, view);
+    expect(act).toEqual({ kind: "cmd", cmd: { cmd: "playCard", handIdx, target: live } });
+    if (act?.kind !== "cmd") return;
+    expect(() => advance(g, act.cmd, bundle)).not.toThrow();
+  });
+
+  test("the hover focus lands on the live panel past a GAP", () => {
+    const f = fxCombat();
+    const g = structuredClone(f.game!);
+    const c = g.combat!;
+    c.monsters.unshift({
+      id: "GAP",
+      idx: 0,
+      hp: 0,
+      maxHp: 0,
+      block: 0,
+      powers: [],
+      move: null,
+      moveHistory: [],
+      isDead: false,
+      isEscaped: true,
+      halfDead: false,
+      data: {},
+    });
+    c.monsters.forEach((m, i) => (m.idx = i));
+    const handLen = c.player.piles.hand.length;
+    const view = buildView(g, { ...f.ui, focus: { scope: "combat", idx: handLen } }, bundle);
+    if (view.screen.kind !== "combat") throw new Error("not combat");
+    expect(view.screen.focusEnemy).toBe(0);
   });
 });

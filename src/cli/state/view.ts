@@ -195,6 +195,9 @@ export interface IntentView {
 
 export interface EnemyPanelView {
   key: string | null; // targeting number for alive enemies
+  /** the engine's monster slot. GAP padding draws no panel, so this is not
+   *  always the panel's own index: commands must target by slot */
+  slot: number;
   /** monster id, for the ASCII portrait and its tint */
   id: string;
   name: string;
@@ -853,6 +856,7 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     const info = blindIntents || gone ? null : (intents[idx] ?? null);
     return [{
       key: gone ? null : (keyFor(targetNo++) ?? null),
+      slot: idx,
       id: m.id,
       name: toAscii(bundle.monsters.get(m.id)?.name ?? titleCase(m.id)),
       hp: m.hp,
@@ -926,7 +930,9 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     if (k < hand.length) {
       focusHand = k;
     } else if ((k -= hand.length) < aliveIdx.length) {
-      focusEnemy = aliveIdx[k]!;
+      // a panel index, not a slot: GAP padding draws no panel
+      const slot = aliveIdx[k]!;
+      focusEnemy = enemies.findIndex((e) => e.slot === slot);
     } else if ((k -= aliveIdx.length) < g.run.relics.length) {
       // relics do nothing when you press Enter on them; they are already doing it
     } else if ((k -= g.run.relics.length) < potionSlots.length) {

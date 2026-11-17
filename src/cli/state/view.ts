@@ -10,7 +10,7 @@ import type { CardDef, ContentBundle } from "../../engine/content/defs";
 import type { PendingChoice } from "../../engine/core/actions";
 import { getIntents, type IntentInfo, type IntentPower } from "../../engine/combat/intents";
 import { peekRelicFromPool } from "../../engine/run/rewards";
-import { getCardPreviews, previewCardAt, type CardPreview } from "../../engine/combat/preview";
+import { cardPlayCost, getCardPreviews, previewCardAt, type CardPreview } from "../../engine/combat/preview";
 import {
   titleCase,
   isCharacterId,
@@ -56,6 +56,7 @@ import { toAscii } from "../text/ascii";
 import type { UiState, Overlay, PileName, InspectSource } from "./uiState";
 import { currentEraStart } from "./uiState";
 import { cmd, ui as uiAct, type KeyAction } from "../input/actions";
+import { UNREMOVABLE_CURSES } from "../../engine/run/deckEdit";
 
 // --- view types ----------------------------------------------------------------
 
@@ -483,11 +484,12 @@ function makeList(all: RawItem[], page: number, focusI: number | null = null): L
   return { items, page: p, pages, total: all.length, focusI: fI };
 }
 
-/** ASCII printed cost for a live card instance. */
-function instCostLabel(card: CardInstance): string {
-  if (card.cost === -1) return "X";
-  if (card.cost === -2) return "-";
-  return String(card.costForTurn);
+/** ASCII printed cost for a live card instance, after cost-modifying powers. */
+function instCostLabel(g: GameState, bundle: ContentBundle, card: CardInstance): string {
+  const cost = g.combat ? cardPlayCost(g, bundle, card) : card.costForTurn;
+  if (cost === -1) return "X";
+  if (cost === -2) return "-";
+  return String(cost);
 }
 
 function masterCostLabel(cost: number): string {
@@ -691,11 +693,12 @@ function relicAbbrev(name: string): string {
 }
 
 /** Mirror of the engine's playability gate (web UI's isPlayable). */
-function isPlayable(card: CardInstance, energy: number): boolean {
-  if (card.cost === -2) return false;
-  if (card.cost === -1) return true;
+function isPlayable(g: GameState, bundle: ContentBundle, card: CardInstance, energy: number): boolean {
+  const cost = g.combat ? cardPlayCost(g, bundle, card) : card.costForTurn;
+  if (cost === -2) return false;
+  if (cost === -1) return true;
   if (card.freeToPlayOnce) return true;
-  return energy >= card.costForTurn;
+  return energy >= cost;
 }
 
 function firstRulesLine(defId: string, upgrades: number): string {
@@ -901,11 +904,11 @@ function buildCombat(g: GameState, ui: UiState, bundle: ContentBundle, screenFoc
     return {
       key: keyFor(i),
       name: toAscii((def?.name ?? titleCase(card.defId)) + (card.upgrades > 0 ? "+" : "")),
-      cost: instCostLabel(card),
+      cost: instCostLabel(g, bundle, card),
       type: def?.type ?? "?",
       rarity: def?.rarity ?? "?",
       targeted: def?.target === "enemy",
-      playable: isPlayable(card, p.energy),
+      playable: isPlayable(g, bundle, card, p.energy),
       rules: cardRulesText(card.defId, card.upgrades)
         .split("\n")
         .filter((l) => l.trim().length > 0)
@@ -1332,7 +1335,7 @@ function buildChoiceOverlay(g: GameState, pending: PendingChoice, ui: UiState, f
           : `deck #${iid}`;
       } else {
         const card = g.combat?.cards[iid];
-        label = card ? `${cardName(bundle, card.defId, card.upgrades)} (${instCostLabel(card)})` : `card #${iid}`;
+        label = card ? `${cardName(bundle, card.defId, card.upgrades)} (${instCostLabel(g, bundle, card)})` : `card #${iid}`;
       }
       if (req.kind === "scry" && i === 0) label += "  (top of draw)";
       return { label };
@@ -1424,7 +1427,7 @@ function inspectables(g: GameState, source: InspectSource, bundle: ContentBundle
       if (!c) return [];
       return c.player.piles.hand.flatMap((iid, at) => {
         const card = c.cards[iid];
-        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(card) }] : [];
+        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(g, bundle, card) }] : [];
       });
     }
     case "deck":
@@ -1436,7 +1439,7 @@ function inspectables(g: GameState, source: InspectSource, bundle: ContentBundle
         enter: null,
         defId: card.defId,
         upgrades: card.upgrades,
-        cost: instCostLabel(card),
+        cost: instCostLabel(g, bundle, card),
       }));
     case "relics":
       return g.run.relics.map((r, at) => ({ kind: "relic" as const, at, enter: null, defId: r.defId }));
@@ -1498,7 +1501,7 @@ function inspectables(g: GameState, source: InspectSource, bundle: ContentBundle
           return mc ? [masterCard(bundle, mc.defId, mc.upgrades, at)] : [];
         }
         const card = c.cards[iid];
-        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(card) }] : [];
+        return card ? [{ kind: "card" as const, at, enter: null, defId: card.defId, upgrades: card.upgrades, cost: instCostLabel(g, bundle, card) }] : [];
       });
     }
   }
@@ -1650,28 +1653,27 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
           : top.mode === "smith"
             ? "UPGRADE A CARD"
             : `REMOVE A CARD (${shopRoom?.shop.removalCost ?? "?"} G)`;
-      const items: RawItem[] = deck.map((mc, deckIdx) => {
+      const items: RawItem[] = deck.flatMap((mc, deckIdx) => {
+        if (top.mode === "remove" && (mc.bottled || UNREMOVABLE_CURSES.includes(mc.defId))) return [];
         const def = bundle.cards.get(mc.defId);
         const smithOk = top.mode !== "smith" || canSmithMaster(bundle, mc);
-        // a REMOVE screen never offers a bottled card (the merchant's purge is
-        // one; the engine refuses it too). ENGINE-GAP: it should also drop
-        // Ascender's Bane and the other unremovable curses, but that list
-        // lives in the content bundle and the shop path never consults it.
-        const removeOk = top.mode !== "remove" || !mc.bottled;
-        return {
-          // the bottle tag is the only place a bottled card announces itself
-          label:
-            `${cardName(bundle, mc.defId, mc.upgrades)} (${def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"}) [${def?.type ?? "?"}]` +
-            (mc.bottled ? " [bottled]" : ""),
-          enabled: smithOk && removeOk,
-          note: !smithOk ? "can't upgrade" : !removeOk ? "bottled" : null,
-          action:
-            top.mode === "smith"
-              ? cmd({ cmd: "restOption", kind: "smith", deckIdx })
-              : top.mode === "remove"
-                ? cmd({ cmd: "shopRemove", deckIdx })
-                : uiAct({ type: "openOverlay", overlay: { kind: "inspect", source: { of: "deck" }, index: deckIdx } }),
-        };
+        const removeOk = true;
+        return [
+          {
+            // the bottle tag is the only place a bottled card announces itself
+            label:
+              `${cardName(bundle, mc.defId, mc.upgrades)} (${def ? masterCostLabel(masterCardCost(def, mc.upgrades)) : "?"}) [${def?.type ?? "?"}]` +
+              (mc.bottled ? " [bottled]" : ""),
+            enabled: smithOk && removeOk,
+            note: !smithOk ? "can't upgrade" : null,
+            action:
+              top.mode === "smith"
+                ? cmd({ cmd: "restOption", kind: "smith", deckIdx })
+                : top.mode === "remove"
+                  ? cmd({ cmd: "shopRemove", deckIdx })
+                  : uiAct({ type: "openOverlay", overlay: { kind: "inspect", source: { of: "deck" }, index: deckIdx } }),
+          },
+        ];
       });
       return { kind: "list", id: "deck", title, list: makeList(items, top.page, focusI) };
     }
@@ -1700,12 +1702,14 @@ function buildOverlay(g: GameState, top: Overlay, ui: UiState, focusI: number | 
         const def = card ? bundle.cards.get(card.defId) : undefined;
         return {
           name: card ? (def?.name ?? card.defId) + (card.upgrades > 0 ? "+" : "") : `#${iid}`,
-          cost: card ? instCostLabel(card) : "?",
+          cost: card ? instCostLabel(g, bundle, card) : "?",
           type: def?.type ?? "?",
         };
       });
-      // draw-pile order is hidden information - present it sorted
-      if (top.pile === "draw") rows = rows.sort((a, b) => a.name.localeCompare(b.name));
+      // draw-pile order is hidden information - present it sorted.
+      // Frozen Eye shows the real order.
+      const frozenEye = g.run.relics.some((r) => r.defId === "FROZEN_EYE");
+      if (top.pile === "draw" && !frozenEye) rows = rows.sort((a, b) => a.name.localeCompare(b.name));
       const items: RawItem[] = rows.map((r) => ({ label: `${r.name} (${r.cost}) [${r.type}]`, action: null }));
       if (items.length === 0) items.push({ label: "(empty)", enabled: false, action: null });
       return { kind: "list", id: "pile", title: pileTitle(top.pile, iids.length), list: makeList(items, top.page, focusI) };
@@ -2091,7 +2095,7 @@ function combatFocus(g: GameState, ui: UiState, bundle: ContentBundle, accent: s
     return {
       count,
       idx,
-      tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)),
+      tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(g, bundle, card)),
       inspect: inspectAt(g, { of: "hand" }, bundle, k),
     };
   }
@@ -2211,7 +2215,7 @@ function choiceFocus(g: GameState, pending: PendingChoice, overlay: OverlayView,
   }
   const card = g.combat.cards[iid];
   if (!card) return { count, idx, tooltip: tipChoiceItem(overlay.list, idx, accent) };
-  return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(card)), inspect };
+  return { count, idx, tooltip: tipCard(bundle, card.defId, card.upgrades, instCostLabel(g, bundle, card)), inspect };
 }
 
 function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: ContentBundle, accent: string): FocusInfo {
@@ -2248,7 +2252,7 @@ function overlayFocus(g: GameState, top: Overlay, overlay: OverlayView, bundle: 
       return {
         count,
         idx,
-        tooltip: tipCard(bundle, e.card.defId, e.card.upgrades, instCostLabel(e.card)),
+        tooltip: tipCard(bundle, e.card.defId, e.card.upgrades, instCostLabel(g, bundle, e.card)),
         inspect: inspectAt(g, { of: "pile", pile: top.pile }, bundle, idx),
       };
     }

@@ -8,6 +8,7 @@
 
 import type { RelicDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";
+import { cardGroupEntries, createCardReward } from "../../engine/run/rewards";
 import { cnt, gainGold, healPlayer, relicDamageAll } from "./lib";
 
 export const commonRelics: RelicDef[] = [
@@ -160,12 +161,19 @@ export const commonRelics: RelicDef[] = [
   },
   {
     // "Whenever you Rest, you may add a card to your deck."
-    // RUN-LAYER: needs the rest-site card-reward flow.
     id: "DREAM_CATCHER",
     name: "Dream Catcher",
     tier: "common",
     pool: "shared",
-    hooks: {},
+    hooks: {
+      onRest: (ctx) => {
+        ctx.run.room = {
+          kind: "rewards",
+          entries: cardGroupEntries(ctx, createCardReward(ctx, "monster")),
+          source: "relic",
+        };
+      },
+    },
   },
   {
     // "Every 3 turns, gain 1 Energy." (persistent counter, continues across combats)
@@ -431,13 +439,15 @@ export const commonRelics: RelicDef[] = [
   },
   {
     // "Whenever you would deal 4 or less unblocked Attack damage, increase it to 5."
-    // ENGINE-GAP: needs a relic-stage atDamageFinalGive fold (the damage calc only
-    // folds relics at the pre-Strength atDamageGive stage).
+    // 0 stays 0. The relic stage of atDamageFinalGive runs before the target's
+    // Intangible cap.
     id: "THE_BOOT",
     name: "The Boot",
     tier: "common",
     pool: "shared",
-    hooks: {},
+    hooks: {
+      atDamageFinalGive: (_ctx, d) => (d > 0 && d < 5 ? 5 : d),
+    },
   },
   {
     // "Every 4th ? room is a Treasure room." RUN-LAYER (uses history.tinyChestCounter).

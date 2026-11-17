@@ -158,6 +158,69 @@ export function generateShop(ctx: EffectCtx): ShopState {
   return { cards, relics, potions, removalCost: computeRemovalCost(ctx), removalUsed: false };
 }
 
+/** The Courier: a purchased slot is replaced. Class cards roll shop rarity on
+ *  cardRng and pick with mathUtilRng; colorless uses the 0.30 rare chance;
+ *  relics roll a tier; potions use returnRandomPotion. Prices follow the
+ *  same formulas as the opening stock (no second sale). */
+export function restockPurchased(ctx: EffectCtx, shop: ShopState, kind: "card" | "relic" | "potion", idx: number): void {
+  if (!hasRelic(ctx.run, "THE_COURIER")) return;
+  if (kind === "card") {
+    const slot = shop.cards[idx];
+    if (!slot) return;
+    const fresh = slot.colorless ? rollRestockColorless(ctx) : rollRestockClassCard(ctx, slot.id);
+    slot.id = fresh.id;
+    slot.rarity = fresh.rarity;
+    slot.price = priceShopCard(ctx, fresh.rarity, slot.colorless);
+    slot.sold = false;
+  } else if (kind === "relic") {
+    const slot = shop.relics[idx];
+    if (!slot) return;
+    const tier = rollShopRelicTier(ctx);
+    slot.tier = tier;
+    slot.id = obtainRelicFromPool(ctx.run, tier);
+    const base = SHOP.basePrices.relicByTier[tier];
+    const raw = Math.round(f32mul(base, ctx.rng("merchantRng").randomFloatRange(SHOP.otherJitter.min, SHOP.otherJitter.max)));
+    slot.price = finalizePrice(ctx, raw);
+    slot.sold = false;
+  } else {
+    if (hasRelic(ctx.run, "SOZU")) return;
+    const slot = shop.potions[idx];
+    if (!slot) return;
+    const id = returnRandomPotion(ctx);
+    if (!id) return;
+    const rarity = ctx.bundle.potions.get(id)!.rarity;
+    const raw = Math.round(
+      f32mul(SHOP.basePrices.potionByRarity[rarity], ctx.rng("merchantRng").randomFloatRange(SHOP.otherJitter.min, SHOP.otherJitter.max)),
+    );
+    slot.id = id;
+    slot.price = finalizePrice(ctx, raw);
+    slot.sold = false;
+  }
+}
+
+function rollRestockClassCard(ctx: EffectCtx, previousId: CardId): { id: CardId; rarity: CardRarityRoll } {
+  const type = ctx.bundle.cards.get(previousId)?.type;
+  let rarity = rollCardRarityShop(ctx);
+  if (type === "power" && rarity === "common") rarity = "uncommon";
+  const wanted = type === "attack" || type === "skill" || type === "power" ? type : "attack";
+  const pool = classCardPool(ctx, rarity).filter((id) => ctx.bundle.cards.get(id)!.type === wanted);
+  if (pool.length === 0) throw new Error(`empty courier pool: ${wanted}/${rarity}`);
+  return { id: pool[ctx.rng("mathUtilRng").random(pool.length - 1)]!, rarity };
+}
+
+function rollRestockColorless(ctx: EffectCtx): { id: CardId; rarity: CardRarityRoll } {
+  const rarity: CardRarityRoll = ctx.rng("cardRng").randomBoolean(0.3) ? "rare" : "uncommon";
+  return { id: rollColorlessCard(ctx, rarity), rarity };
+}
+
+function priceShopCard(ctx: EffectCtx, rarity: CardRarityRoll, colorless: boolean): number {
+  const base = SHOP.basePrices.cardByRarity[rarity];
+  const jitter = ctx.rng("merchantRng").randomFloatRange(SHOP.cardJitter.min, SHOP.cardJitter.max);
+  let price = f32mul(base, jitter);
+  if (colorless) price = f32mul(price, SHOP.colorlessFactor);
+  return finalizePrice(ctx, Math.trunc(price));
+}
+
 /** Mid-shop reprice: buying a price-modifying relic (Membership Card) applies
  *  its factor to remaining unsold prices and the removal cost immediately. */
 export function repriceAfterRelic(ctx: EffectCtx, shop: ShopState, relicId: string): void {

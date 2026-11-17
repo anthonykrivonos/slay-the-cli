@@ -14,7 +14,7 @@ import type { ContentBundle, EffectCtx } from "./content/defs";
 import { ActionQueue } from "./core/queue";
 import { RngRegistry, type RngRegistryState, type Stream } from "./core/rngRegistry";
 import { seedFromString, seedToString } from "./core/rng";
-import { runQueue, queueEndTurn, afterCardUsed, scryResolve, effectiveCost } from "./combat/interpreter";
+import { runQueue, queueEndTurn, afterCardUsed, scryResolve, effectiveCost, cardIsPlayable } from "./combat/interpreter";
 import { buildCombatState, initializeCombat } from "./combat/setup";
 import { runPrimitives } from "./content/primitives";
 import { fireHook, vetoHook } from "./core/hooks";
@@ -254,7 +254,7 @@ export function advance(prev: GameState, cmd: Command, bundle: ContentBundle): G
       const c = combat.cards[iid]!;
       const def = bundle.cards.get(c.defId)!;
       // playability
-      if (c.cost === -2) throw new Error("unplayable card");
+      if (!cardIsPlayable(ctx, c)) throw new Error("unplayable card");
       const cost = c.cost === -1 ? 0 : effectiveCost(ctx, c);
       if (!c.freeToPlayOnce && combat.player.energy < cost) throw new Error("not enough energy");
       if (def.target === "enemy") {

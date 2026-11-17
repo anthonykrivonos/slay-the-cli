@@ -15,6 +15,7 @@ import { PLAYER, monster } from "../../engine/core/ids";
 import { cnt, healPlayer } from "./lib";
 import { astrolabePickup, callingBellPickup, emptyCagePickup, pandorasBoxPickup, tinyHousePickup } from "./pickup";
 import { removeRelic } from "../events/lib";
+import { obtainMasterCard } from "../../engine/run/deckEdit";
 import { channelOrb } from "../../engine/combat/orbRuntime";
 
 export const bossRelics: RelicDef[] = [
@@ -46,14 +47,23 @@ export const bossRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Gain 1 Energy... Whenever you open a non-Boss chest, obtain a Curse."
-    // ENGINE-GAP(energy); the curse obtain needs the run layer's curse pool + relicRng.
+    // "Gain 1 Energy. Whenever you open a non-Boss chest, obtain a Curse."
     id: "CURSED_KEY",
     energyBonus: 1,
     name: "Cursed Key",
     tier: "boss",
     pool: "shared",
-    hooks: {},
+    hooks: {
+      onChestOpen: (ctx, isBossChest) => {
+        if (isBossChest) return;
+        const pool: string[] = [];
+        for (const c of ctx.bundle.cards.values()) {
+          if (c.type === "curse" && c.rarity === "curse") pool.push(c.id);
+        }
+        if (pool.length === 0) return;
+        obtainMasterCard(ctx, pool[ctx.rng("relicRng").random(pool.length - 1)]!);
+      },
+    },
   },
   {
     // "Gain 1 Energy... You can no longer gain Gold." ENGINE-GAP(energy); gold zeroing implemented.
@@ -240,7 +250,7 @@ export const bossRelics: RelicDef[] = [
   },
   {
     // "During Boss and Elite combats, gain 1 Energy at the start of your turn."
-    // ENGINE-GAP(energy): conditional energyPerTurn, wired engine-side.
+    // energyBonusEliteBossOnly is applied when the fight is built.
     id: "SLAVERS_COLLAR",
     energyBonus: 1,
     energyBonusEliteBossOnly: true,
@@ -262,7 +272,8 @@ export const bossRelics: RelicDef[] = [
     },
   },
   {
-    // "Gain 1 Energy... You can no longer obtain potions." ENGINE-GAP(energy) + RUN-LAYER(potion rewards).
+    // "Gain 1 Energy. You can no longer obtain potions."
+    // Rewards, shops, Entropic Brew, and Cauldron all refuse the obtain.
     id: "SOZU",
     energyBonus: 1,
     name: "Sozu",
@@ -321,7 +332,7 @@ export const bossRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Elites now drop an additional relic when defeated." RUN-LAYER (rewards).
+    // "Elites now drop an additional relic when defeated."
     id: "BLACK_STAR",
     name: "Black Star",
     tier: "boss",

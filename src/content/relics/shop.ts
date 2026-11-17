@@ -3,6 +3,9 @@
 import type { RelicDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";
 import { cnt, colorlessPoolFilter, healPlayer, randomCardDefs, requestCardPick } from "./lib";
+import { hasRelic } from "../util";
+import { returnRandomPotion } from "../../engine/run/rewards";
+import { dollysMirrorPickup, orreryPickup } from "./pickup";
 
 export const shopRelics: RelicDef[] = [
   {
@@ -30,8 +33,7 @@ export const shopRelics: RelicDef[] = [
   },
   {
     // "The effects of your cost X cards are increased by 2."
-    // ENGINE-GAP: X-cost cards read energyOnUse in their own defs; no hook can
-    // add +2 to the captured X (needs an energyOnUse fold or card-def support).
+    // cardCtx adds 2 to energyOnUse for X-cost cards. Energy spent is unchanged.
     id: "CHEMICAL_X",
     name: "Chemical X",
     tier: "shop",
@@ -50,7 +52,8 @@ export const shopRelics: RelicDef[] = [
     },
   },
   {
-    // "When viewing your Draw Pile, the cards are now shown in order." UI-only marker.
+    // "When viewing your Draw Pile, the cards are now shown in order."
+    // The draw-pile overlay skips its name sort while this is held.
     id: "FROZEN_EYE",
     name: "Frozen Eye",
     tier: "shop",
@@ -59,7 +62,7 @@ export const shopRelics: RelicDef[] = [
   },
   {
     // "Whenever you break an enemy's Block, apply 2 Vulnerable."
-    // ENGINE-GAP: no block-broken hook in the damage pipeline.
+    // Applied in the damage interpreter when a player hit drops block to 0.
     id: "HAND_DRILL",
     name: "Hand Drill",
     tier: "shop",
@@ -67,8 +70,7 @@ export const shopRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Unplayable Status cards can now be played..." ENGINE-GAP: same
-    // playability override gap as Blue Candle.
+    // "Unplayable Status cards can now be played. Playing a Status exhausts it."
     id: "MEDICAL_KIT",
     name: "Medical Kit",
     tier: "shop",
@@ -141,7 +143,7 @@ export const shopRelics: RelicDef[] = [
   },
   {
     // "Cards which Exhaust when played will instead discard 50% of the time."
-    // ENGINE-GAP: no exhaust-redirect hook in the exhaust flow.
+    // cardRandomRng coin flip in afterCardUsed.
     id: "STRANGE_SPOON",
     name: "Strange Spoon",
     tier: "shop",
@@ -197,19 +199,31 @@ export const shopRelics: RelicDef[] = [
     },
   },
   {
-    // "When obtained, brews 5 random potions." RUN-LAYER (potion generation).
+    // "When obtained, brews 5 random potions." Empty slots fill; the rest are
+    // lost (no discard-a-potion screen). Sozu blocks the whole brew.
     id: "CAULDRON",
     name: "Cauldron",
     tier: "shop",
     pool: "shared",
+    onEquip: (ctx) => {
+      if (hasRelic(ctx, "SOZU")) return;
+      for (let i = 0; i < 5; i++) {
+        const slot = ctx.run.potions.indexOf(null);
+        if (slot === -1) break;
+        const id = returnRandomPotion(ctx);
+        if (!id) break;
+        ctx.run.potions[slot] = id;
+      }
+    },
     hooks: {},
   },
   {
-    // "Upon pickup, obtain an additional copy of a card in your deck." RUN-LAYER.
+    // "Upon pickup, obtain an additional copy of a card in your deck."
     id: "DOLLYS_MIRROR",
     name: "Dolly's Mirror",
     tier: "shop",
     pool: "shared",
+    onEquip: dollysMirrorPickup,
     hooks: {},
   },
   {
@@ -225,15 +239,17 @@ export const shopRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Upon pickup, choose and add 5 cards to your deck." RUN-LAYER.
+    // "Upon pickup, choose 5 cards to add to your deck."
     id: "ORRERY",
     name: "Orrery",
     tier: "shop",
     pool: "shared",
+    onEquip: orreryPickup,
     hooks: {},
   },
   {
-    // "Combat reward screens now contain Colorless cards and cards from other colors." RUN-LAYER.
+    // "Combat reward screens now contain Colorless cards and cards from other colors."
+    // createCardReward draws the any-color pool and burns one cardRng long per card.
     id: "PRISMATIC_SHARD",
     name: "Prismatic Shard",
     tier: "shop",

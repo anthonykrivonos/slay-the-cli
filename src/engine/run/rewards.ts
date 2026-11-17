@@ -84,6 +84,25 @@ export function colorlessCardPool(ctx: EffectCtx, rarity: CardRarityRoll): CardI
   return out;
 }
 
+/** Every obtainable card of a rarity, any color. Prismatic Shard's pool. */
+export function anyColorCardPool(ctx: EffectCtx, rarity: CardRarityRoll): CardId[] {
+  const out: CardId[] = [];
+  for (const c of ctx.bundle.cards.values()) {
+    if (c.rarity !== rarity) continue;
+    if (c.type === "curse" || c.type === "status") continue;
+    out.push(c.id);
+  }
+  return out;
+}
+
+function eggPreviewUpgrade(ctx: EffectCtx, id: CardId): boolean {
+  const type = ctx.bundle.cards.get(id)?.type;
+  if (type === "attack" && hasRelic(ctx.run, "MOLTEN_EGG")) return true;
+  if (type === "skill" && hasRelic(ctx.run, "TOXIC_EGG")) return true;
+  if (type === "power" && hasRelic(ctx.run, "FROZEN_EGG")) return true;
+  return false;
+}
+
 export function cursePool(ctx: EffectCtx): CardId[] {
   const out: CardId[] = [];
   for (const c of ctx.bundle.cards.values()) {
@@ -188,9 +207,9 @@ export function createCardReward(ctx: EffectCtx, room: RewardRoomKind): RolledCa
   let numCards = CARD_REWARD.baseCount;
   if (hasRelic(run, "QUESTION_CARD")) numCards += CARD_REWARD.questionCardModifier;
   if (hasRelic(run, "BUSTED_CROWN")) numCards += CARD_REWARD.bustedCrownModifier;
-  // TODO PRISMATIC_SHARD: any-color pool draws (burns an extra cardRng.randomLong per card)
 
   const chance = upgradeChance(run.act, run.ascension);
+  const prismatic = hasRelic(run, "PRISMATIC_SHARD");
   const out: RolledCard[] = [];
   for (let i = 0; i < numCards; i++) {
     const rarity = rollCardRarity(ctx, room);
@@ -198,14 +217,18 @@ export function createCardReward(ctx: EffectCtx, room: RewardRoomKind): RolledCa
     else if (rarity === "common") {
       run.blizzard.cardRarityFactor = Math.max(run.blizzard.cardRarityFactor - 1, CARD_REWARD.pityFloor);
     }
-    const pool = classCardPool(ctx, rarity);
+    // getAnyColorCard burns one extra cardRng long per card, then draws the
+    // any-color pool of that rarity
+    if (prismatic) cardRng.randomLong();
+    const pool = prismatic ? anyColorCardPool(ctx, rarity) : classCardPool(ctx, rarity);
     if (pool.length === 0) throw new Error(`empty ${rarity} card pool for ${run.character}`);
     let id: CardId;
     let guard = 0;
     do {
       id = pool[cardRng.random(pool.length - 1)]!;
     } while (out.some((c) => c.id === id) && ++guard < 1000);
-    const upgraded = rarity !== "rare" && chance > 0 && cardRng.randomBoolean(chance);
+    let upgraded = rarity !== "rare" && chance > 0 && cardRng.randomBoolean(chance);
+    if (!upgraded && eggPreviewUpgrade(ctx, id)) upgraded = true;
     out.push({ id, rarity, upgraded });
   }
   return out;
@@ -233,6 +256,7 @@ export function returnRandomPotion(ctx: EffectCtx): PotionId | null {
  *  consumed; pity +/-10 on miss/drop. */
 export function rollPotionReward(ctx: EffectCtx, rewardsSoFar: number): PotionId | null {
   const run = ctx.run;
+  if (hasRelic(run, "SOZU")) return null; // no potion is offered, and the roll is not spent
   let chance = POTION_DROP.baseChance + run.blizzard.potionChance;
   if (hasRelic(run, "WHITE_BEAST_STATUE")) chance = 100;
   if (rewardsSoFar >= 4) chance = 0;
@@ -292,11 +316,12 @@ export function nextRewardGroup(entries: RewardEntry[]): number {
   return g;
 }
 
-function pushCardGroup(entries: RewardEntry[], cards: RolledCard[]): void {
+function pushCardGroup(ctx: EffectCtx, entries: RewardEntry[], cards: RolledCard[]): void {
   const group = nextRewardGroup(entries);
   for (const c of cards) {
     entries.push({ kind: "card", group, id: c.id, rarity: c.rarity, upgraded: c.upgraded, taken: false });
   }
+  if (hasRelic(ctx.run, "SINGING_BOWL")) entries.push({ kind: "singingBowl", group, taken: false });
 }
 
 function rewardCategoryCount(entries: RewardEntry[]): number {
@@ -321,6 +346,9 @@ export function buildCombatRewards(ctx: EffectCtx, room: "monster" | "elite" | "
 
   if (room === "elite") {
     entries.push({ kind: "relic", id: obtainRelicFromPool(run, eliteRelicTier(ctx)), taken: false });
+    if (hasRelic(run, "BLACK_STAR")) {
+      entries.push({ kind: "relic", id: obtainRelicFromPool(run, eliteRelicTier(ctx)), taken: false });
+    }
     if (burningElite && !run.keys.emerald) entries.push({ kind: "emeraldKey", taken: false });
   }
 
@@ -328,9 +356,9 @@ export function buildCombatRewards(ctx: EffectCtx, room: "monster" | "elite" | "
   if (wantsPotionAndCard) {
     const potion = rollPotionReward(ctx, rewardCategoryCount(entries));
     if (potion) entries.push({ kind: "potion", id: potion, taken: false });
-    pushCardGroup(entries, createCardReward(ctx, room));
+    pushCardGroup(ctx, entries, createCardReward(ctx, room));
     if (room === "monster" && hasRelic(run, "PRAYER_WHEEL")) {
-      pushCardGroup(entries, createCardReward(ctx, room));
+      pushCardGroup(ctx, entries, createCardReward(ctx, room));
     }
   }
 
@@ -338,8 +366,8 @@ export function buildCombatRewards(ctx: EffectCtx, room: "monster" | "elite" | "
 }
 
 /** Wrap a pre-rolled card list as a rewards screen card group (Neow, events). */
-export function cardGroupEntries(cards: RolledCard[]): RewardEntry[] {
+export function cardGroupEntries(ctx: EffectCtx, cards: RolledCard[]): RewardEntry[] {
   const entries: RewardEntry[] = [];
-  pushCardGroup(entries, cards);
+  pushCardGroup(ctx, entries, cards);
   return entries;
 }

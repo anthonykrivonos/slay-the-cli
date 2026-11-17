@@ -76,6 +76,12 @@ export function reshuffleDiscardIntoDraw(ctx: EffectCtx): void {
 export function drawCards(ctx: EffectCtx, n: number): void {
   const piles = ctx.combat!.player.piles;
   for (let i = 0; i < n; i++) {
+    // Battle Trance / Bullet Time: no draws while No Draw is up, including
+    // card effects and Gremlin Horn. The power is gone before the next turn.
+    if (ctx.combat!.player.powers.some((p) => p.id === "NO_DRAW")) {
+      ctx.emit("drawFizzled", { remaining: n - i });
+      return;
+    }
     if (piles.hand.length >= HAND_LIMIT) {
       ctx.emit("drawFizzled", { remaining: n - i });
       return;

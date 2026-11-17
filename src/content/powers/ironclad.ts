@@ -266,10 +266,11 @@ export const ironcladPowers: PowerDef[] = [
     stacking: "none",
     turnBased: false,
     hooks: {
-      // ENGINE-GAP: drawCards has no veto hook, so card-effect draws (Pommel
-      // Strike after Battle Trance) cannot be blocked. modifyDrawPerTurn covers
-      // only the start-of-turn draw - moot anyway since the power is removed at
-      // end of turn. Enforcement of "cannot draw additional cards" is skipped.
+      // drawCards refuses every draw while this power is up, including card
+      // effects and Gremlin Horn. It is removed at the end of the player turn,
+      // so the next turn's opening draw is unaffected. modifyDrawPerTurn is
+      // belt and braces for a draw that happens to be counted before the power
+      // is applied.
       modifyDrawPerTurn: () => 0,
       atEndOfTurn: (ctx, isPlayerTurn) => {
         if (isPlayerTurn) ctx.queue.addToBottom({ kind: "removePower", target: ctx.owner, powerId: "NO_DRAW" });

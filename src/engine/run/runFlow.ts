@@ -16,11 +16,13 @@ import type { RngRegistry } from "../core/rngRegistry";
 import { Rng, JavaRandom, javaShuffle } from "../core/rng";
 import { f32add, f32mul } from "../core/math";
 import { PLAYER } from "../core/ids";
-import { fireHook, foldHook, vetoHook } from "../core/hooks";
+import { fireHook, foldHook } from "../core/hooks";
 import { buildCombatState, initializeCombat } from "../combat/setup";
 import { runQueue } from "../combat/interpreter";
 import { generateMap, MAP_HEIGHT, MAP_WIDTH } from "./mapGen";
-import { generateEncounters, generateExtraStrongEncounters, getActDef, resolveEncounter } from "./encounters";
+import { generateEncounters, generateExtraStrongEncounters, getActDef } from "./encounters";
+import { rollLineup } from "./lineups";
+import { obtainMasterCard, removableIndices, removeDeckAt } from "./deckEdit";
 import {
   buildCombatRewards,
   cardGroupEntries,
@@ -31,7 +33,7 @@ import {
   nextRewardGroup,
   obtainRelicFromPool,
 } from "./rewards";
-import { generateShop, repriceAfterRelic } from "./shop";
+import { generateShop, repriceAfterRelic, restockPurchased } from "./shop";
 import { setupTreasureRoom, openChestContents } from "./treasure";
 import { applyRest, applySmith, canSmith } from "./rest";
 import { getNeowOptions, applyNeowBonus, applyNeowDrawback } from "./neow";
@@ -315,9 +317,29 @@ export function generateEventId(ctx: EffectCtx): EventId | null {
 function startCombat(state: GameState, ctx: EffectCtx, roomKind: "monster" | "elite" | "boss", encounterId: string, burningElite: boolean): void {
   const run = state.run;
   const bundle = ctx.bundle;
-  const monsters = resolveCombatMonsters(bundle, run, roomKind, encounterId);
+  const lineup = rollLineup(ctx, roomKind, encounterId);
   const character = bundle.characters.get(run.character)!;
-  const combat = buildCombatState(run, bundle, encounterId, monsters, character.startingEnergy, character.orbSlots, roomKind);
+  const combat = buildCombatState(
+    run,
+    bundle,
+    encounterId,
+    lineup.map((s) => s.id),
+    character.startingEnergy,
+    character.orbSlots,
+    roomKind,
+  );
+  lineup.forEach((slot, i) => {
+    const m = combat.monsters[i]!;
+    if (slot.gap) {
+      m.isEscaped = true;
+      m.hp = 0;
+      m.maxHp = 0;
+    } else if (slot.hp !== undefined) {
+      m.hp = slot.hp;
+      m.maxHp = slot.hp;
+      m.data.hpRolled = true;
+    }
+  });
   state.combat = combat;
   ctx.combat = combat;
   run.room = { kind: "combat", roomKind, encounterId, burningElite };
@@ -326,23 +348,22 @@ function startCombat(state: GameState, ctx: EffectCtx, roomKind: "monster" | "el
   runQueue(ctx);
 }
 
-function resolveCombatMonsters(
-  bundle: EffectCtx["bundle"],
-  run: RunState,
-  roomKind: "monster" | "elite" | "boss",
-  encounterId: string,
-): string[] {
-  if (run.act === 4) {
-    // fixed Act 4 encounters (no ActDef)
-    if (encounterId === "SHIELD_AND_SPEAR") return ["SPIRE_SHIELD", "SPIRE_SPEAR"];
-    if (encounterId === "THE_HEART") return ["CORRUPT_HEART"];
+/** Gold a dead thief was holding. Escaped thieves keep what they stole. */
+function stolenGoldRefund(state: GameState): number {
+  const combat = state.combat;
+  if (!combat) return 0;
+  let n = 0;
+  for (const m of combat.monsters) {
+    if (m.isDead && !m.isEscaped) n += (m.data.stolenGold as number) ?? 0;
   }
-  if (roomKind === "boss") {
-    const actDef = getActDef(bundle.acts, run.act);
-    const multi = actDef.bossEncounters?.find((b) => b.id === encounterId);
-    return multi ? [...multi.monsters] : [encounterId];
-  }
-  return resolveEncounter(getActDef(bundle.acts, run.act), encounterId);
+  return n;
+}
+
+function addStolenGold(entries: RewardEntry[], stolen: number): void {
+  if (stolen <= 0) return;
+  const gold = entries.find((e) => e.kind === "gold");
+  if (gold && gold.kind === "gold") gold.amount += stolen;
+  else entries.unshift({ kind: "gold", amount: stolen, taken: false });
 }
 
 /**
@@ -378,8 +399,12 @@ export function handleCombatVictory(state: GameState, ctx: EffectCtx, registry: 
   const run = state.run;
   const room = run.room;
   if (room?.kind !== "combat") return;
+  const stolen = stolenGoldRefund(state);
   if (room.eventCombat) {
     // event-room flow: rewards are event-defined (run/eventRuntime.ts)
+    state.combat = null;
+    ctx.combat = null;
+    if (stolen > 0) gainGold(ctx, stolen);
     handleEventCombatVictory(state, ctx);
     return;
   }
@@ -418,6 +443,7 @@ export function handleCombatVictory(state: GameState, ctx: EffectCtx, registry: 
     }
     // boss gold uses the boss floor's miscRng, BEFORE the boss treasure room
     const entries = buildCombatRewards(ctx, "boss", false);
+    addStolenGold(entries, stolen);
     // enterBossTreasureRoom: ++floorNum then reseed floor streams
     run.floor++;
     registry.reseedFloorStreams(run.floor);
@@ -431,9 +457,11 @@ export function handleCombatVictory(state: GameState, ctx: EffectCtx, registry: 
     return;
   }
 
+  const entries = buildCombatRewards(ctx, room.roomKind, room.burningElite);
+  addStolenGold(entries, stolen);
   run.room = {
     kind: "rewards",
-    entries: buildCombatRewards(ctx, room.roomKind, room.burningElite),
+    entries,
     source: room.roomKind,
   };
 }
@@ -498,9 +526,7 @@ function addRelic(ctx: EffectCtx, id: string): void {
 }
 
 function addCardToDeck(ctx: EffectCtx, defId: string, upgraded: boolean): void {
-  if (!vetoHook(ctx, PLAYER, "onObtainCard", defId)) return; // Omamori-style veto
-  ctx.run.deck.push({ defId, upgrades: upgraded ? 1 : 0, misc: 0, bottled: false });
-  ctx.emit("deckCardObtained", { defId, upgrades: upgraded ? 1 : 0 });
+  obtainMasterCard(ctx, defId, upgraded ? 1 : 0);
 }
 
 function gainGold(ctx: EffectCtx, amount: number): void {
@@ -509,7 +535,7 @@ function gainGold(ctx: EffectCtx, amount: number): void {
 
 function markGroupTaken(entries: RewardEntry[], group: number): void {
   for (const e of entries) {
-    if ((e.kind === "card" || e.kind === "bossRelic") && e.group === group) e.taken = true;
+    if ((e.kind === "card" || e.kind === "bossRelic" || e.kind === "singingBowl") && e.group === group) e.taken = true;
   }
 }
 
@@ -557,36 +583,49 @@ export function restOptionAvailable(ctx: EffectCtx, kind: RestOptionKind): boole
   }
 }
 
+/** Map a displayed-list index back to a master-deck index. */
+function deckIndexFromChoice(deckIndices: number[] | undefined, chosen: number[]): number[] {
+  if (!deckIndices) return chosen;
+  return chosen.map((i) => {
+    const deckIdx = deckIndices[i];
+    if (deckIdx === undefined) throw new Error(`invalid choice index ${i}`);
+    return deckIdx;
+  });
+}
+
 /** Registered as effect "__restToke": Peace Pipe's card removal. */
 export function restTokeResume(ctx: EffectCtx, args: unknown): void {
-  const { chosen } = args as { chosen: number[] };
-  const run = ctx.run;
-  for (const i of [...new Set(chosen)].sort((a, b) => b - a)) {
-    if (!run.deck[i]) throw new Error(`invalid deck index ${i}`);
-    run.deck.splice(i, 1);
+  const { chosen, deckIndices } = args as { chosen: number[]; deckIndices?: number[] };
+  const picked = deckIndexFromChoice(deckIndices, chosen);
+  for (const i of [...new Set(picked)].sort((a, b) => b - a)) {
+    if (!ctx.run.deck[i]) throw new Error(`invalid deck index ${i}`);
+    removeDeckAt(ctx, i);
   }
 }
 
 /** Registered as effect "__runDeckChoice": resumes Neow deck selections. */
 export function runDeckChoiceResume(ctx: EffectCtx, args: unknown): void {
-  const { action, chosen } = args as { action: "remove" | "upgrade" | "transform"; chosen: number[] };
+  const { action, chosen, deckIndices } = args as {
+    action: "remove" | "upgrade" | "transform";
+    chosen: number[];
+    deckIndices?: number[];
+  };
+  const picked = deckIndexFromChoice(deckIndices, chosen);
   const run = ctx.run;
-  for (const i of chosen) {
+  for (const i of picked) {
     if (!run.deck[i]) throw new Error(`invalid deck index ${i}`);
   }
   if (action === "upgrade") {
-    for (const i of chosen) run.deck[i]!.upgrades++;
+    for (const i of picked) run.deck[i]!.upgrades++;
   } else {
-    const sorted = [...new Set(chosen)].sort((a, b) => b - a);
+    const sorted = [...new Set(picked)].sort((a, b) => b - a);
     for (const i of sorted) {
-      run.deck.splice(i, 1);
+      removeDeckAt(ctx, i);
       if (action === "transform") {
         // TODO exact transform rng is not pinned by meta.json; the real game
         // transforms with miscRng - uniform over the class pool, all rarities.
         const pool = [...classCardPool(ctx, "common"), ...classCardPool(ctx, "uncommon"), ...classCardPool(ctx, "rare")];
-        if (pool.length > 0) {
-          run.deck.push({ defId: pool[ctx.rng("miscRng").random(pool.length - 1)]!, upgrades: 0, misc: 0, bottled: false });
-        }
+        if (pool.length > 0) obtainMasterCard(ctx, pool[ctx.rng("miscRng").random(pool.length - 1)]!);
       }
     }
   }
@@ -662,12 +701,12 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
         // screen (Calling Bell, Tiny House): leave whatever it put up
         if (run.room.kind === "neow") run.room = { kind: "map" };
       } else if (followUp.type === "cardReward") {
-        run.room = { kind: "rewards", entries: cardGroupEntries(followUp.cards), source: "neow" };
+        run.room = { kind: "rewards", entries: cardGroupEntries(ctx, followUp.cards), source: "neow" };
       } else {
         const indices =
           followUp.action === "upgrade"
             ? run.deck.map((_, i) => i).filter((i) => canSmith(ctx, i))
-            : run.deck.map((_, i) => i);
+            : removableIndices(ctx);
         const count = Math.min(followUp.count, indices.length);
         if (count === 0) {
           run.room = { kind: "map" };
@@ -676,14 +715,14 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
             request: {
               kind: "cards",
               pile: "custom",
-              iids: indices, // deck indices; `choose` passes them back as chosen
+              iids: indices, // deck indices; `choose` sends positions in this list
               min: count,
               max: count,
               canCancel: false,
               reason: `neow:${followUp.action}`,
             },
             resume: "__runDeckChoice",
-            resumeArgs: { action: followUp.action },
+            resumeArgs: { action: followUp.action, deckIndices: indices },
           });
         }
       }
@@ -733,6 +772,7 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
           e.taken = true;
           break;
         case "potion": {
+          if (hasRelic(run, "SOZU")) throw new Error("cannot obtain potions");
           const slot = run.potions.indexOf(null);
           if (slot === -1) throw new Error("potion slots are full");
           run.potions[slot] = e.id;
@@ -749,6 +789,11 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
           break;
         case "card":
           addCardToDeck(ctx, e.id, e.upgraded);
+          markGroupTaken(room.entries, e.group);
+          break;
+        case "singingBowl":
+          run.maxHp += 2;
+          run.hp = Math.min(run.maxHp, run.hp + Math.max(0, Math.floor(foldHook(ctx, PLAYER, "onHeal", 2))));
           markGroupTaken(room.entries, e.group);
           break;
         case "bossRelic":
@@ -773,7 +818,7 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
         run.gold -= slot.price;
         slot.sold = true;
         addCardToDeck(ctx, slot.id, false);
-        // TODO THE_COURIER restock (meta.shop.courierRestock)
+        restockPurchased(ctx, shop, "card", cmd.idx);
       } else if (cmd.kind === "relic") {
         const slot = shop.relics[cmd.idx];
         if (!slot || slot.sold) throw new Error("relic slot unavailable");
@@ -783,15 +828,18 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
         addRelic(ctx, slot.id);
         // mid-shop reprice (Membership Card immediately halves remaining prices)
         repriceAfterRelic(ctx, shop, slot.id);
+        restockPurchased(ctx, shop, "relic", cmd.idx);
       } else {
         const slot = shop.potions[cmd.idx];
         if (!slot || slot.sold) throw new Error("potion slot unavailable");
         if (run.gold < slot.price) throw new Error("not enough gold");
         const free = run.potions.indexOf(null);
         if (free === -1) throw new Error("potion slots are full");
+        if (hasRelic(run, "SOZU")) throw new Error("cannot obtain potions");
         run.gold -= slot.price;
         slot.sold = true;
         run.potions[free] = slot.id;
+        restockPurchased(ctx, shop, "potion", cmd.idx);
       }
       break;
     }
@@ -803,11 +851,11 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
       if (run.gold < shop.removalCost) throw new Error("not enough gold");
       const purge = run.deck[cmd.deckIdx];
       if (!purge) throw new Error(`invalid deck index ${cmd.deckIdx}`);
-      // a REMOVE screen never lists a bottled card (openCardSelectScreen,
-      // GameContext.cpp:3802 - canTransform() && !isCardBottled)
+      // a REMOVE screen never lists a bottled card or an unremovable curse
       if (purge.bottled) throw new Error("a bottled card cannot be removed");
+      if (!removableIndices(ctx).includes(cmd.deckIdx)) throw new Error("that card cannot be removed");
       run.gold -= shop.removalCost;
-      run.deck.splice(cmd.deckIdx, 1);
+      removeDeckAt(ctx, cmd.deckIdx);
       run.history.cardRemovesPurchased++;
       shop.removalUsed = true;
       break;
@@ -818,8 +866,7 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
       if (room.used) throw new Error("rest site already used");
       if (!restOptionAvailable(ctx, cmd.kind)) throw new Error(`${cmd.kind} is not available here`);
       if (cmd.kind === "rest") {
-        applyRest(ctx);
-        fireHook(ctx, PLAYER, "onRest");
+        applyRest(ctx); // fires onRest once (Regal Pillow, Dream Catcher)
       } else if (cmd.kind === "recall") {
         // Recall: take the ruby key instead of resting (once per run)
         run.keys.ruby = true;
@@ -832,8 +879,8 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
         // Shovel: returnRandomRelic(returnRandomRelicTier(relicRng, act))
         addRelic(ctx, obtainRelicFromPool(run, combatRelicTier(ctx)));
       } else if (cmd.kind === "toke") {
-        // Peace Pipe: one card off the deck, through the same picker Neow uses
-        const indices = run.deck.map((_, i) => i);
+        // Peace Pipe: one removable card, indexed like every other deck picker
+        const indices = removableIndices(ctx);
         if (indices.length === 0) throw new Error("nothing to remove");
         room.used = true; // the site is spent whichever card is picked
         ctx.requestChoice({
@@ -847,6 +894,7 @@ export function handleRunCommand(state: GameState, ctx: EffectCtx, registry: Rng
             reason: "rest:toke",
           },
           resume: "__restToke",
+          resumeArgs: { deckIndices: indices },
         });
         break;
       } else {

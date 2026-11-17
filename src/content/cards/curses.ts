@@ -150,8 +150,7 @@ export const curseCards: CardDef[] = [
     values: {},
     upgradeValues: {},
     keywords: [],
-    // ENGINE-GAP: "If transformed or removed from your deck, lose 3 Max HP" is a
-    // run-layer trigger; card defs have no remove/transform hook yet.
+    // Removing or transforming Parasite costs 3 max HP (removeDeckAt).
   },
   {
     id: "PRIDE",

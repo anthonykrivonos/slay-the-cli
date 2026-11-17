@@ -17,7 +17,7 @@ import type { EffectCtx, EventDef, EventOption } from "../../engine/content/defs
 import type { RewardEntry, EventRoomData, MasterCard, RoomState } from "../../engine/run/runState";
 import type { CardId, PotionId, RelicId } from "../../engine/core/ids";
 import { PLAYER } from "../../engine/core/ids";
-import { foldHook, vetoHook } from "../../engine/core/hooks";
+import { foldHook } from "../../engine/core/hooks";
 import { f32mul } from "../../engine/core/math";
 import { JavaRandom, javaShuffle } from "../../engine/core/rng";
 import {
@@ -37,8 +37,9 @@ import {
   type RolledCard,
 } from "../../engine/run/rewards";
 import { canSmith } from "../../engine/run/rest";
+import { obtainMasterCard, removeDeckAt, removableIndices, UNREMOVABLE_CURSES } from "../../engine/run/deckEdit";
 
-export { hasRelic };
+export { hasRelic, removableIndices, UNREMOVABLE_CURSES };
 
 // --- room / screen state -----------------------------------------------------------
 
@@ -134,12 +135,8 @@ export function loseGold(ctx: EffectCtx, amount: number): void {
 
 // --- cards ---------------------------------------------------------------------------
 
-/** Unremovable specials (run-layer rule; card defs carry no flag). */
-export const UNREMOVABLE_CURSES: readonly CardId[] = ["ASCENDERS_BANE", "NECRONOMICURSE", "CURSE_OF_THE_BELL"];
-
 export function obtainCard(ctx: EffectCtx, defId: CardId, upgrades = 0, misc = 0): void {
-  if (!vetoHook(ctx, PLAYER, "onObtainCard", defId)) return; // Omamori veto
-  ctx.run.deck.push({ defId, upgrades, misc, bottled: false });
+  obtainMasterCard(ctx, defId, upgrades, misc);
 }
 
 /** Curse card ids (corpus-stable) - canSpawn(run) has no bundle access. */
@@ -163,20 +160,16 @@ export const CURSE_IDS: ReadonlySet<CardId> = new Set([
 /** Remove deck cards by index (descending order, duplicates ignored). */
 export function removeDeckCards(ctx: EffectCtx, indices: number[]): void {
   const sorted = [...new Set(indices)].sort((a, b) => b - a);
-  for (const i of sorted) {
-    if (ctx.run.deck[i]) ctx.run.deck.splice(i, 1);
-  }
+  for (const i of sorted) removeDeckAt(ctx, i);
 }
 
 /** Transform: remove, then roll the replacement uniformly over the class pool
  *  (all rarities) with miscRng - identical to runFlow's runDeckChoiceResume. */
 export function transformDeckCard(ctx: EffectCtx, deckIdx: number): void {
   if (!ctx.run.deck[deckIdx]) return;
-  ctx.run.deck.splice(deckIdx, 1);
+  removeDeckAt(ctx, deckIdx);
   const pool = [...classCardPool(ctx, "common"), ...classCardPool(ctx, "uncommon"), ...classCardPool(ctx, "rare")];
-  if (pool.length > 0) {
-    ctx.run.deck.push({ defId: pool[ctx.rng("miscRng").random(pool.length - 1)]!, upgrades: 0, misc: 0, bottled: false });
-  }
+  if (pool.length > 0) obtainMasterCard(ctx, pool[ctx.rng("miscRng").random(pool.length - 1)]!);
 }
 
 export function upgradeDeckCard(ctx: EffectCtx, deckIdx: number): void {
@@ -186,17 +179,6 @@ export function upgradeDeckCard(ctx: EffectCtx, deckIdx: number): void {
 
 export function upgradeableIndices(ctx: EffectCtx): number[] {
   return ctx.run.deck.map((_, i) => i).filter((i) => canSmith(ctx, i));
-}
-
-/** Cards a removal/transform screen may target: non-bottled, not an
- *  unremovable special curse. */
-export function removableIndices(ctx: EffectCtx): number[] {
-  return ctx.run.deck
-    .map((_, i) => i)
-    .filter((i) => {
-      const mc = ctx.run.deck[i]!;
-      return !mc.bottled && !UNREMOVABLE_CURSES.includes(mc.defId);
-    });
 }
 
 export function deckIndicesOfType(ctx: EffectCtx, type: "attack" | "skill" | "power"): number[] {
@@ -339,21 +321,22 @@ export function eventCombatRewards(
     if (p) entries.push({ kind: "potion", id: p, taken: false });
   }
   if (opts.cardRoom) {
-    for (const e of cardGroupEntries(createCardReward(ctx, opts.cardRoom))) entries.push(e);
+    for (const e of cardGroupEntries(ctx, createCardReward(ctx, opts.cardRoom))) entries.push(e);
   }
   for (const group of opts.extraCardGroups ?? []) {
     const g = nextRewardGroup(entries);
     for (const c of group) {
       entries.push({ kind: "card", group: g, id: c.id, rarity: c.rarity, upgraded: c.upgraded, taken: false });
     }
+    if (hasRelic(ctx.run, "SINGING_BOWL")) entries.push({ kind: "singingBowl", group: g, taken: false });
   }
   return entries;
 }
 
 // --- pending choices --------------------------------------------------------------------
 
-/** Deck pick: iids carry DECK INDICES; the resume receives them back as
- *  `chosen` (same convention as runFlow's "__runDeckChoice"). */
+/** Deck pick: iids carry DECK INDICES. The resume receives positions in that
+ *  list as `chosen` (what the UI sends) and maps them back. */
 export function requestDeckChoice(
   ctx: EffectCtx,
   opts: { tag: string; indices: number[]; min: number; max: number; reason: string; extra?: unknown },
@@ -364,7 +347,7 @@ export function requestDeckChoice(
   ctx.requestChoice({
     request: { kind: "cards", pile: "custom", iids: opts.indices, min, max, canCancel: false, reason: opts.reason },
     resume: "__eventChoice",
-    resumeArgs: { eventId, tag: opts.tag, extra: opts.extra },
+    resumeArgs: { eventId, tag: opts.tag, extra: opts.extra, deckIndices: opts.indices },
   });
 }
 

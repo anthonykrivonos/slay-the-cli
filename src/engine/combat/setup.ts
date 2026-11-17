@@ -104,8 +104,14 @@ export function initializeCombat(ctx: EffectCtx): void {
   const combat = ctx.combat!;
   ctx.emit("combatStarted", { encounterId: combat.combatFlags.encounterId, monsters: combat.monsters.map((m) => m.id) });
 
-  // monster HP rolls (monsterHpRng, in slot order)
+  // monster HP rolls (monsterHpRng, in slot order). Gaps are empty slots.
+  // A lineup may have already spent the HP roll (wildlife candidate builds).
   for (const m of combat.monsters) {
+    if (m.id === "GAP" || m.isEscaped) continue;
+    if (m.data.hpRolled === true) {
+      delete m.data.hpRolled;
+      continue;
+    }
     const def = ctx.bundle.monsters.get(m.id);
     if (!def) throw new Error(`unknown monster ${m.id}`);
     const [lo, hi] = def.hp(ctx.asc);
@@ -134,6 +140,7 @@ export function initializeCombat(ctx: EffectCtx): void {
   // snapshot: a preBattle may pad the row with empty slots (the Collector
   // moves herself to slot 2), and those placeholders have no monster def
   for (const m of [...combat.monsters]) {
+    if (m.id === "GAP" || m.isEscaped) continue;
     ctx.bundle.monsters.get(m.id)?.preBattle?.(ctx, m);
   }
 

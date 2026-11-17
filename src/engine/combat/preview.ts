@@ -14,6 +14,7 @@
 import type { CardCtx, ContentBundle, EffectCtx } from "../content/defs";
 import type { CardInstance } from "./combatState";
 import { ActionQueue } from "../core/queue";
+import { effectiveCost } from "./interpreter";
 
 export interface CardPreview {
   /** per-hit damage aimed at the previewed target (null = deals none) */
@@ -97,6 +98,16 @@ export function computeCardPreview(ctx: EffectCtx, iid: number, targetIdx: numbe
   } catch {
     return null; // could not even clone the state: no preview, like the game's
   }
+}
+
+/** Energy cost the hand should print, including Corruption and playable curses. */
+export function cardPlayCost(
+  state: { run: EffectCtx["run"]; combat: EffectCtx["combat"] },
+  bundle: ContentBundle,
+  card: CardInstance,
+): number {
+  if (!state.combat) return card.costForTurn;
+  return effectiveCost(previewCtx(state, bundle), card);
 }
 
 /** One card against one target (the targeting screen prices every candidate). */

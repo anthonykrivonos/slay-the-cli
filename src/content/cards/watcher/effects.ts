@@ -97,7 +97,8 @@ function replayTail(ctx: EffectCtx, args: unknown): void {
  * (Weave) run with exact engine semantics.
  */
 function scryStart(ctx: EffectCtx, args: unknown): void {
-  const { n } = args as { n: number };
+  let { n } = args as { n: number };
+  if (ctx.run.relics.some((r) => r.defId === "GOLDEN_EYE")) n += 2;
   if (n <= 0) return;
   const draw = ctx.combat!.player.piles.draw;
   const iids = draw.slice(0, Math.min(n, draw.length));

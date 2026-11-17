@@ -1,7 +1,7 @@
 // Looter - exact port from data/corpus/monsters-act1.json (LOOTER).
 // Turn 1+2: MUG. Turn 3: 50/50 LUNGE or SMOKE_BOMB. LUNGE -> SMOKE_BOMB -> ESCAPE.
-// MUG/LUNGE steal min(playerGold, THIEVERY) gold (15; asc>=17: 20). Escape keeps
-// the stolen gold; if killed first the reward layer refunds self.data.stolenGold.
+// MUG steals min(playerGold, THIEVERY) gold (15; asc>=17: 20). LUNGE does not.
+// Escape keeps the stolen gold; killing the thief first refunds it as reward gold.
 
 import type { MonsterDef, EffectCtx } from "../../../engine/content/defs";
 import type { MonsterState } from "../../../engine/combat/combatState";
@@ -27,17 +27,17 @@ export const looter: MonsterDef = {
       id: "LOOTER_MUG",
       intent: "attack",
       execute: (ctx, self) => {
-        // turn-1 in-game dialog roll (consumed for aiRng parity, value unused)
-        if (ctx.combat!.turn === 1) ctx.rng("aiRng").randomBoolean(0.6);
         stealGold(ctx, self);
         attackPlayer(ctx, self, ctx.asc >= 2 ? 11 : 10);
+        // turn-1 dialog roll after the attack is queued, so the intent dry-run
+        // sees the damage before the poisoned RNG throws
+        if (ctx.combat!.turn === 1) ctx.rng("aiRng").randomBoolean(0.6);
       },
     },
     LOOTER_LUNGE: {
       id: "LOOTER_LUNGE",
       intent: "attack",
       execute: (ctx, self) => {
-        stealGold(ctx, self);
         attackPlayer(ctx, self, ctx.asc >= 2 ? 14 : 12);
       },
     },

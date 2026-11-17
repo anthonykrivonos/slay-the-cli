@@ -97,6 +97,9 @@ export function formatEvent(ev: GameEvent, bundle: ContentBundle, names: readonl
     case "defeat":
       out = "You have been slain";
       break;
+    case "revived":
+      out = `${str(p.source) ?? "A relic"} revives you at ${num(p.hp) ?? 0} HP`;
+      break;
     case "combatEnded":
       out = ev.payload === "victory" ? "Combat won" : `Combat ended (${String(ev.payload)})`;
       break;

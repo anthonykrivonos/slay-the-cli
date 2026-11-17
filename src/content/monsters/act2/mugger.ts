@@ -1,7 +1,7 @@
 // Mugger - exact port from data/corpus/monsters-act2.json (mirrors Looter).
 // Fixed script: MUG (turn 1), MUG (turn 2), then 50/50 SMOKE_BOMB -> ESCAPE or
-// LUNGE -> SMOKE_BOMB -> ESCAPE. MUG/LUNGE steal min(playerGold, THIEVERY)
-// gold (15; asc>=17: 20) BEFORE the attack; the escape keeps the stolen gold,
+// LUNGE -> SMOKE_BOMB -> ESCAPE. MUG steals min(playerGold, THIEVERY)
+// gold (15; asc>=17: 20) BEFORE the attack. LUNGE does not steal. Escape keeps the stolen gold,
 // and killing it first refunds self.data.stolenGold (reward layer).
 // CONFLICT HONORED (SMOKE_BOMB block): 11 (A17: 17) per lightspeed+wiki;
 // spire-archive's 28 is bad data.
@@ -34,19 +34,19 @@ export const mugger: MonsterDef = {
       id: "MUGGER_MUG",
       intent: "attack",
       execute: (ctx, self) => {
-        ctx.rng("aiRng").random(2); // dialog roll (consumed for parity, unused)
-        if (ctx.combat!.turn === 2) ctx.rng("aiRng").randomBoolean(0.6); // extra turn-2 dialog roll
         stealGold(ctx, self);
         attackPlayer(ctx, self, ctx.asc >= 2 ? 11 : 10);
+        // dialog rolls after the attack is queued so the intent preview sees damage
+        ctx.rng("aiRng").random(2);
+        if (ctx.combat!.turn === 2) ctx.rng("aiRng").randomBoolean(0.6);
       },
     },
     MUGGER_LUNGE: {
       id: "MUGGER_LUNGE",
       intent: "attack",
       execute: (ctx, self) => {
-        ctx.rng("aiRng").random(2); // dialog roll (consumed for parity, unused)
-        stealGold(ctx, self);
         attackPlayer(ctx, self, ctx.asc >= 2 ? 18 : 16);
+        ctx.rng("aiRng").random(2); // dialog roll (consumed for parity, unused)
       },
     },
     MUGGER_SMOKE_BOMB: {

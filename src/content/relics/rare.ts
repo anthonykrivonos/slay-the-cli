@@ -186,8 +186,8 @@ export const rareRelics: RelicDef[] = [
     },
   },
   {
-    // "Whenever you Scry, Scry 2 additional cards."
-    // ENGINE-GAP: startScry has no amount-modifying fold; onScry fires after the fact.
+    // "Whenever you Scry, Scry 2 additional cards." Added in startScry and the
+    // watcher scry entry, before the draw pile is sliced.
     id: "GOLDEN_EYE",
     name: "Golden Eye",
     tier: "rare",
@@ -222,7 +222,7 @@ export const rareRelics: RelicDef[] = [
   },
   {
     // "When you would die, heal to 50% of your Max HP instead (works once)."
-    // ENGINE-GAP: playerDeath has no death-save hook (engine notes it lands Phase 2+).
+    // playerDeath spends it (counter -1) after Fairy in a Bottle.
     id: "LIZARD_TAIL",
     name: "Lizard Tail",
     tier: "rare",

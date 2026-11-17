@@ -9,6 +9,7 @@ import type { CardId, PotionId, RelicId } from "../core/ids";
 import type { Rng } from "../core/rng";
 import type { RolledCard } from "./rewards";
 import { classCardPool, colorlessCardPool, cursePool, returnRandomPotion, obtainRelicFromPool } from "./rewards";
+import { obtainMasterCard } from "./deckEdit";
 
 // --- tables (meta.neow; audited by tests/audit/metaAudit.test.ts) -------------------
 
@@ -155,8 +156,7 @@ export function applyNeowDrawback(ctx: EffectCtx, drawback: NeowDrawback): void 
       const curses = cursePool(ctx);
       if (curses.length > 0) {
         const id = curses[ctx.rng("cardRng").random(curses.length - 1)]!;
-        run.deck.push({ defId: id, upgrades: 0, misc: 0, bottled: false });
-        ctx.emit("deckCardObtained", { defId: id, upgrades: 0 });
+        obtainMasterCard(ctx, id);
       }
       break;
     }
@@ -194,9 +194,7 @@ export function applyNeowBonus(ctx: EffectCtx, bonus: NeowBonus): NeowFollowUp {
       const pool = classCardPool(ctx, "rare");
       if (pool.length === 0) throw new Error("empty rare pool");
       const id = pool[ctx.rng("neowRng").random(pool.length - 1)]!;
-      run.deck.push({ defId: id, upgrades: 0, misc: 0, bottled: false });
-      // the card lands with no screen of its own: the UI reads this to say which
-      ctx.emit("deckCardObtained", { defId: id, upgrades: 0 });
+      obtainMasterCard(ctx, id);
       return null;
     }
     case "REMOVE_CARD":
@@ -228,12 +226,18 @@ export function applyNeowBonus(ctx: EffectCtx, bonus: NeowBonus): NeowFollowUp {
     case "BOSS_RELIC":
       equipRelic(ctx, obtainRelicFromPool(run, "boss"));
       return null;
-    case "TEN_PERCENT_HP_BONUS":
-      run.maxHp += Math.floor(run.maxHp * NEOW_BONUS_VALUES.TEN_PERCENT_HP_BONUS);
+    case "TEN_PERCENT_HP_BONUS": {
+      const gain = Math.floor(run.maxHp * NEOW_BONUS_VALUES.TEN_PERCENT_HP_BONUS);
+      run.maxHp += gain;
+      run.hp += gain;
       return null;
-    case "TWENTY_PERCENT_HP_BONUS":
-      run.maxHp += Math.floor(run.maxHp * NEOW_BONUS_VALUES.TWENTY_PERCENT_HP_BONUS);
+    }
+    case "TWENTY_PERCENT_HP_BONUS": {
+      const gain = Math.floor(run.maxHp * NEOW_BONUS_VALUES.TWENTY_PERCENT_HP_BONUS);
+      run.maxHp += gain;
+      run.hp += gain;
       return null;
+    }
     case "HUNDRED_GOLD":
       run.gold += NEOW_BONUS_VALUES.HUNDRED_GOLD;
       return null;

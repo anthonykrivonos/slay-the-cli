@@ -95,9 +95,6 @@ export const silentRares: CardDef[] = [
         const c = combat.cards[iid]!;
         if (c.cost >= 0) c.costForTurn = 0;
       }
-      // ENGINE-GAP: NO_DRAW cannot veto card-effect draws (Battle Trance
-      // precedent, see powers/ironclad.ts) - "cannot draw additional cards
-      // this turn" is not enforced against draw effects.
       ctx.queue.addToBottom({ kind: "applyPower", source: PLAYER, target: PLAYER, powerId: "NO_DRAW", amount: 1 });
     },
   },

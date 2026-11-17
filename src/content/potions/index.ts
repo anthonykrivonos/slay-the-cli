@@ -11,7 +11,9 @@
 
 import type { EffectCtx, PotionDef } from "../../engine/content/defs";
 import { PLAYER, monster } from "../../engine/core/ids";
-import { drawCards } from "../../engine/combat/piles";
+import { drawCards, moveCard, reshuffleDiscardIntoDraw } from "../../engine/combat/piles";
+import { cardIsPlayable } from "../../engine/combat/interpreter";
+import { returnRandomPotion } from "../../engine/run/rewards";
 import { hasRelic } from "../util";
 import {
   aliveMonsterIdxs,
@@ -196,8 +198,27 @@ export const allPotions: PotionDef[] = [
     sacredBarkDoubles: true,
     onUse: (ctx, _t, potency) => {
       const combat = ctx.combat!;
-      const top = combat.player.piles.draw.slice(0, potency);
-      for (const iid of top) {
+      const toPlay: number[] = [];
+      let guard = 0;
+      while (toPlay.length < potency && guard++ < 200) {
+        if (combat.player.piles.draw.length === 0) {
+          if (combat.player.piles.discard.length === 0) break;
+          reshuffleDiscardIntoDraw(ctx);
+          if (combat.player.piles.draw.length === 0) break;
+        }
+        const iid = combat.player.piles.draw[0]!;
+        const card = combat.cards[iid]!;
+        // Unplayable cards (Ascender's Bane, statuses) are discarded and do
+        // not count. Blue Candle / Medical Kit make their types playable.
+        if (!cardIsPlayable(ctx, card)) {
+          moveCard(ctx, iid, "discard");
+          continue;
+        }
+        combat.player.piles.draw.shift();
+        combat.player.piles.limbo.push(iid);
+        toPlay.push(iid);
+      }
+      for (const iid of toPlay) {
         const def = ctx.bundle.cards.get(combat.cards[iid]!.defId);
         let target: number | null = null;
         if (def && (def.target === "enemy" || def.target === "selfandenemy")) {
@@ -264,8 +285,6 @@ export const allPotions: PotionDef[] = [
   },
   {
     // "Fill all your empty potion slots with random potions."
-    // RUN-LAYER: random potion generation (potionRng + rarity weights) lives in
-    // the run layer. No-op until it lands.
     id: "ENTROPIC_BREW",
     name: "Entropic Brew",
     rarity: "rare",
@@ -273,7 +292,14 @@ export const allPotions: PotionDef[] = [
     targeted: false,
     potency: 0,
     sacredBarkDoubles: false,
-    onUse: () => {},
+    onUse: (ctx) => {
+      if (hasRelic(ctx, "SOZU")) return;
+      for (let i = 0; i < ctx.run.potions.length; i++) {
+        if (ctx.run.potions[i] !== null) continue;
+        const id = returnRandomPotion(ctx);
+        if (id) ctx.run.potions[i] = id;
+      }
+    },
   },
   {
     // "Channel [1|2] Dark for each orb slot." DEPENDS: DARK orb def.
@@ -313,7 +339,7 @@ export const allPotions: PotionDef[] = [
   },
   {
     // "When you would die, heal to [30%|60%] of Max HP instead."
-    // ENGINE-GAP: non-drinkable death-save; playerDeath has no hook yet.
+    // Not drinkable. playerDeath spends the slot and heals.
     id: "FAIRY_POTION",
     name: "Fairy in a Bottle",
     rarity: "rare",
@@ -321,6 +347,7 @@ export const allPotions: PotionDef[] = [
     targeted: false,
     potency: 30,
     sacredBarkDoubles: true,
+    canUse: () => false,
     onUse: () => {},
   },
   {

@@ -16,17 +16,23 @@ function instanceKeywords(ctx: CardCtx, iid: number): string[] {
 
 /**
  * Perfected Strike: count cards with the "strike" keyword. V2.3.4 counts
- * hand + draw + discard at use time (exhaust pile excluded); the count happens
- * before the played card leaves the hand, so the card itself (now in limbo) is
- * included explicitly.
+ * hand + draw + discard at use time (exhaust pile excluded). A real play has
+ * already moved the card to limbo, so it is counted once more. A preview leaves
+ * it in hand, and must not count it twice.
  */
 function countStrikes(ctx: CardCtx): number {
   const piles = ctx.combat!.player.piles;
   let n = 0;
+  let selfSeen = false;
   for (const pile of ["draw", "hand", "discard"] as const) {
-    for (const iid of piles[pile]) if (instanceKeywords(ctx, iid).includes("strike")) n++;
+    for (const iid of piles[pile]) {
+      if (iid === ctx.card.iid) selfSeen = true;
+      if (instanceKeywords(ctx, iid).includes("strike")) n++;
+    }
   }
-  if (instanceKeywords(ctx, ctx.card.iid).includes("strike")) n++;
+  // During a real play the card is already in limbo, so count it here.
+  // A preview dry-run leaves it in hand; counting it again would inflate damage.
+  if (!selfSeen && instanceKeywords(ctx, ctx.card.iid).includes("strike")) n++;
   return n;
 }
 

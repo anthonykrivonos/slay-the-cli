@@ -403,6 +403,8 @@ export function rewardLabel(e: RewardEntry, bundle: ContentBundle): string {
       return "Emerald Key";
     case "card":
       return cardName(bundle, e.id, e.upgraded ? 1 : 0);
+    case "singingBowl":
+      return "Gain 2 Max HP";
     case "bossRelic":
       return relicName(bundle, e.id);
   }
@@ -431,10 +433,10 @@ export function rewardRows(entries: RewardEntry[]): RewardRow[] {
   const rows: RewardRow[] = [];
   const groups = new Map<number, Extract<RewardRow, { type: "group" }>>();
   entries.forEach((entry, idx) => {
-    if (entry.kind === "card" || entry.kind === "bossRelic") {
+    if (entry.kind === "card" || entry.kind === "singingBowl" || entry.kind === "bossRelic") {
       let g = groups.get(entry.group);
       if (!g) {
-        g = { type: "group", kind: entry.kind, items: [] };
+        g = { type: "group", kind: entry.kind === "bossRelic" ? "bossRelic" : "card", items: [] };
         groups.set(entry.group, g);
         rows.push(g);
       }

@@ -19,7 +19,6 @@ export const ironcladUncommons: CardDef[] = [
     values: { magic: 3 },
     upgradeValues: { magic: 4 },
     keywords: [],
-    // ENGINE-GAP: NO_DRAW cannot veto card-effect draws (see powers/ironclad.ts)
     primitives: [
       { do: "draw", n: "magic" },
       { do: "applyPower", power: "NO_DRAW", n: 1, target: "self" },

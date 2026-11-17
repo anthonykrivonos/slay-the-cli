@@ -7,6 +7,8 @@ import type { EffectCtx, CardCtx, ContentBundle } from "../content/defs";
 import type { GameAction, DamageInfo, CardSelector } from "../core/actions";
 import type { CardInstance, CardQueueItem, MonsterState, Pile } from "./combatState";
 import { fireHook, foldHook, foldHookScoped, anyHook } from "../core/hooks";
+import { hasRelic } from "../run/rewards";
+import { f32, f32mul } from "../core/math";
 import { PLAYER, monster, type ActorRef } from "../core/ids";
 import { applyPower, reducePower, removePower, getPowerAmount, tickTurnBasedPowers } from "./powerRuntime";
 import { calcMonsterBlock } from "./damageCalc";
@@ -177,16 +179,35 @@ export function executeAction(ctx: EffectCtx, a: GameAction): void {
 // damage / hp / block application
 // ------------------------------------------------------------------------------
 
+/** Intangible caps every incoming hit and HP loss at 1. */
+function capIntangible(ctx: EffectCtx, target: ActorRef, amount: number): number {
+  if (amount <= 1) return amount;
+  const powers = target.kind === "player" ? ctx.combat!.player.powers : (ctx.combat!.monsters[target.idx]?.powers ?? []);
+  return powers.some((p) => p.id === "INTANGIBLE" && p.amount > 0) ? 1 : amount;
+}
+
 function applyDamage(ctx: EffectCtx, target: ActorRef, info: DamageInfo): void {
   let d = info.amount;
+  // Attacks are already capped in the damage calc. Thorns and HP loss are not.
+  if (info.type === "thorns" || info.type === "hpLoss") d = capIntangible(ctx, target, d);
 
   if (target.kind === "monster") {
     const m = ctx.combat!.monsters[target.idx];
     if (!m || m.isDead || m.isEscaped) return;
+    const blockBefore = m.block;
     if (info.type !== "hpLoss" && m.block > 0) {
       const blocked = Math.min(m.block, d);
       m.block -= blocked;
       d -= blocked;
+    }
+    if (blockBefore > 0 && m.block === 0 && info.source?.kind === "player" && hasRelic(ctx.run, "HAND_DRILL")) {
+      ctx.queue.addToBottom({
+        kind: "applyPower",
+        source: PLAYER,
+        target,
+        powerId: "VULNERABLE",
+        amount: 2,
+      });
     }
     d = foldHookScoped(ctx, target, "powers", "onAttackedToChangeDamage", d, info);
     d = Math.max(0, Math.floor(foldHookScoped(ctx, target, "powers", "onLoseHp", d))); // Invincible cap
@@ -222,7 +243,9 @@ function applyDamage(ctx: EffectCtx, target: ActorRef, info: DamageInfo): void {
 }
 
 function applyHpLoss(ctx: EffectCtx, target: ActorRef, amount: number): void {
-  // direct HP loss (Offering, Bloodletting, poison): bypasses block AND the damage pipeline
+  // direct HP loss (Offering, Bloodletting, Hemokinesis): bypasses block.
+  // Intangible still caps it at 1, then onLoseHp (Tungsten Rod, Invincible).
+  amount = capIntangible(ctx, target, amount);
   if (target.kind === "monster") {
     const m = ctx.combat!.monsters[target.idx];
     if (!m || m.isDead) return;
@@ -332,8 +355,31 @@ export function spawnMonster(
   ctx.emit("monsterSpawned", { idx, monsterId });
 }
 
+function reviveAt(ctx: EffectCtx, fraction: number, source: string): boolean {
+  const amount = Math.round(f32mul(ctx.run.maxHp, f32(fraction)));
+  ctx.run.hp = 0;
+  const healed = Math.floor(foldHook(ctx, PLAYER, "onHeal", amount));
+  ctx.run.hp = Math.min(ctx.run.maxHp, Math.max(0, healed));
+  if (ctx.run.hp <= 0) return false;
+  ctx.emit("revived", { source, hp: ctx.run.hp });
+  return true;
+}
+
 function playerDeath(ctx: EffectCtx): void {
-  // Fairy in a Bottle / Lizard Tail resurrections hook in here later (Phase 2+)
+  if (ctx.rt.combatOver === "defeat") return;
+  // Fairy in a Bottle before Lizard Tail. A failed heal (Mark of the Bloom)
+  // still spends the potion and falls through.
+  const slot = ctx.run.potions.indexOf("FAIRY_POTION");
+  if (slot !== -1) {
+    ctx.run.potions[slot] = null;
+    const fraction = hasRelic(ctx.run, "SACRED_BARK") ? 0.6 : 0.3;
+    if (reviveAt(ctx, fraction, "Fairy in a Bottle")) return;
+  }
+  const tail = ctx.run.relics.find((r) => r.defId === "LIZARD_TAIL");
+  if (tail && tail.counter !== -1) {
+    tail.counter = -1;
+    if (reviveAt(ctx, 0.5, "Lizard Tail")) return;
+  }
   ctx.rt.combatOver = "defeat";
   ctx.emit("defeat");
 }
@@ -404,23 +450,39 @@ export function makeTempCard(ctx: EffectCtx, defId: string, upgrades: number, de
     misc: 0,
     retainOnce: false,
   };
+  let landed: Pile = dest;
   if (dest === "hand" && combat.player.piles.hand.length >= 10) {
     combat.player.piles.discard.push(iid); // hand overflow goes to discard
+    landed = "discard";
   } else if (dest === "draw") {
     // shuffled into a random position
     moveCard(ctx, iid, "draw", "random");
   } else {
     combat.player.piles[dest].push(iid);
   }
-  ctx.emit("cardCreated", { iid, defId, dest });
+  ctx.emit("cardCreated", { iid, defId, dest: landed });
 }
 
 function cardCtx(ctx: EffectCtx, c: CardInstance, target: number | null, energyOnUse: number): CardCtx {
-  return { ...ctx, card: c, target, energyOnUse, upgraded: c.upgrades > 0 };
+  // Chemical X: X-cost effects are 2 higher. The energy spent stays energyOnUse.
+  let x = energyOnUse;
+  if (c.cost === -1 && hasRelic(ctx.run, "CHEMICAL_X")) x += 2;
+  return { ...ctx, card: c, target, energyOnUse: x, upgraded: c.upgrades > 0 };
 }
 
-/** Cost after dynamicCost + modifyCardCost hooks (Corruption: skills 0). X (-1) and unplayable (-2) pass through. */
+/** Blue Candle plays curses. Medical Kit plays statuses. Both cost 0. */
+export function cardIsPlayable(ctx: EffectCtx, c: CardInstance): boolean {
+  if (c.cost !== -2) return true;
+  const type = ctx.bundle.cards.get(c.defId)?.type;
+  if (type === "curse" && hasRelic(ctx.run, "BLUE_CANDLE")) return true;
+  if (type === "status" && hasRelic(ctx.run, "MEDICAL_KIT")) return true;
+  return false;
+}
+
+/** Cost after dynamicCost + modifyCardCost hooks (Corruption: skills 0).
+ *  X (-1) passes through. Unplayable (-2) becomes 0 when a relic allows the play. */
 export function effectiveCost(ctx: EffectCtx, c: CardInstance): number {
+  if (c.cost === -2) return cardIsPlayable(ctx, c) ? 0 : -2;
   if (c.cost < 0) return c.cost;
   const def = ctx.bundle.cards.get(c.defId);
   const base = def?.dynamicCost ? def.dynamicCost(ctx, c) : c.costForTurn;
@@ -461,6 +523,12 @@ function resolveCardPlay(ctx: EffectCtx, item: CardQueueItem): void {
   }
 
   item.exhaustOnUse ||= cardHasKeyword(c, def, "exhaust");
+  if (def.type === "curse" && hasRelic(ctx.run, "BLUE_CANDLE")) {
+    item.exhaustOnUse = true;
+    ctx.queue.addToBottom({ kind: "loseHp", target: PLAYER, amount: 1 });
+  } else if (def.type === "status" && hasRelic(ctx.run, "MEDICAL_KIT")) {
+    item.exhaustOnUse = true;
+  }
   combat.turnFlags.cardsPlayedThisTurn++;
   combat.combatFlags.cardsPlayedThisCombat++;
   if (def.type === "attack") {
@@ -523,6 +591,11 @@ export function afterCardUsed(ctx: EffectCtx, args: unknown): void {
   }
   fireHook(ctx, PLAYER, "onAfterCardPlayed", c);
 
+  // Strange Spoon: an exhaust-on-play card discards instead, half the time.
+  if (item?.exhaustOnUse && hasRelic(ctx.run, "STRANGE_SPOON") && ctx.rng("cardRandomRng").randomBoolean()) {
+    item.exhaustOnUse = false;
+  }
+
   if (item?.purgeOnUse) {
     removeCardFromCombat(ctx, iid);
     ctx.rt.currentItem = null;
@@ -574,6 +647,7 @@ function runInnerQueueMarker(_ctx: EffectCtx): void {
 // ------------------------------------------------------------------------------
 
 function startScry(ctx: EffectCtx, n: number): void {
+  if (hasRelic(ctx.run, "GOLDEN_EYE")) n += 2;
   const draw = ctx.combat!.player.piles.draw;
   const iids = draw.slice(0, Math.min(n, draw.length));
   if (iids.length === 0) return;

@@ -16,6 +16,7 @@ import type { RewardEntry } from "../../engine/run/runState";
 import { JavaRandom, javaShuffle } from "../../engine/core/rng";
 import { canSmith } from "../../engine/run/rest";
 import { classCardPool, createCardReward, nextRewardGroup, potionPool } from "../../engine/run/rewards";
+import { obtainMasterCard } from "../../engine/run/deckEdit";
 import {
   UNREMOVABLE_CURSES,
   deckIndicesOfType,
@@ -108,6 +109,11 @@ const relicPickupChoice: EffectFn = (ctx, args) => {
   const { relicId, indices, chosen } = args as { relicId: RelicId; indices: number[]; chosen: number[] };
   const picked = (chosen ?? []).map((i) => indices[i]).filter((i): i is number => i !== undefined);
   if (picked.length === 0) return;
+  if (relicId === "DOLLYS_MIRROR") {
+    const mc = ctx.run.deck[picked[0]!];
+    if (mc) obtainMasterCard(ctx, mc.defId, mc.upgrades, mc.misc);
+    return;
+  }
   // a bottle keeps the card: it flags the master card and takes nothing out
   // (Deck::bottleCard). The combat half lives in relics/uncommon.ts.
   if (BOTTLES.has(relicId)) {
@@ -163,6 +169,30 @@ export function callingBellPickup(ctx: EffectCtx): void {
   const entries = pickupRewards(ctx);
   for (const tier of ["common", "uncommon", "rare"] as const) {
     entries.push({ kind: "relic", id: screenlessRelicOfTier(ctx, tier), taken: false });
+  }
+}
+
+/** "Upon pickup, obtain an additional copy of a card in your deck." */
+export function dollysMirrorPickup(ctx: EffectCtx): void {
+  requestPickupChoice(ctx, {
+    relicId: "DOLLYS_MIRROR",
+    indices: ctx.run.deck.map((_, i) => i),
+    count: 1,
+    reason: "relic:copy",
+  });
+}
+
+/** "Upon pickup, choose 5 cards to add to your deck." Five separate rewards. */
+export function orreryPickup(ctx: EffectCtx): void {
+  const entries = pickupRewards(ctx);
+  for (let i = 0; i < 5; i++) {
+    const group = nextRewardGroup(entries);
+    for (const c of createCardReward(ctx, "monster")) {
+      entries.push({ kind: "card", group, id: c.id, rarity: c.rarity, upgraded: c.upgraded, taken: false });
+    }
+    if (ctx.run.relics.some((r) => r.defId === "SINGING_BOWL")) {
+      entries.push({ kind: "singingBowl", group, taken: false });
+    }
   }
 }
 

@@ -35,9 +35,8 @@ function bottledToTop(ctx: HookCtx, type: "attack" | "skill" | "power"): void {
 
 export const uncommonRelics: RelicDef[] = [
   {
-    // "Unplayable Curse cards can now be played..." ENGINE-GAP: the engine
-    // rejects cost -2 cards before any hook fires; needs playability override
-    // plus lose-1-HP-and-exhaust play semantics.
+    // "Unplayable Curse cards can now be played. Playing a Curse exhausts it
+    // and loses 1 HP." The play gate and the exhaust/HP live in the interpreter.
     id: "BLUE_CANDLE",
     name: "Blue Candle",
     tier: "uncommon",
@@ -390,8 +389,8 @@ export const uncommonRelics: RelicDef[] = [
     hooks: { onEnterRestSite: (ctx) => healPlayer(ctx, Math.floor(ctx.run.deck.length / 5) * 3) },
   },
   {
-    // "Whenever you add a Power card to your deck, Upgrade it." RUN-LAYER: the
-    // obtain pipeline must apply egg upgrades when adding the MasterCard.
+    // "Whenever you add a Power card to your deck, Upgrade it."
+    // Applied in obtainMasterCard (and previewed on card rewards).
     id: "FROZEN_EGG",
     name: "Frozen Egg",
     tier: "uncommon",
@@ -413,7 +412,8 @@ export const uncommonRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "Whenever you add an Attack card to your deck, Upgrade it." RUN-LAYER.
+    // "Whenever you add an Attack card to your deck, Upgrade it."
+    // Applied in obtainMasterCard (and previewed on card rewards).
     id: "MOLTEN_EGG",
     name: "Molten Egg",
     tier: "uncommon",
@@ -441,7 +441,8 @@ export const uncommonRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "When adding cards to your deck, you may raise your Max HP by 2 instead." RUN-LAYER.
+    // "You may gain 2 Max HP instead of adding a card to your deck."
+    // A singingBowl entry is added to each card-reward group.
     id: "SINGING_BOWL",
     name: "Singing Bowl",
     tier: "uncommon",
@@ -449,8 +450,7 @@ export const uncommonRelics: RelicDef[] = [
     hooks: {},
   },
   {
-    // "The Merchant restocks...; all prices are reduced by 20%."
-    // Price hook implemented; restocking is RUN-LAYER.
+    // "The merchant restocks cards, relics, and potions. All prices are reduced by 20%."
     id: "THE_COURIER",
     name: "The Courier",
     tier: "uncommon",
@@ -458,7 +458,8 @@ export const uncommonRelics: RelicDef[] = [
     hooks: { modifyPrice: (_ctx, price) => price * 0.8 },
   },
   {
-    // "Whenever you add a Skill card to your deck, Upgrade it." RUN-LAYER.
+    // "Whenever you add a Skill card to your deck, Upgrade it."
+    // Applied in obtainMasterCard (and previewed on card rewards).
     id: "TOXIC_EGG",
     name: "Toxic Egg",
     tier: "uncommon",

@@ -409,14 +409,10 @@ describe("potency plumbing", () => {
     expect(effectivePotency(ctx, B.potions.get("SMOKE_BOMB")!)).toBe(0);
   });
 
-  test("all 42 corpus potions have defs; flagged ones are safe no-ops", () => {
+  test("all 42 corpus potions have defs; Fairy cannot be drunk", () => {
     expect(allPotions.length).toBe(42);
-    let s = game({});
-    // RUN-LAYER / ENGINE-GAP potions must not crash or corrupt state
-    for (const id of ["ENTROPIC_BREW", "FAIRY_POTION"]) {
-      s = usePotion(s, id);
-      expect(s.pending).toBeNull();
-    }
+    const def = B.potions.get("FAIRY_POTION");
+    expect(def?.canUse?.({} as never)).toBe(false);
   });
 
   describe("Smoke Bomb", () => {

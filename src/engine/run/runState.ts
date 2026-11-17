@@ -101,6 +101,7 @@ export type RewardEntry =
   | { kind: "relic"; id: RelicId; taken: boolean }
   | { kind: "emeraldKey"; taken: boolean }
   | { kind: "card"; group: number; id: CardId; rarity: CardRarityRoll; upgraded: boolean; taken: boolean }
+  | { kind: "singingBowl"; group: number; taken: boolean }
   | { kind: "bossRelic"; group: number; id: RelicId; taken: boolean };
 
 export interface ShopCardSlot {

@@ -638,7 +638,7 @@ describe("Looter", () => {
         const hp1 = s.run.hp;
         s = endTurn(s);
         expect(hp1 - s.run.hp).toBe(12);
-        expect(s.run.gold).toBe(54);
+        expect(s.run.gold).toBe(69); // Lunge does not steal
         expect(mon(s).move).toBe("LOOTER_SMOKE_BOMB");
       }
       s = endTurn(s); // Smoke Bomb executes (6 block), next is Escape

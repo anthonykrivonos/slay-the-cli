@@ -3,11 +3,11 @@
 // Strong-encounter weights are the corpus fraction NUMERATORS (denominator =
 // their sum: 32 / 29 / 8); weak and elite picks are uniform.
 //
-// Encounter -> monster compositions are the base game's fixed lineups.
-// TODO(randomized lineups): several encounters roll their composition at
-// battle init in the real game (louse colors, small/large slime variants,
-// gremlin gangs, Exordium thugs/wildlife, act-3 shapes). Fixed representative
-// lineups are used until that roll lands with monster content.
+// Encounter ids and weights are the corpus tables. Compositions that the real
+// game rolls at battle init (louse colors, slimes, gremlins, thugs, wildlife,
+// shapes) are rolled in src/engine/run/lineups.ts. The monster lists below are
+// the fallback resolveEncounter returns; startCombat does not use them for
+// those ids.
 
 import type { ActDef } from "../engine/content/defs";
 
@@ -17,19 +17,19 @@ const act1: ActDef = {
   weakEncounters: [
     { id: "CULTIST", monsters: ["CULTIST"] },
     { id: "JAW_WORM", monsters: ["JAW_WORM"] },
-    { id: "TWO_LOUSE", monsters: ["RED_LOUSE", "GREEN_LOUSE"] }, // TODO random louse colors
-    { id: "SMALL_SLIMES", monsters: ["SPIKE_SLIME_S", "ACID_SLIME_M"] }, // TODO 50/50 variant
+    { id: "TWO_LOUSE", monsters: ["RED_LOUSE", "GREEN_LOUSE"] },
+    { id: "SMALL_SLIMES", monsters: ["SPIKE_SLIME_S", "ACID_SLIME_M"] },
   ],
   strongEncounters: [
-    { id: "GREMLIN_GANG", weight: 2, monsters: ["MAD_GREMLIN", "SNEAKY_GREMLIN", "FAT_GREMLIN", "SHIELD_GREMLIN"] }, // TODO random gremlins
+    { id: "GREMLIN_GANG", weight: 2, monsters: ["MAD_GREMLIN", "SNEAKY_GREMLIN", "FAT_GREMLIN", "SHIELD_GREMLIN"] },
     { id: "LOTS_OF_SLIMES", weight: 2, monsters: ["SPIKE_SLIME_S", "SPIKE_SLIME_S", "SPIKE_SLIME_S", "ACID_SLIME_S", "ACID_SLIME_S"] },
     { id: "RED_SLAVER", weight: 2, monsters: ["RED_SLAVER"] },
-    { id: "EXORDIUM_THUGS", weight: 3, monsters: ["RED_LOUSE", "BLUE_SLAVER"] }, // TODO random pairing
-    { id: "EXORDIUM_WILDLIFE", weight: 3, monsters: ["FUNGI_BEAST", "JAW_WORM"] }, // TODO random pairing
+    { id: "EXORDIUM_THUGS", weight: 3, monsters: ["RED_LOUSE", "BLUE_SLAVER"] },
+    { id: "EXORDIUM_WILDLIFE", weight: 3, monsters: ["FUNGI_BEAST", "JAW_WORM"] },
     { id: "BLUE_SLAVER", weight: 4, monsters: ["BLUE_SLAVER"] },
     { id: "LOOTER", weight: 4, monsters: ["LOOTER"] },
-    { id: "LARGE_SLIME", weight: 4, monsters: ["ACID_SLIME_L"] }, // TODO 50/50 acid/spike
-    { id: "THREE_LOUSE", weight: 4, monsters: ["RED_LOUSE", "GREEN_LOUSE", "RED_LOUSE"] }, // TODO random colors
+    { id: "LARGE_SLIME", weight: 4, monsters: ["ACID_SLIME_L"] },
+    { id: "THREE_LOUSE", weight: 4, monsters: ["RED_LOUSE", "GREEN_LOUSE", "RED_LOUSE"] },
     { id: "TWO_FUNGI_BEASTS", weight: 4, monsters: ["FUNGI_BEAST", "FUNGI_BEAST"] },
   ],
   elites: [
@@ -75,7 +75,7 @@ const act2: ActDef = {
     { id: "CENTURION_AND_HEALER", weight: 6, monsters: ["CENTURION", "MYSTIC"] },
   ],
   elites: [
-    { id: "GREMLIN_LEADER", monsters: ["MAD_GREMLIN", "SNEAKY_GREMLIN", "GREMLIN_LEADER"] }, // TODO random minions
+    { id: "GREMLIN_LEADER", monsters: ["MAD_GREMLIN", "SNEAKY_GREMLIN", "GREMLIN_LEADER"] },
     { id: "SLAVERS", monsters: ["BLUE_SLAVER", "TASKMASTER", "RED_SLAVER"] },
     { id: "BOOK_OF_STABBING", monsters: ["BOOK_OF_STABBING"] },
   ],
@@ -109,14 +109,14 @@ const act3: ActDef = {
   weakEncounters: [
     { id: "THREE_DARKLINGS", monsters: ["DARKLING", "DARKLING", "DARKLING"] },
     { id: "ORB_WALKER", monsters: ["ORB_WALKER"] },
-    { id: "THREE_SHAPES", monsters: ["REPULSOR", "SPIKER", "EXPLODER"] }, // TODO random shapes
+    { id: "THREE_SHAPES", monsters: ["REPULSOR", "SPIKER", "EXPLODER"] },
   ],
   strongEncounters: [
     { id: "SPIRE_GROWTH", weight: 1, monsters: ["SPIRE_GROWTH"] },
     { id: "TRANSIENT", weight: 1, monsters: ["TRANSIENT"] },
-    { id: "FOUR_SHAPES", weight: 1, monsters: ["REPULSOR", "SPIKER", "EXPLODER", "REPULSOR"] }, // TODO random shapes
+    { id: "FOUR_SHAPES", weight: 1, monsters: ["REPULSOR", "SPIKER", "EXPLODER", "REPULSOR"] },
     { id: "MAW", weight: 1, monsters: ["THE_MAW"] },
-    { id: "SPHERE_AND_TWO_SHAPES", weight: 1, monsters: ["SPHERIC_GUARDIAN", "REPULSOR", "SPIKER"] }, // TODO random shapes
+    { id: "SPHERE_AND_TWO_SHAPES", weight: 1, monsters: ["SPHERIC_GUARDIAN", "REPULSOR", "SPIKER"] },
     { id: "JAW_WORM_HORDE", weight: 1, monsters: ["JAW_WORM", "JAW_WORM", "JAW_WORM"] },
     { id: "THREE_DARKLINGS", weight: 1, monsters: ["DARKLING", "DARKLING", "DARKLING"] },
     { id: "WRITHING_MASS", weight: 1, monsters: ["WRITHING_MASS"] },
